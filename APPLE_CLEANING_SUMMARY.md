@@ -4,6 +4,14 @@
 
 Your Mimic workspace now includes a comprehensive Apple junk cleaning system that automatically maintains a clean development environment.
 
+## 🆕 Recent Updates
+
+### Husky v10 Compatibility (June 2025)
+
+- Updated all git hooks to use modern Husky v9/v10 format
+- Removed deprecated `#!/usr/bin/env sh` and `. "$(dirname -- "$0")/_/husky.sh"` lines
+- Hooks now use direct command execution (future-proof for Husky v10)
+
 ## 🎯 What Was Implemented
 
 ### 1. **Comprehensive Apple Cleaner Tool**
