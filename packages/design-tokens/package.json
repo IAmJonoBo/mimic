@@ -1,0 +1,28 @@
+{
+  "name": "@mimic/design-tokens",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Design tokens generated from Penpot using Style Dictionary",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "style-dictionary build -c style-dictionary.config.js && tsc",
+    "build:tokens": "style-dictionary build -c style-dictionary.config.js",
+    "build:types": "tsc",
+    "clean": "rm -rf dist",
+    "watch": "style-dictionary build -c style-dictionary.config.js --watch"
+  },
+  "dependencies": {
+    "style-dictionary": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.3",
+    "typescript": "^5.8.3"
+  },
+  "publishConfig": {
+    "access": "restricted"
+  }
+}

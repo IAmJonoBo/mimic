@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "@builder.io/qwik",
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "@mimic/design-system": ["./packages/design-system/src"],
+      "@mimic/design-tokens": ["./packages/design-tokens/src"],
+      "@mimic/shared-utils": ["./packages/shared-utils/src"]
+    }
+  },
+  "include": ["packages/*/src/**/*", "apps/*/src/**/*", "tools/*/src/**/*"],
+  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/build"]
+}

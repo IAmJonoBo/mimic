@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Clean Apple junk before committing
+npm run precommit:clean
+
+# Run linting and tests
+pnpm exec lint-staged

@@ -1,0 +1,56 @@
+{
+  "name": "design-tokens",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/design-tokens/src",
+  "projectType": "library",
+  "tags": ["scope:tokens", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "packages/design-tokens/dist",
+        "main": "packages/design-tokens/src/index.ts",
+        "tsConfig": "packages/design-tokens/tsconfig.json",
+        "assets": ["packages/design-tokens/*.md"]
+      }
+    },
+    "tokens:build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "style-dictionary build",
+        "cwd": "packages/design-tokens"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/design-tokens/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/design-tokens"
+      }
+    },
+    "clean:apple": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node ../../tools/apple-cleaner.js .",
+        "cwd": "packages/design-tokens"
+      }
+    },
+    "clean": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["rm -rf dist", "node ../../tools/apple-cleaner.js ."],
+        "cwd": "packages/design-tokens",
+        "parallel": false
+      }
+    }
+  }
+}

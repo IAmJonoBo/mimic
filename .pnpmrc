@@ -1,0 +1,23 @@
+packages:
+  - 'packages/*'
+  - 'apps/*'
+  - 'tools/*'
+
+shamefully-hoist: false
+strict-peer-dependencies: false
+auto-install-peers: true
+dedupe-peer-dependents: true
+
+# Enable shared workspace dependencies
+shared-workspace-lockfile: true
+
+# Optimize for monorepo performance
+prefer-frozen-lockfile: true
+resolution-mode: highest
+
+# Speed up installs
+fetch-retry-mintimeout: 10000
+fetch-retry-maxtimeout: 60000
+
+# Node modules configuration
+node-linker: isolated

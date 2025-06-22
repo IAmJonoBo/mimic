@@ -1,0 +1,88 @@
+{
+  "name": "mimic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Design-token-driven pipeline using 100% libre tooling",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/IAmJonoBo/mimic.git"
+  },
+  "license": "MIT",
+  "author": "Mimic Team",
+  "workspaces": [
+    "packages/*",
+    "apps/*",
+    "tools/*"
+  ],
+  "packageManager": "pnpm@9.0.0",
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "nx run-many -t build",
+    "build:affected": "nx affected -t build",
+    "test": "nx run-many -t test",
+    "test:affected": "nx affected -t test",
+    "lint": "nx run-many -t lint",
+    "lint:affected": "nx affected -t lint",
+    "e2e": "nx run-many -t e2e",
+    "dev": "nx run-many -t serve --parallel=10",
+    "clean": "nx reset && rm -rf node_modules && pnpm install",
+    "clean:apple": "node tools/apple-cleaner.js",
+    "clean:ds-store": "find . -name '.DS_Store' -type f -delete",
+    "clean:xcode": "find . -name '*.xcuserdata*' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name 'xcuserdata' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name '*.xcworkspace/xcuserdata' -type d -exec rm -rf {} + 2>/dev/null || true",
+    "clean:apple-logs": "find . -name '*.crash' -type f -delete 2>/dev/null || true; find . -name '*.crashlog' -type f -delete 2>/dev/null || true; find . -name '*.diag' -type f -delete 2>/dev/null || true",
+    "clean:spotlight": "find . -name '.Spotlight-V100' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name '.fseventsd' -type d -exec rm -rf {} + 2>/dev/null || true",
+    "clean:temp": "find . -name '*.tmp' -type f -delete 2>/dev/null || true; find . -name 'Thumbs.db' -type f -delete 2>/dev/null || true; find . -name '~*' -type f -delete 2>/dev/null || true",
+    "clean:all": "npm run clean:apple && npm run clean:temp && npm run clean",
+    "clean:workspace": "nx run-many -t clean",
+    "clean:apple:workspace": "nx run-many -t clean:apple",
+    "precommit:clean": "npm run clean:ds-store",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "typecheck": "nx run-many -t typecheck",
+    "visual-test": "nx run-many -t visual-test",
+    "storybook": "nx run design-system:storybook",
+    "build-storybook": "nx run design-system:build-storybook",
+    "tokens:build": "nx run tokens:build",
+    "tokens:watch": "nx run tokens:build --watch",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@eslint/js": "^8.57.0",
+    "@nx/eslint": "21.2.1",
+    "@nx/eslint-plugin": "21.2.1",
+    "@nx/jest": "21.2.1",
+    "@nx/js": "21.2.1",
+    "@nx/node": "21.2.1",
+    "@nx/plugin": "21.2.1",
+    "@nx/react": "21.2.1",
+    "@nx/storybook": "21.2.1",
+    "@nx/vite": "21.2.1",
+    "@nx/workspace": "21.2.1",
+    "@typescript-eslint/eslint-plugin": "^7.18.0",
+    "@typescript-eslint/parser": "^7.18.0",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "10.1.5",
+    "husky": "^9.1.7",
+    "jiti": "2.4.2",
+    "jsdom": "^26.1.0",
+    "lint-staged": "^16.1.2",
+    "nx": "21.2.1",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
+      "prettier --write"
+    ],
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "storybook": "8.6.14"
+  }
+}
