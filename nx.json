@@ -16,7 +16,10 @@
       "!{projectRoot}/.storybook/**/*",
       "!{projectRoot}/tsconfig.storybook.json"
     ],
-    "sharedGlobals": []
+    "sharedGlobals": [
+      "{workspaceRoot}/.github/workflows/ci.yml",
+      "{workspaceRoot}/tools/apple-cleaner.js"
+    ]
   },
   "targetDefaults": {
     "@nx/eslint:lint": {
@@ -136,6 +139,7 @@
     }
   ],
   "useInferencePlugins": true,
-  "nxCloudAccessToken": null,
-  "nxCloudId": "6858740ab45da5624a6cdcf8"
+  "nxCloudId": "6858740ab45da5624a6cdcf8",
+  "parallel": 3,
+  "cacheDirectory": "tmp/nx-cache"
 }

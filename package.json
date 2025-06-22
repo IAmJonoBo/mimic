@@ -47,7 +47,21 @@
     "build-storybook": "nx run design-system:build-storybook",
     "tokens:build": "nx run tokens:build",
     "tokens:watch": "nx run tokens:build --watch",
-    "prepare": "husky"
+    "prepare": "husky",
+    "graph": "nx graph",
+    "graph:affected": "nx affected:graph",
+    "affected": "nx affected",
+    "dep-graph": "nx dep-graph",
+    "report": "nx report",
+    "reset": "nx reset",
+    "repair": "nx repair",
+    "connect": "nx connect",
+    "watch": "nx watch --all -- nx build",
+    "dev:runner": "node tools/dev-runner.js",
+    "setup:dx": "./scripts/setup-dx.sh",
+    "setup:complete": "pnpm install && pnpm clean:apple && pnpm build",
+    "workspace:info": "nx report && nx graph --file=tmp/workspace-graph.json",
+    "analyze": "pnpm build && pnpm workspace:info"
   },
   "devDependencies": {
     "@eslint/js": "^8.57.0",

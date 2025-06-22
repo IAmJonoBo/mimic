@@ -1,0 +1,54 @@
+{
+  "folders": [
+    {
+      "name": "🎨 Mimic Workspace",
+      "path": "."
+    },
+    {
+      "name": "📦 Design System",
+      "path": "./packages/design-system"
+    },
+    {
+      "name": "🎯 Design Tokens",
+      "path": "./packages/design-tokens"
+    },
+    {
+      "name": "🔧 Shared Utils",
+      "path": "./packages/shared-utils"
+    }
+  ],
+  "settings": {
+    "typescript.preferences.includePackageJsonAutoImports": "on",
+    "typescript.suggest.autoImports": true,
+    "typescript.preferences.inlayHints.parameterNames.enabled": "literals",
+    "typescript.preferences.inlayHints.parameterNames.suppressWhenArgumentMatchesName": true,
+    "editor.rulers": [80, 120],
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit",
+      "source.organizeImports": "explicit"
+    },
+    "files.associations": {
+      "*.css": "css",
+      "*.scss": "scss"
+    },
+    "emmet.includeLanguages": {
+      "javascript": "javascriptreact",
+      "typescript": "typescriptreact"
+    }
+  },
+  "extensions": {
+    "recommendations": [
+      "nrwl.angular-console",
+      "ms-vscode.vscode-typescript-next",
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "bradlc.vscode-tailwindcss",
+      "ms-vscode.vscode-json",
+      "yoavbls.pretty-ts-errors",
+      "gruntfuggly.todo-tree",
+      "chrmarti.regex",
+      "ms-vscode.vscode-markdown"
+    ]
+  }
+}

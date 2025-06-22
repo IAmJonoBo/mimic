@@ -1,0 +1,72 @@
+name: 🚀 Release
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    
+    steps:
+      - name: 📚 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏗️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: 📦 Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: 🔧 Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🧹 Clean Apple junk
+        run: pnpm clean:apple
+
+      - name: 🏗️ Build packages
+        run: pnpm nx run-many -t build
+
+      - name: 🧪 Run tests
+        run: pnpm nx run-many -t test
+
+      - name: 🔍 Lint code
+        run: pnpm nx run-many -t lint
+
+      - name: 📸 Visual regression tests
+        run: pnpm nx run-many -t visual-test
+        continue-on-error: true
+
+      - name: 📊 Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          directory: ./coverage
+          fail_ci_if_error: false
+
+      - name: 📚 Build Storybook
+        run: pnpm build-storybook
+
+      - name: 🚀 Deploy Storybook to GitHub Pages
+        if: github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./packages/design-system/storybook-static
+          cname: mimic-design-system.dev

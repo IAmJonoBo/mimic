@@ -1,6 +1,45 @@
-# Mimic: Design-Token-Driven Pipeline
+# 🎨 Mimic: Design-Token-Driven Development Pipeline
 
-A fully open, design-token-driven pipeline using 100% libre tooling.
+[![CI](https://github.com/IAmJonoBo/mimic/workflows/CI/badge.svg)](https://github.com/IAmJonoBo/mimic/actions)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Nx](https://img.shields.io/badge/built%20with-Nx-blue)](https://nx.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)](https://www.typescriptlang.org/)
+
+> A modern, design-token-driven development pipeline using 100% libre tooling for building scalable design systems and multi-platform applications.
+
+## 🌟 Overview
+
+Mimic is a comprehensive monorepo that demonstrates how to build a complete design system pipeline using only open-source tools. It provides a seamless workflow from design tokens to production-ready components across multiple platforms.
+
+### ✨ Key Features
+
+- 🎯 **Single Source of Truth**: Design tokens managed with W3C DTCG standards
+- 🚀 **Multi-Platform**: Web, mobile, and desktop from one codebase
+- 🔧 **Modern Tooling**: Nx 21, TypeScript 5.8, Vite, Storybook 8
+- 🧹 **Zero Lock-in**: 100% open-source, self-hostable
+- ⚡ **Developer Experience**: Hot reload, visual testing, automated workflows
+- 🔒 **Enterprise Ready**: Type-safe, tested, documented
+
+## 🏗️ Architecture
+
+```mermaid
+graph TB
+    A[Design Tokens] --> B[Style Dictionary]
+    B --> C[CSS Variables]
+    B --> D[TypeScript Types]
+    B --> E[Mobile Tokens]
+
+    C --> F[Design System Components]
+    D --> F
+    F --> G[Storybook Documentation]
+    F --> H[Web Applications]
+
+    E --> I[Mobile Applications]
+
+    J[Visual Tests] --> F
+    K[Unit Tests] --> F
+    L[E2E Tests] --> H
+```
 
 ## Executive Summary
 
@@ -38,47 +77,195 @@ We will self-host Penpot v2 for design, export its W3C-compliant JSON tokens int
 | ------------------------ | -------------------------- | ----------------------------------- |
 | Android/iOS/Desktop/Wasm | Compose Multiplatform 1.7  | Theme.kt auto-generated from tokens |
 | Mobile JS reuse          | React Native 0.80 + Hermes | tokens.ts; IPO reduces APK size     |
-| Desktop shell            | Tauri 2                    | Loads pre-built Qwik bundle         |
 
-### Design → Code Bridge
+## 🚀 Quick Start
 
-- **Figmagic CLI:** Extracts tokens, SVG/PNG assets, and first-pass React components from Penpot files.
-- **Ollama + Llama 3 8B:** Refines or extends generated JSX/Kotlin offline.
+### Prerequisites
 
-### Quality Gates
+- **Node.js**: 18.0.0 or later
+- **pnpm**: 9.0.0 or later
+- **Git**: For version control
 
-| Layer       | Tool                           | Function                        |
-| ----------- | ------------------------------ | ------------------------------- |
-| Interaction | Storybook test-runner          | Executes each story headless    |
-| Visual diff | Loki (alt. BackstopJS)         | Pixel-perfect screenshots in CI |
-| Unit        | Vitest (web) / JUnit (Compose) | Fast TS & JVM testing           |
+### Installation
 
-### Monorepo & DevOps
+```bash
+# Clone the repository
+git clone https://github.com/IAmJonoBo/mimic.git
+cd mimic
 
-- Nx 18 task graph, cached builds, generators
-- Turborepo for Rust-backed build acceleration
-- pnpm with dedupe to flatten duplicates
-- VS Code Dev Containers with Docker Compose for Penpot, Postgres, and Ollama
+# Install dependencies
+pnpm install
 
-## End-to-End Flow
+# Build all packages
+pnpm build
 
-1. Designers create/adjust frames in Penpot, tagging tokens.
-2. CI job invokes `penpot-export` → `design-tokens.json`.
-3. Style Dictionary emits `tokens.css`, `tokens.ts`, `Theme.kt`.
-4. Nx affected graph rebuilds only impacted packages.
-5. Storybook test-runner + Loki validate every PR; failures block merge.
-6. Qwik artefacts deploy to CDN; Compose, RN, Tauri apps pull the same NPM package for tokens at build time.
-7. Optional: `ollama run llm3 scaffold-screen <frameId>` auto-generates new components; outputs must pass Storybook tests.
+# Start development
+pnpm dev
+```
 
-## Roles & Responsibilities
+### Development Commands
 
-| Team      | Key Tasks                                      |
-| --------- | ---------------------------------------------- |
-| Design    | Token governance, Penpot library maintenance   |
-| Front-end | Qwik components, Storybook stories, web perf   |
-| Mobile    | Compose & RN wrappers, native CI pipelines     |
-| Platform  | Nx/Turborepo config, Docker dev-containers     |
-| Dev Rel   | Docs site, public Storybook, community contrib |
+```bash
+# 🏗️ Build all packages
+pnpm build
+
+# 🧪 Run all tests
+pnpm test
+
+# 🔍 Lint all packages
+pnpm lint
+
+# 📚 Start Storybook
+pnpm storybook
+
+# 🎨 Build design tokens
+pnpm tokens:build
+
+# 🧹 Clean workspace
+pnpm clean:all
+
+# 📊 View dependency graph
+pnpm graph
+```
+
+## 📦 Package Structure
+
+This monorepo contains the following packages:
+
+### 🎨 [`packages/design-tokens`](./packages/design-tokens)
+
+W3C-compliant design tokens with Style Dictionary transformation
+
+- Token definitions in JSON format
+- CSS variables generation
+- TypeScript type definitions
+- Multi-platform token exports
+
+### 🧩 [`packages/design-system`](./packages/design-system)
+
+React component library with Storybook documentation
+
+- Reusable UI components
+- Storybook stories and documentation
+- Visual regression testing
+- Accessibility testing
+
+### 🔧 [`packages/shared-utils`](./packages/shared-utils)
+
+Shared utilities and helper functions
+
+- Cross-platform utilities
+- Common TypeScript types
+- Helper functions
+
+## 🛠️ Technology Stack
+
+### Core Technologies
+
+| Category            | Technology                               | Version | Purpose                                       |
+| ------------------- | ---------------------------------------- | ------- | --------------------------------------------- |
+| **Monorepo**        | [Nx](https://nx.dev)                     | 21.2.1  | Task orchestration, caching, code generation  |
+| **Package Manager** | [pnpm](https://pnpm.io)                  | 9.0.0   | Fast, disk-space efficient package management |
+| **Language**        | [TypeScript](https://typescriptlang.org) | 5.8.3   | Type-safe JavaScript development              |
+| **Build Tool**      | [Vite](https://vitejs.dev)               | 5.x     | Fast builds and hot module replacement        |
+
+### Design System
+
+| Tool                 | Purpose                             |
+| -------------------- | ----------------------------------- |
+| **Style Dictionary** | Design token transformation         |
+| **Storybook**        | Component documentation and testing |
+| **React**            | Component library framework         |
+
+### Quality Assurance
+
+| Tool         | Purpose                     |
+| ------------ | --------------------------- |
+| **Vitest**   | Unit testing framework      |
+| **ESLint**   | Code linting and formatting |
+| **Prettier** | Code formatting             |
+| **Husky**    | Git hooks for quality gates |
+
+## 🎯 Project Goals
+
+### Primary Objectives
+
+1. **🎨 Single Source of Truth**: Design tokens managed with W3C DTCG standards
+2. **🚀 Multi-Platform Compatibility**: Write once, deploy everywhere
+3. **🔒 Zero Vendor Lock-in**: 100% open-source, self-hostable
+4. **⚡ Developer Experience**: Modern tooling with hot reload and automation
+5. **🛡️ Quality First**: Automated testing and visual regression detection
+
+### Technical Vision
+
+- **Token-Driven Development**: All visual properties derived from centralized tokens
+- **Component Reusability**: Shared components across web, mobile, and desktop
+- **Automated Quality Gates**: No manual testing bottlenecks
+- **Developer Productivity**: Fast builds, intelligent caching, and helpful tooling
+
+## 📚 Documentation
+
+Comprehensive documentation is available:
+
+- **[📋 Documentation Index](./docs/README.md)** - Complete documentation overview
+- **[🚀 Quick Start Guide](#-quick-start)** - Get up and running in minutes
+- **[🤝 Contributing Guide](./CONTRIBUTING.md)** - How to contribute to the project
+- **[🛠️ Development Guide](./DEVELOPMENT.md)** - Local development workflows
+- **[📖 API Reference](./docs/API.md)** - Complete API documentation
+- **[🏗️ Architecture Decisions](./docs/ADR.md)** - Technical decision records
+- **[🔧 Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
+- **[🚀 Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment procedures
+
+### Package Documentation
+
+- **[🎨 Design Tokens](./packages/design-tokens/README.md)** - W3C-compliant design tokens
+- **[🧩 Design System](./packages/design-system/README.md)** - Qwik component library
+- **[🔧 Shared Utilities](./packages/shared-utils/README.md)** - Common helper functions
+
+### Live Documentation
+
+- **[📚 Storybook](https://iamjonobo.github.io/mimic/storybook/)** - Interactive component playground
+- **[📊 Dependency Graph](https://nx.dev/packages/nx/documents/dep-graph)** - Project dependency visualization
+
+## 🤝 Contributing
+
+We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+
+### Development Workflow
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
+3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
+4. **Push** to the branch (`git push origin feature/amazing-feature`)
+5. **Open** a Pull Request
+
+### Code Quality
+
+All contributions must pass:
+
+- ✅ Type checking with TypeScript
+- ✅ Linting with ESLint
+- ✅ Unit tests with Vitest
+- ✅ Visual regression tests
+- ✅ Build verification
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🔗 Links
+
+- **Repository**: [https://github.com/IAmJonoBo/mimic](https://github.com/IAmJonoBo/mimic)
+- **Issues**: [Report bugs or request features](https://github.com/IAmJonoBo/mimic/issues)
+- **Discussions**: [Join the conversation](https://github.com/IAmJonoBo/mimic/discussions)
+
+---
+
+Built with ❤️ using 100% open-source tools
+
+[Nx](https://nx.dev) • [TypeScript](https://typescriptlang.org) • [Vite](https://vitejs.dev) • [Storybook](https://storybook.js.org)
+| Platform | Nx/Turborepo config, Docker dev-containers |
+| Dev Rel | Docs site, public Storybook, community contrib |
 
 ## Quality Metrics
 
