@@ -26,7 +26,7 @@ class RuntimeGuards {
   constructor(config: Partial<RuntimeGuardConfig> = {}) {
     this.config = {
       enableCollisionDetection: true,
-      enableImportPathValidation: true, 
+      enableImportPathValidation: true,
       enableNamespaceValidation: true,
       logLevel: 'warning',
       ...config,
@@ -40,10 +40,10 @@ class RuntimeGuards {
   private initializeGuards(): void {
     // Monitor for CSS variable collisions
     this.detectCSSVariableCollisions();
-    
+
     // Monitor for JavaScript global collisions
     this.detectJSGlobalCollisions();
-    
+
     // Monitor for namespace violations
     this.detectNamespaceViolations();
 
@@ -70,7 +70,7 @@ class RuntimeGuards {
               if (rule.type === CSSRule.STYLE_RULE) {
                 const styleRule = rule as CSSStyleRule;
                 const text = styleRule.cssText;
-                
+
                 // Check for non-ds prefixed CSS variables
                 const variableMatches = text.match(/--([^d][^s]-[^:;]+)/g);
                 if (variableMatches) {
@@ -95,19 +95,23 @@ class RuntimeGuards {
         this.reportCollision({
           type: 'css-variable',
           severity: 'warning',
-          message: 'Detected CSS variables without ds- prefix that may cause collisions',
+          message:
+            'Detected CSS variables without ds- prefix that may cause collisions',
           detected: collisions,
           recommendations: [
             'Ensure all design tokens use --ds-* prefix',
             'Update CSS variables to follow collision-safe naming',
-            'Check for third-party CSS conflicts'
+            'Check for third-party CSS conflicts',
           ],
         });
       }
     } catch (error) {
       // Development warning for debugging - using console.warn is acceptable here
       // eslint-disable-next-line no-console
-      console.warn('[RuntimeGuards] CSS variable collision detection failed:', error);
+      console.warn(
+        '[RuntimeGuards] CSS variable collision detection failed:',
+        error
+      );
     }
   }
 
@@ -128,12 +132,13 @@ class RuntimeGuards {
       this.reportCollision({
         type: 'js-global',
         severity: 'warning',
-        message: 'Detected global variables in ds* namespace that may cause conflicts',
+        message:
+          'Detected global variables in ds* namespace that may cause conflicts',
         detected: potentialConflicts,
         recommendations: [
           'Ensure only authorized design token globals use ds* prefix',
           'Check for third-party library conflicts',
-          'Consider using module imports instead of globals'
+          'Consider using module imports instead of globals',
         ],
       });
     }
@@ -142,7 +147,7 @@ class RuntimeGuards {
   private detectNamespaceViolations(): void {
     // This would be enhanced with build-time information about actual imports
     // For now, we'll check for deprecated patterns in the global scope
-    
+
     const deprecatedPatterns = [
       'design-tokens/dist/',
       'tokens.dist.',
@@ -168,7 +173,7 @@ class RuntimeGuards {
         recommendations: [
           'Update imports to use libs/tokens/ paths',
           'Ensure all token references use ds- prefix',
-          'Review migration guide for breaking changes'
+          'Review migration guide for breaking changes',
         ],
       });
     }
@@ -179,7 +184,7 @@ class RuntimeGuards {
 
     if (this.shouldLog(report.severity)) {
       let logMethod: 'error' | 'warn' | 'log';
-      
+
       if (report.severity === 'error') {
         logMethod = 'error';
       } else if (report.severity === 'warning') {
@@ -187,7 +192,7 @@ class RuntimeGuards {
       } else {
         logMethod = 'log';
       }
-      
+
       // Runtime collision reporting - using console is acceptable here
       // eslint-disable-next-line no-console
       console[logMethod](`[RuntimeGuards] ${report.message}`, {
@@ -219,18 +224,14 @@ class RuntimeGuards {
 
   public validateTokenImport(importPath: string): boolean {
     // Validate that import uses collision-safe paths
-    const validPatterns = [
-      'libs/tokens/',
-      '@mimic/design-tokens/',
-    ];
+    const validPatterns = ['libs/tokens/', '@mimic/design-tokens/'];
 
-    const deprecatedPatterns = [
-      'dist/',
-      'build/',
-    ];
+    const deprecatedPatterns = ['dist/', 'build/'];
 
     const isValid = validPatterns.some(pattern => importPath.includes(pattern));
-    const isDeprecated = deprecatedPatterns.some(pattern => importPath.includes(pattern));
+    const isDeprecated = deprecatedPatterns.some(pattern =>
+      importPath.includes(pattern)
+    );
 
     if (isDeprecated) {
       this.reportCollision({
@@ -240,7 +241,7 @@ class RuntimeGuards {
         detected: [importPath],
         recommendations: [
           'Update to use libs/tokens/ import path',
-          'Follow migration guide for proper imports'
+          'Follow migration guide for proper imports',
         ],
       });
       return false;

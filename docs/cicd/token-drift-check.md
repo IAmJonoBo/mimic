@@ -49,16 +49,16 @@ export class RealTimeDriftMonitor extends EventEmitter {
 
   async start(): Promise<void> {
     console.log('🔍 Starting real-time drift monitoring...');
-    
+
     // Initial baseline
     this.lastKnownHash = await this.getCurrentTokenHash();
-    
+
     // Set up webhook listener
     await this.setupWebhook();
-    
+
     // Start polling as fallback
     this.startPolling();
-    
+
     this.emit('monitoring:started');
   }
 
@@ -69,13 +69,16 @@ export class RealTimeDriftMonitor extends EventEmitter {
         events: ['file:updated', 'library:updated'],
         filters: {
           fileId: process.env.PENPOT_FILE_ID,
-          projectId: process.env.PENPOT_PROJECT_ID
-        }
+          projectId: process.env.PENPOT_PROJECT_ID,
+        },
       });
-      
+
       console.log('✅ Webhook registered for real-time updates');
     } catch (error) {
-      console.warn('⚠️ Webhook setup failed, relying on polling:', error.message);
+      console.warn(
+        '⚠️ Webhook setup failed, relying on polling:',
+        error.message
+      );
     }
   }
 
@@ -88,17 +91,17 @@ export class RealTimeDriftMonitor extends EventEmitter {
   async checkForDrift(): Promise<DriftResult> {
     try {
       const currentHash = await this.getCurrentTokenHash();
-      
+
       if (currentHash !== this.lastKnownHash) {
         console.log('🚨 Token drift detected!');
-        
+
         const driftDetails = await this.analyzeDrift();
         this.emit('drift:detected', driftDetails);
-        
+
         this.lastKnownHash = currentHash;
         return driftDetails;
       }
-      
+
       return { hasDrift: false };
     } catch (error) {
       console.error('❌ Drift detection failed:', error);
@@ -110,31 +113,31 @@ export class RealTimeDriftMonitor extends EventEmitter {
   private async getCurrentTokenHash(): Promise<string> {
     const penpotTokens = await this.penpotAPI.exportTokens();
     const codebaseTokens = await this.tokenStore.getAllTokens();
-    
+
     // Create combined hash
     const crypto = require('crypto');
     const combined = JSON.stringify({
       penpot: penpotTokens,
-      codebase: codebaseTokens
+      codebase: codebaseTokens,
     });
-    
+
     return crypto.createHash('sha256').update(combined).digest('hex');
   }
 
   private async analyzeDrift(): Promise<DriftResult> {
     const penpotTokens = await this.penpotAPI.exportTokens();
     const codebaseTokens = await this.tokenStore.getAllTokens();
-    
+
     const differ = new TokenDiffer();
     const differences = differ.compare(penpotTokens, codebaseTokens);
-    
+
     return {
       hasDrift: true,
       timestamp: new Date(),
       differences,
       penpotVersion: await this.penpotAPI.getFileVersion(),
       codebaseVersion: await this.tokenStore.getVersion(),
-      severity: this.calculateSeverity(differences)
+      severity: this.calculateSeverity(differences),
     };
   }
 
@@ -143,7 +146,7 @@ export class RealTimeDriftMonitor extends EventEmitter {
       clearInterval(this.pollInterval);
       this.pollInterval = null;
     }
-    
+
     this.emit('monitoring:stopped');
     console.log('🛑 Drift monitoring stopped');
   }
@@ -184,13 +187,13 @@ export class ScheduledDriftAnalyzer {
 
   private async runDeepAnalysis(): Promise<void> {
     console.log('🔍 Running scheduled deep drift analysis...');
-    
+
     try {
       const analysis = await this.analyzer.analyze({
         includeHistory: true,
         analyzeUsage: true,
         checkCrossRefs: true,
-        validateSemantics: true
+        validateSemantics: true,
       });
 
       if (analysis.criticalIssues.length > 0) {
@@ -198,7 +201,6 @@ export class ScheduledDriftAnalyzer {
       }
 
       await this.storeAnalysis(analysis);
-      
     } catch (error) {
       console.error('❌ Scheduled analysis failed:', error);
       await this.sendErrorAlert(error);
@@ -207,21 +209,21 @@ export class ScheduledDriftAnalyzer {
 
   private async runComprehensiveAudit(): Promise<void> {
     console.log('📊 Running comprehensive token audit...');
-    
+
     const audit = await this.analyzer.comprehensiveAudit({
       checkOrphans: true,
       analyzePerformance: true,
       validateAccessibility: true,
       checkBrandCompliance: true,
-      assessQuality: true
+      assessQuality: true,
     });
 
     // Generate audit report
     const report = await this.generateAuditReport(audit);
-    
+
     // Store results
     await this.storeAuditResults(audit);
-    
+
     // Send weekly summary
     await this.sendWeeklySummary(report);
   }
@@ -241,11 +243,11 @@ echo "🔍 Checking for token drift before push..."
 # Check if token files have been modified
 if git diff --name-only HEAD~1 HEAD | grep -q "packages/design-tokens/"; then
   echo "📝 Token changes detected, verifying sync with Penpot..."
-  
+
   # Run drift detection
   npm run tokens:check-drift
   drift_status=$?
-  
+
   if [ $drift_status -eq 1 ]; then
     echo "🚨 DRIFT DETECTED: Tokens are out of sync with Penpot!"
     echo "Run 'npm run tokens:sync' to resolve before pushing."
@@ -287,23 +289,23 @@ on:
 jobs:
   sync:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Check for drift
         id: drift-check
         run: |
@@ -312,7 +314,7 @@ jobs:
         env:
           PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
           PENPOT_FILE_ID: ${{ secrets.PENPOT_FILE_ID }}
-      
+
       - name: Sync tokens
         if: steps.drift-check.outputs.drift-detected == '1' || github.event.inputs.force_sync == 'true'
         run: |
@@ -323,14 +325,14 @@ jobs:
           fi
         env:
           PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
-      
+
       - name: Validate synced tokens
         if: steps.drift-check.outputs.drift-detected == '1'
         run: |
           npm run tokens:validate
           npm run tokens:build
           npm run test:tokens
-      
+
       - name: Create pull request
         if: steps.drift-check.outputs.drift-detected == '1' && github.event.inputs.dry_run != 'true'
         uses: peter-evans/create-pull-request@v5
@@ -340,31 +342,31 @@ jobs:
           title: '🎨 Automated token sync from Penpot'
           body: |
             ## Automated Token Synchronization
-            
+
             This PR was automatically created to sync design tokens with updates from Penpot.
-            
+
             ### Changes
             - Updated design tokens from Penpot export
             - Regenerated platform-specific token files
             - Validated token consistency and structure
-            
+
             ### Validation
             - [x] Schema validation passed
             - [x] Build process completed successfully
             - [x] Token tests passed
             - [ ] Visual regression tests (will run automatically)
-            
+
             ### Review Checklist
             - [ ] Review token changes for design consistency
             - [ ] Verify no breaking changes introduced
             - [ ] Check component impact in Storybook
             - [ ] Approve and merge if changes look correct
-            
+
             > This PR was created by the automated token sync workflow.
             > If you see frequent sync PRs, consider reviewing the token governance process.
           branch: automated/token-sync-${{ github.run_number }}
           delete-branch: true
-      
+
       - name: Send notification
         if: steps.drift-check.outputs.drift-detected == '1'
         uses: 8398a7/action-slack@v3
@@ -402,63 +404,62 @@ export class ManualTokenSync {
 
   async sync(options: SyncOptions): Promise<SyncResult> {
     console.log('🔄 Starting manual token synchronization...');
-    
+
     try {
       // 1. Export from Penpot
       const penpotTokens = await this.penpotAPI.exportTokens();
       console.log('✅ Exported tokens from Penpot');
-      
+
       // 2. Compare with current tokens
       const currentTokens = await this.tokenProcessor.getCurrentTokens();
       const differences = this.findDifferences(penpotTokens, currentTokens);
-      
+
       if (differences.length === 0) {
         console.log('✅ No differences found, tokens are in sync');
         return { status: 'up-to-date', changes: [] };
       }
-      
+
       // 3. Handle conflicts if any
       const conflicts = this.identifyConflicts(differences);
       if (conflicts.length > 0 && !options.autoResolve) {
         console.log('⚠️ Conflicts detected, manual resolution required');
-        return { 
-          status: 'conflicts-detected', 
+        return {
+          status: 'conflicts-detected',
           conflicts,
-          changes: differences 
+          changes: differences,
         };
       }
-      
+
       // 4. Apply changes
       if (options.dryRun) {
         console.log('🔍 Dry run mode - showing what would be changed:');
         this.logChanges(differences);
         return { status: 'dry-run', changes: differences };
       }
-      
+
       await this.applyChanges(differences, conflicts);
       console.log('✅ Token synchronization completed');
-      
+
       // 5. Generate build artifacts
       await this.tokenProcessor.buildAllPlatforms();
-      
-      return { 
-        status: 'success', 
+
+      return {
+        status: 'success',
         changes: differences,
-        timestamp: new Date()
+        timestamp: new Date(),
       };
-      
     } catch (error) {
       console.error('❌ Synchronization failed:', error);
-      return { 
-        status: 'error', 
+      return {
+        status: 'error',
         error: error.message,
-        changes: []
+        changes: [],
       };
     }
   }
 
   private async applyChanges(
-    differences: TokenDifference[], 
+    differences: TokenDifference[],
     conflicts: TokenConflict[]
   ): Promise<void> {
     // Resolve conflicts first
@@ -477,8 +478,11 @@ export class ManualTokenSync {
 
   private logChanges(differences: TokenDifference[]): void {
     differences.forEach(diff => {
-      const symbol = diff.type === 'added' ? '➕' : diff.type === 'removed' ? '➖' : '🔄';
-      console.log(`${symbol} ${diff.path}: ${diff.oldValue} → ${diff.newValue}`);
+      const symbol =
+        diff.type === 'added' ? '➕' : diff.type === 'removed' ? '➖' : '🔄';
+      console.log(
+        `${symbol} ${diff.path}: ${diff.oldValue} → ${diff.newValue}`
+      );
     });
   }
 }
@@ -501,7 +505,10 @@ export class ConflictDetector {
     // Check for concurrent modifications
     localChanges.forEach(localChange => {
       const penpotValue = this.getTokenValue(penpotTokens, localChange.path);
-      const codebaseValue = this.getTokenValue(codebaseTokens, localChange.path);
+      const codebaseValue = this.getTokenValue(
+        codebaseTokens,
+        localChange.path
+      );
 
       if (penpotValue !== codebaseValue && localChange.value !== penpotValue) {
         conflicts.push({
@@ -510,7 +517,7 @@ export class ConflictDetector {
           penpotValue,
           codebaseValue,
           localValue: localChange.value,
-          timestamp: new Date()
+          timestamp: new Date(),
         });
       }
     });
@@ -543,7 +550,7 @@ export class ConflictDetector {
             type: 'semantic-color-shift',
             path: ['color', colorKey],
             description: `Color ${colorKey} has shifted significantly in hue`,
-            severity: 'high'
+            severity: 'high',
           });
         }
       }
@@ -559,20 +566,20 @@ export class ConflictDetector {
 export class ConflictResolver {
   async resolve(conflict: TokenConflict): Promise<ResolutionResult> {
     const strategy = this.getResolutionStrategy(conflict);
-    
+
     switch (strategy) {
       case 'prefer-penpot':
         return this.preferPenpotValue(conflict);
-        
+
       case 'prefer-codebase':
         return this.preferCodebaseValue(conflict);
-        
+
       case 'merge':
         return this.mergeValues(conflict);
-        
+
       case 'manual':
         return this.requestManualResolution(conflict);
-        
+
       default:
         throw new Error(`Unknown resolution strategy: ${strategy}`);
     }
@@ -585,37 +592,44 @@ export class ConflictResolver {
       if (conflict.path[0] === 'color' || conflict.path[0] === 'typography') {
         return 'prefer-penpot';
       }
-      
+
       // Prefer codebase for technical tokens
-      if (conflict.path.includes('component') || conflict.path.includes('platform')) {
+      if (
+        conflict.path.includes('component') ||
+        conflict.path.includes('platform')
+      ) {
         return 'prefer-codebase';
       }
     }
-    
+
     if (conflict.type === 'semantic-color-shift') {
       return 'manual'; // Always require manual review for color changes
     }
-    
+
     return 'manual'; // Default to manual resolution
   }
 
-  private async requestManualResolution(conflict: TokenConflict): Promise<ResolutionResult> {
+  private async requestManualResolution(
+    conflict: TokenConflict
+  ): Promise<ResolutionResult> {
     // Create GitHub issue for manual resolution
     const issue = await this.createResolutionIssue(conflict);
-    
+
     // Send Slack notification
     await this.notifyTeam(conflict, issue);
-    
+
     return {
       status: 'pending-manual',
       conflict,
-      issueUrl: issue.url
+      issueUrl: issue.url,
     };
   }
 
-  private async createResolutionIssue(conflict: TokenConflict): Promise<GitHubIssue> {
+  private async createResolutionIssue(
+    conflict: TokenConflict
+  ): Promise<GitHubIssue> {
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-    
+
     const issueBody = `
 ## Token Conflict Resolution Required
 
@@ -654,12 +668,12 @@ ${conflict.description || 'No additional description available.'}
       repo: process.env.GITHUB_REPOSITORY_NAME!,
       title: `Token Conflict: ${conflict.path.join('.')}`,
       body: issueBody,
-      labels: ['design-system', 'token-conflict', 'manual-resolution']
+      labels: ['design-system', 'token-conflict', 'manual-resolution'],
     });
 
     return {
       number: response.data.number,
-      url: response.data.html_url
+      url: response.data.html_url,
     };
   }
 }
@@ -687,21 +701,21 @@ export class ContinuousMonitor {
     this.startPerformanceMonitor();
     this.startUsageMonitor();
     this.startQualityMonitor();
-    
+
     console.log('🔍 Continuous monitoring started');
   }
 
   private startDriftMonitor(): void {
     const driftMonitor = new RealTimeDriftMonitor({
       interval: 30000, // 30 seconds
-      threshold: 0.1,  // 10% change threshold
+      threshold: 0.1, // 10% change threshold
     });
 
-    driftMonitor.on('drift:detected', async (drift) => {
+    driftMonitor.on('drift:detected', async drift => {
       await this.handleDriftDetection(drift);
     });
 
-    driftMonitor.on('drift:error', async (error) => {
+    driftMonitor.on('drift:error', async error => {
       await this.alertManager.sendErrorAlert('Drift Detection', error);
     });
 
@@ -714,12 +728,12 @@ export class ContinuousMonitor {
     this.metrics.record('drift.detected', {
       severity: drift.severity,
       changes: drift.differences.length,
-      timestamp: drift.timestamp
+      timestamp: drift.timestamp,
     });
 
     // Determine alert level
     const alertLevel = this.determineAlertLevel(drift);
-    
+
     if (alertLevel === 'critical') {
       await this.alertManager.sendCriticalAlert(drift);
     } else if (alertLevel === 'warning') {
@@ -735,8 +749,8 @@ export class ContinuousMonitor {
   private shouldAutoSync(drift: DriftResult): boolean {
     // Only auto-sync for minor changes
     const minorChangeTypes = ['description-update', 'metadata-change'];
-    
-    return drift.differences.every(diff => 
+
+    return drift.differences.every(diff =>
       minorChangeTypes.includes(diff.type)
     );
   }
@@ -759,11 +773,13 @@ export class MetricsCollector {
 
   record(metric: string, data: any): void {
     // Record to InfluxDB
-    this.influx.writePoints([{
-      measurement: metric,
-      fields: data,
-      timestamp: new Date()
-    }]);
+    this.influx.writePoints([
+      {
+        measurement: metric,
+        fields: data,
+        timestamp: new Date(),
+      },
+    ]);
 
     // Update Prometheus metrics
     this.updatePrometheusMetrics(metric, data);
@@ -771,20 +787,26 @@ export class MetricsCollector {
 
   private setupPrometheusMetrics(): void {
     // Drift detection metrics
-    this.prometheus.register(new Gauge({
-      name: 'token_drift_detected_total',
-      help: 'Total number of token drifts detected'
-    }));
+    this.prometheus.register(
+      new Gauge({
+        name: 'token_drift_detected_total',
+        help: 'Total number of token drifts detected',
+      })
+    );
 
-    this.prometheus.register(new Histogram({
-      name: 'token_sync_duration_seconds',
-      help: 'Duration of token synchronization operations'
-    }));
+    this.prometheus.register(
+      new Histogram({
+        name: 'token_sync_duration_seconds',
+        help: 'Duration of token synchronization operations',
+      })
+    );
 
-    this.prometheus.register(new Gauge({
-      name: 'token_conflicts_active',
-      help: 'Number of active token conflicts'
-    }));
+    this.prometheus.register(
+      new Gauge({
+        name: 'token_conflicts_active',
+        help: 'Number of active token conflicts',
+      })
+    );
   }
 
   async getDriftTrends(): Promise<DriftTrends> {
@@ -816,22 +838,28 @@ export class AlertManager {
 
   private setupChannels(): void {
     // Slack integration
-    this.channels.push(new SlackChannel({
-      webhook: process.env.SLACK_WEBHOOK_URL!,
-      channel: '#design-system'
-    }));
+    this.channels.push(
+      new SlackChannel({
+        webhook: process.env.SLACK_WEBHOOK_URL!,
+        channel: '#design-system',
+      })
+    );
 
     // Email notifications
-    this.channels.push(new EmailChannel({
-      smtp: process.env.SMTP_CONFIG!,
-      recipients: process.env.ALERT_RECIPIENTS!.split(',')
-    }));
+    this.channels.push(
+      new EmailChannel({
+        smtp: process.env.SMTP_CONFIG!,
+        recipients: process.env.ALERT_RECIPIENTS!.split(','),
+      })
+    );
 
     // PagerDuty for critical issues
     if (process.env.PAGERDUTY_KEY) {
-      this.channels.push(new PagerDutyChannel({
-        integrationKey: process.env.PAGERDUTY_KEY
-      }));
+      this.channels.push(
+        new PagerDutyChannel({
+          integrationKey: process.env.PAGERDUTY_KEY,
+        })
+      );
     }
   }
 
@@ -841,13 +869,11 @@ export class AlertManager {
       title: '🚨 Critical Token Drift Detected',
       message: this.formatDriftMessage(drift),
       data: drift,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Send to all channels for critical alerts
-    await Promise.all(
-      this.channels.map(channel => channel.send(alert))
-    );
+    await Promise.all(this.channels.map(channel => channel.send(alert)));
   }
 
   async sendWarningAlert(drift: DriftResult): Promise<void> {
@@ -856,37 +882,37 @@ export class AlertManager {
       title: '⚠️ Token Drift Warning',
       message: this.formatDriftMessage(drift),
       data: drift,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     // Send to Slack and email only for warnings
-    const warningChannels = this.channels.filter(c => 
-      c.type === 'slack' || c.type === 'email'
+    const warningChannels = this.channels.filter(
+      c => c.type === 'slack' || c.type === 'email'
     );
-    
-    await Promise.all(
-      warningChannels.map(channel => channel.send(alert))
-    );
+
+    await Promise.all(warningChannels.map(channel => channel.send(alert)));
   }
 
   private formatDriftMessage(drift: DriftResult): string {
     const changeCount = drift.differences.length;
     const severity = drift.severity;
-    
+
     return `
 Token drift detected with ${changeCount} changes (severity: ${severity})
 
 **Changes Summary:**
-${drift.differences.slice(0, 5).map(d => 
-  `• ${d.type}: ${d.path.join('.')} - ${d.oldValue} → ${d.newValue}`
-).join('\n')}
+${drift.differences
+  .slice(0, 5)
+  .map(d => `• ${d.type}: ${d.path.join('.')} - ${d.oldValue} → ${d.newValue}`)
+  .join('\n')}
 
 ${changeCount > 5 ? `\n... and ${changeCount - 5} more changes` : ''}
 
 **Action Required:**
-${severity === 'critical' ? 
-  'Immediate review and sync recommended' : 
-  'Review and sync when convenient'
+${
+  severity === 'critical'
+    ? 'Immediate review and sync recommended'
+    : 'Review and sync when convenient'
 }
     `.trim();
   }
@@ -909,42 +935,42 @@ export class AlertingRules {
       // Critical: Breaking changes
       {
         name: 'breaking-changes',
-        condition: (drift) => drift.differences.some(d => d.breaking),
+        condition: drift => drift.differences.some(d => d.breaking),
         level: 'critical',
         action: 'immediate-notification',
-        throttle: 0 // No throttling for breaking changes
+        throttle: 0, // No throttling for breaking changes
       },
 
       // Warning: Color changes
       {
         name: 'color-changes',
-        condition: (drift) => drift.differences.some(d => 
-          d.path[0] === 'color' && d.type === 'modified'
-        ),
+        condition: drift =>
+          drift.differences.some(
+            d => d.path[0] === 'color' && d.type === 'modified'
+          ),
         level: 'warning',
         action: 'design-team-notification',
-        throttle: 300000 // 5 minutes
+        throttle: 300000, // 5 minutes
       },
 
       // Info: Documentation updates
       {
         name: 'documentation-updates',
-        condition: (drift) => drift.differences.every(d => 
-          d.type === 'description-change'
-        ),
+        condition: drift =>
+          drift.differences.every(d => d.type === 'description-change'),
         level: 'info',
         action: 'auto-sync',
-        throttle: 3600000 // 1 hour
+        throttle: 3600000, // 1 hour
       },
 
       // Warning: High change volume
       {
         name: 'high-volume-changes',
-        condition: (drift) => drift.differences.length > 20,
+        condition: drift => drift.differences.length > 20,
         level: 'warning',
         action: 'manual-review-required',
-        throttle: 600000 // 10 minutes
-      }
+        throttle: 600000, // 10 minutes
+      },
     ];
   }
 
@@ -956,12 +982,12 @@ export class AlertingRules {
         const lastTriggered = this.getLastTriggered(rule.name);
         const now = Date.now();
 
-        if (!lastTriggered || (now - lastTriggered) > rule.throttle) {
+        if (!lastTriggered || now - lastTriggered > rule.throttle) {
           actions.push({
             rule: rule.name,
             level: rule.level,
             action: rule.action,
-            timestamp: new Date()
+            timestamp: new Date(),
           });
 
           this.recordTrigger(rule.name, now);
@@ -1015,4 +1041,4 @@ pnpm tokens:report --weekly                # Generate weekly trend report
 
 ---
 
-*This documentation is automatically updated when drift detection strategies change.*
+_This documentation is automatically updated when drift detection strategies change._

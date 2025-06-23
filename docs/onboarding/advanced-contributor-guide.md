@@ -1,6 +1,6 @@
 # Advanced Contributor Onboarding Guide
 
-Comprehensive onboarding guide for contributors to the Mimic design system, covering advanced workflows,  
+Comprehensive onboarding guide for contributors to the Mimic design system, covering advanced workflows,\
 tooling integration, and best practices for maintaining design-development consistency.
 
 ## Table of Contents
@@ -101,7 +101,7 @@ echo "🛠️ Step 3/7: Setting up development tools..."
 # Install VS Code extensions if VS Code is available
 if command -v code &> /dev/null; then
   echo "Installing VS Code extensions..."
-  
+
   extensions=(
     "ms-vscode.vscode-typescript-next"
     "bradlc.vscode-tailwindcss"
@@ -112,11 +112,11 @@ if command -v code &> /dev/null; then
     "github.copilot"
     "github.copilot-chat"
   )
-  
+
   for ext in "${extensions[@]}"; do
     code --install-extension "$ext" --force
   done
-  
+
   echo "✅ VS Code extensions installed"
 fi
 
@@ -137,7 +137,7 @@ fi
 # Setup development certificates (if needed)
 if [ ! -f "certs/localhost.pem" ]; then
   mkdir -p certs
-  
+
   if command -v mkcert &> /dev/null; then
     cd certs
     mkcert localhost 127.0.0.1 ::1
@@ -220,14 +220,14 @@ echo "Happy contributing! 🎨"
     "editor.rulers": [80, 120],
     "editor.wordWrap": "bounded",
     "editor.wordWrapColumn": 120,
-    
+
     // File associations
     "files.associations": {
       "*.css": "css",
       "*.scss": "scss",
       "*.json": "jsonc"
     },
-    
+
     // Search exclusions
     "search.exclude": {
       "**/node_modules": true,
@@ -236,32 +236,32 @@ echo "Happy contributing! 🎨"
       "**/coverage": true,
       "**/.storybook-static": true
     },
-    
+
     // Language-specific settings
     "typescript.preferences.useAliasesForRenames": false,
     "typescript.preferences.includePackageJsonAutoImports": "on",
     "typescript.suggest.autoImports": true,
-    
+
     // Nx Console settings
     "nxConsole.showNodeVersionOnStartup": false,
     "nxConsole.projectViewingStyle": "tree",
-    
+
     // Design token specific
     "css.validate": true,
     "scss.validate": true,
     "less.validate": false,
-    
+
     // Prettier integration
     "prettier.requireConfig": true,
     "prettier.useEditorConfig": false,
-    
+
     // ESLint integration
     "eslint.workingDirectories": [
       "packages/design-tokens",
       "packages/design-system",
       "packages/shared-utils"
     ],
-    
+
     // File watching
     "files.watcherExclude": {
       "**/node_modules/**": true,
@@ -269,7 +269,7 @@ echo "Happy contributing! 🎨"
       "**/dist/**": true
     }
   },
-  
+
   "extensions": {
     "recommendations": [
       "ms-vscode.vscode-typescript-next",
@@ -285,7 +285,7 @@ echo "Happy contributing! 🎨"
       "shd101wyy.markdown-preview-enhanced"
     ]
   },
-  
+
   "tasks": {
     "version": "2.0.0",
     "tasks": [
@@ -353,7 +353,7 @@ echo "Happy contributing! 🎨"
       }
     ]
   },
-  
+
   "launch": {
     "version": "0.2.0",
     "configurations": [
@@ -478,7 +478,7 @@ interface AIPrompt {
 
 export class OllamaDesignAssistant {
   private modelName = 'llama3';
-  
+
   async isAvailable(): Promise<boolean> {
     try {
       execSync('ollama --version', { stdio: 'ignore' });
@@ -487,10 +487,12 @@ export class OllamaDesignAssistant {
       return false;
     }
   }
-  
+
   async ensureModelInstalled(): Promise<void> {
     try {
-      const output = execSync(`ollama list | grep ${this.modelName}`, { encoding: 'utf-8' });
+      const output = execSync(`ollama list | grep ${this.modelName}`, {
+        encoding: 'utf-8',
+      });
       if (!output.includes(this.modelName)) {
         console.log(`📥 Installing ${this.modelName} model...`);
         execSync(`ollama pull ${this.modelName}`, { stdio: 'inherit' });
@@ -500,16 +502,16 @@ export class OllamaDesignAssistant {
       execSync(`ollama pull ${this.modelName}`, { stdio: 'inherit' });
     }
   }
-  
+
   async generateComponent(prompt: AIPrompt): Promise<string> {
     const systemPrompt = this.buildSystemPrompt(prompt.type);
     const userPrompt = this.buildUserPrompt(prompt);
-    
+
     const fullPrompt = `${systemPrompt}\n\nUser Request:\n${userPrompt}`;
-    
+
     return this.queryOllama(fullPrompt);
   }
-  
+
   private buildSystemPrompt(type: string): string {
     const basePrompt = `You are an expert in design systems and React component development. 
 Follow these principles:
@@ -519,7 +521,7 @@ Follow these principles:
 - Use design tokens for all styling
 - Include comprehensive JSDoc comments
 - Write testable, maintainable code`;
-    
+
     switch (type) {
       case 'component':
         return `${basePrompt}
@@ -530,7 +532,7 @@ Create React components that:
 - Include proper ARIA attributes
 - Use CSS modules or styled-components with design tokens
 - Export both named and default exports`;
-        
+
       case 'token':
         return `${basePrompt}
         
@@ -540,7 +542,7 @@ Create design tokens that:
 - Provide comprehensive documentation
 - Consider dark mode and accessibility
 - Include usage examples`;
-        
+
       case 'story':
         return `${basePrompt}
         
@@ -550,7 +552,7 @@ Create Storybook stories that:
 - Include interaction tests with @storybook/test
 - Show responsive behavior
 - Include design documentation`;
-        
+
       case 'test':
         return `${basePrompt}
         
@@ -560,23 +562,23 @@ Create comprehensive tests that:
 - Test keyboard navigation
 - Test responsive behavior
 - Include visual regression tests`;
-        
+
       default:
         return basePrompt;
     }
   }
-  
+
   private buildUserPrompt(prompt: AIPrompt): string {
     let userPrompt = `Context: ${prompt.context}\n\n`;
-    
+
     if (prompt.requirements.length > 0) {
       userPrompt += `Requirements:\n${prompt.requirements.map(req => `- ${req}`).join('\n')}\n\n`;
     }
-    
+
     if (prompt.constraints && prompt.constraints.length > 0) {
       userPrompt += `Constraints:\n${prompt.constraints.map(con => `- ${con}`).join('\n')}\n\n`;
     }
-    
+
     // Add current design tokens context
     const tokensPath = 'packages/design-tokens/dist/tokens.json';
     if (existsSync(tokensPath)) {
@@ -586,44 +588,44 @@ Create comprehensive tests that:
       userPrompt += `Spacing: ${Object.keys(tokens.spacing || {}).join(', ')}\n`;
       userPrompt += `Typography: ${Object.keys(tokens.typography || {}).join(', ')}\n\n`;
     }
-    
+
     return userPrompt;
   }
-  
+
   private async queryOllama(prompt: string): Promise<string> {
     return new Promise((resolve, reject) => {
       const ollama = spawn('ollama', ['run', this.modelName], {
-        stdio: ['pipe', 'pipe', 'pipe']
+        stdio: ['pipe', 'pipe', 'pipe'],
       });
-      
+
       let output = '';
       let error = '';
-      
-      ollama.stdout.on('data', (data) => {
+
+      ollama.stdout.on('data', data => {
         output += data.toString();
       });
-      
-      ollama.stderr.on('data', (data) => {
+
+      ollama.stderr.on('data', data => {
         error += data.toString();
       });
-      
-      ollama.on('close', (code) => {
+
+      ollama.on('close', code => {
         if (code === 0) {
           resolve(output.trim());
         } else {
           reject(new Error(`Ollama process failed: ${error}`));
         }
       });
-      
+
       // Send the prompt
       ollama.stdin.write(prompt);
       ollama.stdin.end();
     });
   }
-  
+
   async scaffoldComponent(name: string, type: string): Promise<void> {
     console.log(`🤖 AI scaffolding ${type} component: ${name}`);
-    
+
     const prompt: AIPrompt = {
       type: 'component',
       context: `Create a ${type} component named ${name} for a design system`,
@@ -632,40 +634,42 @@ Create comprehensive tests that:
         'Accessible by default',
         'Uses design tokens for styling',
         'Includes proper documentation',
-        'Follows atomic design principles'
+        'Follows atomic design principles',
       ],
       constraints: [
         'Must support ref forwarding',
         'Must spread native HTML attributes',
-        'Must include ARIA attributes where appropriate'
-      ]
+        'Must include ARIA attributes where appropriate',
+      ],
     };
-    
+
     try {
       await this.ensureModelInstalled();
       const componentCode = await this.generateComponent(prompt);
-      
+
       // Save generated component
       const componentPath = join('packages/design-system/src/components', name);
       if (!existsSync(componentPath)) {
         execSync(`mkdir -p ${componentPath}`);
       }
-      
+
       writeFileSync(join(componentPath, `${name}.tsx`), componentCode);
-      
+
       // Generate accompanying files
       await this.generateStory(name, componentCode);
       await this.generateTest(name, componentCode);
-      
+
       console.log(`✅ Component ${name} scaffolded successfully`);
       console.log(`📝 Review and refine the generated code before committing`);
-      
     } catch (error) {
       console.error(`❌ Failed to scaffold component: ${error.message}`);
     }
   }
-  
-  private async generateStory(name: string, componentCode: string): Promise<void> {
+
+  private async generateStory(
+    name: string,
+    componentCode: string
+  ): Promise<void> {
     const prompt: AIPrompt = {
       type: 'story',
       context: `Create comprehensive Storybook stories for this component:\n\n${componentCode}`,
@@ -673,16 +677,23 @@ Create comprehensive tests that:
         'Include all variants and states',
         'Add interaction tests',
         'Show accessibility features',
-        'Include design documentation'
-      ]
+        'Include design documentation',
+      ],
     };
-    
+
     const storyCode = await this.generateComponent(prompt);
-    const storyPath = join('packages/design-system/src/components', name, `${name}.stories.tsx`);
+    const storyPath = join(
+      'packages/design-system/src/components',
+      name,
+      `${name}.stories.tsx`
+    );
     writeFileSync(storyPath, storyCode);
   }
-  
-  private async generateTest(name: string, componentCode: string): Promise<void> {
+
+  private async generateTest(
+    name: string,
+    componentCode: string
+  ): Promise<void> {
     const prompt: AIPrompt = {
       type: 'test',
       context: `Create comprehensive tests for this component:\n\n${componentCode}`,
@@ -690,12 +701,16 @@ Create comprehensive tests that:
         'Test component behavior',
         'Include accessibility tests',
         'Test keyboard navigation',
-        'Test responsive behavior'
-      ]
+        'Test responsive behavior',
+      ],
     };
-    
+
     const testCode = await this.generateComponent(prompt);
-    const testPath = join('packages/design-system/src/components', name, `${name}.test.tsx`);
+    const testPath = join(
+      'packages/design-system/src/components',
+      name,
+      `${name}.test.tsx`
+    );
     writeFileSync(testPath, testCode);
   }
 }
@@ -703,29 +718,37 @@ Create comprehensive tests that:
 // CLI integration
 if (require.main === module) {
   const assistant = new OllamaDesignAssistant();
-  
+
   const [, , command, ...args] = process.argv;
-  
+
   switch (command) {
     case 'scaffold':
       const [name, type = 'atom'] = args;
       if (!name) {
-        console.error('Usage: tsx tools/ai/ollama-integration.ts scaffold <ComponentName> [type]');
+        console.error(
+          'Usage: tsx tools/ai/ollama-integration.ts scaffold <ComponentName> [type]'
+        );
         process.exit(1);
       }
       assistant.scaffoldComponent(name, type);
       break;
-      
+
     case 'check':
       assistant.isAvailable().then(available => {
-        console.log(`Ollama ${available ? '✅ available' : '❌ not available'}`);
+        console.log(
+          `Ollama ${available ? '✅ available' : '❌ not available'}`
+        );
       });
       break;
-      
+
     default:
       console.log('Available commands:');
-      console.log('  scaffold <ComponentName> [type] - Scaffold a new component');
-      console.log('  check                          - Check if Ollama is available');
+      console.log(
+        '  scaffold <ComponentName> [type] - Scaffold a new component'
+      );
+      console.log(
+        '  check                          - Check if Ollama is available'
+      );
   }
 }
 ```
@@ -763,22 +786,22 @@ lint:
     - biome@1.8.3
     - eslint@8.57.0
     - prettier@3.3.2
-    
+
     # Documentation
     - dprint@0.45.1
     - markdownlint@0.41.0
-    
+
     # Security
     - semgrep@1.77.0
     - trufflehog@3.78.2
-    
+
     # Configuration
     - taplo@0.8.1  # TOML formatter
     - yamllint@1.35.1
-    
+
     # Design specific
     - stylelint@16.6.1
-    
+
   ignore:
     - linters: [ALL]
       paths:
@@ -825,9 +848,7 @@ repos:
       "useTabs": false
     },
     "dockerfile": {},
-    "includes": [
-      "**/*.{ts,tsx,js,jsx,json,md,toml,dockerfile}"
-    ],
+    "includes": ["**/*.{ts,tsx,js,jsx,json,md,toml,dockerfile}"],
     "excludes": [
       "node_modules/",
       "dist/",
@@ -868,102 +889,122 @@ interface TokenContribution {
 }
 
 export class TokenContributionWorkflow {
-  async validateContribution(contribution: TokenContribution): Promise<string[]> {
+  async validateContribution(
+    contribution: TokenContribution
+  ): Promise<string[]> {
     const errors: string[] = [];
-    
+
     // Naming validation
     if (!this.validateNaming(contribution.name, contribution.category)) {
-      errors.push(`Invalid naming pattern for ${contribution.category}: ${contribution.name}`);
+      errors.push(
+        `Invalid naming pattern for ${contribution.category}: ${contribution.name}`
+      );
     }
-    
+
     // Value validation
     if (!this.validateValue(contribution.value, contribution.category)) {
-      errors.push(`Invalid value for ${contribution.category}: ${contribution.value}`);
+      errors.push(
+        `Invalid value for ${contribution.category}: ${contribution.value}`
+      );
     }
-    
+
     // Semantic validation
     if (!this.validateSemantics(contribution)) {
       errors.push(`Token doesn't follow semantic naming conventions`);
     }
-    
+
     // Breaking change validation
     if (contribution.breaking && !this.validateBreakingChange(contribution)) {
       errors.push(`Breaking change not properly justified`);
     }
-    
+
     return errors;
   }
-  
+
   private validateNaming(name: string, category: string): boolean {
     const patterns = {
-      color: /^(color-)?(base|semantic|surface|text|border|action|feedback|overlay)-/,
+      color:
+        /^(color-)?(base|semantic|surface|text|border|action|feedback|overlay)-/,
       spacing: /^(spacing-|space-)(xs|sm|md|lg|xl|2xl|3xl|\d+)$/,
       typography: /^(font-)?(size|weight|family|height|spacing)-/,
       border: /^border-(width|radius|style)-/,
-      shadow: /^shadow-(xs|sm|md|lg|xl|inner)$/
+      shadow: /^shadow-(xs|sm|md|lg|xl|inner)$/,
     };
-    
+
     return patterns[category]?.test(name) || false;
   }
-  
+
   private validateValue(value: any, category: string): boolean {
     switch (category) {
       case 'color':
-        return /^#[0-9A-Fa-f]{6}$/.test(value) || 
-               /^rgb\(\d+,\s*\d+,\s*\d+\)$/.test(value) ||
-               /^hsl\(\d+,\s*\d+%,\s*\d+%\)$/.test(value);
-      
+        return (
+          /^#[0-9A-Fa-f]{6}$/.test(value) ||
+          /^rgb\(\d+,\s*\d+,\s*\d+\)$/.test(value) ||
+          /^hsl\(\d+,\s*\d+%,\s*\d+%\)$/.test(value)
+        );
+
       case 'spacing':
         return /^\d+(\.\d+)?(px|rem|em)$/.test(value);
-      
+
       case 'typography':
         if (typeof value === 'object') {
           return value.fontSize && value.lineHeight;
         }
         return /^\d+(\.\d+)?(px|rem|em)$/.test(value);
-      
+
       default:
         return true;
     }
   }
-  
+
   private validateSemantics(contribution: TokenContribution): boolean {
     // Check if token follows semantic naming
     const semanticKeywords = [
-      'primary', 'secondary', 'tertiary',
-      'success', 'warning', 'error', 'info',
-      'surface', 'background', 'foreground',
-      'subtle', 'muted', 'emphasis'
+      'primary',
+      'secondary',
+      'tertiary',
+      'success',
+      'warning',
+      'error',
+      'info',
+      'surface',
+      'background',
+      'foreground',
+      'subtle',
+      'muted',
+      'emphasis',
     ];
-    
-    return semanticKeywords.some(keyword => 
+
+    return semanticKeywords.some(keyword =>
       contribution.name.toLowerCase().includes(keyword)
     );
   }
-  
+
   private validateBreakingChange(contribution: TokenContribution): boolean {
     // Breaking changes require detailed reasoning
-    return contribution.reasoning.length > 50 && 
-           contribution.reasoning.toLowerCase().includes('breaking');
+    return (
+      contribution.reasoning.length > 50 &&
+      contribution.reasoning.toLowerCase().includes('breaking')
+    );
   }
-  
+
   async applyContribution(contribution: TokenContribution): Promise<void> {
     console.log(`🎨 Applying token contribution: ${contribution.name}`);
-    
+
     // Validate first
     const errors = await this.validateContribution(contribution);
     if (errors.length > 0) {
       throw new Error(`Validation failed:\n${errors.join('\n')}`);
     }
-    
+
     // Apply the token change
     const tokensPath = `packages/design-tokens/tokens/${contribution.category}.json`;
     let tokens = {};
-    
+
     if (existsSync(tokensPath)) {
       tokens = JSON.parse(readFileSync(tokensPath, 'utf-8'));
     }
-    
+
     switch (contribution.type) {
       case 'new':
         this.addToken(tokens, contribution);
@@ -975,139 +1016,143 @@ export class TokenContributionWorkflow {
         this.deprecateToken(tokens, contribution);
         break;
     }
-    
+
     // Save updated tokens
     writeFileSync(tokensPath, JSON.stringify(tokens, null, 2));
-    
+
     // Rebuild tokens
     execSync('pnpm nx build design-tokens', { stdio: 'inherit' });
-    
+
     // Run validation suite
     await this.runValidationSuite(contribution);
-    
+
     console.log(`✅ Token contribution applied successfully`);
   }
-  
+
   private addToken(tokens: any, contribution: TokenContribution): void {
     const path = contribution.name.split('-');
     let current = tokens;
-    
+
     for (let i = 0; i < path.length - 1; i++) {
       if (!current[path[i]]) {
         current[path[i]] = {};
       }
       current = current[path[i]];
     }
-    
+
     current[path[path.length - 1]] = {
       $value: contribution.value,
       $description: contribution.description,
-      $type: this.getTokenType(contribution.category)
+      $type: this.getTokenType(contribution.category),
     };
   }
-  
+
   private modifyToken(tokens: any, contribution: TokenContribution): void {
     // Find and update existing token
     const path = contribution.name.split('-');
     let current = tokens;
-    
+
     for (let i = 0; i < path.length - 1; i++) {
       if (!current[path[i]]) {
         throw new Error(`Token path not found: ${contribution.name}`);
       }
       current = current[path[i]];
     }
-    
+
     const tokenName = path[path.length - 1];
     if (!current[tokenName]) {
       throw new Error(`Token not found: ${contribution.name}`);
     }
-    
+
     current[tokenName].$value = contribution.value;
     current[tokenName].$description = contribution.description;
   }
-  
+
   private deprecateToken(tokens: any, contribution: TokenContribution): void {
     // Mark token as deprecated
     const path = contribution.name.split('-');
     let current = tokens;
-    
+
     for (let i = 0; i < path.length - 1; i++) {
       current = current[path[i]];
     }
-    
+
     const tokenName = path[path.length - 1];
     current[tokenName].$deprecated = true;
     current[tokenName].$deprecationReason = contribution.reasoning;
   }
-  
+
   private getTokenType(category: string): string {
     const typeMap = {
       color: 'color',
       spacing: 'dimension',
       typography: 'typography',
       border: 'border',
-      shadow: 'shadow'
+      shadow: 'shadow',
     };
-    
+
     return typeMap[category] || 'other';
   }
-  
-  private async runValidationSuite(contribution: TokenContribution): Promise<void> {
+
+  private async runValidationSuite(
+    contribution: TokenContribution
+  ): Promise<void> {
     console.log('🧪 Running validation suite...');
-    
+
     // Run token schema validation
     execSync('pnpm nx run design-tokens:validate-schema', { stdio: 'inherit' });
-    
+
     // Run component tests to ensure no breakage
     execSync('pnpm nx test design-system', { stdio: 'inherit' });
-    
+
     // Build Storybook to validate visual changes
     execSync('pnpm nx build-storybook design-system', { stdio: 'inherit' });
-    
+
     console.log('✅ Validation suite passed');
   }
-  
+
   async createContributionPR(contribution: TokenContribution): Promise<void> {
     const branchName = `token/${contribution.type}-${contribution.name.replace(/[^a-zA-Z0-9]/g, '-')}`;
-    
+
     // Create feature branch
     execSync(`git checkout -b ${branchName}`);
-    
+
     // Apply contribution
     await this.applyContribution(contribution);
-    
+
     // Commit changes
     const commitMessage = this.generateCommitMessage(contribution);
     execSync('git add .');
     execSync(`git commit -m "${commitMessage}"`);
-    
+
     // Push branch
     execSync(`git push origin ${branchName}`);
-    
+
     console.log(`🚀 Created PR branch: ${branchName}`);
-    console.log(`📝 Create PR with title: ${this.generatePRTitle(contribution)}`);
+    console.log(
+      `📝 Create PR with title: ${this.generatePRTitle(contribution)}`
+    );
   }
-  
+
   private generateCommitMessage(contribution: TokenContribution): string {
     const type = contribution.breaking ? 'tokens!' : 'tokens';
     const scope = contribution.category;
     const action = {
       new: 'add',
       modify: 'update',
-      deprecate: 'deprecate'
+      deprecate: 'deprecate',
     }[contribution.type];
-    
+
     return `${type}(${scope}): ${action} ${contribution.name}\n\n${contribution.reasoning}`;
   }
-  
+
   private generatePRTitle(contribution: TokenContribution): string {
     const action = {
       new: 'Add',
       modify: 'Update',
-      deprecate: 'Deprecate'
+      deprecate: 'Deprecate',
     }[contribution.type];
-    
+
     return `${action} ${contribution.category} token: ${contribution.name}`;
   }
 }
@@ -1138,30 +1183,36 @@ export class QualityGateRunner {
       required: true,
       check: async () => {
         try {
-          execSync('pnpm nx run design-tokens:validate-schema', { stdio: 'pipe' });
+          execSync('pnpm nx run design-tokens:validate-schema', {
+            stdio: 'pipe',
+          });
           return true;
         } catch {
           return false;
         }
       },
-      errorMessage: 'Design token schema validation failed. Check token structure and naming.'
+      errorMessage:
+        'Design token schema validation failed. Check token structure and naming.',
     },
-    
+
     {
       name: 'Component Tests',
       description: 'Runs all component unit tests',
       required: true,
       check: async () => {
         try {
-          execSync('pnpm nx test design-system --passWithNoTests', { stdio: 'pipe' });
+          execSync('pnpm nx test design-system --passWithNoTests', {
+            stdio: 'pipe',
+          });
           return true;
         } catch {
           return false;
         }
       },
-      errorMessage: 'Component tests failed. Fix failing tests before proceeding.'
+      errorMessage:
+        'Component tests failed. Fix failing tests before proceeding.',
     },
-    
+
     {
       name: 'Accessibility Tests',
       description: 'Validates WCAG compliance',
@@ -1174,9 +1225,10 @@ export class QualityGateRunner {
           return false;
         }
       },
-      errorMessage: 'Accessibility tests failed. Ensure components meet WCAG 2.1 AA standards.'
+      errorMessage:
+        'Accessibility tests failed. Ensure components meet WCAG 2.1 AA standards.',
     },
-    
+
     {
       name: 'Visual Regression Tests',
       description: 'Checks for unintended visual changes',
@@ -1189,25 +1241,30 @@ export class QualityGateRunner {
           return false;
         }
       },
-      errorMessage: 'Visual regression detected. Review changes in Loki diff report.'
+      errorMessage:
+        'Visual regression detected. Review changes in Loki diff report.',
     },
-    
+
     {
       name: 'Bundle Size Check',
       description: 'Ensures bundle size is within limits',
       required: true,
       check: async () => {
         try {
-          const report = execSync('pnpm nx run design-system:analyze-bundle --json', { encoding: 'utf-8' });
+          const report = execSync(
+            'pnpm nx run design-system:analyze-bundle --json',
+            { encoding: 'utf-8' }
+          );
           const bundleData = JSON.parse(report);
           return bundleData.gzippedSize < 50000; // 50KB limit
         } catch {
           return false;
         }
       },
-      errorMessage: 'Bundle size exceeds 50KB limit. Optimize components or split bundles.'
+      errorMessage:
+        'Bundle size exceeds 50KB limit. Optimize components or split bundles.',
     },
-    
+
     {
       name: 'Performance Benchmarks',
       description: 'Validates component performance metrics',
@@ -1220,9 +1277,10 @@ export class QualityGateRunner {
           return false;
         }
       },
-      errorMessage: 'Performance benchmarks failed. Check component render times.'
+      errorMessage:
+        'Performance benchmarks failed. Check component render times.',
     },
-    
+
     {
       name: 'Security Audit',
       description: 'Scans for security vulnerabilities',
@@ -1235,46 +1293,50 @@ export class QualityGateRunner {
           return false;
         }
       },
-      errorMessage: 'Security vulnerabilities detected. Run pnpm audit fix.'
+      errorMessage: 'Security vulnerabilities detected. Run pnpm audit fix.',
     },
-    
+
     {
       name: 'License Compliance',
       description: 'Validates all dependencies have compatible licenses',
       required: true,
       check: async () => {
         try {
-          execSync('npx license-checker --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC"', { stdio: 'pipe' });
+          execSync(
+            'npx license-checker --onlyAllow "MIT;Apache-2.0;BSD-2-Clause;BSD-3-Clause;ISC"',
+            { stdio: 'pipe' }
+          );
           return true;
         } catch {
           return false;
         }
       },
-      errorMessage: 'Non-compatible licenses detected. Review dependency licenses.'
-    }
+      errorMessage:
+        'Non-compatible licenses detected. Review dependency licenses.',
+    },
   ];
-  
+
   async runAll(): Promise<boolean> {
     console.log('🚪 Running quality gates...\n');
-    
+
     let allPassed = true;
     const results = [];
-    
+
     for (const gate of this.gates) {
       console.log(`🔍 ${gate.name}...`);
-      
+
       const startTime = Date.now();
       const passed = await gate.check();
       const duration = Date.now() - startTime;
-      
+
       results.push({
         name: gate.name,
         passed,
         required: gate.required,
         duration,
-        errorMessage: gate.errorMessage
+        errorMessage: gate.errorMessage,
       });
-      
+
       if (passed) {
         console.log(`  ✅ Passed (${duration}ms)`);
       } else {
@@ -1282,36 +1344,44 @@ export class QualityGateRunner {
         if (gate.errorMessage) {
           console.log(`     ${gate.errorMessage}`);
         }
-        
+
         if (gate.required) {
           allPassed = false;
         }
       }
-      
+
       console.log('');
     }
-    
+
     // Generate detailed report
     this.generateReport(results);
-    
+
     // Summary
     const required = results.filter(r => r.required);
     const requiredPassed = required.filter(r => r.passed);
-    
+
     console.log('📊 Quality Gate Summary:');
-    console.log(`   Required: ${requiredPassed.length}/${required.length} passed`);
-    console.log(`   Optional: ${results.filter(r => !r.required && r.passed).length}/${results.filter(r => !r.required).length} passed`);
-    console.log(`   Total Duration: ${results.reduce((sum, r) => sum + r.duration, 0)}ms`);
-    
+    console.log(
+      `   Required: ${requiredPassed.length}/${required.length} passed`
+    );
+    console.log(
+      `   Optional: ${results.filter(r => !r.required && r.passed).length}/${results.filter(r => !r.required).length} passed`
+    );
+    console.log(
+      `   Total Duration: ${results.reduce((sum, r) => sum + r.duration, 0)}ms`
+    );
+
     if (allPassed) {
       console.log('\n🎉 All required quality gates passed!');
     } else {
-      console.log('\n❌ Some required quality gates failed. Fix issues before proceeding.');
+      console.log(
+        '\n❌ Some required quality gates failed. Fix issues before proceeding.'
+      );
     }
-    
+
     return allPassed;
   }
-  
+
   private generateReport(results: any[]): void {
     const report = {
       timestamp: new Date().toISOString(),
@@ -1320,40 +1390,46 @@ export class QualityGateRunner {
         passed: results.filter(r => r.passed).length,
         failed: results.filter(r => !r.passed).length,
         required: results.filter(r => r.required).length,
-        requiredPassed: results.filter(r => r.required && r.passed).length
+        requiredPassed: results.filter(r => r.required && r.passed).length,
       },
       gates: results,
-      recommendations: this.generateRecommendations(results)
+      recommendations: this.generateRecommendations(results),
     };
-    
+
     writeFileSync('quality-gate-report.json', JSON.stringify(report, null, 2));
-    
+
     // Also generate markdown report for PR comments
     const markdown = this.generateMarkdownReport(report);
     writeFileSync('quality-gate-report.md', markdown);
   }
-  
+
   private generateRecommendations(results: any[]): string[] {
     const recommendations = [];
-    
+
     const failedRequired = results.filter(r => r.required && !r.passed);
     if (failedRequired.length > 0) {
-      recommendations.push('🚨 Address all required quality gate failures before merging');
+      recommendations.push(
+        '🚨 Address all required quality gate failures before merging'
+      );
     }
-    
+
     const slowGates = results.filter(r => r.duration > 30000); // 30 seconds
     if (slowGates.length > 0) {
-      recommendations.push('⚡ Optimize slow quality gates to improve CI performance');
+      recommendations.push(
+        '⚡ Optimize slow quality gates to improve CI performance'
+      );
     }
-    
+
     const failedOptional = results.filter(r => !r.required && !r.passed);
     if (failedOptional.length > 0) {
-      recommendations.push('💡 Consider addressing optional quality gate failures for better quality');
+      recommendations.push(
+        '💡 Consider addressing optional quality gate failures for better quality'
+      );
     }
-    
+
     return recommendations;
   }
-  
+
   private generateMarkdownReport(report: any): string {
     return `# Quality Gate Report
 
@@ -1371,12 +1447,16 @@ Generated: ${report.timestamp}
 
 ## Gate Results
 
-${report.gates.map(gate => `
+${report.gates
+  .map(
+    gate => `
 ### ${gate.passed ? '✅' : '❌'} ${gate.name} ${gate.required ? '(Required)' : '(Optional)'}
 
 - **Duration**: ${gate.duration}ms
 ${gate.passed ? '' : `- **Error**: ${gate.errorMessage || 'No error message'}`}
-`).join('\n')}
+`
+  )
+  .join('\n')}
 
 ## Recommendations
 
@@ -1388,13 +1468,13 @@ ${report.recommendations.map(rec => `- ${rec}`).join('\n')}
 // Pre-commit hook integration
 if (require.main === module) {
   const runner = new QualityGateRunner();
-  
+
   runner.runAll().then(passed => {
     process.exit(passed ? 0 : 1);
   });
 }
 ```
 
-This comprehensive contributor onboarding guide provides everything needed for new contributors to quickly  
-become productive with the advanced Mimic design system workflows. It includes automated setup scripts,  
+This comprehensive contributor onboarding guide provides everything needed for new contributors to quickly\
+become productive with the advanced Mimic design system workflows. It includes automated setup scripts,\
 AI-assisted development tools, quality gates, and complete workflow integration guidance.

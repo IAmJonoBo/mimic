@@ -1,8 +1,12 @@
 # Mimic Design Token Pipeline: User Guide
 
-**Version**: 2.0.0  
-**Last Updated**: June 2025  
+**Version**: 2.2.0\
+**Last Updated**: June 2025\
 **Target Audience**: Designers, Developers, DevOps Engineers
+
+> **📖 Document Overview**: This User Guide provides step-by-step instructions for using the Mimic design token pipeline.
+> For comprehensive technical details, see the [Control Document](./CONTROL_DOCUMENT.md).
+> For quick setup, see the [README](../README.md).
 
 Building on everything we've planned, this User Guide walks you—designer, developer, or DevOps—through
 each stage of the open-source pipeline, explains why the step matters, and links straight to the official docs for
@@ -73,7 +77,6 @@ efficient task execution.
 ### 2.1 Create and Organize Tokens
 
 1. **Create global/alias/semantic tokens** in the Tokens panel
-
    - Global tokens: Raw values (colors, spacing, typography)
    - Alias tokens: References to global tokens with semantic meaning
    - Component tokens: Context-specific overrides
@@ -110,6 +113,7 @@ The W3C-DTCG format ensures interoperability with any standards-compliant token 
 - [Penpot User Guide](https://help.penpot.app/)
 - [W3C Design Tokens Spec](https://design-tokens.github.io/community-group/format/)
 - [Penpot Token Schema](./design/penpot-token-schema.md)
+- [Control Document: Technical Implementation](./CONTROL_DOCUMENT.md#technical-implementation-guide)
 
 ---
 
@@ -710,12 +714,118 @@ Enable strict module boundaries to prevent cross-platform token imports:
 
 ### 10.4 Runtime Guard-Rails
 
-| Runtime           | Collision Risk            | Prevention Strategy                                   |
-| ----------------- | ------------------------- | ----------------------------------------------------- |
-| **Qwik City**     | CSS variables vs Tailwind | Prefixed `--ds-*` vars; Tailwind safelist `^ds-`      |
-| **React Native**  | Metro cache conflicts     | Import only via `@tokens/react-native`; Metro dedupes |
-| **Compose MP**    | Package name clashes      | Use `ds.theme` package namespace                      |
-| **Tauri Desktop** | Asset path conflicts      | Configure `distDir` to `apps/web/dist`                |
+| Runtime           | Collision Risk            | Prevention Strategy                                                 | Tooling Reference    |
+| ----------------- | ------------------------- | ------------------------------------------------------------------- | -------------------- |
+| **Qwik City**     | CSS variables vs Tailwind | Prefixed `--ds-*` vars; Tailwind safelist `^ds-`                    | Specify warning docs |
+| **React Native**  | Metro cache conflicts     | Scoped package names (`@mimic/design-tokens`) + Metro deduplication | Locofy FAQ           |
+| **Compose MP**    | Package name clashes      | Use `ds.theme` package namespace                                    | Industry standard    |
+| **Tauri Desktop** | Asset path conflicts      | Configure `distDir` to `apps/web/dist`                              | Tauri best practice  |
+| **Storybook**     | Port conflicts            | Fixed ports: Web(6006), Mobile(7007), Desktop(6008)                 | Supernova docs       |
+
+#### Critical Implementation Details
+
+**Specify-Documented Tailwind CSS Collision Prevention**
+
+Specify documentation warns that un-namespaced design token CSS variables will collide with Tailwind\
+utility classes. Mimic's `ds-` prefix completely eliminates this risk:
+
+```javascript
+// tailwind.config.js - Collision-safe configuration
+module.exports = {
+  safelist: [
+    {
+      pattern: /^ds-/, // Allow all ds- prefixed CSS variables (prevents Specify warnings)
+      variants: ['hover', 'focus', 'active'],
+    },
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // ✅ No collision: --ds-color-primary vs .text-primary
+        primary: 'var(--ds-color-primary)',
+        // ✅ No collision: --ds-color-secondary vs .text-secondary
+        secondary: 'var(--ds-color-secondary)',
+      },
+      spacing: {
+        // ✅ No collision: --ds-spacing-xs vs .p-1, .m-1, etc.
+        xs: 'var(--ds-spacing-xs)',
+        sm: 'var(--ds-spacing-sm)',
+        md: 'var(--ds-spacing-md)',
+      },
+    },
+  },
+};
+```
+
+**Locofy FAQ Metro Bundle Deduplication**
+
+Locofy FAQ documents that Metro will bundle duplicate packages if package.json name fields collide with\
+workspace library names. Mimic prevents this with proper scoped naming:
+
+```json
+// packages/design-tokens/package.json - Metro-safe configuration
+{
+  "name": "@mimic/design-tokens", // ✅ Scoped name prevents Locofy FAQ duplication issue
+  "version": "1.0.0",
+  "main": "libs/tokens/js/tokens.js",
+  "exports": {
+    ".": "./libs/tokens/js/tokens.js",
+    "./css": "./libs/tokens/css/tokens.css",
+    "./react-native": "./libs/tokens/react-native/theme.ts"
+  },
+  "files": ["libs/tokens/"]
+}
+```
+
+**Why This Works:**
+
+- Metro recognizes `@mimic/design-tokens` as external scoped package
+- No collision with workspace lib `design-tokens` (different namespace)
+- Metro cache deduplicates correctly across multiple app bundles
+
+**Supernova-Documented Storybook Port Management**
+
+Supernova documentation notes that Storybook's React Native builder defaults to port 7007 while Vite\
+builder defaults to port 6006, causing dev-machine port conflicts. Mimic uses fixed port assignment:
+
+```bash
+# Collision-safe Storybook commands per Supernova best practices
+pnpm nx run design-system:storybook          # Port 6006 (Web/Vite - default)
+pnpm nx run design-system:storybook:mobile   # Port 7007 (React Native - default)
+pnpm nx run design-system:storybook:desktop  # Port 6008 (Desktop/Vite - custom)
+```
+
+**Configuration Files:**
+
+```javascript
+// .storybook/main.js (Web)
+module.exports = {
+  framework: '@storybook/vite',
+  viteFinal: config => {
+    config.server = config.server || {};
+    config.server.port = 6006; // Fixed Web port
+    return config;
+  },
+};
+
+// .storybook/main.mobile.js (Mobile)
+module.exports = {
+  framework: '@storybook/react-native',
+  server: {
+    port: 7007, // Fixed Mobile port (React Native default)
+  },
+};
+
+// .storybook/main.desktop.js (Desktop)
+module.exports = {
+  framework: '@storybook/vite',
+  viteFinal: config => {
+    config.server = config.server || {};
+    config.server.port = 6008; // Fixed Desktop port (avoid conflicts)
+    return config;
+  },
+};
+```
 
 **Why this matters**: This architecture eliminates all four types of collisions (naming,
 file-path, module boundary, and runtime globals) while maintaining Penpot as the single source
@@ -780,6 +890,13 @@ common failure modes enables faster problem resolution.
 
 ### Core Documentation
 
+- **[Control Document](./CONTROL_DOCUMENT.md)** - Master technical reference and operational procedures
+- **[README](../README.md)** - Project overview, quick start, and collision prevention architecture
+- **[Contributing Guide](../CONTRIBUTING.md)** - How to contribute to the project
+- **[Development Guide](../DEVELOPMENT.md)** - Local development workflows
+
+### Official Tool Documentation
+
 - [Penpot User Guide](https://help.penpot.app/) - Token export and design system management
 - [Style Dictionary Documentation](https://amzn.github.io/style-dictionary/) - Installation, configuration, and custom transforms
 - [Qwik City Documentation](https://qwik.builder.io/docs/qwikcity/) - Prefetch strategies and integrations
@@ -792,7 +909,7 @@ common failure modes enables faster problem resolution.
 - [Tauri Security Guide](https://tauri.app/v1/references/security) - Security best practices
 - [Nx Module Boundaries](https://nx.dev/core-features/enforce-module-boundaries) - Architectural constraints
 
-### Internal Documentation
+### Advanced Documentation
 
 - [Getting Started Guide](./onboarding/README.md) - First-time setup and onboarding
 - [Advanced Developer Guide](./onboarding/advanced-contributor-guide.md) - Deep-dive development topics
@@ -801,7 +918,6 @@ common failure modes enables faster problem resolution.
 - [Penpot Token Schema](./design/penpot-token-schema.md) - Token structure and validation
 - [Implementation Guide](./IMPLEMENTATION_GUIDE.md) - Technical implementation details
 - [Architecture Overview](./architecture/README.md) - System architecture and decisions
-- [Control Document](./CONTROL_DOCUMENT.md) - Master control and governance document
 
 ---
 
@@ -815,4 +931,5 @@ fully documented, reproducible, and ready for team onboarding or open-source con
 - **Maintainer**: Mimic Core Team
 - **Last Updated**: June 2025
 - **Target Audience**: All pipeline users (Designers, Developers, DevOps)
+- **Related Documents**: [Control Document](./CONTROL_DOCUMENT.md) • [README](../README.md)
 - **Feedback**: [Create an issue](https://github.com/mimic/issues/new) for improvements

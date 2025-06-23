@@ -237,15 +237,15 @@ fun DynamicMimicTheme(
 ) {
     val themeMode by themeController.themeMode.collectAsState()
     val customColors by themeController.customColors.collectAsState()
-    
+
     val isDarkTheme = when (themeMode) {
         ThemeMode.LIGHT -> false
         ThemeMode.DARK -> true
         ThemeMode.SYSTEM -> isSystemInDarkTheme()
     }
-    
+
     val colors = customColors ?: if (isDarkTheme) darkMimicColors() else lightMimicColors()
-    
+
     MimicTheme(
         darkTheme = isDarkTheme,
         colors = colors,
@@ -327,11 +327,11 @@ enum class ScreenSize {
 @Composable
 fun rememberScreenSize(): ScreenSize {
     val density = LocalDensity.current
-    val screenWidth = with(density) { 
+    val screenWidth = with(density) {
         // Platform-specific screen width calculation
         getScreenWidth()
     }
-    
+
     return when {
         screenWidth < Breakpoints.sm -> ScreenSize.XS
         screenWidth < Breakpoints.md -> ScreenSize.SM
@@ -356,7 +356,7 @@ fun Modifier.responsive(
     xxl: Modifier = Modifier
 ): Modifier {
     val screenSize = rememberScreenSize()
-    
+
     return when (screenSize) {
         ScreenSize.XS -> this.then(xs)
         ScreenSize.SM -> this.then(sm)
@@ -384,7 +384,7 @@ import platform.UIKit.*
 @Composable
 actual fun rememberSafeAreaInsets(): PaddingValues {
     val safeAreaInsets = UIApplication.sharedApplication.keyWindow?.safeAreaInsets
-    
+
     return PaddingValues(
         top = (safeAreaInsets?.top?.toFloat() ?: 0f).dp,
         bottom = (safeAreaInsets?.bottom?.toFloat() ?: 0f).dp,
@@ -418,16 +418,16 @@ fun IOSAdaptiveMimicTheme(
     // Detect iOS dynamic type settings
     val preferredContentSizeCategory = UIApplication.sharedApplication
         .preferredContentSizeCategory
-    
+
     // Adapt typography based on iOS accessibility settings
     val adaptedTypography = mimicTypography().adaptForAccessibility(
         contentSizeCategory = preferredContentSizeCategory
     )
-    
+
     // Detect iOS appearance mode
     val isDarkMode = UITraitCollection.currentTraitCollection
         .userInterfaceStyle == UIUserInterfaceStyleDark
-    
+
     MimicTheme(
         darkTheme = isDarkMode,
         typography = adaptedTypography,
@@ -453,7 +453,7 @@ fun MimicTypography.adaptForAccessibility(
         UIContentSizeCategoryAccessibilityExtraExtraExtraLarge -> 2.4f
         else -> 1.0f
     }
-    
+
     return copy(
         h1 = h1.copy(fontSize = h1.fontSize * scaleFactor),
         h2 = h2.copy(fontSize = h2.fontSize * scaleFactor),
@@ -490,24 +490,24 @@ fun IOSNavigationTheme(
     // Configure iOS navigation bar appearance
     val appearance = UINavigationBarAppearance().apply {
         configureWithOpaqueBackground()
-        
-        tintColor?.let { 
+
+        tintColor?.let {
             this.setTitleTextAttributes(mapOf(
                 NSForegroundColorAttributeName to it
             ))
         }
-        
+
         barTintColor?.let {
             this.backgroundColor = it
         }
     }
-    
+
     UINavigationBar.appearance().apply {
         standardAppearance = appearance
         compactAppearance = appearance
         scrollEdgeAppearance = appearance
     }
-    
+
     content()
 }
 ```
@@ -529,27 +529,27 @@ object BrowserAPI {
         document.documentElement?.setAttribute("data-theme", if (isDark) "dark" else "light")
         window.localStorage.setItem("theme", if (isDark) "dark" else "light")
     }
-    
+
     fun getSystemThemePreference(): Boolean {
         return window.matchMedia("(prefers-color-scheme: dark)").matches
     }
-    
+
     fun observeSystemThemeChanges(callback: (Boolean) -> Unit) {
         val mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
         mediaQuery.addEventListener("change") { event ->
             callback(mediaQuery.matches)
         }
     }
-    
+
     fun getViewportSize(): Pair<Int, Int> {
         return Pair(
             window.innerWidth,
             window.innerHeight
         )
     }
-    
+
     fun observeViewportChanges(callback: (Int, Int) -> Unit) {
-        window.addEventListener("resize") { 
+        window.addEventListener("resize") {
             val (width, height) = getViewportSize()
             callback(width, height)
         }
@@ -571,19 +571,19 @@ fun WasmAdaptiveMimicTheme(
     content: @Composable () -> Unit
 ) {
     var isDarkTheme by remember { mutableStateOf(BrowserAPI.getSystemThemePreference()) }
-    
+
     // Listen for system theme changes
     LaunchedEffect(Unit) {
         BrowserAPI.observeSystemThemeChanges { isDark ->
             isDarkTheme = isDark
         }
     }
-    
+
     // Update document theme attribute
     LaunchedEffect(isDarkTheme) {
         BrowserAPI.setThemePreference(isDarkTheme)
     }
-    
+
     MimicTheme(
         darkTheme = isDarkTheme,
         content = content
@@ -593,13 +593,13 @@ fun WasmAdaptiveMimicTheme(
 @Composable
 actual fun getScreenWidth(): Dp {
     var screenWidth by remember { mutableStateOf(BrowserAPI.getViewportSize().first) }
-    
+
     LaunchedEffect(Unit) {
         BrowserAPI.observeViewportChanges { width, _ ->
             screenWidth = width
         }
     }
-    
+
     return screenWidth.dp
 }
 ```
@@ -625,9 +625,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const systemColorScheme = useColorScheme();
   const [userTheme, setUserTheme] = useState<'light' | 'dark' | 'system'>('system');
-  
+
   const theme = userTheme === 'system' ? systemColorScheme || 'light' : userTheme;
-  
+
   // Listen for system theme changes
   useEffect(() => {
     const subscription = Appearance.addChangeListener(({ colorScheme }) => {
@@ -635,22 +635,22 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         // Theme will update automatically via useColorScheme
       }
     });
-    
+
     return () => subscription?.remove();
   }, [userTheme]);
-  
+
   const setTheme = (newTheme: 'light' | 'dark' | 'system') => {
     setUserTheme(newTheme);
     // Persist theme preference
     // AsyncStorage.setItem('theme', newTheme);
   };
-  
+
   const contextValue: ThemeContextType = {
     theme,
     tokens,
     setTheme
   };
-  
+
   return (
     <ThemeContext.Provider value={contextValue}>
       {children}
@@ -691,7 +691,7 @@ export const FabricButton: React.FC<ButtonProps> = ({
   onPress
 }) => {
   const { theme, tokens } = useTheme();
-  
+
   const buttonStyles = StyleSheet.create({
     container: {
       borderRadius: tokens.border.radius.medium,
@@ -703,7 +703,7 @@ export const FabricButton: React.FC<ButtonProps> = ({
       opacity: disabled ? 0.6 : 1,
       ...getVariantStyles(variant, theme, tokens)
     } as ViewStyle,
-    
+
     text: {
       fontSize: tokens.typography.button.fontSize,
       fontWeight: tokens.typography.button.fontWeight,
@@ -711,7 +711,7 @@ export const FabricButton: React.FC<ButtonProps> = ({
       ...getTextVariantStyles(variant, theme, tokens)
     } as TextStyle
   });
-  
+
   return (
     <Pressable
       style={({ pressed }) => [
@@ -800,19 +800,19 @@ import kotlin.collections.mutableMapOf
 object ThemeCache {
     private val colorCache = mutableMapOf<String, MimicColors>()
     private val typographyCache = mutableMapOf<String, MimicTypography>()
-    
+
     fun getCachedColors(key: String): MimicColors? = colorCache[key]
-    
+
     fun setCachedColors(key: String, colors: MimicColors) {
         colorCache[key] = colors
     }
-    
+
     fun getCachedTypography(key: String): MimicTypography? = typographyCache[key]
-    
+
     fun setCachedTypography(key: String, typography: MimicTypography) {
         typographyCache[key] = typography
     }
-    
+
     fun clearCache() {
         colorCache.clear()
         typographyCache.clear()
@@ -825,7 +825,7 @@ fun cachedMimicColors(
     customizations: Map<String, Any> = emptyMap()
 ): MimicColors {
     val cacheKey = "colors_${isDark}_${customizations.hashCode()}"
-    
+
     return remember(cacheKey) {
         ThemeCache.getCachedColors(cacheKey) ?: run {
             val colors = if (isDark) darkMimicColors() else lightMimicColors()
@@ -847,14 +847,14 @@ import androidx.compose.runtime.*
 
 class MemoryEfficientTheme {
     private val disposables = mutableListOf<DisposableEffect>()
-    
+
     @Composable
     fun ProvideTheme(
         content: @Composable () -> Unit
     ) {
         // Track memory usage
         val memoryTracker = remember { MemoryTracker() }
-        
+
         DisposableEffect(Unit) {
             memoryTracker.start()
             onDispose {
@@ -862,10 +862,10 @@ class MemoryEfficientTheme {
                 clearCaches()
             }
         }
-        
+
         content()
     }
-    
+
     private fun clearCaches() {
         ThemeCache.clearCache()
         // Clear other caches
@@ -876,7 +876,7 @@ class MemoryTracker {
     fun start() {
         // Platform-specific memory tracking
     }
-    
+
     fun stop() {
         // Cleanup and report
     }
@@ -899,26 +899,26 @@ class ThemeTest {
     @Test
     fun testLightThemeColors() {
         val lightColors = lightMimicColors()
-        
+
         assertNotNull(lightColors.primary)
         assertNotNull(lightColors.background)
         assertNotNull(lightColors.surface)
     }
-    
+
     @Test
     fun testDarkThemeColors() {
         val darkColors = darkMimicColors()
-        
+
         assertNotNull(darkColors.primary)
         assertNotNull(darkColors.background)
         assertNotNull(darkColors.surface)
     }
-    
+
     @Test
     fun testThemeTokenConsistency() {
         val lightColors = lightMimicColors()
         val darkColors = darkMimicColors()
-        
+
         // Ensure both themes have same structure
         assertEquals(lightColors::class, darkColors::class)
     }
@@ -931,7 +931,7 @@ class IOSThemeTest {
     fun testSafeAreaInsets() {
         // Test iOS-specific safe area handling
     }
-    
+
     @Test
     fun testDynamicTypeSupport() {
         // Test iOS Dynamic Type integration
@@ -948,4 +948,4 @@ class IOSThemeTest {
 
 ---
 
-*This documentation is updated with each Compose Multiplatform release and covers the latest platform-specific features.*
+_This documentation is updated with each Compose Multiplatform release and covers the latest platform-specific features._

@@ -78,7 +78,7 @@ const diff: TokenDiff = {
   newValue: '#0066cc',
   impact: 'breaking',
   platforms: ['web', 'mobile', 'desktop'],
-  components: ['Button', 'Link', 'Badge']
+  components: ['Button', 'Link', 'Badge'],
 };
 ```
 
@@ -104,7 +104,7 @@ jobs:
     steps:
       - name: Generate Token Diff
         run: npm run tokens:diff -- --format github --output diff-report.md
-      
+
       - name: Comment PR with Diff
         uses: actions/github-script@v6
         with:
@@ -146,7 +146,7 @@ export default {
 
 export const ColorDiff = () => {
   const { added, removed, modified } = useTokenDiff();
-  
+
   return (
     <TokenDiffViewer
       added={added}
@@ -184,14 +184,18 @@ export async function notifyChanges(diff) {
     await slack.postMessage({
       channel: '#design-system',
       text: `🚨 Breaking token changes detected in PR #${prNumber}`,
-      attachments: [{
-        color: 'danger',
-        fields: [{
-          title: 'Affected Tokens',
-          value: diff.breakingChanges.map(c => c.path.join('.')).join('\n'),
-          short: false
-        }]
-      }]
+      attachments: [
+        {
+          color: 'danger',
+          fields: [
+            {
+              title: 'Affected Tokens',
+              value: diff.breakingChanges.map(c => c.path.join('.')).join('\n'),
+              short: false,
+            },
+          ],
+        },
+      ],
     });
   }
 }
@@ -215,10 +219,10 @@ npm run tokens:impact-analysis -- --format json --output impact.json
 
 Understand cross-platform effects:
 
-| Token Change | Web | Mobile | Desktop | Storybook |
-|--------------|-----|--------|---------|-----------|
-| `color.primary.500` | 🔴 Breaking | 🔴 Breaking | 🔴 Breaking | 🟡 Visual |
-| `spacing.large` | 🟡 Layout | 🟡 Layout | 🟡 Layout | 🟡 Visual |
+| Token Change            | Web           | Mobile        | Desktop       | Storybook |
+| ----------------------- | ------------- | ------------- | ------------- | --------- |
+| `color.primary.500`     | 🔴 Breaking   | 🔴 Breaking   | 🔴 Breaking   | 🟡 Visual |
+| `spacing.large`         | 🟡 Layout     | 🟡 Layout     | 🟡 Layout     | 🟡 Visual |
 | `typography.heading.h1` | 🟡 Typography | 🟡 Typography | 🟡 Typography | 🟡 Visual |
 
 ### 2. Component Dependency Graph
@@ -239,14 +243,14 @@ const dependencies: ComponentTokenDependency[] = [
     component: 'Button',
     tokens: ['color.primary.500', 'spacing.medium', 'border.radius.small'],
     platform: 'web',
-    breaking: true
+    breaking: true,
   },
   {
     component: 'Card',
     tokens: ['color.surface', 'shadow.medium', 'border.radius.medium'],
     platform: 'mobile',
-    breaking: false
-  }
+    breaking: false,
+  },
 ];
 ```
 
@@ -256,12 +260,12 @@ Track token adoption and usage:
 
 ```sql
 -- Query token usage analytics
-SELECT 
+SELECT
   token_path,
   COUNT(*) as usage_count,
   platform,
   last_used
-FROM token_usage_analytics 
+FROM token_usage_analytics
 WHERE modified_in_pr = :pr_number
 GROUP BY token_path, platform;
 ```
@@ -303,19 +307,19 @@ export const tokenMigrations = {
   'v2.0.0': {
     removed: {
       'color.brand.primary': 'color.primary.500',
-      'spacing.xl': 'spacing.large'
+      'spacing.xl': 'spacing.large',
     },
     renamed: {
-      'typography.body': 'typography.body.medium'
+      'typography.body': 'typography.body.medium',
     },
     valueChanged: {
       'border.radius.default': {
         old: '4px',
         new: '6px',
-        reason: 'Updated to match new design specifications'
-      }
-    }
-  }
+        reason: 'Updated to match new design specifications',
+      },
+    },
+  },
 };
 ```
 
@@ -345,10 +349,16 @@ export function generateChangeDoc(diff: TokenDiff[]): string {
 # Token Changes - ${new Date().toISOString()}
 
 ## Breaking Changes
-${diff.filter(d => d.impact === 'breaking').map(formatChange).join('\n')}
+${diff
+  .filter(d => d.impact === 'breaking')
+  .map(formatChange)
+  .join('\n')}
 
 ## New Tokens
-${diff.filter(d => d.type === 'added').map(formatChange).join('\n')}
+${diff
+  .filter(d => d.type === 'added')
+  .map(formatChange)
+  .join('\n')}
 
 ## Migration Guide
 ${generateMigrationGuide(diff)}
@@ -387,13 +397,13 @@ Validate changes before commit:
 # Check for token changes
 if git diff --cached --name-only | grep -q "packages/design-tokens/"; then
   echo "🔍 Detecting token changes..."
-  
+
   # Run token validation
   npm run tokens:validate || exit 1
-  
+
   # Generate diff report
   npm run tokens:diff -- --staged
-  
+
   # Check for breaking changes
   if npm run tokens:breaking-changes --silent; then
     echo "⚠️  Breaking token changes detected. Please review carefully."
@@ -475,4 +485,4 @@ Configure diff behavior in `package.json`:
 
 ---
 
-*This documentation is automatically updated when token diff strategies change.*
+_This documentation is automatically updated when token diff strategies change._

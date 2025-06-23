@@ -19,10 +19,10 @@ disruption.
    ```bash
    # Find hardcoded colors
    grep -r "#[0-9a-fA-F]\{6\}" src/
-   
+
    # Find hardcoded spacing
    grep -r "[0-9]\+px" src/
-   
+
    # Find CSS custom properties
    grep -r "var(--" src/
    ```
@@ -36,7 +36,7 @@ disruption.
      spacing: ['8px', '16px', '24px', '32px'],
      typography: ['16px', '18px', '24px'],
      borderRadius: ['4px', '6px', '8px'],
-     shadows: ['0 2px 4px rgba(0,0,0,0.1)']
+     shadows: ['0 2px 4px rgba(0,0,0,0.1)'],
    };
    ```
 
@@ -45,10 +45,10 @@ disruption.
    ```typescript
    const tokenMapping = {
      '#007bff': 'color.primary.500',
-     '#28a745': 'color.success.500', 
+     '#28a745': 'color.success.500',
      '#dc3545': 'color.error.500',
      '16px': 'spacing.md',
-     '24px': 'spacing.lg'
+     '24px': 'spacing.lg',
    };
    ```
 
@@ -72,15 +72,15 @@ yarn add @mimic/design-tokens
    ```javascript
    // vite.config.js
    import { defineConfig } from 'vite';
-   
+
    export default defineConfig({
      css: {
        preprocessorOptions: {
          css: {
-           additionalData: `@import '@mimic/design-tokens/css';`
-         }
-       }
-     }
+           additionalData: `@import '@mimic/design-tokens/css';`,
+         },
+       },
+     },
    });
    ```
 
@@ -92,9 +92,9 @@ yarn add @mimic/design-tokens
      plugins: {
        'postcss-import': {},
        'postcss-custom-properties': {
-         preserve: false // Convert CSS variables to static values
-       }
-     }
+         preserve: false, // Convert CSS variables to static values
+       },
+     },
    };
    ```
 
@@ -107,7 +107,7 @@ yarn add @mimic/design-tokens
 const styles = {
   primary: '#007bff',
   success: '#28a745',
-  error: '#dc3545'
+  error: '#dc3545',
 };
 
 // After: Design tokens
@@ -116,7 +116,7 @@ import { getToken } from '@mimic/design-tokens';
 const styles = {
   primary: getToken('color.primary.500'),
   success: getToken('color.success.500'),
-  error: getToken('color.error.500')
+  error: getToken('color.error.500'),
 };
 ```
 
@@ -222,8 +222,8 @@ const theme = {
   primary: '#007bff',
   spacing: {
     small: '8px',
-    medium: '16px'
-  }
+    medium: '16px',
+  },
 };
 
 // After: Token-based theme
@@ -234,9 +234,9 @@ const theme = {
   spacing: Object.fromEntries(
     getTokensByPattern('spacing.*').map(token => [
       token.path.split('.').pop(),
-      token.value
+      token.value,
     ])
-  )
+  ),
 };
 ```
 
@@ -249,7 +249,7 @@ const theme = {
    ```bash
    #!/bin/bash
    # replace-colors.sh
-   
+
    # Replace common color values
    find src/ -name "*.css" -o -name "*.scss" -o -name "*.ts" -o -name "*.tsx" | \
    xargs sed -i '' \
@@ -263,7 +263,7 @@ const theme = {
    ```bash
    #!/bin/bash
    # replace-spacing.sh
-   
+
    find src/ -name "*.css" -o -name "*.scss" | \
    xargs sed -i '' \
      -e 's/8px/var(--spacing-sm)/g' \
@@ -278,13 +278,13 @@ const theme = {
    // validate-migration.js
    const fs = require('fs');
    const glob = require('glob');
-   
+
    const hardcodedPatterns = [
-     /#[0-9a-fA-F]{6}/g,  // Hex colors
-     /\d+px/g,             // Pixel values
-     /rgba?\([^)]+\)/g     // RGB/RGBA colors
+     /#[0-9a-fA-F]{6}/g, // Hex colors
+     /\d+px/g, // Pixel values
+     /rgba?\([^)]+\)/g, // RGB/RGBA colors
    ];
-   
+
    glob('src/**/*.{css,scss,ts,tsx}', (err, files) => {
      files.forEach(file => {
        const content = fs.readFileSync(file, 'utf8');
@@ -312,7 +312,7 @@ const theme = {
 - [ ] Install and configure @mimic/design-tokens
 - [ ] Import CSS variables or TypeScript functions
 - [ ] Replace colors with token equivalents
-- [ ] Replace spacing with token equivalents  
+- [ ] Replace spacing with token equivalents
 - [ ] Replace typography with token equivalents
 - [ ] Replace border radius and shadows
 - [ ] Update component libraries and utilities
@@ -378,7 +378,7 @@ const brandBlue = getToken('color.primary.500'); // Test in UI first
 const migratedComponents = [
   'Button',
   'Card',
-  'Input'
+  'Input',
   // Add more as you migrate
 ];
 ```
@@ -389,8 +389,8 @@ const migratedComponents = [
 // Create team utilities for common patterns
 const useTokens = () => ({
   getPrimaryColor: (shade = 500) => getToken(`color.primary.${shade}`),
-  getSpacing: (size) => getToken(`spacing.${size}`),
-  getShadow: (level) => getToken(`shadow.${level}`)
+  getSpacing: size => getToken(`spacing.${size}`),
+  getShadow: level => getToken(`shadow.${level}`),
 });
 ```
 
@@ -398,6 +398,7 @@ const useTokens = () => ({
 
 ```markdown
 <!-- Update style guides with token usage -->
+
 ## Color Usage
 
 - Primary actions: `var(--color-primary-500)`

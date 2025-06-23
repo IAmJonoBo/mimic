@@ -13,23 +13,33 @@ const config: StorybookConfig = {
     name: '@storybook/html-vite',
     options: {
       builder: {
-        viteConfigPath: './vite.config.desktop.ts'
-      }
+        viteConfigPath: './vite.config.desktop.ts',
+      },
     },
   },
   typescript: {
     check: true,
   },
   viteFinal: async config => {
+    // Fixed port assignment to prevent Supernova-documented conflicts
+    config.server = config.server || {};
+    config.server.port = 6008; // Desktop Storybook: Port 6008 (custom, prevents conflicts)
+
     // Desktop-specific token configuration (uses web tokens with desktop styling)
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@mimic/design-tokens/desktop': require.resolve('../../design-tokens/libs/tokens/css/tokens.css'),
-      '@mimic/design-tokens/js': require.resolve('../../design-tokens/libs/tokens/js/tokens.js'),
-      '@mimic/design-tokens': require.resolve('../../design-tokens/libs/tokens/ts/tokens.ts'),
+      '@mimic/design-tokens/desktop': require.resolve(
+        '../../design-tokens/libs/tokens/css/tokens.css'
+      ),
+      '@mimic/design-tokens/js': require.resolve(
+        '../../design-tokens/libs/tokens/js/tokens.js'
+      ),
+      '@mimic/design-tokens': require.resolve(
+        '../../design-tokens/libs/tokens/ts/tokens.ts'
+      ),
     };
-    
+
     return config;
   },
 };

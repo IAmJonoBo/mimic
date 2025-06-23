@@ -29,7 +29,7 @@
     "lint:workspace": "nx run workspace-format:lint",
     "lint:affected": "nx affected -t lint",
     "lint:css": "stylelint 'packages/**/*.{css,scss,sass}' --fix",
-    "lint:md": "markdownlint-cli2 --fix",
+    "lint:md": "markdownlint-cli2 --fix '**/*.md' '!**/node_modules/**' '!**/.git/**' '!**/.trunk/**' '!**/.nx/**' '!**/._*' '!**/.github/instructions/**'",
     "lint:md:fix-line-length": "node scripts/fix-markdown-line-length.js",
     "lint:commits": "commitlint --from=HEAD~1 --to=HEAD",
     "e2e": "nx run-many -t e2e",
@@ -62,6 +62,9 @@
     "tokens:sync": "nx run design-tokens:tokens:sync",
     "tokens:sync-all": "nx run design-tokens:tokens:sync && nx run-many -t build --skip-nx-cache",
     "tokens:watch": "nx run design-tokens:watch",
+    "tokens:validate": "node -e \"const { runTokenContractValidation } = require('./packages/shared-utils/dist/token-contract-validation.js'); runTokenContractValidation();\"",
+    "validate:token-contract": "pnpm tokens:validate",
+    "validate:penpot-export": "node -e \"console.log('🔍 Validating Penpot export...'); if (!require('fs').existsSync('tokens.json')) { console.log('❌ tokens.json not found'); process.exit(1); } console.log('✅ Penpot export validated');\"",
     "dev:full-stack": "concurrently 'nx run design-tokens:watch' 'nx run design-system:storybook'",
     "prepare": "husky",
     "graph": "nx graph",
@@ -80,7 +83,7 @@
     "analyze": "pnpm build && pnpm workspace:info"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.0.4",
+    "@biomejs/biome": "^2.0.5",
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@commitlint/config-nx-scopes": "^19.8.1",

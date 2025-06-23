@@ -140,21 +140,21 @@ on:
 jobs:
   export-tokens:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Install Penpot CLI
         run: npm install -g @penpot/cli
-      
+
       - name: Export tokens
         env:
           PENPOT_TOKEN: ${{ secrets.PENPOT_API_TOKEN }}
@@ -164,7 +164,7 @@ jobs:
             --format dtcg \
             --output ./packages/design-tokens/src/penpot-export.json \
             --include-metadata
-      
+
       - name: Export assets
         env:
           PENPOT_TOKEN: ${{ secrets.PENPOT_API_TOKEN }}
@@ -174,11 +174,11 @@ jobs:
             --preset assets \
             --format svg,png \
             --output ./packages/design-tokens/assets/
-      
+
       - name: Validate exported tokens
         run: |
           node scripts/validate-penpot-export.js
-      
+
       - name: Create Pull Request
         if: github.event_name == 'schedule'
         uses: peter-evans/create-pull-request@v5
@@ -188,13 +188,13 @@ jobs:
           title: 'Token Update: Penpot Export'
           body: |
             ## 🎨 Design Token Update
-            
+
             Automated export from Penpot design file.
-            
+
             ### Changes
             - Updated design tokens from Penpot
             - Exported optimized assets (SVG/PNG)
-            
+
             ### Review Checklist
             - [ ] Token values are correct
             - [ ] No breaking changes to existing tokens
@@ -283,12 +283,12 @@ fi
 if git diff --cached --name-only | grep -q "packages/design-tokens/"; then
   echo "🔍 Validating design tokens..."
   node scripts/validate-tokens.js
-  
+
   if [ $? -ne 0 ]; then
     echo "❌ Token validation failed!"
     exit 1
   fi
-  
+
   echo "✅ Token validation passed"
 fi
 
@@ -317,84 +317,90 @@ interface TokenChange {
   impact: 'high' | 'medium' | 'low';
 }
 
-export function classifyTokenChanges(oldTokens: any, newTokens: any): TokenChange[] {
+export function classifyTokenChanges(
+  oldTokens: any,
+  newTokens: any
+): TokenChange[] {
   const differences = diff(oldTokens, newTokens) || [];
   const changes: TokenChange[] = [];
-  
-  differences.forEach((change) => {
+
+  differences.forEach(change => {
     const path = change.path?.join('.') || 'root';
-    
+
     switch (change.kind) {
       case 'D': // Deleted
         changes.push({
           type: 'breaking',
           path,
           description: `Token "${path}" was removed`,
-          impact: 'high'
+          impact: 'high',
         });
         break;
-        
+
       case 'N': // New
         changes.push({
           type: 'additive',
           path,
           description: `Token "${path}" was added`,
-          impact: 'low'
+          impact: 'low',
         });
         break;
-        
+
       case 'E': // Edited
-        const isValueChange = change.path?.[change.path.length - 1] === '$value';
+        const isValueChange =
+          change.path?.[change.path.length - 1] === '$value';
         changes.push({
           type: isValueChange ? 'breaking' : 'non-breaking',
           path,
           description: `Token "${path}" changed from "${change.lhs}" to "${change.rhs}"`,
-          impact: isValueChange ? 'medium' : 'low'
+          impact: isValueChange ? 'medium' : 'low',
         });
         break;
     }
   });
-  
+
   return changes;
 }
 
 // Usage in CI
 if (require.main === module) {
   const oldTokens = JSON.parse(readFileSync('tokens-previous.json', 'utf8'));
-  const newTokens = JSON.parse(readFileSync('packages/design-tokens/src/penpot-export.json', 'utf8'));
-  
+  const newTokens = JSON.parse(
+    readFileSync('packages/design-tokens/src/penpot-export.json', 'utf8')
+  );
+
   const changes = classifyTokenChanges(oldTokens, newTokens);
-  
+
   console.log('## Token Change Summary\n');
-  
+
   const breakingChanges = changes.filter(c => c.type === 'breaking');
   const nonBreakingChanges = changes.filter(c => c.type === 'non-breaking');
   const additiveChanges = changes.filter(c => c.type === 'additive');
-  
+
   if (breakingChanges.length > 0) {
     console.log('### ⚠️ Breaking Changes');
     breakingChanges.forEach(c => console.log(`- ${c.description}`));
     console.log('');
   }
-  
+
   if (nonBreakingChanges.length > 0) {
     console.log('### 🔧 Non-Breaking Changes');
     nonBreakingChanges.forEach(c => console.log(`- ${c.description}`));
     console.log('');
   }
-  
+
   if (additiveChanges.length > 0) {
     console.log('### ✨ New Additions');
     additiveChanges.forEach(c => console.log(`- ${c.description}`));
     console.log('');
   }
-  
+
   // Exit with error if breaking changes detected
   if (breakingChanges.length > 0) {
     console.log('❌ Breaking changes detected - manual review required');
     process.exit(1);
   }
-  
+
   console.log('✅ All changes are backwards compatible');
 }
 ```

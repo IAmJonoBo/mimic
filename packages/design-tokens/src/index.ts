@@ -18,9 +18,7 @@
 // Import source token files for fallback access
 import baseTokens from '../tokens/base.json' with { type: 'json' };
 import componentTokens from '../tokens/components.json' with { type: 'json' };
-import mobileTokens from '../tokens/platforms/mobile.json' with {
-  type: 'json',
-};
+import mobileTokens from '../tokens/platforms/mobile.json' with { type: 'json' };
 import webTokens from '../tokens/platforms/web.json' with { type: 'json' };
 import semanticTokens from '../tokens/semantic.json' with { type: 'json' };
 
@@ -183,7 +181,7 @@ const addTokenIfMatches = (
 ): void => {
   if (matchesPattern(path, pattern)) {
     // Avoid duplicates by checking if path already exists
-    if (!results.some((r) => r.path === path)) {
+    if (!results.some(r => r.path === path)) {
       results.push({
         path,
         value: String(tokenValue.$value),
@@ -253,11 +251,11 @@ export const validateTokens = (
     '$value' in obj;
 
   const isGroupObject = (obj: Record<string, unknown>): boolean => {
-    const dollarKeys = Object.keys(obj).filter((key) => key.startsWith('$'));
+    const dollarKeys = Object.keys(obj).filter(key => key.startsWith('$'));
     // Groups can have $description and $type properties (for inheritance)
     // BUT if they have other $ properties or appear to be intended as tokens, they're not groups
     const validGroupKeys = ['$description', '$type'];
-    const hasOnlyValidGroupKeys = dollarKeys.every((key) =>
+    const hasOnlyValidGroupKeys = dollarKeys.every(key =>
       validGroupKeys.includes(key)
     );
 
@@ -266,7 +264,7 @@ export const validateTokens = (
 
     // If it has $ properties and seems like it should be a token (no sub-objects), it's invalid
     const hasSubObjects = Object.values(obj).some(
-      (value) => value && typeof value === 'object' && !Array.isArray(value)
+      value => value && typeof value === 'object' && !Array.isArray(value)
     );
 
     // Groups should contain other objects, tokens should not
@@ -277,7 +275,7 @@ export const validateTokens = (
     tokenObject: Record<string, unknown>,
     currentPath: string
   ): void => {
-    const dollarKeys = Object.keys(tokenObject).filter((key) =>
+    const dollarKeys = Object.keys(tokenObject).filter(key =>
       key.startsWith('$')
     );
     // If object has $ properties (indicating it's meant to be a token) but no $value, it's invalid

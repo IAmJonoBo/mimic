@@ -198,6 +198,6 @@ node tools/apple-cleaner.js packages/design-system
 
 ---
 
-**Status**: ✅ **Fully Configured**  
-**Automation**: ✅ **Git Hooks Active**  
+**Status**: ✅ **Fully Configured**\
+**Automation**: ✅ **Git Hooks Active**\
 **Cross-Platform**: ✅ **macOS Optimized**

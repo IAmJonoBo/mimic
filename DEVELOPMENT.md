@@ -97,7 +97,7 @@ pnpm nx run-many -t e2e
 ```bash
 # Run Storybook for specific platforms
 pnpm nx run design-system:storybook          # Web components
-pnpm nx run design-system:storybook:mobile   # Mobile components  
+pnpm nx run design-system:storybook:mobile   # Mobile components
 pnpm nx run design-system:storybook:desktop  # Desktop components
 
 # Test module boundaries

@@ -1,0 +1,24 @@
+{
+  "globs": ["**/*.md", "!node_modules/**", "!.git/**", "!.trunk/**", "!.nx/**"],
+  "config": {
+    "MD013": {
+      "line_length": 120,
+      "headings": false,
+      "code_blocks": false,
+      "tables": false,
+    },
+    "MD024": false,
+    "MD033": false,
+    "MD034": false,
+    "MD012": false,
+    "MD026": false,
+    "MD037": false,
+    "MD007": {
+      "indent": 2,
+    },
+    "MD029": false,
+    "MD010": {
+      "code_blocks": false,
+    },
+  },
+}

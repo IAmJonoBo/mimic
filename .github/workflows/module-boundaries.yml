@@ -10,7 +10,7 @@ jobs:
   module-boundaries:
     name: Enforce Module Boundaries
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -69,7 +69,7 @@ jobs:
       - name: Check collision-safe token outputs
         run: |
           echo "🔍 Verifying collision-safe token outputs exist..."
-          
+
           # Check platform-rooted directories exist
           for platform in css scss js ts json dart compose react-native; do
             if [ ! -d "packages/design-tokens/libs/tokens/$platform" ]; then
@@ -93,7 +93,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: module-boundaries
     if: always()
-    
+
     steps:
       - name: Report Success
         if: needs.module-boundaries.result == 'success'

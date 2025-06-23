@@ -5,7 +5,7 @@
 [![Nx](https://img.shields.io/badge/built%20with-Nx-blue)](https://nx.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)](https://www.typescriptlang.org/)
 
-> A modern, collision-free design token management platform using 100% libre tooling for building scalable  
+> A modern, collision-free design token management platform using 100% libre tooling for building scalable\
 > design systems and multi-platform applications with comprehensive collision prevention architecture.
 
 ## 🌟 Overview
@@ -16,12 +16,13 @@ platforms.
 
 ### ✨ Key Features
 
-- 🎯 **Single Source of Truth**: Design tokens managed with W3C DTCG standards
+- 🎯 **Single Source of Truth**: Design tokens managed with W3C-DTCG standards
 - 🚀 **Multi-Platform**: Web, mobile, and desktop from one codebase
 - 🔧 **Modern Tooling**: Nx 21, TypeScript 5.8, Vite, Storybook 8
 - 🧹 **Zero Lock-in**: 100% open-source, self-hostable
 - ⚡ **Developer Experience**: Hot reload, visual testing, automated workflows
 - 🔒 **Enterprise Ready**: Type-safe, tested, documented
+- 🛡️ **Collision-Free Architecture**: Comprehensive namespace strategy prevents all conflicts
 
 ## 🏗️ Architecture
 
@@ -46,11 +47,11 @@ graph TB
 
 ## Executive Summary
 
-We will self-host Penpot v2 for design, export its W3C-compliant JSON tokens into Git,
-transform them with Style Dictionary, and compile one set of components for web, mobile/desktop,
-and desktop shell. Automated visual, unit, and interaction tests gate every pull request.
-Optional local LLMs (Llama 3 8B via Ollama) extend scaffolding without license cost.
-All moving parts are MIT, Apache-2.0, or AGPL—permitting on-premises deployment and zero SaaS spend.
+Mimic provides a comprehensive, collision-free design token management platform using 100% open-source tools.
+We self-host Penpot v2 for design, export W3C-DTCG compliant JSON tokens, transform them with Style Dictionary using
+our industry-leading collision-prevention architecture, and deploy to multiple platforms: Qwik City (web),
+React Native (mobile), Tauri (desktop), and Compose Multiplatform. Automated visual, unit, and interaction tests
+gate every pull request. All components are MIT, Apache-2.0, or AGPL—enabling fully on-premises deployment.
 
 ## Project Objectives
 
@@ -62,28 +63,29 @@ All moving parts are MIT, Apache-2.0, or AGPL—permitting on-premises deploymen
 
 ## Technical Stack
 
-### Design & Token Authoring
+### Design & Token Pipeline
 
-| Element         | Tool             | Rationale                                                   |
-| --------------- | ---------------- | ----------------------------------------------------------- |
-| Design canvas   | Penpot v2        | Self-hosted, collaborative, AGPL, native design-token panel |
-| Format spec     | W3C DTCG JSON    | Inter-tool standard for tokens                              |
-| Token transform | Style Dictionary | Generates CSS, TS, Dart, Kotlin, etc.                       |
+| Element         | Tool                  | Rationale                                                   |
+| --------------- | --------------------- | ----------------------------------------------------------- |
+| Design canvas   | Penpot v2             | Self-hosted, collaborative, AGPL, native design-token panel |
+| Format spec     | W3C-DTCG JSON         | Inter-tool standard for tokens                              |
+| Token transform | Style Dictionary v4.x | Multi-platform token generation with collision prevention   |
 
-### Web Component Library
+### Web & Documentation
 
-| Concern    | Tool            | Notes                         |
-| ---------- | --------------- | ----------------------------- |
-| Framework  | Qwik City 2     | <1 kB hydration, resumability |
-| Styling    | vanilla-extract | Zero-runtime CSS, type-safe   |
-| Docs/tests | Storybook 8.5   | Built-in axe checks           |
+| Concern    | Tool            | Notes                                  |
+| ---------- | --------------- | -------------------------------------- |
+| Framework  | Qwik City 2.x   | <1 kB hydration, resumability          |
+| Styling    | vanilla-extract | Zero-runtime CSS, type-safe            |
+| Docs/tests | Storybook 8.5+  | Built-in axe checks, visual regression |
 
 ### Multi-Platform Runtimes
 
-| Target                   | Framework                  | Token Injection                     |
+| Target                   | Framework                  | Token Integration                   |
 | ------------------------ | -------------------------- | ----------------------------------- |
 | Android/iOS/Desktop/Wasm | Compose Multiplatform 1.7  | Theme.kt auto-generated from tokens |
-| Mobile JS reuse          | React Native 0.80 + Hermes | tokens.ts; IPO reduces APK size     |
+| Mobile JS reuse          | React Native 0.80 + Hermes | tokens.ts; New Architecture + IPO   |
+| Desktop                  | Tauri 2.x                  | Web tokens + native performance     |
 
 ## 🚀 Quick Start
 
@@ -93,6 +95,8 @@ All moving parts are MIT, Apache-2.0, or AGPL—permitting on-premises deploymen
 - **pnpm**: 8.0.0 or later (install via `corepack enable`)
 - **Git**: For version control
 - **Docker**: For Penpot export automation (optional)
+- **Rust & Cargo**: For Tauri desktop builds (optional)
+- **JDK 17 / Android SDK / Xcode**: For native mobile builds (optional)
 
 ### Installation & Bootstrap
 
@@ -236,19 +240,43 @@ Shared utilities and helper functions
 - **Component Reusability**: Shared components across web, mobile, and desktop
 - **Automated Quality Gates**: No manual testing bottlenecks
 - **Developer Productivity**: Fast builds, intelligent caching, and helpful tooling
+- **Collision-Free Architecture**: Comprehensive namespace strategy prevents all conflicts
+
+## 🎯 Performance Targets
+
+### Quality Metrics
+
+- **Build Time**: < 5 minutes for full pipeline
+- **Bundle Size**: Within defined budgets per platform
+- **Load Time**: < 3 seconds for all applications
+- **Test Coverage**: > 80% across all platforms
+- **Zero Critical Vulnerabilities**: Automated security scanning
+
+### User Experience Metrics
+
+- **Token Update Speed**: < 5 minutes from design to development
+- **Developer Onboarding**: < 30 minutes to first contribution
+- **Build Success Rate**: > 95% successful builds
+- **Core Web Vitals**: LCP < 2s on 3G, CLS < 0.1
 
 ## 📚 Documentation
 
-Comprehensive documentation is available:
+## 📚 Documentation
 
-- **[📋 Documentation Index](./docs/README.md)** - Complete documentation overview
+### Core Documentation
+
+- **[📋 User Guide](./docs/USER_GUIDE.md)** - Complete step-by-step guide for designers, developers, and DevOps
+- **[🎛️ Control Document](./docs/CONTROL_DOCUMENT.md)** - Master technical reference and operational procedures
+- **[� Documentation Index](./docs/README.md)** - Complete documentation overview
+
+### Quick References
+
 - **[🚀 Quick Start Guide](#-quick-start)** - Get up and running in minutes
 - **[🤝 Contributing Guide](./CONTRIBUTING.md)** - How to contribute to the project
 - **[🛠️ Development Guide](./DEVELOPMENT.md)** - Local development workflows
 - **[📖 API Reference](./docs/API.md)** - Complete API documentation
 - **[🏗️ Architecture Decisions](./docs/ADR.md)** - Technical decision records
 - **[🔧 Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
-- **[🚀 Deployment Guide](./docs/DEPLOYMENT.md)** - Production deployment procedures
 
 ### Package Documentation
 
@@ -260,6 +288,63 @@ Comprehensive documentation is available:
 
 - **[📚 Storybook](https://iamjonobo.github.io/mimic/storybook/)** - Interactive component playground
 - **[📊 Dependency Graph](https://nx.dev/packages/nx/documents/dep-graph)** - Project dependency visualization
+
+## 🛡️ Collision Prevention Architecture
+
+Mimic implements a comprehensive collision-prevention strategy that eliminates all four types of conflicts:
+naming collisions, file-path collisions, module boundary violations, and runtime global conflicts.
+
+### Core Principles
+
+1. **Universal Namespace Strategy**: All tokens use the `ds-` prefix across all platforms
+2. **Platform-Rooted Build Paths**: Each platform outputs to isolated directories
+3. **Module Boundary Enforcement**: Nx rules prevent illegal cross-platform imports
+4. **Runtime Isolation**: Platform-specific global scoping prevents conflicts
+5. **Tailwind CSS Compatibility**: `ds-` prefix prevents utility class conflicts per Specify/Locofy warnings
+6. **Metro Deduplication**: Scoped package names (`@mimic/design-tokens`) prevent React Native bundle duplication per Locofy FAQ
+7. **Storybook Port Management**: Fixed ports (Web:6006, Mobile:7007, Desktop:6008) prevent dev-machine conflicts per Supernova docs
+
+### Token Namespace Strategy
+
+| Platform                  | Prefix Format      | Example Output               |
+| ------------------------- | ------------------ | ---------------------------- |
+| **CSS/SCSS**              | `ds-` (kebab-case) | `--ds-color-primary-500`     |
+| **JavaScript/TypeScript** | `ds` (camelCase)   | `dsColorPrimary500`          |
+| **Kotlin/Compose**        | `Ds` (PascalCase)  | `DsTokens.Color.PRIMARY_500` |
+| **React Native**          | `ds` (camelCase)   | `dsColorPrimary500`          |
+
+### Platform-Rooted Build Paths
+
+```text
+packages/design-tokens/libs/tokens/
+├── css/tokens.css           # Web CSS variables
+├── js/tokens.js             # Web JavaScript constants
+├── ts/tokens.ts             # Web TypeScript types
+├── compose/Theme.kt         # Compose Multiplatform objects
+└── react-native/theme.ts    # React Native StyleSheet
+```
+
+### Critical Collision Prevention Details
+
+**1. Token-Name Clashes (Specify/Tailwind Warning)**
+Mimic's `ds-` prefix strategy completely prevents Specify-documented collisions with Tailwind classes:
+- `--ds-color-primary` ≠ `.text-primary` (no conflict)
+- `--ds-spacing-md` ≠ `.p-4` or `.m-4` (no conflict)
+- `dsColorPrimary` ≠ Tailwind utility functions (no conflict)
+
+**2. Storybook Port Conflicts (Supernova Issue)**
+Fixed port assignment prevents Supernova-documented development machine conflicts:
+- **Web Storybook**: Port 6006 (Vite builder default)
+- **Mobile Storybook**: Port 7007 (React Native builder default)
+- **Desktop Storybook**: Port 6008 (Vite builder custom)
+
+**3. Metro Bundle Duplication (Locofy FAQ)**
+Scoped package naming prevents Locofy-documented Metro workspace lib collisions:
+- Package name: `"@mimic/design-tokens"` (scoped, not `design-tokens`)
+- Metro recognizes scoped names and deduplicates correctly
+- Workspace lib names cannot conflict with external package names
+
+📖 **Further reading**: [User Guide](./docs/USER_GUIDE.md#collision-prevention-architecture) • [Control Document](./docs/CONTROL_DOCUMENT.md#collision-prevention-architecture)
 
 ## 🤝 Contributing
 
@@ -335,6 +420,12 @@ Built with ❤️ using 100% open-source tools
 
 ---
 
-This brief gives each discipline a concrete, OSS-only tool-chain while leaving space for incremental
-enhancements—ensuring the organisation controls every byte from design ideation to shipped binary.
+## 📚 Documentation Roadmap
+
+| Document | Purpose | Audience |
+|----------|---------|----------|
+| **[README](./README.md)** | Project overview, quick start, architecture summary | All stakeholders |
+| **[User Guide](./docs/USER_GUIDE.md)** | Step-by-step tutorials and workflows | Designers, Developers, DevOps |
+| **[Control Document](./docs/CONTROL_DOCUMENT.md)** | Technical reference and operational procedures | Technical Teams, DevOps |
+| **[Contributing Guide](./CONTRIBUTING.md)** | Development workflows and coding standards | Contributors |
 ````

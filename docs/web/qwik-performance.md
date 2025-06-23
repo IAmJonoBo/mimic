@@ -42,39 +42,39 @@ export default defineConfig(() => {
       qwikImageOptimization({
         // Automatic format conversion
         formats: ['webp', 'avif', 'jpeg'],
-        
+
         // Quality settings
         quality: {
           webp: 85,
           avif: 80,
-          jpeg: 85
+          jpeg: 85,
         },
-        
+
         // Responsive breakpoints
         breakpoints: [640, 768, 1024, 1280, 1536],
-        
+
         // Lazy loading by default
         loading: 'lazy',
-        
+
         // Decode async for better performance
-        decoding: 'async'
-      })
+        decoding: 'async',
+      }),
     ],
-    
+
     // Additional optimizations
     build: {
       rollupOptions: {
         output: {
           // Separate image chunks
-          assetFileNames: (assetInfo) => {
+          assetFileNames: assetInfo => {
             if (/\.(jpe?g|png|svg|gif|webp|avif)$/i.test(assetInfo.name)) {
               return 'assets/images/[name]-[hash][extname]';
             }
             return 'assets/[name]-[hash][extname]';
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   };
 });
 ```
@@ -107,26 +107,26 @@ export const OptimizedImage = component$<OptimizedImageProps>(({
     <Image
       src={src}
       alt={alt}
-      
+
       // Automatic format selection (webp/avif fallback)
       format="auto"
-      
+
       // Responsive images
       sizes={responsive ? "(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" : undefined}
-      
+
       // Priority loading for above-the-fold images
       loading={priority ? 'eager' : 'lazy'}
       fetchpriority={priority ? 'high' : 'auto'}
-      
+
       // Decode async for better performance
       decoding="async"
-      
+
       // Placeholder while loading
       placeholder={placeholder}
-      
+
       // Additional optimizations
       quality={85}
-      
+
       class={className}
       {...props}
     />
@@ -145,11 +145,11 @@ export const HeroImage = component$<{
   src: string;
   alt: string;
   preload?: boolean;
-}>((props) => {
+}>(props => {
   // Preload hero image for LCP optimization
   useTask$(({ track }) => {
     track(() => props.preload);
-    
+
     if (props.preload && typeof document !== 'undefined') {
       const link = document.createElement('link');
       link.rel = 'preload';
@@ -166,12 +166,10 @@ export const HeroImage = component$<{
       alt={props.alt}
       priority={true}
       class="hero-image"
-      
       // Hero-specific optimizations
       sizes="100vw"
       quality={90}
       format="webp"
-      
       // Ensure hero image loads fast
       loading="eager"
       fetchpriority="high"
@@ -196,37 +194,40 @@ interface SmartLinkProps {
   priority?: 'high' | 'low' | 'auto';
 }
 
-export const SmartLink = component$<SmartLinkProps>(({
-  href,
-  children,
-  prefetchStrategy = 'viewport',
-  priority = 'auto',
-  ...props
-}) => {
-  return (
-    <Link
-      href={href}
-      
-      // Prefetch when link enters viewport
-      prefetch={prefetchStrategy === 'viewport' ? 'viewport' : false}
-      
-      // Alternative: Prefetch on hover/intent
-      onMouseEnter$={prefetchStrategy === 'hover' ? (() => {
-        // Manual prefetch trigger
-        if (typeof document !== 'undefined') {
-          const link = document.createElement('link');
-          link.rel = 'prefetch';
-          link.href = href;
-          document.head.appendChild(link);
+export const SmartLink = component$<SmartLinkProps>(
+  ({
+    href,
+    children,
+    prefetchStrategy = 'viewport',
+    priority = 'auto',
+    ...props
+  }) => {
+    return (
+      <Link
+        href={href}
+        // Prefetch when link enters viewport
+        prefetch={prefetchStrategy === 'viewport' ? 'viewport' : false}
+        // Alternative: Prefetch on hover/intent
+        onMouseEnter$={
+          prefetchStrategy === 'hover'
+            ? () => {
+                // Manual prefetch trigger
+                if (typeof document !== 'undefined') {
+                  const link = document.createElement('link');
+                  link.rel = 'prefetch';
+                  link.href = href;
+                  document.head.appendChild(link);
+                }
+              }
+            : undefined
         }
-      }) : undefined}
-      
-      {...props}
-    >
-      {children}
-    </Link>
-  );
-});
+        {...props}
+      >
+        {children}
+      </Link>
+    );
+  }
+);
 ```
 
 ### Advanced Prefetch Configuration
@@ -248,34 +249,34 @@ export default defineConfig(() => {
             linkInsert: 'html-append',
             linkRel: 'prefetch',
             workerFetchInsert: 'always',
-            prefetchEvent: 'qvisible' // Prefetch when visible
+            prefetchEvent: 'qvisible', // Prefetch when visible
           },
-          
+
           // Prefetch rules
           include: [
             // Prefetch critical routes
             { path: '/', priority: 'high' },
             { path: '/about', priority: 'low' },
-            { path: '/contact', priority: 'low' }
+            { path: '/contact', priority: 'low' },
           ],
-          
+
           exclude: [
             // Don't prefetch heavy pages
             '/dashboard/**',
-            '/admin/**'
-          ]
-        }
+            '/admin/**',
+          ],
+        },
       }),
       qwikVite({
         // Optimizer options for prefetch
         optimizer: {
           chunkStrategy: {
             type: 'smart', // Smart chunking for better prefetch
-            minChunkSize: 1000
-          }
-        }
-      })
-    ]
+            minChunkSize: 1000,
+          },
+        },
+      }),
+    ],
   };
 });
 ```
@@ -289,23 +290,23 @@ import { useLocation } from '@builder.io/qwik-city';
 
 export default component$(() => {
   const location = useLocation();
-  
+
   // Intelligent prefetching based on current route
   useTask$(({ track }) => {
     track(() => location.url.pathname);
-    
+
     if (typeof document !== 'undefined') {
       // Prefetch likely next pages based on current route
       const prefetchMap = {
         '/': ['/about', '/features'],
         '/about': ['/contact', '/team'],
         '/features': ['/pricing', '/demo'],
-        '/pricing': ['/signup', '/contact']
+        '/pricing': ['/signup', '/contact'],
       };
-      
+
       const currentPath = location.url.pathname;
       const prefetchPaths = prefetchMap[currentPath] || [];
-      
+
       prefetchPaths.forEach((path, index) => {
         // Stagger prefetch requests
         setTimeout(() => {
@@ -354,7 +355,7 @@ const PRECACHE_ASSETS = [
   '/offline',
   // Critical CSS and JS files
   '/build/q-*.css',
-  '/build/q-*.js'
+  '/build/q-*.js',
 ];
 
 // Cache strategies
@@ -364,30 +365,30 @@ const cacheStrategies = {
     match: /\.(jpg|jpeg|png|gif|webp|avif|svg)$/,
     strategy: 'cache-first',
     cacheName: STATIC_CACHE,
-    maxAge: 30 * 24 * 60 * 60 * 1000 // 30 days
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
   },
-  
+
   // API: Network first with cache fallback
   api: {
     match: /\/api\//,
     strategy: 'network-first',
     cacheName: RUNTIME_CACHE,
-    maxAge: 5 * 60 * 1000 // 5 minutes
+    maxAge: 5 * 60 * 1000, // 5 minutes
   },
-  
+
   // Static assets: Cache first
   static: {
     match: /\.(css|js|woff2?)$/,
     strategy: 'cache-first',
     cacheName: STATIC_CACHE,
-    maxAge: 365 * 24 * 60 * 60 * 1000 // 1 year
-  }
+    maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
+  },
 };
 
 // Install event - precache critical assets
-self.addEventListener('install', (event) => {
+self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => {
+    caches.open(STATIC_CACHE).then(cache => {
       return cache.addAll(PRECACHE_ASSETS);
     })
   );
@@ -395,13 +396,13 @@ self.addEventListener('install', (event) => {
 });
 
 // Fetch event - apply caching strategies
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', event => {
   const { request } = event;
   const url = new URL(request.url);
-  
+
   // Skip non-GET requests
   if (request.method !== 'GET') return;
-  
+
   // Apply matching strategy
   for (const [name, strategy] of Object.entries(cacheStrategies)) {
     if (strategy.match.test(url.pathname) || strategy.match.test(url.href)) {
@@ -409,7 +410,7 @@ self.addEventListener('fetch', (event) => {
       return;
     }
   }
-  
+
   // Default: network first for HTML
   if (request.headers.get('accept')?.includes('text/html')) {
     event.respondWith(handleHTMLRequest(request));
@@ -419,11 +420,11 @@ self.addEventListener('fetch', (event) => {
 // Cache strategies implementation
 async function handleRequest(request: Request, strategy: any) {
   const cache = await caches.open(strategy.cacheName);
-  
+
   if (strategy.strategy === 'cache-first') {
     const cached = await cache.match(request);
     if (cached) return cached;
-    
+
     try {
       const response = await fetch(request);
       if (response.ok) {
@@ -434,7 +435,7 @@ async function handleRequest(request: Request, strategy: any) {
       return new Response('Offline', { status: 503 });
     }
   }
-  
+
   if (strategy.strategy === 'network-first') {
     try {
       const response = await fetch(request);
@@ -452,25 +453,26 @@ async function handleRequest(request: Request, strategy: any) {
 async function handleHTMLRequest(request: Request) {
   try {
     const response = await fetch(request);
-    
+
     // Cache successful HTML responses
     if (response.ok) {
       const cache = await caches.open(RUNTIME_CACHE);
       cache.put(request, response.clone());
     }
-    
+
     return response;
   } catch {
     // Return cached version or offline page
     const cache = await caches.open(RUNTIME_CACHE);
     const cached = await cache.match(request);
-    
+
     if (cached) return cached;
-    
+
     // Return offline page
     const offlineCache = await caches.open(STATIC_CACHE);
-    return offlineCache.match('/offline') || 
-           new Response('Offline', { status: 503 });
+    return (
+      offlineCache.match('/offline') || new Response('Offline', { status: 503 })
+    );
   }
 }
 ```
@@ -488,10 +490,10 @@ export default component$(() => {
       <div class="offline-content">
         <h1>You're Offline</h1>
         <p>
-          It looks like you've lost your internet connection. 
-          Don't worry, you can still browse some cached content.
+          It looks like you've lost your internet connection. Don't worry, you
+          can still browse some cached content.
         </p>
-        
+
         <div class="offline-actions">
           <button
             type="button"
@@ -504,7 +506,7 @@ export default component$(() => {
           >
             Try Again
           </button>
-          
+
           <a href="/" class="home-link">
             Go Home
           </a>
@@ -519,9 +521,10 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content: 'You are currently offline. Some cached content may still be available.'
-    }
-  ]
+      content:
+        'You are currently offline. Some cached content may still be available.',
+    },
+  ],
 };
 ```
 
@@ -560,7 +563,7 @@ import { qwikCity } from '@builder.io/qwik-city/vite';
 
 export default defineConfig(({ mode }): UserConfig => {
   const isProduction = mode === 'production';
-  
+
   return {
     plugins: [
       qwikCity(),
@@ -569,33 +572,33 @@ export default defineConfig(({ mode }): UserConfig => {
           // Production optimizations
           minify: isProduction,
           sourcemap: !isProduction,
-          
+
           // Chunking strategy for optimal loading
           chunkStrategy: {
             type: 'smart',
             minChunkSize: 1000,
-            maxChunkSize: 50000
+            maxChunkSize: 50000,
           },
-          
+
           // Tree shaking optimization
           treeShaking: isProduction,
-          
+
           // Symbol optimization
-          symbolsOutput: isProduction ? 'minimal' : 'detailed'
-        }
-      })
+          symbolsOutput: isProduction ? 'minimal' : 'detailed',
+        },
+      }),
     ],
-    
+
     build: {
       // Target modern browsers for better optimization
       target: 'es2020',
-      
+
       // Minification
       minify: isProduction ? 'terser' : false,
-      
+
       // Source maps for debugging
       sourcemap: !isProduction,
-      
+
       // Rollup optimizations
       rollupOptions: {
         output: {
@@ -604,57 +607,53 @@ export default defineConfig(({ mode }): UserConfig => {
             // Vendor libraries
             'vendor-react': ['react', 'react-dom'],
             'vendor-utils': ['lodash', 'date-fns'],
-            
+
             // Design system components
             'design-system': ['@mimic/design-system'],
-            'design-tokens': ['@mimic/design-tokens']
+            'design-tokens': ['@mimic/design-tokens'],
           },
-          
+
           // Optimal chunk sizes
           experimentalMinChunkSize: 1000,
-          
+
           // Asset naming for caching
           chunkFileNames: 'assets/[name]-[hash].js',
           entryFileNames: 'assets/[name]-[hash].js',
-          assetFileNames: 'assets/[name]-[hash].[ext]'
-        }
+          assetFileNames: 'assets/[name]-[hash].[ext]',
+        },
       },
-      
+
       // Terser options for production
-      terserOptions: isProduction ? {
-        compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: ['console.log'],
-          passes: 2
-        },
-        mangle: {
-          safari10: true
-        },
-        format: {
-          comments: false
-        }
-      } : undefined
+      terserOptions: isProduction
+        ? {
+            compress: {
+              drop_console: true,
+              drop_debugger: true,
+              pure_funcs: ['console.log'],
+              passes: 2,
+            },
+            mangle: {
+              safari10: true,
+            },
+            format: {
+              comments: false,
+            },
+          }
+        : undefined,
     },
-    
+
     // Dependency optimization
     optimizeDeps: {
-      include: [
-        '@mimic/design-tokens',
-        '@mimic/design-system'
-      ],
-      exclude: [
-        '@builder.io/qwik',
-        '@builder.io/qwik-city'
-      ]
+      include: ['@mimic/design-tokens', '@mimic/design-system'],
+      exclude: ['@builder.io/qwik', '@builder.io/qwik-city'],
     },
-    
+
     // Development server optimizations
     server: {
       fs: {
-        strict: false // Allow serving files from parent directories
-      }
-    }
+        strict: false, // Allow serving files from parent directories
+      },
+    },
   };
 });
 ```
@@ -675,7 +674,7 @@ export interface WebVitalsMetric {
 
 export function trackWebVitals(callback: (metric: WebVitalsMetric) => void) {
   if (typeof window === 'undefined') return;
-  
+
   // Dynamic import for better performance
   import('web-vitals').then(({ onCLS, onFID, onFCP, onLCP, onTTFB, onINP }) => {
     onCLS(callback);
@@ -692,19 +691,21 @@ export function reportWebVitals(metric: WebVitalsMetric) {
   // Analytics integration
   if (typeof gtag !== 'undefined') {
     gtag('event', metric.name, {
-      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+      value: Math.round(
+        metric.name === 'CLS' ? metric.value * 1000 : metric.value
+      ),
       event_category: 'Web Vitals',
       event_label: metric.id,
-      non_interaction: true
+      non_interaction: true,
     });
   }
-  
+
   // Custom analytics endpoint
   fetch('/api/analytics/web-vitals', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(metric),
-    keepalive: true
+    keepalive: true,
   }).catch(console.error);
 }
 ```
@@ -718,36 +719,37 @@ import { trackWebVitals, reportWebVitals } from '~/utils/performance';
 
 export const PerformanceMonitor = component$(() => {
   const metrics = useSignal<Record<string, number>>({});
-  
+
   useTask$(({ cleanup }) => {
     // Track Core Web Vitals
-    trackWebVitals((metric) => {
+    trackWebVitals(metric => {
       metrics.value = {
         ...metrics.value,
-        [metric.name]: metric.value
+        [metric.name]: metric.value,
       };
-      
+
       // Report to analytics
       reportWebVitals(metric);
     });
-    
+
     // Performance observer for additional metrics
     if (typeof window !== 'undefined' && 'PerformanceObserver' in window) {
-      const observer = new PerformanceObserver((list) => {
+      const observer = new PerformanceObserver(list => {
         for (const entry of list.getEntries()) {
           if (entry.entryType === 'navigation') {
             const nav = entry as PerformanceNavigationTiming;
-            
+
             // Track additional metrics
             const additionalMetrics = {
-              'Dom-Load': nav.domContentLoadedEventEnd - nav.domContentLoadedEventStart,
+              'Dom-Load':
+                nav.domContentLoadedEventEnd - nav.domContentLoadedEventStart,
               'Resource-Load': nav.loadEventEnd - nav.loadEventStart,
               'DNS-Time': nav.domainLookupEnd - nav.domainLookupStart,
               'Connect-Time': nav.connectEnd - nav.connectStart,
               'Request-Time': nav.responseEnd - nav.requestStart,
-              'Response-Time': nav.responseEnd - nav.responseStart
+              'Response-Time': nav.responseEnd - nav.responseStart,
             };
-            
+
             Object.entries(additionalMetrics).forEach(([name, value]) => {
               if (value > 0) {
                 metrics.value = { ...metrics.value, [name]: value };
@@ -756,13 +758,13 @@ export const PerformanceMonitor = component$(() => {
           }
         }
       });
-      
+
       observer.observe({ entryTypes: ['navigation', 'resource'] });
-      
+
       cleanup(() => observer.disconnect());
     }
   });
-  
+
   return null; // This is a utility component with no UI
 });
 ```
@@ -787,29 +789,29 @@ node scripts/check-bundle-size.js
 # Performance budget check
 if [ -f "dist/manifest.json" ]; then
   echo "✅ Manifest generated successfully"
-  
+
   # Check critical resource sizes
   MAIN_JS_SIZE=$(find dist -name "*.js" -exec du -b {} + | awk '{sum += $1} END {print sum}')
   MAIN_CSS_SIZE=$(find dist -name "*.css" -exec du -b {} + | awk '{sum += $1} END {print sum}')
-  
+
   echo "📦 Bundle sizes:"
   echo "  JavaScript: $(echo $MAIN_JS_SIZE | numfmt --to=iec-i)B"
   echo "  CSS: $(echo $MAIN_CSS_SIZE | numfmt --to=iec-i)B"
-  
+
   # Performance budget enforcement
   MAX_JS_SIZE=500000  # 500KB
   MAX_CSS_SIZE=100000 # 100KB
-  
+
   if [ $MAIN_JS_SIZE -gt $MAX_JS_SIZE ]; then
     echo "❌ JavaScript bundle exceeds limit: $(echo $MAIN_JS_SIZE | numfmt --to=iec-i)B > $(echo $MAX_JS_SIZE | numfmt --to=iec-i)B"
     exit 1
   fi
-  
+
   if [ $MAIN_CSS_SIZE -gt $MAX_CSS_SIZE ]; then
     echo "❌ CSS bundle exceeds limit: $(echo $MAIN_CSS_SIZE | numfmt --to=iec-i)B > $(echo $MAX_CSS_SIZE | numfmt --to=iec-i)B"
     exit 1
   fi
-  
+
   echo "✅ Bundle sizes within performance budget"
 fi
 ```

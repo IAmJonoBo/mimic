@@ -19,15 +19,15 @@ Penpot design files to production applications across web, mobile, and desktop p
 
 ### Required Tools
 
-| Tool | Version | Installation Notes |
-|------|---------|-------------------|
-| Node.js | ≥ 20 LTS | `corepack enable && corepack prepare pnpm@latest --activate` |
-| pnpm | ≥ 8 | Included with Node corepack |
-| Rust | Latest stable | Required for Tauri desktop apps |
-| Java | 17+ | For Compose Multiplatform development |
-| Xcode | Latest | iOS React Native development (macOS only) |
-| Android SDK | Latest | Android development |
-| Nx CLI | Latest | `pnpm dlx @nx/cli@latest` |
+| Tool        | Version       | Installation Notes                                           |
+| ----------- | ------------- | ------------------------------------------------------------ |
+| Node.js     | ≥ 20 LTS      | `corepack enable && corepack prepare pnpm@latest --activate` |
+| pnpm        | ≥ 8           | Included with Node corepack                                  |
+| Rust        | Latest stable | Required for Tauri desktop apps                              |
+| Java        | 17+           | For Compose Multiplatform development                        |
+| Xcode       | Latest        | iOS React Native development (macOS only)                    |
+| Android SDK | Latest        | Android development                                          |
+| Nx CLI      | Latest        | `pnpm dlx @nx/cli@latest`                                    |
 
 ### Bootstrap Existing Workspace
 
@@ -89,11 +89,21 @@ The `style-dictionary.config.js` already supports multiple platforms:
 module.exports = {
   source: ['tokens/**/*.json'],
   platforms: {
-    css: { /* CSS variables */ },
-    ts: { /* TypeScript types */ },
-    json: { /* Raw JSON */ },
-    compose: { /* Kotlin for Compose */ },
-    rn: { /* React Native JS */ },
+    css: {
+      /* CSS variables */
+    },
+    ts: {
+      /* TypeScript types */
+    },
+    json: {
+      /* Raw JSON */
+    },
+    compose: {
+      /* Kotlin for Compose */
+    },
+    rn: {
+      /* React Native JS */
+    },
   },
 };
 ```
@@ -180,10 +190,7 @@ import { qwikVite } from '@builder.io/qwik/optimizer';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 
 export default defineConfig({
-  plugins: [
-    qwikVite(),
-    vanillaExtractPlugin(),
-  ],
+  plugins: [qwikVite(), vanillaExtractPlugin()],
   // Import design token CSS
   css: {
     preprocessorOptions: {
@@ -471,21 +478,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v2
-      
+
       # Setup environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      
+
       # Install and build
       - run: pnpm install
       - run: pnpm nx run tokens:build-all
-      
+
       # Test affected projects
       - run: pnpm nx affected -t lint test build
-      
+
       # Visual regression tests
       - run: pnpm nx run web:build-storybook
       - run: pnpm nx run web:visual-test

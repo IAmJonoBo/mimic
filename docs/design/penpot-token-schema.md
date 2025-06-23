@@ -192,12 +192,12 @@ Complete mapping from Penpot DTCG JSON to Style Dictionary platform outputs:
 
 ### Token Category Mapping
 
-| Penpot Token Path | Style Dictionary Path | CSS Variable | TypeScript Export |
-|-------------------|----------------------|--------------|-------------------|
-| `color.primary.500` | `color.primary.500` | `--color-primary-500` | `tokens.color.primary[500]` |
-| `spacing.md` | `spacing.md` | `--spacing-md` | `tokens.spacing.md` |
-| `typography.fontSize.base` | `fontSize.base` | `--font-size-base` | `tokens.fontSize.base` |
-| `semantic.text.primary` | `color.text.primary` | `--color-text-primary` | `tokens.color.text.primary` |
+| Penpot Token Path             | Style Dictionary Path         | CSS Variable                    | TypeScript Export                    |
+| ----------------------------- | ----------------------------- | ------------------------------- | ------------------------------------ |
+| `color.primary.500`           | `color.primary.500`           | `--color-primary-500`           | `tokens.color.primary[500]`          |
+| `spacing.md`                  | `spacing.md`                  | `--spacing-md`                  | `tokens.spacing.md`                  |
+| `typography.fontSize.base`    | `fontSize.base`               | `--font-size-base`              | `tokens.fontSize.base`               |
+| `semantic.text.primary`       | `color.text.primary`          | `--color-text-primary`          | `tokens.color.text.primary`          |
 | `component.button.padding.sm` | `component.button.padding.sm` | `--component-button-padding-sm` | `tokens.component.button.padding.sm` |
 
 ### Platform Transform Groups
@@ -211,55 +211,63 @@ module.exports = {
     css: {
       transformGroup: 'css',
       buildPath: 'dist/css/',
-      files: [{
-        destination: 'tokens.css',
-        format: 'css/variables',
-        options: {
-          selector: ':root'
-        }
-      }]
+      files: [
+        {
+          destination: 'tokens.css',
+          format: 'css/variables',
+          options: {
+            selector: ':root',
+          },
+        },
+      ],
     },
-    
+
     // TypeScript for web and React Native
     ts: {
       transformGroup: 'js',
       buildPath: 'dist/ts/',
-      files: [{
-        destination: 'tokens.ts',
-        format: 'javascript/es6',
-        options: {
-          exportDefault: false
-        }
-      }]
+      files: [
+        {
+          destination: 'tokens.ts',
+          format: 'javascript/es6',
+          options: {
+            exportDefault: false,
+          },
+        },
+      ],
     },
-    
+
     // Dart for Flutter/Compose Multiplatform
     dart: {
       transformGroup: 'flutter',
       buildPath: 'dist/dart/',
-      files: [{
-        destination: 'tokens.dart',
-        format: 'flutter/class.dart',
-        options: {
-          className: 'DesignTokens'
-        }
-      }]
+      files: [
+        {
+          destination: 'tokens.dart',
+          format: 'flutter/class.dart',
+          options: {
+            className: 'DesignTokens',
+          },
+        },
+      ],
     },
-    
+
     // Kotlin for Android Compose
     compose: {
       transformGroup: 'android',
       buildPath: 'dist/compose/',
-      files: [{
-        destination: 'Theme.kt',
-        format: 'compose/object',
-        options: {
-          packageName: 'com.mimic.tokens',
-          objectName: 'MimicTheme'
-        }
-      }]
-    }
-  }
+      files: [
+        {
+          destination: 'Theme.kt',
+          format: 'compose/object',
+          options: {
+            packageName: 'com.mimic.tokens',
+            objectName: 'MimicTheme',
+          },
+        },
+      ],
+    },
+  },
 };
 ```
 
@@ -270,11 +278,11 @@ module.exports = {
 StyleDictionary.registerTransform({
   name: 'size/compose/dp',
   type: 'value',
-  matcher: (token) => token.type === 'dimension',
-  transformer: (token) => {
+  matcher: token => token.type === 'dimension',
+  transformer: token => {
     const value = parseFloat(token.value);
     return `${value * 16}.dp`; // Convert rem to dp
-  }
+  },
 });
 
 // Custom format for Compose theme object
@@ -282,7 +290,7 @@ StyleDictionary.registerFormat({
   name: 'compose/object',
   formatter: (dictionary, config) => {
     const { packageName, objectName } = config.options;
-    
+
     return `package ${packageName}
 
 import androidx.compose.ui.graphics.Color
@@ -290,20 +298,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 object ${objectName} {
-${dictionary.allTokens.map(token => {
-  const name = token.name.split('-').map(part => 
-    part.charAt(0).toUpperCase() + part.slice(1)
-  ).join('');
-  
-  if (token.type === 'color') {
-    return `    val ${name} = Color(0x${token.value.replace('#', '')})`;
-  } else if (token.type === 'dimension') {
-    return `    val ${name} = ${token.value}`;
-  }
-  return `    val ${name} = "${token.value}"`;
-}).join('\n')}
+${dictionary.allTokens
+  .map(token => {
+    const name = token.name
+      .split('-')
+      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+      .join('');
+
+    if (token.type === 'color') {
+      return `    val ${name} = Color(0x${token.value.replace('#', '')})`;
+    } else if (token.type === 'dimension') {
+      return `    val ${name} = ${token.value}`;
+    }
+    return `    val ${name} = "${token.value}"`;
+  })
+  .join('\n')}
 }`;
-  }
+  },
 });
 ```
 
@@ -323,7 +334,7 @@ function buildTokens() {
 }
 
 // Watch for changes
-chokidar.watch('tokens/**/*.json').on('change', (path) => {
+chokidar.watch('tokens/**/*.json').on('change', path => {
   console.log(`🔄 Token file changed: ${path}`);
   buildTokens();
 });
@@ -350,7 +361,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Export tokens from Penpot
         env:
           PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
@@ -359,11 +370,11 @@ jobs:
           pnpm penpot-export \
             --file $PENPOT_FILE_ID \
             --out tokens/design-tokens.json
-      
+
       - name: Build Style Dictionary outputs
         run: |
           pnpm nx run design-tokens:build
-      
+
       - name: Check for changes
         id: changes
         run: |
@@ -372,7 +383,7 @@ jobs:
           else
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
-      
+
       - name: Create Pull Request
         if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v5
@@ -380,11 +391,11 @@ jobs:
           title: 'feat(tokens): sync design tokens from Penpot'
           body: |
             Automated token sync from Penpot design file.
-            
+
             ### Changes
             - Updated design tokens from Penpot
             - Regenerated platform-specific outputs
-            
+
             ### Review Checklist
             - [ ] Verify token changes are intentional
             - [ ] Check visual regression tests pass
@@ -412,24 +423,24 @@ fi
 # Validate token structure if Style Dictionary outputs are staged
 if git diff --cached --name-only | grep -q "tokens/.*\.json"; then
   echo "🔍 Validating token structure..."
-  
+
   # Check W3C DTCG compliance
   pnpm exec ajv validate \
     -s schemas/dtcg.schema.json \
     -d "tokens/**/*.json"
-  
+
   if [ $? -ne 0 ]; then
     echo "❌ Token validation failed"
     echo "   Tokens must comply with W3C DTCG format"
     exit 1
   fi
-  
+
   # Rebuild outputs to ensure consistency
   pnpm nx run design-tokens:build
-  
+
   # Stage regenerated files
   git add dist/
-  
+
   echo "✅ Token validation passed"
 fi
 ```

@@ -57,17 +57,17 @@ jobs:
           # Find all markdown files
           find docs packages -name "*.md" -type f | while read -r file; do
             echo "Checking $file"
-            
+
             # Extract markdown links
             grep -oE '\[([^\]]+)\]\(([^)]+)\)' "$file" | while read -r link; do
               # Extract the URL part
               url=$(echo "$link" | sed -n 's/.*(\([^)]*\)).*/\1/p')
-              
+
               # Skip external URLs and anchors
               if [[ "$url" =~ ^https?:// ]] || [[ "$url" =~ ^# ]]; then
                 continue
               fi
-              
+
               # Resolve relative paths
               if [[ "$url" =~ ^\.\. ]]; then
                 # Relative to current file's directory
@@ -81,10 +81,10 @@ jobs:
                 # Assume relative to repository root
                 full_path="$url"
               fi
-              
+
               # Normalize path
               full_path=$(realpath -m "$full_path" 2>/dev/null || echo "$full_path")
-              
+
               # Check if file exists
               if [[ ! -f "$full_path" ]]; then
                 echo "❌ Broken link in $file: $url -> $full_path"
@@ -118,7 +118,7 @@ jobs:
           if [ "$total_docs" -gt 0 ]; then
             coverage=$((advanced_docs * 100 / total_docs))
             echo "Advanced documentation coverage: ${coverage}%"
-            
+
             # Require at least 40% advanced documentation coverage
             if [ "$coverage" -lt 40 ]; then
               echo "❌ Advanced documentation coverage too low: ${coverage}% (minimum: 40%)"

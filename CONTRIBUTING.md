@@ -356,19 +356,16 @@ Include screenshots for UI changes.
 ### What We Look For
 
 1. **Code Quality**
-
    - Clean, readable code
    - Proper error handling
    - Performance considerations
 
 2. **Testing**
-
    - Adequate test coverage
    - Edge cases covered
    - Tests are maintainable
 
 3. **Documentation**
-
    - Code is self-documenting
    - Complex logic is commented
    - Public APIs are documented
@@ -412,14 +409,14 @@ The project enforces strict architectural boundaries via ESLint rules to prevent
 
 ```typescript
 // ✅ Good - Allowed dependencies
-import { dsColors } from '@mimic/design-tokens';           // tokens → shared
-import { Button } from '@mimic/design-system';             // web → design-system
-import { validateToken } from '@mimic/shared-utils';       // any → shared
+import { dsColors } from '@mimic/design-tokens'; // tokens → shared
+import { Button } from '@mimic/design-system'; // web → design-system
+import { validateToken } from '@mimic/shared-utils'; // any → shared
 
 // ❌ Bad - Boundary violations
-import { MobileComponent } from '../mobile/Component';     // web → mobile (forbidden)
-import { WebUtils } from '../web/utils';                  // mobile → web (forbidden)
-import { DesktopHelper } from '../desktop/helper';        // mobile → desktop (forbidden)
+import { MobileComponent } from '../mobile/Component'; // web → mobile (forbidden)
+import { WebUtils } from '../web/utils'; // mobile → web (forbidden)
+import { DesktopHelper } from '../desktop/helper'; // mobile → desktop (forbidden)
 ```
 
 **Debugging Boundary Violations:**
@@ -437,19 +434,21 @@ pnpm nx lint your-package-name
 
 ### Design Token Guidelines
 
-All design tokens use strict namespacing to prevent collisions with third-party libraries:
+All design tokens use strict namespacing to prevent collisions with third-party libraries per industry\
+best practices documented by Specify (Tailwind conflicts), Locofy FAQ (Metro duplication), and\
+Supernova (Storybook port conflicts):
 
-**CSS Tokens:**
+**CSS Tokens (Specify-Compliant):**
 
 ```css
-/* ✅ Good - All CSS tokens use --ds-* prefix */
+/* ✅ Good - All CSS tokens use --ds-* prefix to prevent Specify/Tailwind conflicts */
 --ds-color-primary: #007bff;
 --ds-spacing-md: 1rem;
 --ds-typography-heading-size: 2rem;
 
-/* ❌ Bad - Missing ds- prefix */
---color-primary: #007bff;        /* Will fail CI */
---spacing-md: 1rem;              /* Will fail CI */
+/* ❌ Bad - Missing ds- prefix (will fail CI and cause Tailwind conflicts) */
+--color-primary: #007bff; /* Will fail CI */
+--spacing-md: 1rem; /* Will fail CI */
 ```
 
 **JavaScript/TypeScript Tokens:**
@@ -459,9 +458,9 @@ All design tokens use strict namespacing to prevent collisions with third-party 
 export const dsColors = { primary: '#007bff' };
 export const dsSpacing = { md: '1rem' };
 
-// ❌ Bad - Missing ds prefix
-export const colors = { primary: '#007bff' };     // Will fail CI
-export const spacing = { md: '1rem' };            // Will fail CI
+// ❌ Bad - Missing ds prefix (will fail CI and cause import conflicts)
+export const colors = { primary: '#007bff' }; // Will fail CI
+export const spacing = { md: '1rem' }; // Will fail CI
 ```
 
 **Platform-Specific Namespacing:**
@@ -471,11 +470,36 @@ export const spacing = { md: '1rem' };            // Will fail CI
 - **Dart**: `DsTokens.*` (PascalCase)
 - **Kotlin**: `ds.theme.*` (object notation)
 
+**Metro Package Naming (Locofy FAQ Compliance):**
+
+```json
+// ✅ Good - Scoped package name prevents Metro duplication per Locofy FAQ
+{
+  "name": "@mimic/design-tokens"  // Prevents Metro bundle conflicts
+}
+
+// ❌ Bad - Unscoped name causes Metro duplication
+{
+  "name": "design-tokens"         // Will fail CI, causes Metro issues
+}
+```
+
+**Storybook Port Assignment (Supernova Best Practice):**
+
+```bash
+# Fixed port assignments prevent Supernova-documented conflicts
+pnpm nx run design-system:storybook          # Port 6006 (Web/Vite default)
+pnpm nx run design-system:storybook:mobile   # Port 7007 (React Native default)
+pnpm nx run design-system:storybook:desktop  # Port 6008 (Custom, no conflicts)
+```
+
 **Important Rules:**
 
 - ❌ **Never manually edit** files in `packages/design-tokens/libs/tokens/`
 - ✅ **All token changes** must originate from Penpot or base definitions
-- ✅ **Use the ds- prefix** for all custom CSS variables
+- ✅ **Use the ds- prefix** for all custom CSS variables (prevents Specify/Tailwind conflicts)
+- ✅ **Use scoped package names** like `@mimic/package-name` (prevents Metro duplication per Locofy FAQ)
+- ✅ **Use fixed Storybook ports** as documented (prevents Supernova-documented port conflicts)
 - ✅ **Import tokens** from the appropriate platform path
 
 ### Storybook Platform Isolation
@@ -491,7 +515,7 @@ pnpm nx run design-system:storybook
 # Mobile-focused components
 pnpm nx run design-system:storybook:mobile
 
-# Desktop-focused components  
+# Desktop-focused components
 pnpm nx run design-system:storybook:desktop
 ```
 
@@ -513,7 +537,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
 
 const meta: Meta<typeof Button> = {
-  title: 'Mobile/Button',              // Platform prefix
+  title: 'Mobile/Button', // Platform prefix
   component: Button,
   parameters: {
     viewport: { defaultViewport: 'mobile1' }, // Mobile viewport
@@ -538,7 +562,7 @@ pnpm nx run-many -t lint --parallel --maxParallel=4
 # CSS token validation
 grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/
 
-# JavaScript token validation  
+# JavaScript token validation
 grep -r "^[[:space:]]*export.*[^d][^s][A-Z]" packages/design-tokens/libs/tokens/js/
 ```
 
@@ -573,17 +597,38 @@ pnpm nx show projects --with-deps design-system
 
 ```bash
 # Error: "Found CSS tokens without ds- prefix"
-# Solution: Use proper namespacing
+# Solution: Use proper namespacing per Specify documentation
 
-# Before (bad)
+# Before (bad - causes Specify/Tailwind conflicts)
 .my-component {
   color: var(--primary-color);
 }
 
-# After (good)  
+# After (good - Specify-compliant)
 .my-component {
   color: var(--ds-color-primary);
 }
+```
+
+**Metro Bundle Duplication (Locofy FAQ Issue):**
+
+```bash
+# Error: "Metro bundling duplicate packages"
+# Solution: Use scoped package names per Locofy FAQ guidance
+
+# Check package.json uses proper scoped naming
+grep -q '"name": "@mimic/design-tokens"' packages/design-tokens/package.json
+```
+
+**Storybook Port Conflicts (Supernova Issue):**
+
+```bash
+# Error: "Port already in use" / "Cannot start Storybook"
+# Solution: Use fixed port assignments per Supernova documentation
+
+# Web Storybook: Port 6006 (Vite builder default)
+# Mobile Storybook: Port 7007 (React Native builder default)
+# Desktop Storybook: Port 6008 (custom to prevent conflicts)
 ```
 
 **Storybook Build Failure:**

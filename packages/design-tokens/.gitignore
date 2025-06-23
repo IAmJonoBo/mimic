@@ -4,3 +4,23 @@
 
 # Build outputs specific to design-tokens
 dist/
+libs/tokens/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Style Dictionary build artifacts
+build/
+
+# Node modules (if any package-specific installs)
+node_modules/
+
+# Logs
+*.log
+logs/
+
+# Cache
+.cache/

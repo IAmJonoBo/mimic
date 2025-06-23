@@ -173,7 +173,6 @@ find packages/design-tokens/tokens -name "\*.json" -exec node -e "JSON.parse(req
 \;
 
 ````bash
-
 2. **Rebuild tokens explicitly:**
 
 ```bash
@@ -313,14 +312,17 @@ pnpm build:tokens
    ```typescript
    // Debug token availability
    import { getTokensByPattern } from '@mimic/design-tokens';
-   
+
    // List all available tokens
    const allTokens = getTokensByPattern('*');
    console.table(allTokens);
-   
+
    // Check specific category
    const colors = getTokensByPattern('color.*');
-   console.log('Available colors:', colors.map(t => t.path));
+   console.log(
+     'Available colors:',
+     colors.map(t => t.path)
+   );
    ```
 
 2. **Verify token structure:**
@@ -328,7 +330,7 @@ pnpm build:tokens
    ```bash
    # Check token files exist
    ls -la packages/design-tokens/tokens/
-   
+
    # Validate token structure
    pnpm test
    ```
@@ -337,11 +339,11 @@ pnpm build:tokens
 
    ```typescript
    // ✅ Correct: dot-separated path
-   getToken('color.primary.500')
-   
+   getToken('color.primary.500');
+
    // ❌ Wrong: slash or other separators
-   getToken('color/primary/500')
-   getToken('color-primary-500')
+   getToken('color/primary/500');
+   getToken('color-primary-500');
    ```
 
 ### CSS Variables Not Loading
@@ -359,7 +361,7 @@ pnpm build:tokens
    ```css
    /* ✅ Import tokens before using them */
    @import '@mimic/design-tokens/css';
-   
+
    .component {
      color: var(--color-primary-500);
    }
@@ -405,7 +407,7 @@ pnpm build:tokens
 
    ```typescript
    import { validateTokens } from '@mimic/design-tokens';
-   
+
    const result = validateTokens();
    if (!result.isValid) {
      console.error('Validation errors:', result.errors);
@@ -428,8 +430,8 @@ pnpm build:tokens
        }
      }
    }
-   
-   // ❌ Wrong format  
+
+   // ❌ Wrong format
    {
      "color": {
        "primary": {
@@ -461,7 +463,7 @@ pnpm build:tokens
 
    ```typescript
    import { matchesPattern } from '@mimic/design-tokens';
-   
+
    // Test specific patterns
    console.log(matchesPattern('color.primary.500', 'color.primary.*')); // true
    console.log(matchesPattern('color.primary.500', 'color.*')); // false
@@ -472,13 +474,13 @@ pnpm build:tokens
 
    ```typescript
    // ✅ Correct patterns
-   getTokensByPattern('color.primary.*')  // All primary colors
-   getTokensByPattern('spacing.*')        // All spacing tokens
-   getTokensByPattern('*')                // All tokens
-   
+   getTokensByPattern('color.primary.*'); // All primary colors
+   getTokensByPattern('spacing.*'); // All spacing tokens
+   getTokensByPattern('*'); // All tokens
+
    // ❌ Wrong patterns
-   getTokensByPattern('color.primary.**') // Double asterisk not supported
-   getTokensByPattern('color.*.500')      // Middle wildcards not supported
+   getTokensByPattern('color.primary.**'); // Double asterisk not supported
+   getTokensByPattern('color.*.500'); // Middle wildcards not supported
    ```
 
 3. **Debug pattern results:**
@@ -486,8 +488,10 @@ pnpm build:tokens
    ```typescript
    const pattern = 'color.primary.*';
    const results = getTokensByPattern(pattern);
-   console.log(`Pattern "${pattern}" found ${results.length} tokens:`, 
-     results.map(r => r.path));
+   console.log(
+     `Pattern "${pattern}" found ${results.length} tokens:`,
+     results.map(r => r.path)
+   );
    ```
 
 ### Build Performance Issues
@@ -512,7 +516,7 @@ pnpm build:tokens
    ```bash
    # Use watch mode for development
    pnpm run watch
-   
+
    # Build only what changed
    pnpm nx affected:build
    ```
@@ -522,7 +526,7 @@ pnpm build:tokens
    ```bash
    # Run with timing information
    time pnpm run build:tokens
-   
+
    # Use verbose logging
    pnpm run build:tokens --verbose
    ```

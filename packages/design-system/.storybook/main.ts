@@ -13,36 +13,46 @@ const config: StorybookConfig = {
     name: '@storybook/html-vite',
     options: {
       builder: {
-        viteConfigPath: './vite.config.storybook.ts'
-      }
+        viteConfigPath: './vite.config.storybook.ts',
+      },
     },
   },
   typescript: {
     check: true,
   },
   refs: {
-    // Enable composition for cross-platform documentation
-    'mobile': {
+    // Enable composition for cross-platform documentation with fixed port assignments
+    mobile: {
       title: 'Mobile Components',
-      url: 'http://localhost:4401', // Mobile Storybook instance
+      url: 'http://localhost:7007', // Mobile Storybook: Port 7007 (React Native default)
       expanded: false,
     },
-    'desktop': {
-      title: 'Desktop Components', 
-      url: 'http://localhost:4402', // Desktop Storybook instance
+    desktop: {
+      title: 'Desktop Components',
+      url: 'http://localhost:6008', // Desktop Storybook: Port 6008 (custom, no conflicts)
       expanded: false,
     },
   },
   viteFinal: async config => {
+    // Fixed port assignment to prevent Supernova-documented conflicts
+    config.server = config.server || {};
+    config.server.port = 6006; // Web Storybook: Port 6006 (Vite builder default)
+
     // Ensure design tokens are available with collision-safe paths
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@mimic/design-tokens/web': require.resolve('../../design-tokens/libs/tokens/css/tokens.css'),
-      '@mimic/design-tokens/js': require.resolve('../../design-tokens/libs/tokens/js/tokens.js'),
-      '@mimic/design-tokens/types': require.resolve('../../design-tokens/libs/tokens/ts/tokens.ts'),
+      '@mimic/design-tokens/web': require.resolve(
+        '../../design-tokens/libs/tokens/css/tokens.css'
+      ),
+      '@mimic/design-tokens/js': require.resolve(
+        '../../design-tokens/libs/tokens/js/tokens.js'
+      ),
+      '@mimic/design-tokens/types': require.resolve(
+        '../../design-tokens/libs/tokens/ts/tokens.ts'
+      ),
     };
-    
+
     // Add CSS preprocessing for design tokens
     config.css = config.css || {};
     config.css.preprocessorOptions = {
@@ -51,7 +61,7 @@ const config: StorybookConfig = {
         additionalData: `@import "@mimic/design-tokens/scss/tokens.scss";`,
       },
     };
-    
+
     return config;
   },
 };

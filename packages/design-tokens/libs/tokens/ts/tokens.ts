@@ -175,7 +175,8 @@ export const tokens: DesignTokens = {
   'spacing.3xl': '4rem',
   'typography.fontFamily.primary': 'Inter, system-ui, sans-serif',
   'typography.fontFamily.heading': 'Inter, system-ui, sans-serif',
-  'typography.fontFamily.monospace': 'JetBrains Mono, Consolas, Monaco, monospace',
+  'typography.fontFamily.monospace':
+    'JetBrains Mono, Consolas, Monaco, monospace',
   'typography.fontSize.xs': '0.75rem',
   'typography.fontSize.sm': '0.875rem',
   'typography.fontSize.base': '1rem',
@@ -205,9 +206,12 @@ export const tokens: DesignTokens = {
   'border.width.thin': '1px',
   'border.width.medium': '2px',
   'border.width.thick': '4px',
-  'shadow.sm': '{"offsetX":"0px","offsetY":"1px","blur":"2px","spread":"0px","color":"rgba(0, 0, 0, 0.05)"}',
-  'shadow.md': '{"offsetX":"0px","offsetY":"4px","blur":"6px","spread":"-1px","color":"rgba(0, 0, 0, 0.1)"}',
-  'shadow.lg': '{"offsetX":"0px","offsetY":"10px","blur":"15px","spread":"-3px","color":"rgba(0, 0, 0, 0.1)"}',
+  'shadow.sm':
+    '{"offsetX":"0px","offsetY":"1px","blur":"2px","spread":"0px","color":"rgba(0, 0, 0, 0.05)"}',
+  'shadow.md':
+    '{"offsetX":"0px","offsetY":"4px","blur":"6px","spread":"-1px","color":"rgba(0, 0, 0, 0.1)"}',
+  'shadow.lg':
+    '{"offsetX":"0px","offsetY":"10px","blur":"15px","spread":"-3px","color":"rgba(0, 0, 0, 0.1)"}',
   'button.padding.small': '0.25rem 0.5rem',
   'button.padding.medium': '0.5rem 1rem',
   'button.padding.large': '1rem 1.5rem',
@@ -218,7 +222,8 @@ export const tokens: DesignTokens = {
   'button.fontWeight': '500',
   'card.padding': '1.5rem',
   'card.borderRadius': '0.5rem',
-  'card.shadow': '{"offsetX":"0px","offsetY":"4px","blur":"6px","spread":"-1px","color":"rgba(0, 0, 0, 0.1)"}',
+  'card.shadow':
+    '{"offsetX":"0px","offsetY":"4px","blur":"6px","spread":"-1px","color":"rgba(0, 0, 0, 0.1)"}',
   'card.border': '1px solid #e5e5e5',
   'input.padding': '0.5rem 1rem',
   'input.borderRadius': '0.375rem',
@@ -233,7 +238,7 @@ export const tokens: DesignTokens = {
   'heading.h2.fontSize': '1.875rem',
   'heading.h2.marginBottom': '1rem',
   'heading.h3.fontSize': '1.5rem',
-  'heading.h3.marginBottom': '1rem'
+  'heading.h3.marginBottom': '1rem',
 };
 
 export default tokens;

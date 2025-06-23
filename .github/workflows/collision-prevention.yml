@@ -14,7 +14,7 @@ jobs:
   module-boundaries:
     name: Module Boundary Enforcement
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -38,13 +38,14 @@ jobs:
 
       - name: Validate token namespace compliance
         run: |
-          echo "🔍 Checking CSS token namespace compliance..."
-          # Ensure all CSS tokens use --ds-* prefix
+          echo "🔍 Checking CSS token namespace compliance (Specify Warning Prevention)..."
+          # Ensure all CSS tokens use --ds-* prefix to prevent Tailwind conflicts
           if grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/ 2>/dev/null; then
-            echo "❌ Found CSS tokens without ds- prefix"
+            echo "❌ Found CSS tokens without ds- prefix (Specify conflict risk)"
+            echo "Solution: All CSS custom properties must use --ds-* prefix per Specify documentation"
             exit 1
           fi
-          echo "✅ All CSS tokens use --ds-* prefix"
+          echo "✅ All CSS tokens use --ds-* prefix (Specify compliant)"
 
           echo "🔍 Checking JavaScript token namespace compliance..."
           # Ensure all JS tokens use ds prefix (exclude comments and strings)
@@ -53,6 +54,58 @@ jobs:
             exit 1
           fi
           echo "✅ All JS tokens use ds prefix"
+
+      - name: Run comprehensive collision prevention validation
+        run: |
+          echo "🔍 Running comprehensive collision prevention validation..."
+          cd packages/shared-utils
+
+          # Build the collision prevention module
+          pnpm build
+
+          # Run the runtime collision prevention check
+          node dist/collision-prevention.js
+
+          echo "✅ Collision prevention validation completed"
+
+      - name: Validate Storybook port assignments (Supernova Compliance)
+        run: |
+          echo "🔍 Checking Storybook port assignments (Supernova Docs Compliance)..."
+
+          # Check for required Storybook configs and their ports
+          configs=("main.ts:6006" "main.mobile.ts:7007" "main.desktop.ts:6008")
+          for config_port in "${configs[@]}"; do
+            IFS=':' read -r config expected_port <<< "$config_port"
+            config_file="packages/design-system/.storybook/$config"
+
+            if [ ! -f "$config_file" ]; then
+              echo "❌ Missing Storybook config: $config"
+              exit 1
+            fi
+
+            if ! grep -q "config.server.port = $expected_port" "$config_file"; then
+              echo "❌ $config: Port not set to $expected_port (Supernova requirement)"
+              exit 1
+            fi
+          done
+          echo "✅ All Storybook ports correctly assigned per Supernova docs"
+
+      - name: Validate package scoping (Locofy FAQ Compliance)
+        run: |
+          echo "🔍 Checking package scoping (Locofy FAQ Compliance)..."
+
+          # Check that all packages use @mimic scope
+          for package_file in packages/*/package.json; do
+            if [ -f "$package_file" ]; then
+              package_name=$(jq -r '.name' "$package_file")
+              if [[ ! "$package_name" =~ ^@mimic/ ]]; then
+                echo "❌ Package in $package_file uses unscoped name: $package_name"
+                echo "Solution: Use @mimic/ scope per Locofy FAQ (prevents Metro duplication)"
+                exit 1
+              fi
+            fi
+          done
+          echo "✅ All packages use @mimic scope (Locofy FAQ compliant)"
 
       - name: Validate import path compliance
         run: |
@@ -73,7 +126,7 @@ jobs:
       - name: Check collision-safe token outputs
         run: |
           echo "🔍 Verifying collision-safe token outputs exist..."
-          
+
           # Check platform-rooted directories exist
           for platform in css scss js ts json dart compose react-native; do
             if [ ! -d "packages/design-tokens/libs/tokens/$platform" ]; then
@@ -95,7 +148,7 @@ jobs:
   token-pipeline:
     name: Token Pipeline Validation
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -118,17 +171,17 @@ jobs:
       - name: Validate token schema compliance
         run: |
           echo "🔍 Validating token schema compliance..."
-          
+
           # Check for token schema violations
           cd packages/design-tokens
-          
+
           # Validate JSON schema
           if [ -f "libs/tokens/json/tokens.json" ]; then
             # Basic JSON validation
             node -e "JSON.parse(require('fs').readFileSync('libs/tokens/json/tokens.json', 'utf8'))"
             echo "✅ JSON tokens are valid"
           fi
-          
+
           # Check for required token categories
           required_categories=("color" "typography" "spacing" "shadow")
           for category in "${required_categories[@]}"; do
@@ -141,21 +194,21 @@ jobs:
         run: |
           echo "🔍 Testing runtime collision detection..."
           cd packages/shared-utils
-          
+
           # Run collision detection tests
           pnpm test --testNamePattern="runtime.*guard" --passWithNoTests
 
       - name: Validate cross-platform consistency
         run: |
           echo "🔍 Validating cross-platform token consistency..."
-          
+
           # Compare token counts across platforms
           css_count=$(grep -c "^--ds-" packages/design-tokens/libs/tokens/css/tokens.css 2>/dev/null || echo "0")
           js_count=$(grep -c "^export.*ds" packages/design-tokens/libs/tokens/js/tokens.js 2>/dev/null || echo "0")
-          
+
           echo "CSS tokens: $css_count"
           echo "JS tokens: $js_count"
-          
+
           # Allow for some variation due to platform-specific tokens
           if [ "$css_count" -gt 0 ] && [ "$js_count" -gt 0 ]; then
             echo "✅ Tokens generated for multiple platforms"
@@ -166,7 +219,7 @@ jobs:
   storybook-composition:
     name: Storybook Composition Validation
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -195,7 +248,7 @@ jobs:
       - name: Validate Storybook composition configs
         run: |
           echo "🔍 Validating Storybook composition configurations..."
-          
+
           # Check for required Storybook configs
           configs=("main.ts" "main.mobile.ts" "main.desktop.ts")
           for config in "${configs[@]}"; do
@@ -216,10 +269,39 @@ jobs:
           done
           echo "✅ All Vite isolation configs present"
 
+      - name: Test Storybook port isolation (Supernova Compliance)
+        run: |
+          echo "🔍 Testing Storybook port isolation (Supernova Docs)..."
+
+          # Test that each Storybook config specifies its required port
+          web_port=$(grep -o "config.server.port = [0-9]*" packages/design-system/.storybook/main.ts | grep -o "[0-9]*")
+          mobile_port=$(grep -o "config.server.port = [0-9]*" packages/design-system/.storybook/main.mobile.ts | grep -o "[0-9]*")
+          desktop_port=$(grep -o "config.server.port = [0-9]*" packages/design-system/.storybook/main.desktop.ts | grep -o "[0-9]*")
+
+          if [ "$web_port" != "6006" ]; then
+            echo "❌ Web Storybook port should be 6006, found: $web_port"
+            exit 1
+          fi
+
+          if [ "$mobile_port" != "7007" ]; then
+            echo "❌ Mobile Storybook port should be 7007, found: $mobile_port"
+            exit 1
+          fi
+
+          if [ "$desktop_port" != "6008" ]; then
+            echo "❌ Desktop Storybook port should be 6008, found: $desktop_port"
+            exit 1
+          fi
+
+          echo "✅ All Storybook ports correctly isolated per Supernova docs"
+          echo "   - Web: $web_port"
+          echo "   - Mobile: $mobile_port"
+          echo "   - Desktop: $desktop_port"
+
   security-scan:
     name: Security & Dependency Audit
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -242,7 +324,7 @@ jobs:
       - name: Check for sensitive data leaks
         run: |
           echo "🔍 Checking for sensitive data in token files..."
-          
+
           # Check for API keys, secrets, or personal info in tokens
           if grep -r -i "api[_-]key\|secret\|password\|token.*[0-9a-f]\{20,\}" packages/design-tokens/libs/tokens/ 2>/dev/null; then
             echo "❌ Potential sensitive data found in tokens"
@@ -253,7 +335,7 @@ jobs:
       - name: Validate token file permissions
         run: |
           echo "🔍 Checking token file permissions..."
-          
+
           # Ensure token files are not executable
           if find packages/design-tokens/libs/tokens/ -type f -executable 2>/dev/null | grep -q .; then
             echo "❌ Found executable token files"
@@ -264,7 +346,7 @@ jobs:
   performance-budget:
     name: Performance Budget Validation
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -287,12 +369,12 @@ jobs:
       - name: Check token bundle sizes
         run: |
           echo "🔍 Checking token bundle sizes..."
-          
+
           # Define size limits (in bytes)
           CSS_LIMIT=51200    # 50KB
           JS_LIMIT=25600     # 25KB
           JSON_LIMIT=102400  # 100KB
-          
+
           # Check CSS bundle size
           if [ -f "packages/design-tokens/libs/tokens/css/tokens.css" ]; then
             css_size=$(wc -c < packages/design-tokens/libs/tokens/css/tokens.css)
@@ -302,7 +384,7 @@ jobs:
               exit 1
             fi
           fi
-          
+
           # Check JS bundle size
           if [ -f "packages/design-tokens/libs/tokens/js/tokens.js" ]; then
             js_size=$(wc -c < packages/design-tokens/libs/tokens/js/tokens.js)
@@ -312,8 +394,8 @@ jobs:
               exit 1
             fi
           fi
-          
-          # Check JSON bundle size  
+
+          # Check JSON bundle size
           if [ -f "packages/design-tokens/libs/tokens/json/tokens.json" ]; then
             json_size=$(wc -c < packages/design-tokens/libs/tokens/json/tokens.json)
             echo "JSON bundle size: ${json_size} bytes (limit: ${JSON_LIMIT})"
@@ -322,15 +404,22 @@ jobs:
               exit 1
             fi
           fi
-          
+
           echo "✅ All bundles within size limits"
 
   report-status:
     name: Report Overall Status
     runs-on: ubuntu-latest
-    needs: [module-boundaries, token-pipeline, storybook-composition, security-scan, performance-budget]
+    needs:
+      [
+        module-boundaries,
+        token-pipeline,
+        storybook-composition,
+        security-scan,
+        performance-budget,
+      ]
     if: always()
-    
+
     steps:
       - name: Report Success
         if: needs.module-boundaries.result == 'success' && needs.token-pipeline.result == 'success' && needs.storybook-composition.result == 'success' && needs.security-scan.result == 'success' && needs.performance-budget.result == 'success'
@@ -338,7 +427,7 @@ jobs:
           echo "✅ ALL COLLISION PREVENTION & QUALITY GATES: PASSED"
           echo ""
           echo "🛡️  Module boundary enforcement: ✅ PASSED"
-          echo "🔧 Token pipeline validation: ✅ PASSED"  
+          echo "🔧 Token pipeline validation: ✅ PASSED"
           echo "📚 Storybook composition: ✅ PASSED"
           echo "🔒 Security & dependency audit: ✅ PASSED"
           echo "⚡ Performance budget validation: ✅ PASSED"

@@ -3,8 +3,8 @@
 import { defineConfig } from 'prettier';
 
 export default defineConfig({
-  // Core formatting rules (align with Biome for consistency)
-  printWidth: 80,
+  // Core formatting rules (no line-length restrictions for code)
+  printWidth: 320,
   tabWidth: 2,
   useTabs: false,
   semi: true,
@@ -24,16 +24,8 @@ export default defineConfig({
     {
       files: ['*.html', '*.astro'],
       options: {
-        printWidth: 100,
+        printWidth: 120,
         htmlWhitespaceSensitivity: 'css',
-      },
-    },
-    {
-      files: ['*.md', '*.mdx'],
-      options: {
-        printWidth: 80,
-        proseWrap: 'preserve',
-        embeddedLanguageFormatting: 'auto',
       },
     },
     {

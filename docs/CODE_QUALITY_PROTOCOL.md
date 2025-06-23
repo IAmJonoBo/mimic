@@ -1,6 +1,6 @@
 # 🔧 Code Quality Protocol & Linting Stack
 
-> **Modern 2025 Enterprise-Grade Code Quality Pipeline**  
+> **Modern 2025 Enterprise-Grade Code Quality Pipeline**\
 > A comprehensive guide to our Rust-speed, multi-formatter linting stack for pnpm + ESM + Nx monorepos
 
 ## 📋 Executive Summary

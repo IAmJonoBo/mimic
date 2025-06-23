@@ -1,4 +1,5 @@
 {
+  "lineWidth": 320,
   "toml": {
     "indentWidth": 2
   },
@@ -8,23 +9,50 @@
   "yaml": {
     "indentWidth": 2
   },
-  "includes": ["**/*.{toml,yaml,yml,xml}"],
+  "markdown": {
+    "lineWidth": 120
+  },
+  "includes": ["**/*.{toml,yaml,yml,xml,md,mdx}"],
   "excludes": [
     "**/node_modules",
     "**/*-lock.json",
+    "**/*.lock",
     "**/dist/**",
     "**/build/**",
+    "**/lib/**",
+    "**/out/**",
     "**/.nx/**",
     "**/coverage/**",
     "**/tmp/**",
+    "**/temp/**",
+    "**/.tmp/**",
+    "**/.temp/**",
+    "**/temporary/**",
     "**/storybook-static/**",
+    "**/chromatic-build/**",
+    "**/.next/**",
+    "**/.nuxt/**",
+    "**/.vuepress/dist/**",
+    "**/.serverless/**",
+    "**/.parcel-cache/**",
+    "**/.turbo/**",
+    "**/.vercel/**",
+    "**/.nitro/**",
+    "**/target/**",
+    "**/.cache/**",
+    "**/logs/**",
+    "**/.expo/**",
+    "**/auto-generated/**",
+    "**/generated/**",
+    "**/gen/**",
     "**/*.{js,jsx,ts,tsx,json}",
     "**/*.{html,astro,css,scss,sass}",
-    "**/*.{md,mdx}"
+    "**/*.timestamp-*",
+    "**/vite.config.*.timestamp*",
+    "**/vitest.config.*.timestamp*",
+    "**/.cursor/rules/**",
+    "**/.github/instructions/**",
+    "**/packages/design-tokens/libs/tokens/**"
   ],
-  "plugins": [
-    "https://plugins.dprint.dev/toml-0.7.0.wasm",
-    "https://plugins.dprint.dev/g-plane/markup_fmt-v0.22.0.wasm",
-    "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.1.wasm"
-  ]
+  "plugins": ["https://plugins.dprint.dev/toml-0.7.0.wasm", "https://plugins.dprint.dev/g-plane/markup_fmt-v0.22.0.wasm", "https://plugins.dprint.dev/g-plane/pretty_yaml-v0.5.1.wasm", "https://plugins.dprint.dev/markdown-0.18.0.wasm"]
 }

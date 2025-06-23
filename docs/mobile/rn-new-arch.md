@@ -1,6 +1,6 @@
 # React Native New Architecture Integration
 
-Comprehensive guide for integrating Mimic design tokens with React Native's New Architecture (Fabric + TurboModules),  
+Comprehensive guide for integrating Mimic design tokens with React Native's New Architecture (Fabric + TurboModules),\
 covering token transformation, native module integration, and platform-specific optimizations.
 
 ## New Architecture Overview
@@ -60,13 +60,13 @@ RCT_EXPORT_MODULE()
   NSBundle *bundle = [NSBundle mainBundle];
   NSString *tokenPath = [bundle pathForResource:@"design-tokens" ofType:@"json"];
   NSData *tokenData = [NSData dataWithContentsOfFile:tokenPath];
-  
+
   if (tokenData) {
     NSError *error;
     NSDictionary *tokens = [NSJSONSerialization JSONObjectWithData:tokenData options:0 error:&error];
     return tokens[name] ?: @"";
   }
-  
+
   return @"";
 }
 
@@ -85,27 +85,27 @@ const StyleDictionary = require('style-dictionary');
 StyleDictionary.registerTransform({
   name: 'size/react-native-new-arch',
   type: 'value',
-  matcher: (token) => token.type === 'dimension',
-  transformer: (token) => {
+  matcher: token => token.type === 'dimension',
+  transformer: token => {
     const value = parseFloat(token.value);
-    
+
     // Convert to dp/pt for New Architecture compatibility
     return {
       ios: `${value}pt`,
       android: `${value}dp`,
       fabric: value, // Raw number for Fabric calculations
     };
-  }
+  },
 });
 
 // Color transform with platform-specific handling
 StyleDictionary.registerTransform({
   name: 'color/react-native-new-arch',
   type: 'value',
-  matcher: (token) => token.type === 'color',
-  transformer: (token) => {
+  matcher: token => token.type === 'color',
+  transformer: token => {
     const hexColor = token.value;
-    
+
     return {
       ios: `UIColor(hex: "${hexColor}")`,
       android: `Color.parseColor("${hexColor}")`,
@@ -114,18 +114,18 @@ StyleDictionary.registerTransform({
         red: parseInt(hexColor.slice(1, 3), 16) / 255,
         green: parseInt(hexColor.slice(3, 5), 16) / 255,
         blue: parseInt(hexColor.slice(5, 7), 16) / 255,
-        alpha: 1.0
-      }
+        alpha: 1.0,
+      },
     };
-  }
+  },
 });
 
 // Typography transform for New Architecture
 StyleDictionary.registerTransform({
   name: 'typography/react-native-new-arch',
   type: 'value',
-  matcher: (token) => token.type === 'typography',
-  transformer: (token) => {
+  matcher: token => token.type === 'typography',
+  transformer: token => {
     return {
       fontFamily: token.value.fontFamily,
       fontSize: parseFloat(token.value.fontSize),
@@ -136,10 +136,10 @@ StyleDictionary.registerTransform({
       fabricProperties: {
         textShadowColor: 'transparent',
         textShadowOffset: { width: 0, height: 0 },
-        textShadowRadius: 0
-      }
+        textShadowRadius: 0,
+      },
     };
-  }
+  },
 });
 ```
 
@@ -156,7 +156,7 @@ module.exports = {
         'name/cti/kebab',
         'size/react-native-new-arch',
         'color/react-native-new-arch',
-        'typography/react-native-new-arch'
+        'typography/react-native-new-arch',
       ],
       buildPath: 'dist/react-native-new-arch/',
       files: [
@@ -165,15 +165,15 @@ module.exports = {
           format: 'javascript/es6',
           options: {
             outputReferences: true,
-            newArchitecture: true
-          }
+            newArchitecture: true,
+          },
         },
         {
           destination: 'tokens.json',
           format: 'json/flat',
           options: {
-            newArchitecture: true
-          }
+            newArchitecture: true,
+          },
         },
         {
           destination: 'ios/Tokens.swift',
@@ -181,8 +181,8 @@ module.exports = {
           className: 'MimicTokens',
           options: {
             newArchitecture: true,
-            fabricSupport: true
-          }
+            fabricSupport: true,
+          },
         },
         {
           destination: 'android/Tokens.kt',
@@ -190,12 +190,12 @@ module.exports = {
           className: 'MimicTokens',
           options: {
             newArchitecture: true,
-            packageName: 'com.mimic.tokens'
-          }
-        }
-      ]
-    }
-  }
+            packageName: 'com.mimic.tokens',
+          },
+        },
+      ],
+    },
+  },
 };
 ```
 
@@ -210,29 +210,29 @@ import React
 
 @objc(TokenViewComponentView)
 class TokenViewComponentView: RCTViewComponentView {
-  
+
   private var tokenName: String = ""
   private var tokenValue: String = ""
-  
+
   override func updateProps(_ props: Props, oldProps: Props) {
     super.updateProps(props, oldProps)
-    
+
     guard let tokenProps = props as? TokenViewProps else { return }
-    
+
     if tokenProps.tokenName != tokenName {
       tokenName = tokenProps.tokenName
       applyToken()
     }
-    
+
     if tokenProps.tokenValue != tokenValue {
       tokenValue = tokenProps.tokenValue
       applyToken()
     }
   }
-  
+
   private func applyToken() {
     guard !tokenName.isEmpty else { return }
-    
+
     // Apply token-based styling with Fabric optimization
     switch tokenName {
     case let name where name.contains("color"):
@@ -246,7 +246,7 @@ class TokenViewComponentView: RCTViewComponentView {
     default:
       break
     }
-    
+
     // Trigger Fabric re-render
     setNeedsLayout()
   }
@@ -275,31 +275,31 @@ import com.facebook.react.uimanager.ThemedReactContext
 import com.facebook.react.uimanager.annotations.ReactProp
 
 class TokenViewManager : SimpleViewManager<View>() {
-  
+
   companion object {
     const val REACT_CLASS = "TokenView"
   }
-  
+
   override fun getName(): String = REACT_CLASS
-  
+
   override fun createViewInstance(reactContext: ThemedReactContext): View {
     return View(reactContext)
   }
-  
+
   @ReactProp(name = "tokenName")
   fun setTokenName(view: View, tokenName: String?) {
     tokenName?.let { name ->
       applyToken(view, name)
     }
   }
-  
+
   @ReactProp(name = "tokenValue")
   fun setTokenValue(view: View, tokenValue: String?) {
     tokenValue?.let { value ->
       applyTokenValue(view, value)
     }
   }
-  
+
   private fun applyToken(view: View, tokenName: String) {
     when {
       tokenName.contains("color") -> {
@@ -313,7 +313,7 @@ class TokenViewManager : SimpleViewManager<View>() {
       }
     }
   }
-  
+
   private fun applyTokenValue(view: View, tokenValue: String) {
     try {
       when {
@@ -353,12 +353,12 @@ export interface TokenValue {
 export const useTokens = () => {
   const [tokens, setTokens] = useState<Record<string, TokenValue>>({});
   const [isLoading, setIsLoading] = useState(true);
-  
+
   useEffect(() => {
     const loadTokens = async () => {
       try {
         setIsLoading(true);
-        
+
         // Use TurboModule for optimal performance
         if (TokenTurboModule) {
           const validated = await TokenTurboModule.validateTokens();
@@ -370,20 +370,23 @@ export const useTokens = () => {
               'spacing.small',
               'spacing.medium',
               'typography.body',
-              'typography.heading'
+              'typography.heading',
             ];
-            
-            const tokenPromises = tokenNames.map(async (name) => {
+
+            const tokenPromises = tokenNames.map(async name => {
               const value = await TokenTurboModule.getToken(name);
               return { name, value };
             });
-            
+
             const resolvedTokens = await Promise.all(tokenPromises);
-            const tokenMap = resolvedTokens.reduce((acc, { name, value }) => {
-              acc[name] = parseTokenValue(value);
-              return acc;
-            }, {} as Record<string, TokenValue>);
-            
+            const tokenMap = resolvedTokens.reduce(
+              (acc, { name, value }) => {
+                acc[name] = parseTokenValue(value);
+                return acc;
+              },
+              {} as Record<string, TokenValue>
+            );
+
             setTokens(tokenMap);
           }
         } else {
@@ -400,10 +403,10 @@ export const useTokens = () => {
         setIsLoading(false);
       }
     };
-    
+
     loadTokens();
   }, []);
-  
+
   const getToken = useMemo(() => {
     return (tokenName: string, fallback?: string | number) => {
       const token = tokens[tokenName];
@@ -411,13 +414,13 @@ export const useTokens = () => {
         return Platform.select({
           ios: token.platform === 'ios' ? token.value : fallback,
           android: token.platform === 'android' ? token.value : fallback,
-          default: token.value
+          default: token.value,
         });
       }
       return fallback;
     };
   }, [tokens]);
-  
+
   const syncTokens = async (remoteUrl?: string) => {
     if (TokenTurboModule && remoteUrl) {
       try {
@@ -432,28 +435,40 @@ export const useTokens = () => {
       }
     }
   };
-  
+
   return {
     tokens,
     getToken,
     syncTokens,
-    isLoading
+    isLoading,
   };
 };
 
 const parseTokenValue = (rawValue: string): TokenValue => {
   // Parse token value based on format
   if (rawValue.startsWith('#')) {
-    return { value: rawValue, type: 'color', platform: Platform.OS as 'ios' | 'android' };
+    return {
+      value: rawValue,
+      type: 'color',
+      platform: Platform.OS as 'ios' | 'android',
+    };
   }
-  
+
   if (rawValue.endsWith('dp') || rawValue.endsWith('pt')) {
     const numericValue = parseFloat(rawValue);
-    return { value: numericValue, type: 'spacing', platform: Platform.OS as 'ios' | 'android' };
+    return {
+      value: numericValue,
+      type: 'spacing',
+      platform: Platform.OS as 'ios' | 'android',
+    };
   }
-  
+
   // Default to string value
-  return { value: rawValue, type: 'typography', platform: Platform.OS as 'ios' | 'android' };
+  return {
+    value: rawValue,
+    type: 'typography',
+    platform: Platform.OS as 'ios' | 'android',
+  };
 };
 ```
 
@@ -471,39 +486,39 @@ interface StyledViewProps {
   style?: ViewStyle;
 }
 
-export const StyledView: React.FC<StyledViewProps> = ({ 
-  tokenStyle, 
-  children, 
+export const StyledView: React.FC<StyledViewProps> = ({
+  tokenStyle,
+  children,
   style,
-  ...props 
+  ...props
 }) => {
   const { getToken } = useTokens();
-  
+
   const computedStyle: ViewStyle = React.useMemo(() => {
     if (!tokenStyle) return style || {};
-    
+
     const baseStyle: ViewStyle = {};
-    
+
     // Parse token-based styles
     const backgroundColor = getToken(`color.${tokenStyle}`, 'transparent');
     const padding = getToken(`spacing.${tokenStyle}`, 0);
     const borderRadius = getToken(`radius.${tokenStyle}`, 0);
-    
+
     if (backgroundColor !== 'transparent') {
       baseStyle.backgroundColor = backgroundColor as string;
     }
-    
+
     if (padding) {
       baseStyle.padding = padding as number;
     }
-    
+
     if (borderRadius) {
       baseStyle.borderRadius = borderRadius as number;
     }
-    
+
     return { ...baseStyle, ...style };
   }, [tokenStyle, style, getToken]);
-  
+
   return (
     <View style={computedStyle} {...props}>
       {children}
@@ -517,38 +532,38 @@ interface StyledTextProps {
   style?: TextStyle;
 }
 
-export const StyledText: React.FC<StyledTextProps> = ({ 
-  tokenStyle, 
-  children, 
+export const StyledText: React.FC<StyledTextProps> = ({
+  tokenStyle,
+  children,
   style,
-  ...props 
+  ...props
 }) => {
   const { getToken } = useTokens();
-  
+
   const computedStyle: TextStyle = React.useMemo(() => {
     if (!tokenStyle) return style || {};
-    
+
     const baseStyle: TextStyle = {};
-    
+
     // Parse typography tokens
     const fontSize = getToken(`typography.${tokenStyle}.fontSize`, 16);
     const fontFamily = getToken(`typography.${tokenStyle}.fontFamily`, 'System');
     const fontWeight = getToken(`typography.${tokenStyle}.fontWeight`, 'normal');
     const color = getToken(`typography.${tokenStyle}.color`, '#000000');
     const lineHeight = getToken(`typography.${tokenStyle}.lineHeight`);
-    
+
     baseStyle.fontSize = fontSize as number;
     baseStyle.fontFamily = fontFamily as string;
     baseStyle.fontWeight = fontWeight as TextStyle['fontWeight'];
     baseStyle.color = color as string;
-    
+
     if (lineHeight) {
       baseStyle.lineHeight = lineHeight as number;
     }
-    
+
     return { ...baseStyle, ...style };
   }, [tokenStyle, style, getToken]);
-  
+
   return (
     <Text style={computedStyle} {...props}>
       {children}
@@ -572,14 +587,14 @@ export class TokenCache {
   private lastSync = 0;
   private readonly CACHE_KEY = '@mimic_tokens';
   private readonly SYNC_INTERVAL = 5 * 60 * 1000; // 5 minutes
-  
+
   static getInstance(): TokenCache {
     if (!TokenCache.instance) {
       TokenCache.instance = new TokenCache();
     }
     return TokenCache.instance;
   }
-  
+
   async loadFromStorage(): Promise<void> {
     try {
       const stored = await AsyncStorage.getItem(this.CACHE_KEY);
@@ -592,35 +607,35 @@ export class TokenCache {
       console.warn('Failed to load tokens from storage:', error);
     }
   }
-  
+
   async saveToStorage(): Promise<void> {
     try {
       const data = {
         tokens: Array.from(this.cache.entries()),
-        lastSync: this.lastSync
+        lastSync: this.lastSync,
       };
       await AsyncStorage.setItem(this.CACHE_KEY, JSON.stringify(data));
     } catch (error) {
       console.warn('Failed to save tokens to storage:', error);
     }
   }
-  
+
   get(tokenName: string): any {
     return this.cache.get(tokenName);
   }
-  
+
   set(tokenName: string, value: any): void {
     this.cache.set(tokenName, value);
   }
-  
+
   shouldSync(): boolean {
     return Date.now() - this.lastSync > this.SYNC_INTERVAL;
   }
-  
+
   markSynced(): void {
     this.lastSync = Date.now();
   }
-  
+
   clear(): void {
     this.cache.clear();
     AsyncStorage.removeItem(this.CACHE_KEY);
@@ -649,7 +664,8 @@ config.transformer = {
 config.resolver = {
   ...config.resolver,
   alias: {
-    '@mimic/tokens': './node_modules/@mimic/design-tokens/dist/react-native-new-arch/tokens.js',
+    '@mimic/tokens':
+      './node_modules/@mimic/design-tokens/dist/react-native-new-arch/tokens.js',
   },
   assetExts: [...config.resolver.assetExts, 'svg'],
   sourceExts: [...config.resolver.sourceExts, 'svg'],
@@ -665,5 +681,5 @@ config.optimization = {
 module.exports = config;
 ```
 
-This comprehensive guide ensures seamless integration of Mimic design tokens with React Native's New Architecture,  
+This comprehensive guide ensures seamless integration of Mimic design tokens with React Native's New Architecture,\
 providing optimal performance and platform-specific optimizations while maintaining token consistency across all platforms.

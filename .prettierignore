@@ -3,26 +3,40 @@ node_modules/
 dist/
 build/
 lib/
+out/
 *.tsbuildinfo
+*.buildinfo
+.next/
+.nuxt/
+.vuepress/dist/
+.serverless/
+.parcel-cache/
 
 # Nx workspace cache
 .nx/cache
 .nx/workspace-data
+.nx/installation
 
 # Testing outputs
 coverage/
 test-results/
 playwright-report/
 blob-report/
+jest-coverage/
+.vitest/
 
 # Storybook build output
 storybook-static/
+chromatic-build/
 
 # Generated or compiled files
 *.d.ts
+*.js.map
+*.d.ts.map
 packages/design-tokens/dist/
+packages/design-tokens/libs/tokens/
 
-# Temporary files
+# Temporary files and caches
 tmp/
 temp/
 .tmp/
@@ -37,11 +51,52 @@ temporary/
 #*#
 .#*
 target/
+.turbo/
+.vercel/
+.nitro/
 
-# Config timestamps
+# Config timestamps and generated configs
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
+*.timestamp-*
 
-# Generated files
+# Generated files and documentation
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
+auto-generated/
+generated/
+gen/
+
+# Lock files and package manager artifacts
+*-lock.json
+*.lock
+.yarn/
+.pnpm-store/
+
+# OS and IDE files
+.DS_Store
+._*
+.vscode/
+.idea/
+
+# Mobile specific
+android/app/debug/
+android/app/profile/
+android/app/release/
+ios/build/
+.expo/
+
+# Logs
+*.log
+logs/
+
+# Environment files
+.env*
+!.env.example
+!.env.template
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig

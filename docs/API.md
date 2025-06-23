@@ -24,7 +24,7 @@ function getToken(path: string, fallback?: string): string;
 
 **Parameters:**
 
-- `path` - Dot-separated token path (e.g., 'color.primary.500')  
+- `path` - Dot-separated token path (e.g., 'color.primary.500')
 - `fallback` - Optional fallback value if token is not found
 
 **Returns:** Token value as string or fallback
@@ -58,7 +58,7 @@ function getTokensByPattern(pattern: string): Array<{
 
 **Parameters:**
 
-- `pattern` - Glob pattern with wildcard support (e.g., 'color.primary.*', '*')
+- `pattern` - Glob pattern with wildcard support (e.g., 'color.primary._', '_')
 
 **Returns:** Array of token objects with path, value, and optional type
 
@@ -89,7 +89,9 @@ interface TokenValidationResult {
   warnings: string[];
 }
 
-function validateTokens(tokenObj?: Record<string, unknown>): TokenValidationResult;
+function validateTokens(
+  tokenObj?: Record<string, unknown>
+): TokenValidationResult;
 ```
 
 **Parameters:**
@@ -108,7 +110,9 @@ const result = validateTokens();
 console.log('Valid:', result.isValid);
 
 // Validate custom tokens
-const customTokens = { color: { primary: { $value: '#007bff', $type: 'color' } } };
+const customTokens = {
+  color: { primary: { $value: '#007bff', $type: 'color' } },
+};
 const customResult = validateTokens(customTokens);
 if (!customResult.isValid) {
   console.error('Validation errors:', customResult.errors);
@@ -147,7 +151,20 @@ Our tokens follow W3C DTCG format with the following structure:
 ```typescript
 interface Token {
   $value: string | number;
-  $type?: 'color' | 'dimension' | 'fontFamily' | 'fontWeight' | 'duration' | 'cubicBezier' | 'number' | 'strokeStyle' | 'border' | 'transition' | 'shadow' | 'gradient' | 'typography';
+  $type?:
+    | 'color'
+    | 'dimension'
+    | 'fontFamily'
+    | 'fontWeight'
+    | 'duration'
+    | 'cubicBezier'
+    | 'number'
+    | 'strokeStyle'
+    | 'border'
+    | 'transition'
+    | 'shadow'
+    | 'gradient'
+    | 'typography';
   $description?: string;
 }
 
@@ -164,71 +181,71 @@ interface TokenGroup {
 
 ```typescript
 // Base color scale (50-900)
-getToken('color.primary.50')    // Lightest
-getToken('color.primary.500')   // Base 
-getToken('color.primary.900')   // Darkest
+getToken('color.primary.50'); // Lightest
+getToken('color.primary.500'); // Base
+getToken('color.primary.900'); // Darkest
 
 // Semantic colors
-getToken('color.success.500')   // Success state
-getToken('color.warning.500')   // Warning state  
-getToken('color.error.500')     // Error state
-getToken('color.info.500')      // Info state
+getToken('color.success.500'); // Success state
+getToken('color.warning.500'); // Warning state
+getToken('color.error.500'); // Error state
+getToken('color.info.500'); // Info state
 
 // Neutral scale
-getToken('color.neutral.100')   // Light background
-getToken('color.neutral.600')   // Text color
-getToken('color.neutral.900')   // Dark text
+getToken('color.neutral.100'); // Light background
+getToken('color.neutral.600'); // Text color
+getToken('color.neutral.900'); // Dark text
 ```
 
 #### Typography
 
 ```typescript
 // Font families
-getToken('font.family.sans')      // System sans-serif
-getToken('font.family.serif')     // System serif
-getToken('font.family.mono')      // System monospace
+getToken('font.family.sans'); // System sans-serif
+getToken('font.family.serif'); // System serif
+getToken('font.family.mono'); // System monospace
 
 // Font sizes (xs, sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl)
-getToken('font.size.base')        // 1rem (16px)
-getToken('font.size.lg')          // 1.125rem (18px)
-getToken('font.size.2xl')         // 1.5rem (24px)
+getToken('font.size.base'); // 1rem (16px)
+getToken('font.size.lg'); // 1.125rem (18px)
+getToken('font.size.2xl'); // 1.5rem (24px)
 
-// Font weights  
-getToken('font.weight.normal')    // 400
-getToken('font.weight.medium')    // 500
-getToken('font.weight.bold')      // 700
+// Font weights
+getToken('font.weight.normal'); // 400
+getToken('font.weight.medium'); // 500
+getToken('font.weight.bold'); // 700
 
 // Line heights
-getToken('line.height.tight')     // 1.25
-getToken('line.height.normal')    // 1.5
-getToken('line.height.relaxed')   // 1.75
+getToken('line.height.tight'); // 1.25
+getToken('line.height.normal'); // 1.5
+getToken('line.height.relaxed'); // 1.75
 ```
 
 #### Spacing
 
 ```typescript
 // T-shirt scale (xs, sm, md, lg, xl, 2xl, 3xl)
-getToken('spacing.xs')    // 0.25rem (4px)
-getToken('spacing.sm')    // 0.5rem (8px)  
-getToken('spacing.md')    // 1rem (16px)
-getToken('spacing.lg')    // 1.5rem (24px)
-getToken('spacing.xl')    // 2rem (32px)
+getToken('spacing.xs'); // 0.25rem (4px)
+getToken('spacing.sm'); // 0.5rem (8px)
+getToken('spacing.md'); // 1rem (16px)
+getToken('spacing.lg'); // 1.5rem (24px)
+getToken('spacing.xl'); // 2rem (32px)
 ```
 
 #### Borders & Shadows
 
 ```typescript
 // Border radius
-getToken('border.radius.sm')     // 0.125rem (2px)
-getToken('border.radius.md')     // 0.375rem (6px)
-getToken('border.radius.lg')     // 0.5rem (8px)
-getToken('border.radius.full')   // 9999px
+getToken('border.radius.sm'); // 0.125rem (2px)
+getToken('border.radius.md'); // 0.375rem (6px)
+getToken('border.radius.lg'); // 0.5rem (8px)
+getToken('border.radius.full'); // 9999px
 
-// Shadows  
-getToken('shadow.sm')     // Subtle shadow
-getToken('shadow.md')     // Card shadow
-getToken('shadow.lg')     // Modal shadow
-getToken('shadow.xl')     // Floating elements
+// Shadows
+getToken('shadow.sm'); // Subtle shadow
+getToken('shadow.md'); // Card shadow
+getToken('shadow.lg'); // Modal shadow
+getToken('shadow.xl'); // Floating elements
 ```
 
 ### Component Tokens
@@ -237,16 +254,16 @@ Component-specific tokens for consistent UI patterns:
 
 ```typescript
 // Button tokens
-getToken('component.button.padding.sm')     // Small button padding
-getToken('component.button.padding.md')     // Medium button padding
-getToken('component.button.border.radius')  // Button border radius
-getToken('component.button.font.weight')    // Button text weight
+getToken('component.button.padding.sm'); // Small button padding
+getToken('component.button.padding.md'); // Medium button padding
+getToken('component.button.border.radius'); // Button border radius
+getToken('component.button.font.weight'); // Button text weight
 
 // Card tokens
-getToken('component.card.padding')          // Card internal padding
-getToken('component.card.border.radius')    // Card corner radius  
-getToken('component.card.shadow')           // Card elevation
-getToken('component.card.background')       // Card background
+getToken('component.card.padding'); // Card internal padding
+getToken('component.card.border.radius'); // Card corner radius
+getToken('component.card.shadow'); // Card elevation
+getToken('component.card.background'); // Card background
 ```
 
 ### Platform Exports

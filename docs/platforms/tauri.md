@@ -26,18 +26,18 @@ Tauri automatically injects strict CSP with script hashes. Keep HTML meta tag bl
 <!-- src/index.html - Keep CSP meta tag empty for auto-injection -->
 <!DOCTYPE html>
 <html>
-<head>
-  <!-- ❌ Don't manually set CSP - let Tauri handle it -->
-  <!-- <meta http-equiv="Content-Security-Policy" content="..."> -->
-  
-  <!-- ✅ Let Tauri inject CSP automatically -->
-  <meta http-equiv="Content-Security-Policy" content="">
-  
-  <title>Mimic Design System</title>
-</head>
-<body>
-  <div id="root"></div>
-</body>
+  <head>
+    <!-- ❌ Don't manually set CSP - let Tauri handle it -->
+    <!-- <meta http-equiv="Content-Security-Policy" content="..."> -->
+
+    <!-- ✅ Let Tauri inject CSP automatically -->
+    <meta http-equiv="Content-Security-Policy" content="" />
+
+    <title>Mimic Design System</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
 </html>
 ```
 
@@ -169,13 +169,13 @@ pub fn run() {
 
 async fn check_for_updates(app: tauri::AppHandle) -> Result<(), Box<dyn std::error::Error>> {
     let updater = app.updater()?;
-    
+
     if let Some(update) = updater.check().await? {
         println!("Update available: {}", update.version);
-        
+
         // Notify frontend about available update
         app.emit_all("update-available", &update.version)?;
-        
+
         // Optional: Auto-download update
         let mut downloaded = 0;
         update.download_and_install(
@@ -191,7 +191,7 @@ async fn check_for_updates(app: tauri::AppHandle) -> Result<(), Box<dyn std::err
     } else {
         println!("No updates available");
     }
-    
+
     Ok(())
 }
 
@@ -206,7 +206,7 @@ async fn check_for_updates_command(app: tauri::AppHandle) -> Result<String, Stri
 #[tauri::command]
 async fn install_update_command(app: tauri::AppHandle) -> Result<(), String> {
     let updater = app.updater().map_err(|e| e.to_string())?;
-    
+
     if let Some(update) = updater.check().await.map_err(|e| e.to_string())? {
         update.download_and_install(
             |_chunk_length, _content_length| {
@@ -217,7 +217,7 @@ async fn install_update_command(app: tauri::AppHandle) -> Result<(), String> {
             }
         ).await.map_err(|e| e.to_string())?;
     }
-    
+
     Ok(())
 }
 
@@ -293,32 +293,32 @@ export interface UpdateInfo {
 
 export class UpdateManager {
   private static instance: UpdateManager;
-  
+
   static getInstance(): UpdateManager {
     if (!UpdateManager.instance) {
       UpdateManager.instance = new UpdateManager();
     }
     return UpdateManager.instance;
   }
-  
+
   async initialize() {
     // Listen for update events
-    await listen('update-available', async (event) => {
+    await listen('update-available', async event => {
       const version = event.payload as string;
       const shouldUpdate = await ask(
         `A new version (${version}) is available. Would you like to update now?`,
         { title: 'Update Available', type: 'info' }
       );
-      
+
       if (shouldUpdate) {
         await this.installUpdate();
       }
     });
-    
+
     // Check for updates on app startup
     await this.checkForUpdates();
   }
-  
+
   async checkForUpdates(): Promise<void> {
     try {
       await invoke('check_for_updates_command');
@@ -326,24 +326,27 @@ export class UpdateManager {
       console.error('Failed to check for updates:', error);
     }
   }
-  
+
   async installUpdate(): Promise<void> {
     try {
-      await message('Update will be downloaded and installed. The app will restart automatically.', {
-        title: 'Installing Update',
-        type: 'info'
-      });
-      
+      await message(
+        'Update will be downloaded and installed. The app will restart automatically.',
+        {
+          title: 'Installing Update',
+          type: 'info',
+        }
+      );
+
       await invoke('install_update_command');
     } catch (error) {
       console.error('Failed to install update:', error);
       await message(`Failed to install update: ${error}`, {
         title: 'Update Error',
-        type: 'error'
+        type: 'error',
       });
     }
   }
-  
+
   async getAppVersion(): Promise<string> {
     return await invoke('get_app_version');
   }
@@ -389,10 +392,7 @@ Point Tauri to Qwik build output in tauri.conf.json:
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "resources": [
-        "tokens/**",
-        "assets/**"
-      ],
+      "resources": ["tokens/**", "assets/**"],
       "externalBin": [],
       "copyright": "",
       "category": "DeveloperTool",

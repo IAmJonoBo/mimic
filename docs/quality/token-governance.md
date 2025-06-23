@@ -61,20 +61,24 @@ graph TD
 # Token Proposal: [Token Name]
 
 ## Overview
+
 Brief description of the proposed token(s).
 
 ## Justification
+
 - **Problem**: What problem does this solve?
 - **Use Cases**: Where will this token be used?
 - **Impact**: What systems/components are affected?
 
 ## Specification
+
 - **Type**: color | dimension | typography | shadow | etc.
 - **Value**: Specific value(s)
 - **Platforms**: web | mobile | desktop | all
 - **Dependencies**: Other tokens this references
 
 ## Implementation Plan
+
 - [ ] Define token in base.json
 - [ ] Update platform-specific files
 - [ ] Update Style Dictionary config
@@ -83,17 +87,21 @@ Brief description of the proposed token(s).
 - [ ] Update component examples
 
 ## Testing Strategy
+
 - Visual regression testing plan
 - Cross-platform validation
 - Performance impact assessment
 
 ## Migration Plan
+
 (If replacing existing tokens)
+
 - Deprecation timeline
 - Migration guide
 - Breaking change communication
 
 ## Approval
+
 - [ ] Design Lead approval
 - [ ] Frontend Lead approval
 - [ ] Mobile Lead approval
@@ -116,15 +124,15 @@ Brief description of the proposed token(s).
 
 #### Category Standards
 
-| Category | Purpose | Examples |
-|----------|---------|----------|
-| `color` | All color values | `color.primary.500`, `color.semantic.error` |
-| `spacing` | Margins, padding, gaps | `spacing.xs`, `spacing.component.card` |
-| `typography` | Font properties | `typography.heading.h1`, `typography.body.regular` |
-| `dimension` | Sizes, widths, heights | `dimension.button.height.medium` |
-| `border` | Border properties | `border.radius.medium`, `border.width.thick` |
-| `shadow` | Drop shadows | `shadow.elevation.medium`, `shadow.focus` |
-| `motion` | Animation properties | `motion.duration.fast`, `motion.easing.standard` |
+| Category     | Purpose                | Examples                                           |
+| ------------ | ---------------------- | -------------------------------------------------- |
+| `color`      | All color values       | `color.primary.500`, `color.semantic.error`        |
+| `spacing`    | Margins, padding, gaps | `spacing.xs`, `spacing.component.card`             |
+| `typography` | Font properties        | `typography.heading.h1`, `typography.body.regular` |
+| `dimension`  | Sizes, widths, heights | `dimension.button.height.medium`                   |
+| `border`     | Border properties      | `border.radius.medium`, `border.width.thick`       |
+| `shadow`     | Drop shadows           | `shadow.elevation.medium`, `shadow.focus`          |
+| `motion`     | Animation properties   | `motion.duration.fast`, `motion.easing.standard`   |
 
 ## Token Standards
 
@@ -152,7 +160,10 @@ Foundation tokens that define the raw values:
   },
   "font": {
     "family": {
-      "sans": { "$type": "fontFamily", "$value": ["Inter", "system-ui", "sans-serif"] }
+      "sans": {
+        "$type": "fontFamily",
+        "$value": ["Inter", "system-ui", "sans-serif"]
+      }
     },
     "size": {
       "16": { "$type": "dimension", "$value": "16px" }
@@ -248,38 +259,38 @@ import { dtcgSchema } from './schemas/dtcg.json';
 
 export class TokenSchemaValidator {
   private ajv: Ajv;
-  
+
   constructor() {
     this.ajv = new Ajv({
       allErrors: true,
-      verbose: true
+      verbose: true,
     });
-    
+
     this.ajv.addSchema(dtcgSchema, 'dtcg');
   }
-  
+
   validate(tokens: any): ValidationResult {
     const isValid = this.ajv.validate('dtcg', tokens);
-    
+
     return {
       valid: isValid,
       errors: this.ajv.errors || [],
-      warnings: this.generateWarnings(tokens)
+      warnings: this.generateWarnings(tokens),
     };
   }
-  
+
   private generateWarnings(tokens: any): Warning[] {
     const warnings: Warning[] = [];
-    
+
     // Check for missing descriptions
     this.checkMissingDescriptions(tokens, warnings);
-    
+
     // Check naming conventions
     this.checkNamingConventions(tokens, warnings);
-    
+
     // Check for circular references
     this.checkCircularReferences(tokens, warnings);
-    
+
     return warnings;
   }
 }
@@ -291,49 +302,55 @@ export class TokenSchemaValidator {
 // tools/validation/naming-validator.ts
 export class NamingValidator {
   private readonly VALID_CATEGORIES = [
-    'color', 'spacing', 'typography', 'dimension', 
-    'border', 'shadow', 'motion', 'component'
+    'color',
+    'spacing',
+    'typography',
+    'dimension',
+    'border',
+    'shadow',
+    'motion',
+    'component',
   ];
-  
+
   private readonly SCALE_PATTERNS = [
     /^(xxs|xs|sm|md|lg|xl|xxl)$/,
     /^(50|100|200|300|400|500|600|700|800|900)$/,
-    /^(small|medium|large)$/
+    /^(small|medium|large)$/,
   ];
-  
+
   validateTokenPath(path: string[]): ValidationResult {
     const errors: string[] = [];
-    
+
     // Category validation
     if (!this.VALID_CATEGORIES.includes(path[0])) {
       errors.push(`Invalid category: ${path[0]}`);
     }
-    
+
     // Scale validation
     if (path.length > 2) {
       const scale = path[path.length - 1];
-      const hasValidScale = this.SCALE_PATTERNS.some(pattern => 
+      const hasValidScale = this.SCALE_PATTERNS.some(pattern =>
         pattern.test(scale)
       );
-      
+
       if (!hasValidScale) {
         errors.push(`Invalid scale: ${scale}`);
       }
     }
-    
+
     // Reserved word check
     const reservedWords = ['$type', '$value', '$description', '$extensions'];
-    const hasReservedWord = path.some(segment => 
+    const hasReservedWord = path.some(segment =>
       reservedWords.includes(segment)
     );
-    
+
     if (hasReservedWord) {
       errors.push(`Path contains reserved word: ${path.join('.')}`);
     }
-    
+
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 }
@@ -350,27 +367,38 @@ export class ValueValidator {
       /^rgb\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*\)$/, // RGB
       /^rgba\(\s*\d+\s*,\s*\d+\s*,\s*\d+\s*,\s*[\d.]+\s*\)$/, // RGBA
       /^hsl\(\s*\d+\s*,\s*\d+%\s*,\s*\d+%\s*\)$/, // HSL
-      /^hsla\(\s*\d+\s*,\s*\d+%\s*,\s*\d+%\s*,\s*[\d.]+\s*\)$/ // HSLA
+      /^hsla\(\s*\d+\s*,\s*\d+%\s*,\s*\d+%\s*,\s*[\d.]+\s*\)$/, // HSLA
     ];
-    
+
     return patterns.some(pattern => pattern.test(value));
   }
-  
+
   validateDimensionValue(value: string): boolean {
     const pattern = /^-?\d*\.?\d+(px|em|rem|%|vh|vw|pt|dp)$/;
     return pattern.test(value);
   }
-  
+
   validateFontWeightValue(value: string | number): boolean {
     if (typeof value === 'number') {
       return value >= 100 && value <= 900 && value % 100 === 0;
     }
-    
+
     const validWeights = [
-      'normal', 'bold', 'bolder', 'lighter',
-      '100', '200', '300', '400', '500', '600', '700', '800', '900'
+      'normal',
+      'bold',
+      'bolder',
+      'lighter',
+      '100',
+      '200',
+      '300',
+      '400',
+      '500',
+      '600',
+      '700',
+      '800',
+      '900',
     ];
-    
+
     return validWeights.includes(value);
   }
 }
@@ -412,29 +440,31 @@ import { test, expect } from '@playwright/test';
 test.describe('Design Token Visual Tests', () => {
   test('color tokens render correctly', async ({ page }) => {
     await page.goto('/storybook/?path=/story/tokens--colors');
-    
+
     // Wait for tokens to load
     await page.waitForSelector('[data-testid="color-tokens"]');
-    
+
     // Screenshot comparison
-    await expect(page.locator('[data-testid="color-tokens"]'))
-      .toHaveScreenshot('color-tokens.png');
+    await expect(page.locator('[data-testid="color-tokens"]')).toHaveScreenshot(
+      'color-tokens.png'
+    );
   });
-  
+
   test('typography tokens scale properly', async ({ page }) => {
     await page.goto('/storybook/?path=/story/tokens--typography');
-    
+
     // Test different viewport sizes
     const viewports = [
-      { width: 375, height: 667 },   // Mobile
-      { width: 768, height: 1024 },  // Tablet
-      { width: 1440, height: 900 }   // Desktop
+      { width: 375, height: 667 }, // Mobile
+      { width: 768, height: 1024 }, // Tablet
+      { width: 1440, height: 900 }, // Desktop
     ];
-    
+
     for (const viewport of viewports) {
       await page.setViewportSize(viewport);
-      await expect(page.locator('[data-testid="typography-scale"]'))
-        .toHaveScreenshot(`typography-${viewport.width}.png`);
+      await expect(
+        page.locator('[data-testid="typography-scale"]')
+      ).toHaveScreenshot(`typography-${viewport.width}.png`);
     }
   });
 });
@@ -452,23 +482,24 @@ describe('Cross-Platform Token Consistency', () => {
   it('should have consistent color values across platforms', () => {
     const webColors = extractColors(webTokens);
     const mobileColors = extractColors(mobileTokens);
-    
+
     Object.keys(webColors).forEach(colorKey => {
       expect(mobileColors[colorKey]).toBeDefined();
-      expect(normalizeColorValue(webColors[colorKey]))
-        .toBe(normalizeColorValue(mobileColors[colorKey]));
+      expect(normalizeColorValue(webColors[colorKey])).toBe(
+        normalizeColorValue(mobileColors[colorKey])
+      );
     });
   });
-  
+
   it('should have equivalent spacing scales', () => {
     const webSpacing = extractSpacing(webTokens);
     const mobileSpacing = extractSpacing(mobileTokens);
-    
+
     // Convert all to base units for comparison
     Object.keys(webSpacing).forEach(spacingKey => {
       const webValue = convertToPixels(webSpacing[spacingKey]);
       const mobileValue = convertToPixels(mobileSpacing[spacingKey]);
-      
+
       expect(Math.abs(webValue - mobileValue)).toBeLessThanOrEqual(1);
     });
   });
@@ -484,31 +515,35 @@ import { performance } from 'perf_hooks';
 describe('Token Performance', () => {
   it('should load tokens within performance budget', async () => {
     const startTime = performance.now();
-    
+
     // Load tokens
     const tokens = await import('@mimic/design-tokens');
-    
+
     const loadTime = performance.now() - startTime;
-    
+
     // Should load within 50ms
     expect(loadTime).toBeLessThan(50);
   });
-  
+
   it('should have acceptable bundle size', () => {
     const fs = require('fs');
     const path = require('path');
-    
+
     const tokenFiles = [
       'dist/web/tokens.css',
       'dist/web/tokens.js',
-      'dist/mobile/tokens.json'
+      'dist/mobile/tokens.json',
     ];
-    
+
     tokenFiles.forEach(file => {
-      const filePath = path.join(__dirname, '../../packages/design-tokens', file);
+      const filePath = path.join(
+        __dirname,
+        '../../packages/design-tokens',
+        file
+      );
       const stats = fs.statSync(filePath);
       const fileSizeKB = stats.size / 1024;
-      
+
       // Each file should be under 100KB
       expect(fileSizeKB).toBeLessThan(100);
     });
@@ -528,31 +563,33 @@ export class TokenCoverageAnalyzer {
   async analyzeUsage(): Promise<CoverageReport> {
     const allTokens = await this.getAllTokens();
     const usedTokens = await this.findUsedTokens();
-    
+
     const coverage = (usedTokens.size / allTokens.size) * 100;
-    
+
     return {
       totalTokens: allTokens.size,
       usedTokens: usedTokens.size,
       coverage: Math.round(coverage * 100) / 100,
-      unusedTokens: Array.from(allTokens).filter(token => !usedTokens.has(token)),
-      orphanedTokens: await this.findOrphanedTokens()
+      unusedTokens: Array.from(allTokens).filter(
+        token => !usedTokens.has(token)
+      ),
+      orphanedTokens: await this.findOrphanedTokens(),
     };
   }
-  
+
   private async findUsedTokens(): Promise<Set<string>> {
     const usedTokens = new Set<string>();
-    
+
     // Scan source files for token usage
     const sourceFiles = await this.getSourceFiles();
-    
+
     for (const file of sourceFiles) {
       const content = await fs.readFile(file, 'utf-8');
       const tokenReferences = this.extractTokenReferences(content);
-      
+
       tokenReferences.forEach(token => usedTokens.add(token));
     }
-    
+
     return usedTokens;
   }
 }
@@ -571,21 +608,20 @@ export class QualityScoreCalculator {
       consistency: this.calculateConsistencyScore(tokens),
       documentation: this.calculateDocumentationScore(tokens),
       usage: this.calculateUsageScore(tokens),
-      performance: this.calculatePerformanceScore(tokens)
+      performance: this.calculatePerformanceScore(tokens),
     };
-    
-    const weightedScore = (
+
+    const weightedScore =
       scores.naming * 0.25 +
       scores.consistency * 0.25 +
-      scores.documentation * 0.20 +
-      scores.usage * 0.20 +
-      scores.performance * 0.10
-    );
-    
+      scores.documentation * 0.2 +
+      scores.usage * 0.2 +
+      scores.performance * 0.1;
+
     return {
       overall: Math.round(weightedScore),
       breakdown: scores,
-      recommendations: this.generateRecommendations(scores)
+      recommendations: this.generateRecommendations(scores),
     };
   }
 }
@@ -634,6 +670,7 @@ echo "✅ Token validation passed"
 ## Token Changes
 
 ### Type of Change
+
 - [ ] New tokens
 - [ ] Token value updates
 - [ ] Token removals/deprecations
@@ -641,6 +678,7 @@ echo "✅ Token validation passed"
 - [ ] Breaking changes
 
 ### Validation Checklist
+
 - [ ] Schema validation passes
 - [ ] Naming conventions followed
 - [ ] Visual regression tests pass
@@ -650,18 +688,21 @@ echo "✅ Token validation passed"
 - [ ] Migration guide provided (if breaking)
 
 ### Impact Assessment
+
 - **Affected Platforms**: web / mobile / desktop
 - **Affected Components**: [list components]
 - **Breaking Changes**: yes / no
 - **Performance Impact**: none / minimal / significant
 
 ### Testing
+
 - [ ] Storybook stories updated
 - [ ] Visual tests pass
 - [ ] Cross-platform tests pass
 - [ ] Accessibility tests pass
 
 ### Documentation
+
 - [ ] Usage examples provided
 - [ ] API documentation updated
 - [ ] Migration guide written
@@ -681,19 +722,19 @@ export class ComplianceMonitor {
       this.checkNamingCompliance(),
       this.checkValueConsistency(),
       this.checkDocumentationCoverage(),
-      this.checkPerformanceMetrics()
+      this.checkPerformanceMetrics(),
     ]);
-    
+
     const report = this.generateReport(checks);
-    
+
     // Send alerts for compliance violations
     if (report.violations.length > 0) {
       await this.sendComplianceAlert(report);
     }
-    
+
     return report;
   }
-  
+
   private async sendComplianceAlert(report: ComplianceReport): Promise<void> {
     const message = `
 🚨 Design Token Compliance Issues Detected
@@ -702,7 +743,7 @@ ${report.violations.map(v => `• ${v.type}: ${v.message}`).join('\n')}
 
 View full report: ${report.url}
     `;
-    
+
     await this.slackNotifier.send('#design-system', message);
   }
 }
@@ -719,22 +760,22 @@ export class ComplianceDashboard {
         totalTokens: this.getTotalTokenCount(),
         coverage: this.getCoveragePercentage(),
         qualityScore: this.getQualityScore(),
-        lastUpdated: new Date()
+        lastUpdated: new Date(),
       },
-      
+
       metrics: {
         usage: this.getUsageMetrics(),
         performance: this.getPerformanceMetrics(),
-        consistency: this.getConsistencyMetrics()
+        consistency: this.getConsistencyMetrics(),
       },
-      
+
       alerts: this.getActiveAlerts(),
-      
+
       trends: {
         coverage: this.getCoverageTrend(),
         quality: this.getQualityTrend(),
-        adoption: this.getAdoptionTrend()
-      }
+        adoption: this.getAdoptionTrend(),
+      },
     };
   }
 }
@@ -765,4 +806,4 @@ export class ComplianceDashboard {
 
 ---
 
-*This governance framework evolves with the design system and is reviewed quarterly by the Design Token Committee.*
+_This governance framework evolves with the design system and is reviewed quarterly by the Design Token Committee._

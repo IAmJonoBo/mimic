@@ -70,7 +70,7 @@ jobs:
             echo "changes=true" >> $GITHUB_OUTPUT
             echo "Found fixable issues:"
             git status --short
-            
+
             # Count changed files
             CHANGED_FILES=$(git diff --name-only | wc -l | tr -d ' ')
             echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
@@ -125,7 +125,7 @@ jobs:
 
           ### What's Fixed
           - ✅ **Code formatting** via Trunk (Biome/Prettier/dprint)
-          - ✅ **CSS/SCSS linting** via Stylelint  
+          - ✅ **CSS/SCSS linting** via Stylelint
           - ✅ **Markdown linting** via markdownlint
           - ✅ **Cleaned temp files** (Apple/system files)
           - ✅ **Tool upgrades** (Trunk plugins updated)

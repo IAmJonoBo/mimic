@@ -1,0 +1,92 @@
+{
+  "config": {
+    "MD013": {
+      "line_length": 120,
+      "code_block_line_length": 120,
+      "tables": false,
+      "strict": true
+    }
+  },
+  "ignores": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/lib/**",
+    "**/out/**",
+    "**/.nx/**",
+    "**/coverage/**",
+    "**/tmp/**",
+    "**/temp/**",
+    "**/.tmp/**",
+    "**/.temp/**",
+    "**/temporary/**",
+    "**/storybook-static/**",
+    "**/chromatic-build/**",
+    "**/.next/**",
+    "**/.nuxt/**",
+    "**/.vuepress/dist/**",
+    "**/.serverless/**",
+    "**/.parcel-cache/**",
+    "**/.turbo/**",
+    "**/.vercel/**",
+    "**/.nitro/**",
+    "**/target/**",
+    "**/.cache/**",
+    "**/logs/**",
+    "**/.expo/**",
+    "**/auto-generated/**",
+    "**/generated/**",
+    "**/gen/**",
+    "**/*-lock.json",
+    "**/*.lock",
+    "**/.yarn/**",
+    "**/.pnpm-store/**",
+    "**/packages/design-tokens/libs/tokens/**",
+    "**/.cursor/rules/**",
+    "**/.github/instructions/**",
+
+    // macOS and OS artifacts
+    "**/._*",
+    "**/.DS_Store",
+    "**/.Spotlight-V100",
+    "**/.Trashes",
+
+    // Editor and IDE files
+    "**/.vscode/**",
+    "**/.idea/**",
+    "**/*.swp",
+    "**/*.swo",
+    "**/*~",
+    "**/#*#",
+    "**/.#*",
+
+    // Backup and temporary files
+    "**/*.bak",
+    "**/*.backup",
+    "**/*.old",
+    "**/*.orig",
+    "**/*.tmp",
+    "**/*.temp",
+
+    // Package manager and cache files
+    "**/*-lock.json",
+    "**/*.lock",
+    "**/.yarn/**",
+    "**/.pnpm-store/**",
+
+    // Example and template files
+    "**/*.example.md",
+    "**/*.template.md",
+    "**/examples/**",
+    "**/templates/**",
+
+    // Timestamp and generated files
+    "**/*.timestamp-*",
+    "**/vite.config.*.timestamp*",
+    "**/vitest.config.*.timestamp*",
+
+    // Changelog files
+    "CHANGELOG.md",
+    "**/CHANGELOG.md"
+  ]
+}

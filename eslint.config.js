@@ -8,16 +8,47 @@ export default [
   // Global ignores - must be first and only contain ignores
   {
     ignores: [
+      // Build outputs and dependencies
       '**/dist/**',
       '**/build/**',
       '**/lib/**',
+      '**/out/**',
       '**/node_modules/**',
       '**/*.d.ts',
+      '**/*.tsbuildinfo',
+      '**/*.buildinfo',
+      '**/*.js.map',
+      '**/*.d.ts.map',
+
+      // Nx workspace
       '**/.nx/cache/**',
       '**/.nx/workspace-data/**',
+      '**/.nx/installation/**',
       '**/.pnpm-store/**',
+
+      // Storybook
       '**/storybook-static/**',
+      '**/chromatic-build/**',
+
+      // Testing
       '**/coverage/**',
+      '**/test-results/**',
+      '**/playwright-report/**',
+      '**/blob-report/**',
+      '**/jest-coverage/**',
+      '**/.vitest/**',
+
+      // Framework build outputs
+      '**/.next/**',
+      '**/.nuxt/**',
+      '**/.vuepress/dist/**',
+      '**/.serverless/**',
+      '**/.parcel-cache/**',
+      '**/.turbo/**',
+      '**/.vercel/**',
+      '**/.nitro/**',
+
+      // Temporary files and caches
       '/tmp/**',
       '**/tmp/**',
       '**/temp/**',
@@ -27,6 +58,8 @@ export default [
       '*.tsbuildinfo',
       'vite.config.*.timestamp*',
       'vitest.config.*.timestamp*',
+      '**/*.timestamp-*',
+
       // Temporary and cache files
       '**/*.tmp',
       '**/*.temp',
@@ -36,12 +69,57 @@ export default [
       '**/*~',
       '**/#*#',
       '**/.#*',
+
       // macOS metadata files
       '**/._*',
       '**/.DS_Store',
-      // Generated files
+
+      // Mobile development
+      '**/android/app/debug/**',
+      '**/android/app/profile/**',
+      '**/android/app/release/**',
+      '**/ios/build/**',
+      '**/.expo/**',
+      '**/target/**',
+
+      // Lock files and package manager artifacts
+      '**/*-lock.json',
+      '**/*.lock',
+      '**/.yarn/**',
+
+      // Generated files and documentation
       '**/generated/**',
       '**/auto-generated/**',
+      '**/gen/**',
+      '**/.cursor/rules/**',
+      '**/.github/instructions/**',
+      '**/packages/design-tokens/libs/tokens/**',
+
+      // Example files and templates
+      '**/*.example.js',
+      '**/*.example.ts',
+      '**/*.template.js',
+      '**/*.template.ts',
+      '**/examples/**',
+      '**/templates/**',
+
+      // Scripts and configuration files that should not be linted
+      '**/scripts/**',
+      '**/tools/**',
+
+      // Environment and secrets
+      '**/.env*',
+      '**/secrets.json',
+
+      // Logs
+      '**/logs/**',
+      '**/*.log',
+
+      // Backup files
+      '**/*.bak',
+      '**/*.backup',
+      '**/*.old',
+      '**/*.orig',
     ],
   },
 
@@ -108,7 +186,11 @@ export default [
             },
             {
               sourceTag: 'scope:web',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens', 'scope:design-system'],
+              onlyDependOnLibsWithTags: [
+                'scope:shared',
+                'scope:tokens',
+                'scope:design-system',
+              ],
             },
             {
               sourceTag: 'scope:mobile',
@@ -116,7 +198,11 @@ export default [
             },
             {
               sourceTag: 'scope:desktop',
-              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens', 'scope:design-system'],
+              onlyDependOnLibsWithTags: [
+                'scope:shared',
+                'scope:tokens',
+                'scope:design-system',
+              ],
             },
             {
               sourceTag: 'type:lib',
@@ -124,7 +210,11 @@ export default [
             },
             {
               sourceTag: 'type:app',
-              onlyDependOnLibsWithTags: ['type:lib', 'type:util', 'scope:shared'],
+              onlyDependOnLibsWithTags: [
+                'type:lib',
+                'type:util',
+                'scope:shared',
+              ],
             },
           ],
         },

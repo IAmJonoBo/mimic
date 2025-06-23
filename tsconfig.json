@@ -1,14 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2024",
-    "lib": [
-      "ES2024",
-      "DOM",
-      "DOM.Iterable"
-    ],
-    "types": [
-      "node"
-    ],
+    "lib": ["ES2024", "DOM", "DOM.Iterable"],
+    "types": ["node"],
     "module": "NodeNext",
     "skipLibCheck": true,
     "moduleResolution": "NodeNext",
@@ -24,26 +18,11 @@
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
-      "@mimic/design-system": [
-        "./packages/design-system/src"
-      ],
-      "@mimic/design-tokens": [
-        "./packages/design-tokens/src"
-      ],
-      "@mimic/shared-utils": [
-        "./packages/shared-utils/src"
-      ]
+      "@mimic/design-system": ["./packages/design-system/src"],
+      "@mimic/design-tokens": ["./packages/design-tokens/src"],
+      "@mimic/shared-utils": ["./packages/shared-utils/src"]
     }
   },
-  "include": [
-    "packages/*/src/**/*",
-    "apps/*/src/**/*",
-    "tools/*/src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/node_modules",
-    "**/dist",
-    "**/build"
-  ]
+  "include": ["packages/*/src/**/*", "apps/*/src/**/*", "tools/*/src/**/*"],
+  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/build"]
 }

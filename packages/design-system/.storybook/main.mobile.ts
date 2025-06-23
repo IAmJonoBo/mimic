@@ -13,23 +13,33 @@ const config: StorybookConfig = {
     name: '@storybook/html-vite',
     options: {
       builder: {
-        viteConfigPath: './vite.config.mobile.ts'
-      }
+        viteConfigPath: './vite.config.mobile.ts',
+      },
     },
   },
   typescript: {
     check: true,
   },
   viteFinal: async config => {
+    // Fixed port assignment to prevent Supernova-documented conflicts
+    config.server = config.server || {};
+    config.server.port = 7007; // Mobile Storybook: Port 7007 (React Native builder default)
+
     // Mobile-specific token configuration
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@mimic/design-tokens/mobile': require.resolve('../../design-tokens/libs/tokens/react-native/theme.ts'),
-      '@mimic/design-tokens/json': require.resolve('../../design-tokens/libs/tokens/json/tokens.json'),
-      '@mimic/design-tokens': require.resolve('../../design-tokens/libs/tokens/react-native/theme.ts'),
+      '@mimic/design-tokens/mobile': require.resolve(
+        '../../design-tokens/libs/tokens/react-native/theme.ts'
+      ),
+      '@mimic/design-tokens/json': require.resolve(
+        '../../design-tokens/libs/tokens/json/tokens.json'
+      ),
+      '@mimic/design-tokens': require.resolve(
+        '../../design-tokens/libs/tokens/react-native/theme.ts'
+      ),
     };
-    
+
     return config;
   },
 };

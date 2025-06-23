@@ -6,7 +6,7 @@ optimizer configuration, and static asset management for the Mimic design system
 ## Table of Contents
 
 - [Prefetch Strategies](#prefetch-strategies)
-- [Image Optimization](#image-optimization)  
+- [Image Optimization](#image-optimization)
 - [Optimizer Configuration](#optimizer-configuration)
 - [Static Assets & OG Images](#static-assets--og-images)
 - [Design Token Integration](#design-token-integration)
@@ -31,8 +31,8 @@ export const SmartLink = component$<{
   children: any;
 }>(({ href, prefetch = 'viewport', ...props }) => {
   return (
-    <Link 
-      href={href} 
+    <Link
+      href={href}
       prefetch={prefetch}
       {...props}
     >
@@ -78,9 +78,9 @@ export default defineConfig(() => {
             linkInsert: null,
             linkRel: 'prefetch',
             workerFetchInsert: null,
-            prefetchEvent: 'qvisible' // Custom event for viewport detection
-          }
-        }
+            prefetchEvent: 'qvisible', // Custom event for viewport detection
+          },
+        },
       }),
       qwikVite({
         // Optimizer configuration for prefetching
@@ -90,11 +90,11 @@ export default defineConfig(() => {
             // Critical routes to always prefetch
             '/': 'always',
             '/docs': 'viewport',
-            '/components': 'viewport'
-          }
-        }
-      })
-    ]
+            '/components': 'viewport',
+          },
+        },
+      }),
+    ],
   };
 });
 ```
@@ -117,39 +117,44 @@ cleanupOutdatedCaches();
 
 // Cache Qwik bundles with stale-while-revalidate
 registerRoute(
-  ({ request, url }) => 
+  ({ request, url }) =>
     url.pathname.startsWith('/build/') && request.destination === 'script',
   new StaleWhileRevalidate({
     cacheName: 'qwik-bundles',
-    plugins: [{
-      cacheKeyWillBeUsed: async ({ request }) => {
-        // Use URL without query params as cache key
-        const url = new URL(request.url);
-        return `${url.origin}${url.pathname}`;
-      }
-    }]
+    plugins: [
+      {
+        cacheKeyWillBeUsed: async ({ request }) => {
+          // Use URL without query params as cache key
+          const url = new URL(request.url);
+          return `${url.origin}${url.pathname}`;
+        },
+      },
+    ],
   })
 );
 
 // Cache design tokens and assets
 registerRoute(
-  ({ url }) => url.pathname.includes('/tokens/') || url.pathname.includes('/assets/'),
+  ({ url }) =>
+    url.pathname.includes('/tokens/') || url.pathname.includes('/assets/'),
   new CacheFirst({
     cacheName: 'design-system-assets',
-    plugins: [{
-      cacheExpiration: {
-        maxEntries: 100,
-        maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-      }
-    }]
+    plugins: [
+      {
+        cacheExpiration: {
+          maxEntries: 100,
+          maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+        },
+      },
+    ],
   })
 );
 
 // Listen for prefetch events
-self.addEventListener('message', (event) => {
+self.addEventListener('message', event => {
   if (event.data && event.data.type === 'PREFETCH_ROUTES') {
     const routes = event.data.routes;
-    
+
     // Prefetch critical route bundles
     routes.forEach(async (route: string) => {
       try {
@@ -197,7 +202,7 @@ export default defineConfig(() => {
           webp: 80,
           avif: 75,
           jpg: 85,
-          png: 90
+          png: 90,
         },
         // Generate responsive images
         widths: [320, 640, 768, 1024, 1280, 1600],
@@ -206,11 +211,17 @@ export default defineConfig(() => {
         // Generate different densities
         densities: [1, 2],
         // Output directory
-        outputDir: 'dist/assets/images'
-      })
+        outputDir: 'dist/assets/images',
+      }),
     ],
     // Additional image handling
-    assetsInclude: ['**/*.svg', '**/*.png', '**/*.jpg', '**/*.webp', '**/*.avif']
+    assetsInclude: [
+      '**/*.svg',
+      '**/*.png',
+      '**/*.jpg',
+      '**/*.webp',
+      '**/*.avif',
+    ],
   };
 });
 ```
@@ -243,7 +254,7 @@ export const OptimizedImage = component$<OptimizedImageProps>(({
 }) => {
   const tokens = useTokens();
   const imageRef = useSignal<Element>();
-  
+
   // Generate srcset for responsive images
   const generateSrcSet = (baseSrc: string) => {
     const widths = [320, 640, 768, 1024, 1280, 1600];
@@ -251,11 +262,11 @@ export const OptimizedImage = component$<OptimizedImageProps>(({
       .map(w => `${baseSrc}?w=${w} ${w}w`)
       .join(', ');
   };
-  
+
   // Lazy load implementation with Intersection Observer
   useTask$(({ cleanup }) => {
     if (!imageRef.value || loading === 'eager') return;
-    
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -269,18 +280,18 @@ export const OptimizedImage = component$<OptimizedImageProps>(({
           }
         });
       },
-      { 
+      {
         rootMargin: tokens.value.spacing.lg || '50px' // Use token for intersection margin
       }
     );
-    
+
     if (imageRef.value) {
       observer.observe(imageRef.value);
     }
-    
+
     cleanup(() => observer.disconnect());
   });
-  
+
   return (
     <picture>
       {/* AVIF for modern browsers */}
@@ -289,14 +300,14 @@ export const OptimizedImage = component$<OptimizedImageProps>(({
         sizes={sizes}
         type="image/avif"
       />
-      
+
       {/* WebP fallback */}
       <source
         srcSet={generateSrcSet(src.replace(/\.[^.]+$/, '.webp'))}
         sizes={sizes}
         type="image/webp"
       />
-      
+
       {/* Original format fallback */}
       <img
         ref={imageRef}
@@ -337,10 +348,10 @@ export default defineConfig(({ mode }) => {
       qwikVite({
         // Rust-based optimizer configuration
         debug: mode === 'development',
-        
+
         // Build mode configuration
         buildMode: mode === 'production' ? 'production' : 'development',
-        
+
         // Symbol splitting for lazy loading
         entryStrategy: {
           type: 'smart', // Intelligent code splitting
@@ -349,69 +360,68 @@ export default defineConfig(({ mode }) => {
             'design-system': [
               'src/components/button/',
               'src/components/input/',
-              'src/components/modal/'
+              'src/components/modal/',
             ],
-            'design-tokens': [
-              'src/tokens/',
-              '@mimic/design-tokens'
-            ]
-          }
+            'design-tokens': ['src/tokens/', '@mimic/design-tokens'],
+          },
         },
-        
+
         // Advanced optimizer flags
         optimizer: {
           // Symbol optimization
           symbolsOutput: mode === 'production' ? 'minimal' : 'readable',
-          
+
           // Tree shaking
           treeshake: mode === 'production',
-          
+
           // Minification
           minify: mode === 'production',
-          
+
           // Source map generation
-          sourcemap: mode === 'development'
+          sourcemap: mode === 'development',
         },
-        
+
         // ESM output configuration
         esm: {
           // Modern ES modules for production
-          target: mode === 'production' ? 'es2020' : 'es2018'
-        }
-      })
+          target: mode === 'production' ? 'es2020' : 'es2018',
+        },
+      }),
     ],
-    
+
     // Environment variables for optimizer
     define: {
-      'process.env.QWIK_BUILD_MODE': JSON.stringify(mode === 'production' ? 'production' : 'development'),
-      'process.env.QWIK_DEBUG': JSON.stringify(mode === 'development')
+      'process.env.QWIK_BUILD_MODE': JSON.stringify(
+        mode === 'production' ? 'production' : 'development'
+      ),
+      'process.env.QWIK_DEBUG': JSON.stringify(mode === 'development'),
     },
-    
+
     // Build configuration
     build: {
       // Output configuration
       outDir: 'dist',
-      
+
       // Modern browser targets
       target: mode === 'production' ? 'es2020' : 'es2018',
-      
+
       // Chunk size optimization
       rollupOptions: {
         output: {
           manualChunks: {
-            'vendor': ['@builder.io/qwik', '@builder.io/qwik-city'],
+            vendor: ['@builder.io/qwik', '@builder.io/qwik-city'],
             'design-tokens': ['@mimic/design-tokens'],
-            'design-system': ['@mimic/design-system']
-          }
-        }
+            'design-system': ['@mimic/design-system'],
+          },
+        },
       },
-      
+
       // Source map configuration
       sourcemap: mode === 'development',
-      
+
       // Minification
-      minify: mode === 'production' ? 'esbuild' : false
-    }
+      minify: mode === 'production' ? 'esbuild' : false,
+    },
   };
 });
 ```
@@ -517,13 +527,13 @@ import { tokens } from '@mimic/design-tokens';
 export const useOGImageData = routeLoader$(async ({ params, url }) => {
   const title = params.title || 'Mimic Design System';
   const description = params.description || 'Open-source design system built with design tokens';
-  
+
   return { title, description, url: url.toString() };
 });
 
 export default component$(() => {
   const data = useOGImageData();
-  
+
   return (
     <ImageResponse
       width={1200}
@@ -558,7 +568,7 @@ export default component$(() => {
         >
           {data.value.title}
         </h1>
-        
+
         <p
           style={{
             fontSize: tokens.typography.body.lg.fontSize,
@@ -569,7 +579,7 @@ export default component$(() => {
         >
           {data.value.description}
         </p>
-        
+
         <div
           style={{
             display: 'flex',
@@ -601,7 +611,7 @@ import { routeLoader$ } from '@builder.io/qwik-city';
 export const usePageMeta = routeLoader$(async ({ url, params }) => {
   const title = params.title || 'Mimic Design System';
   const description = params.description || 'Open-source design system built with design tokens';
-  
+
   return {
     title,
     description,
@@ -611,30 +621,30 @@ export const usePageMeta = routeLoader$(async ({ url, params }) => {
 
 export default component$(() => {
   const meta = usePageMeta();
-  
+
   return (
     <>
       <head>
         <title>{meta.value.title}</title>
         <meta name="description" content={meta.value.description} />
-        
+
         {/* Open Graph */}
         <meta property="og:title" content={meta.value.title} />
         <meta property="og:description" content={meta.value.description} />
         <meta property="og:image" content={meta.value.ogImage} />
         <meta property="og:type" content="website" />
-        
+
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={meta.value.title} />
         <meta name="twitter:description" content={meta.value.description} />
         <meta name="twitter:image" content={meta.value.ogImage} />
-        
+
         {/* Preload critical assets */}
         <link rel="preload" href="/fonts/inter/Inter-Regular.woff2" as="font" type="font/woff2" crossOrigin="" />
         <link rel="preload" href="/fonts/font-display.css" as="style" />
       </head>
-      
+
       <body>
         <Slot />
       </body>

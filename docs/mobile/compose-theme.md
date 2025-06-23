@@ -33,20 +33,20 @@ object MimicTheme {
     val ColorPrimary100 = Color(0xFFDBEAFE)
     val ColorPrimary500 = Color(0xFF3B82F6)
     val ColorPrimary900 = Color(0xFF1E3A8A)
-    
+
     // Colors - Semantic
     val ColorTextPrimary = Color(0xFF111827)
     val ColorTextSecondary = Color(0xFF6B7280)
     val ColorSurfacePrimary = Color(0xFFFAFAFA)
     val ColorSurfaceSecondary = Color(0xFFF3F4F6)
-    
+
     // Spacing
     val SpacingXs = 4.dp
     val SpacingSm = 8.dp
     val SpacingMd = 16.dp
     val SpacingLg = 24.dp
     val SpacingXl = 32.dp
-    
+
     // Typography
     val FontSizeXs = 12.sp
     val FontSizeBase = 16.sp
@@ -54,7 +54,7 @@ object MimicTheme {
     val FontWeightNormal = FontWeight.Normal
     val FontWeightMedium = FontWeight.Medium
     val FontWeightBold = FontWeight.Bold
-    
+
     // Border Radius
     val BorderRadiusSm = 4.dp
     val BorderRadiusMd = 8.dp
@@ -84,20 +84,20 @@ private val LightColorScheme = lightColorScheme(
     onPrimary = Tokens.ColorPrimary50,
     primaryContainer = Tokens.ColorPrimary100,
     onPrimaryContainer = Tokens.ColorPrimary900,
-    
+
     secondary = Tokens.ColorSecondary500,
     onSecondary = Tokens.ColorSecondary50,
     secondaryContainer = Tokens.ColorSecondary100,
     onSecondaryContainer = Tokens.ColorSecondary900,
-    
+
     surface = Tokens.ColorSurfacePrimary,
     onSurface = Tokens.ColorTextPrimary,
     surfaceVariant = Tokens.ColorSurfaceSecondary,
     onSurfaceVariant = Tokens.ColorTextSecondary,
-    
+
     background = Tokens.ColorSurfacePrimary,
     onBackground = Tokens.ColorTextPrimary,
-    
+
     error = Tokens.ColorError500,
     onError = Tokens.ColorError50
 )
@@ -108,20 +108,20 @@ private val DarkColorScheme = darkColorScheme(
     onPrimary = Tokens.ColorPrimary900,
     primaryContainer = Tokens.ColorPrimary800,
     onPrimaryContainer = Tokens.ColorPrimary100,
-    
+
     secondary = Tokens.ColorSecondary400,
     onSecondary = Tokens.ColorSecondary900,
     secondaryContainer = Tokens.ColorSecondary800,
     onSecondaryContainer = Tokens.ColorSecondary100,
-    
+
     surface = Tokens.ColorNeutral900,
     onSurface = Tokens.ColorNeutral100,
     surfaceVariant = Tokens.ColorNeutral800,
     onSurfaceVariant = Tokens.ColorNeutral300,
-    
+
     background = Tokens.ColorNeutral900,
     onBackground = Tokens.ColorNeutral100,
-    
+
     error = Tokens.ColorError400,
     onError = Tokens.ColorError900
 )
@@ -178,7 +178,7 @@ fun MimicTheme(
     content: @Composable () -> Unit
 ) {
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
-    
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = MimicTypography,
@@ -210,14 +210,14 @@ enum class ThemeMode {
 class ThemeManager {
     private val _themeMode = MutableStateFlow(ThemeMode.SYSTEM)
     val themeMode: StateFlow<ThemeMode> = _themeMode.asStateFlow()
-    
+
     private val _customColors = MutableStateFlow<Map<String, Color>>(emptyMap())
     val customColors: StateFlow<Map<String, Color>> = _customColors.asStateFlow()
-    
+
     fun setThemeMode(mode: ThemeMode) {
         _themeMode.value = mode
     }
-    
+
     fun toggleTheme() {
         _themeMode.value = when (_themeMode.value) {
             ThemeMode.LIGHT -> ThemeMode.DARK
@@ -225,11 +225,11 @@ class ThemeManager {
             ThemeMode.SYSTEM -> ThemeMode.DARK
         }
     }
-    
+
     fun updateCustomColor(key: String, color: Color) {
         _customColors.value = _customColors.value + (key to color)
     }
-    
+
     fun resetCustomColors() {
         _customColors.value = emptyMap()
     }
@@ -272,24 +272,24 @@ fun DynamicMimicTheme(
     val themeMode by themeManager.themeMode.collectAsState()
     val customColors by themeManager.customColors.collectAsState()
     val isSystemDark = isSystemInDarkTheme()
-    
+
     // Determine effective dark theme state
     val isDarkTheme = when (themeMode) {
         ThemeMode.LIGHT -> false
         ThemeMode.DARK -> true
         ThemeMode.SYSTEM -> isSystemDark
     }
-    
+
     // Apply custom color overrides
     val baseColorScheme = if (isDarkTheme) DarkColorScheme else LightColorScheme
     val customColorScheme = applyCustomColors(baseColorScheme, customColors)
-    
+
     // Animate theme transitions
     val animatedColorScheme by animateColorSchemeAsState(
         targetColorScheme = customColorScheme,
         animationSpec = tween(durationMillis = 300)
     )
-    
+
     MaterialTheme(
         colorScheme = animatedColorScheme,
         typography = MimicTypography,
@@ -357,7 +357,7 @@ fun ThemeSwitcher(
     themeManager: ThemeManager = LocalThemeManager.current
 ) {
     val currentTheme by themeManager.themeMode.collectAsState()
-    
+
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
@@ -370,7 +370,7 @@ fun ThemeSwitcher(
                 text = "Theme",
                 style = MaterialTheme.typography.titleMedium
             )
-            
+
             // Theme mode selection
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -380,7 +380,7 @@ fun ThemeSwitcher(
                     FilterChip(
                         selected = currentTheme == mode,
                         onClick = { themeManager.setThemeMode(mode) },
-                        label = { 
+                        label = {
                             Text(
                                 text = when (mode) {
                                     ThemeMode.LIGHT -> "Light"
@@ -402,7 +402,7 @@ fun ThemeSwitcher(
                     )
                 }
             }
-            
+
             // Quick toggle button
             OutlinedButton(
                 onClick = { themeManager.toggleTheme() },
@@ -448,7 +448,7 @@ fun IOSStatusBarTheme(
     // Update iOS status bar style based on theme
     LaunchedEffect(colorScheme.surface) {
         val isLightContent = isColorLight(colorScheme.surface)
-        
+
         // Set status bar style
         UIApplication.sharedApplication.setStatusBarStyle(
             if (isLightContent) {
@@ -457,20 +457,20 @@ fun IOSStatusBarTheme(
                 UIStatusBarStyleDarkContent
             }
         )
-        
+
         // Update status bar background if needed
         val statusBarView = UIApplication.sharedApplication.windows
             .firstOrNull()?.rootViewController?.view?.subviews
             ?.firstOrNull { it.frame.origin.y == 0.0 && it.frame.size.height == 44.0 }
-        
+
         statusBarView?.backgroundColor = UIColor.colorWithRed(
             red = colorScheme.surface.red.toDouble(),
-            green = colorScheme.surface.green.toDouble(), 
+            green = colorScheme.surface.green.toDouble(),
             blue = colorScheme.surface.blue.toDouble(),
             alpha = colorScheme.surface.alpha.toDouble()
         )
     }
-    
+
     content()
 }
 
@@ -485,7 +485,7 @@ fun IOSSafeAreaTheme(
     content: @Composable () -> Unit
 ) {
     val systemBars = WindowInsets.systemBars
-    
+
     // Handle iOS safe areas with Material 3
     content()
 }
@@ -513,13 +513,13 @@ fun WASMThemeIntegration(
         syncWithCSSVariables(colorScheme)
         updateBrowserThemeColor(colorScheme.primary)
     }
-    
+
     content()
 }
 
 private fun syncWithCSSVariables(colorScheme: ColorScheme) {
     val documentElement = document.documentElement
-    
+
     // Update CSS custom properties to match Compose theme
     documentElement?.style?.setProperty("--color-primary", colorScheme.primary.toHexString())
     documentElement?.style?.setProperty("--color-surface", colorScheme.surface.toHexString())
@@ -534,7 +534,7 @@ private fun updateBrowserThemeColor(primaryColor: Color) {
             setAttribute("name", "theme-color")
             document.head?.appendChild(this)
         }
-    
+
     themeColorMeta.setAttribute("content", primaryColor.toHexString())
 }
 
@@ -595,14 +595,14 @@ class ReactNativeThemeBridge {
                 background = colorScheme.background.toHexString(),
                 onBackground = colorScheme.onBackground.toHexString()
             )
-            
+
             return Json.encodeToString(ThemeColors.serializer(), themeColors)
         }
-        
+
         fun importThemeFromReactNative(jsonTheme: String): ColorScheme? {
             return try {
                 val themeColors = Json.decodeFromString<ThemeColors>(jsonTheme)
-                
+
                 lightColorScheme(
                     primary = Color(android.graphics.Color.parseColor(themeColors.primary)),
                     primaryContainer = Color(android.graphics.Color.parseColor(themeColors.primaryContainer)),
@@ -625,20 +625,20 @@ fun SharedThemeProvider(
     onThemeChange: (String) -> Unit = {},
     content: @Composable () -> Unit
 ) {
-    var currentTheme by remember { 
+    var currentTheme by remember {
         mutableStateOf(
-            initialTheme?.let { 
-                ReactNativeThemeBridge.importThemeFromReactNative(it) 
+            initialTheme?.let {
+                ReactNativeThemeBridge.importThemeFromReactNative(it)
             } ?: lightColorScheme()
         )
     }
-    
+
     // Export theme changes back to React Native
     LaunchedEffect(currentTheme) {
         val exportedTheme = ReactNativeThemeBridge.exportThemeToReactNative(currentTheme)
         onThemeChange(exportedTheme)
     }
-    
+
     MaterialTheme(
         colorScheme = currentTheme,
         content = content
@@ -667,20 +667,20 @@ import java.util.concurrent.ConcurrentHashMap
 object ThemeCache {
     private val colorSchemeCache = ConcurrentHashMap<String, ColorScheme>()
     private val colorCache = ConcurrentHashMap<Int, Color>()
-    
+
     fun getCachedColorScheme(
         key: String,
         factory: () -> ColorScheme
     ): ColorScheme {
         return colorSchemeCache.getOrPut(key, factory)
     }
-    
+
     fun getCachedColor(
         argb: Int
     ): Color {
         return colorCache.getOrPut(argb) { Color(argb) }
     }
-    
+
     fun clearCache() {
         colorSchemeCache.clear()
         colorCache.clear()
@@ -699,7 +699,7 @@ fun rememberCachedColorScheme(
                 append("_${key}=${color.value}")
             }
         }
-        
+
         ThemeCache.getCachedColorScheme(cacheKey) {
             val baseScheme = if (isDark) DarkColorScheme else LightColorScheme
             applyCustomColors(baseScheme, customColors)
@@ -740,14 +740,14 @@ fun MemoryOptimizedMimicTheme(
             System.gc() // Suggest garbage collection
         }
     }
-    
+
     // Lazy initialization of color schemes
     val colorScheme by remember(darkTheme) {
         derivedStateOf {
             if (darkTheme) DarkColorScheme else LightColorScheme
         }
     }
-    
+
     // Preload commonly used colors in background
     LaunchedEffect(colorScheme) {
         launch(Dispatchers.Default) {
@@ -755,7 +755,7 @@ fun MemoryOptimizedMimicTheme(
             precomputeDerivedColors(colorScheme)
         }
     }
-    
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = MimicTypography,
@@ -771,7 +771,7 @@ private suspend fun precomputeDerivedColors(colorScheme: ColorScheme) {
         colorScheme.secondary.copy(alpha = 0.1f),
         // Add other commonly used variations
     )
-    
+
     // Cache computed colors
     computedColors.forEach { color ->
         ThemeCache.getCachedColor(color.value.toInt())
@@ -793,12 +793,12 @@ private suspend fun precomputeDerivedColors(colorScheme: ColorScheme) {
 fun DebuggableTheme(content: @Composable () -> Unit) {
     val themeManager = LocalThemeManager.current
     val themeMode by themeManager.themeMode.collectAsState()
-    
+
     // Debug logging
     LaunchedEffect(themeMode) {
         println("Theme mode changed to: $themeMode")
     }
-    
+
     DynamicMimicTheme(content = content)
 }
 ```
@@ -818,10 +818,10 @@ fun PerformantTheme(
     val colorScheme = remember(darkTheme) {
         if (darkTheme) DarkColorScheme else LightColorScheme
     }
-    
+
     // Avoid recreating typography on every recomposition
     val typography = remember { MimicTypography }
-    
+
     MaterialTheme(
         colorScheme = colorScheme,
         typography = typography,
@@ -841,7 +841,7 @@ expect fun adjustColorForPlatform(color: Color): Color
 // Android implementation
 actual fun adjustColorForPlatform(color: Color): Color = color
 
-// iOS implementation  
+// iOS implementation
 actual fun adjustColorForPlatform(color: Color): Color {
     // Adjust for iOS display characteristics
     return color.copy(

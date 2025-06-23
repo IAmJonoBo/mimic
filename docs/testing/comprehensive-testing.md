@@ -1,6 +1,6 @@
 # Comprehensive Testing Strategy
 
-Advanced testing approaches for the Mimic design system monorepo, covering visual regression, interaction testing,  
+Advanced testing approaches for the Mimic design system monorepo, covering visual regression, interaction testing,\
 accessibility validation, and cross-platform compatibility.
 
 ## Visual Regression Testing
@@ -78,10 +78,7 @@ jobs:
   "diffThreshold": 0.1,
   "storybookPort": 6006,
   "verboseRenderer": true,
-  "skipStories": [
-    "Example/*",
-    "Internal/*"
-  ]
+  "skipStories": ["Example/*", "Internal/*"]
 }
 ```
 
@@ -107,7 +104,7 @@ import { getStoryContext } from '@storybook/test-runner';
 const config: TestRunnerConfig = {
   async postRender(page, context) {
     const storyContext = await getStoryContext(page, context);
-    
+
     // Skip interaction tests for specific stories
     if (storyContext.parameters?.skipInteractionTests) {
       return;
@@ -122,26 +119,28 @@ const config: TestRunnerConfig = {
 
     // Custom interaction tests
     await page.waitForSelector('[data-testid="component-root"]');
-    
+
     // Test keyboard navigation
     await page.keyboard.press('Tab');
     await page.keyboard.press('Enter');
-    
+
     // Validate focus management
-    const focusedElement = await page.evaluate(() => document.activeElement?.tagName);
+    const focusedElement = await page.evaluate(
+      () => document.activeElement?.tagName
+    );
     console.log('Focused element:', focusedElement);
   },
-  
+
   // Configure test timeouts
   logLevel: 'verbose',
   failOnConsole: true,
-  
+
   // Browser configuration
   browserOptions: {
     launch: {
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
-    }
-  }
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    },
+  },
 };
 
 export default config;
@@ -161,10 +160,10 @@ const meta: Meta<typeof Button> = {
   parameters: {
     docs: {
       description: {
-        component: 'Interactive button component with comprehensive testing'
-      }
-    }
-  }
+        component: 'Interactive button component with comprehensive testing',
+      },
+    },
+  },
 };
 
 export default meta;
@@ -173,31 +172,31 @@ type Story = StoryObj<typeof Button>;
 export const InteractionTest: Story = {
   args: {
     children: 'Click me',
-    variant: 'primary'
+    variant: 'primary',
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const button = canvas.getByRole('button');
-    
+
     // Test initial state
     await expect(button).toBeInTheDocument();
     await expect(button).toBeEnabled();
-    
+
     // Test click interaction
     await userEvent.click(button);
-    
+
     // Test keyboard interaction
     await userEvent.tab();
     await userEvent.keyboard('{Enter}');
-    
+
     // Test hover state
     await userEvent.hover(button);
     await expect(button).toHaveClass('hover');
-    
+
     // Test focus state
     await userEvent.click(button);
     await expect(button).toHaveFocus();
-  }
+  },
 };
 ```
 
@@ -218,21 +217,25 @@ export const runA11yTests = async (component: HTMLElement) => {
       'color-contrast': { enabled: true },
       'keyboard-navigation': { enabled: true },
       'focus-management': { enabled: true },
-      'aria-labels': { enabled: true }
-    }
+      'aria-labels': { enabled: true },
+    },
   });
-  
+
   expect(results).toHaveNoViolations();
 };
 
 export const testKeyboardNavigation = async (page: Page) => {
   // Test tab order
   await page.keyboard.press('Tab');
-  const firstFocused = await page.evaluate(() => document.activeElement?.tagName);
-  
+  const firstFocused = await page.evaluate(
+    () => document.activeElement?.tagName
+  );
+
   await page.keyboard.press('Tab');
-  const secondFocused = await page.evaluate(() => document.activeElement?.tagName);
-  
+  const secondFocused = await page.evaluate(
+    () => document.activeElement?.tagName
+  );
+
   // Validate focus trap
   expect(firstFocused).not.toBe(secondFocused);
 };
@@ -246,29 +249,30 @@ export const customA11yMatchers = {
   toHaveAriaLabel: (received: HTMLElement, expected: string) => {
     const ariaLabel = received.getAttribute('aria-label');
     const pass = ariaLabel === expected;
-    
+
     return {
       pass,
-      message: () => 
-        pass 
+      message: () =>
+        pass
           ? `Expected element not to have aria-label "${expected}"`
-          : `Expected element to have aria-label "${expected}", got "${ariaLabel}"`
+          : `Expected element to have aria-label "${expected}", got "${ariaLabel}"`,
     };
   },
-  
+
   toBeKeyboardAccessible: async (received: HTMLElement) => {
     // Test keyboard accessibility
-    const isFocusable = received.tabIndex >= 0 || 
-                       ['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'A'].includes(received.tagName);
-    
+    const isFocusable =
+      received.tabIndex >= 0 ||
+      ['BUTTON', 'INPUT', 'SELECT', 'TEXTAREA', 'A'].includes(received.tagName);
+
     return {
       pass: isFocusable,
-      message: () => 
-        isFocusable 
+      message: () =>
+        isFocusable
           ? 'Element is keyboard accessible'
-          : 'Element is not keyboard accessible'
+          : 'Element is not keyboard accessible',
     };
-  }
+  },
 };
 ```
 
@@ -282,31 +286,31 @@ export const deviceMatrix = {
   mobile: {
     'iPhone 13': { width: 390, height: 844, userAgent: 'iPhone' },
     'Pixel 6': { width: 393, height: 851, userAgent: 'Android' },
-    'Galaxy S21': { width: 384, height: 854, userAgent: 'Android' }
+    'Galaxy S21': { width: 384, height: 854, userAgent: 'Android' },
   },
   tablet: {
     'iPad Pro': { width: 1024, height: 1366, userAgent: 'iPad' },
-    'Surface Pro': { width: 912, height: 1368, userAgent: 'Windows' }
+    'Surface Pro': { width: 912, height: 1368, userAgent: 'Windows' },
   },
   desktop: {
     'MacBook Pro': { width: 1440, height: 900, userAgent: 'Mac' },
     'Windows Desktop': { width: 1920, height: 1080, userAgent: 'Windows' },
-    'Linux Desktop': { width: 1366, height: 768, userAgent: 'Linux' }
-  }
+    'Linux Desktop': { width: 1366, height: 768, userAgent: 'Linux' },
+  },
 };
 
 export const runCrossPlatformTests = async (storyUrl: string) => {
   for (const [category, devices] of Object.entries(deviceMatrix)) {
     for (const [deviceName, config] of Object.entries(devices)) {
       await test(`${deviceName} - ${category}`, async ({ page }) => {
-        await page.setViewportSize({ 
-          width: config.width, 
-          height: config.height 
+        await page.setViewportSize({
+          width: config.width,
+          height: config.height,
         });
-        
+
         await page.setUserAgent(config.userAgent);
         await page.goto(storyUrl);
-        
+
         // Device-specific tests
         await validateResponsiveLayout(page, config);
         await testTouchInteractions(page, config);
@@ -320,26 +324,35 @@ export const runCrossPlatformTests = async (storyUrl: string) => {
 
 ```typescript
 // packages/design-system/src/testing/platform-validators.ts
-export const validateResponsiveLayout = async (page: Page, device: DeviceConfig) => {
+export const validateResponsiveLayout = async (
+  page: Page,
+  device: DeviceConfig
+) => {
   // Check responsive breakpoints
   const elements = await page.$$('[data-responsive]');
-  
+
   for (const element of elements) {
-    const computedStyle = await element.evaluate(el => 
+    const computedStyle = await element.evaluate(el =>
       window.getComputedStyle(el)
     );
-    
+
     // Validate layout properties
     expect(computedStyle.display).not.toBe('none');
     expect(computedStyle.visibility).toBe('visible');
   }
 };
 
-export const testTouchInteractions = async (page: Page, device: DeviceConfig) => {
-  if (device.userAgent.includes('Mobile') || device.userAgent.includes('Tablet')) {
+export const testTouchInteractions = async (
+  page: Page,
+  device: DeviceConfig
+) => {
+  if (
+    device.userAgent.includes('Mobile') ||
+    device.userAgent.includes('Tablet')
+  ) {
     // Test touch targets meet minimum size requirements (44px)
     const touchTargets = await page.$$('[role="button"], button, a, input');
-    
+
     for (const target of touchTargets) {
       const boundingBox = await target.boundingBox();
       expect(boundingBox?.width).toBeGreaterThanOrEqual(44);
@@ -361,18 +374,18 @@ import { bundleSize } from './utils/bundle-size';
 export const performanceBudgets = {
   'design-system': {
     maxSize: '100kb',
-    maxGzipSize: '30kb'
+    maxGzipSize: '30kb',
   },
   'design-tokens': {
     maxSize: '50kb',
-    maxGzipSize: '15kb'
-  }
+    maxGzipSize: '15kb',
+  },
 };
 
 export const validateBundleSize = async () => {
   for (const [packageName, budget] of Object.entries(performanceBudgets)) {
     const size = await bundleSize(`./packages/${packageName}/dist`);
-    
+
     expect(size.raw).toBeLessThan(parseSize(budget.maxSize));
     expect(size.gzip).toBeLessThan(parseSize(budget.maxGzipSize));
   }
@@ -383,16 +396,16 @@ export const measureRenderPerformance = async (page: Page) => {
   await page.evaluate(() => {
     performance.mark('component-start');
   });
-  
+
   await page.waitForSelector('[data-testid="component-root"]');
-  
+
   const metrics = await page.evaluate(() => {
     performance.mark('component-end');
     performance.measure('component-render', 'component-start', 'component-end');
-    
+
     return performance.getEntriesByName('component-render')[0];
   });
-  
+
   expect(metrics.duration).toBeLessThan(100); // 100ms budget
 };
 ```
@@ -402,23 +415,23 @@ export const measureRenderPerformance = async (page: Page) => {
 ```typescript
 // packages/design-system/src/testing/memory-testing.ts
 export const detectMemoryLeaks = async (page: Page, iterations = 10) => {
-  const initialMemory = await page.evaluate(() => 
-    (performance as any).memory?.usedJSHeapSize
+  const initialMemory = await page.evaluate(
+    () => (performance as any).memory?.usedJSHeapSize
   );
-  
+
   // Perform multiple render cycles
   for (let i = 0; i < iterations; i++) {
     await page.reload();
     await page.waitForSelector('[data-testid="component-root"]');
   }
-  
-  const finalMemory = await page.evaluate(() => 
-    (performance as any).memory?.usedJSHeapSize
+
+  const finalMemory = await page.evaluate(
+    () => (performance as any).memory?.usedJSHeapSize
   );
-  
+
   const memoryIncrease = finalMemory - initialMemory;
   const threshold = initialMemory * 0.1; // 10% increase threshold
-  
+
   expect(memoryIncrease).toBeLessThan(threshold);
 };
 ```
@@ -463,21 +476,17 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
-      exclude: [
-        '**/*.stories.ts',
-        '**/*.test.ts',
-        '**/node_modules/**'
-      ],
+      exclude: ['**/*.stories.ts', '**/*.test.ts', '**/node_modules/**'],
       thresholds: {
         global: {
           branches: 80,
           functions: 80,
           lines: 80,
-          statements: 80
-        }
-      }
-    }
-  }
+          statements: 80,
+        },
+      },
+    },
+  },
 });
 ```
 
@@ -532,5 +541,5 @@ jobs:
       - run: npx nx e2e design-system-e2e
 ```
 
-This comprehensive testing strategy ensures robust quality assurance across all aspects of the design system, from  
+This comprehensive testing strategy ensures robust quality assurance across all aspects of the design system, from\
 visual consistency to performance and accessibility compliance.

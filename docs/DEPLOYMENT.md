@@ -154,17 +154,17 @@ npm publish
 
    ```toml
    [build]
-     base = "packages/design-system"
-     command = "pnpm build-storybook"
-     publish = "storybook-static"
+   base = "packages/design-system"
+   command = "pnpm build-storybook"
+   publish = "storybook-static"
 
    [build.environment]
-     NODE_VERSION = "18"
+   NODE_VERSION = "18"
 
    [[redirects]]
-     from = "/*"
-     to = "/index.html"
-     status = 200
+   from = "/*"
+   to = "/index.html"
+   status = 200
    ```
 
 2. **Configure Netlify**:

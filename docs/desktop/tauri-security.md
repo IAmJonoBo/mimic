@@ -28,19 +28,19 @@ use serde::{Deserialize, Serialize};
 pub struct SecurityConfig {
     // CSP configuration
     pub csp: ContentSecurityPolicy,
-    
+
     // Token security
     pub token_encryption: bool,
     pub token_validation: bool,
-    
+
     // Communication security
     pub ipc_whitelist: Vec<String>,
     pub api_allowlist: Vec<String>,
-    
+
     // Update security
     pub auto_update_enabled: bool,
     pub signature_verification: bool,
-    
+
     // Development vs production modes
     pub dev_mode: bool,
 }
@@ -118,7 +118,7 @@ impl ContentSecurityPolicy {
             manifest_src: vec!["'self'".to_string()],
         }
     }
-    
+
     pub fn development() -> Self {
         let mut csp = Self::strict();
         csp.script_src.push("'unsafe-eval'".to_string());
@@ -127,7 +127,7 @@ impl ContentSecurityPolicy {
         csp.connect_src.push("https://localhost:*".to_string());
         csp
     }
-    
+
     pub fn to_header_value(&self) -> String {
         format!(
             "default-src {}; script-src {}; style-src {}; img-src {}; font-src {}; connect-src {}; media-src {}; object-src {}; child-src {}; frame-src {}; worker-src {}; manifest-src {}",
@@ -195,24 +195,24 @@ impl CspManager {
     pub fn new(config: SecurityConfig) -> Self {
         Self { config }
     }
-    
+
     pub fn setup<R: Runtime>(&self, app: &App<R>) -> tauri::Result<()> {
         let config = self.config.clone();
-        
+
         app.webview_windows().values().for_each(|window| {
             let _ = self.apply_csp_to_window(window, &config.csp);
         });
-        
+
         // Listen for new windows
         app.listen_global("tauri://window-created", move |event| {
             if let Some(window) = event.payload() {
                 // Apply CSP to new windows
             }
         });
-        
+
         Ok(())
     }
-    
+
     fn apply_csp_to_window<R: Runtime>(
         &self,
         window: &WebviewWindow<R>,
@@ -223,7 +223,7 @@ impl CspManager {
         } else {
             csp.to_header_value()
         };
-        
+
         window.eval(&format!(
             r#"
             if (!document.querySelector('meta[http-equiv="Content-Security-Policy"]')) {{
@@ -235,10 +235,10 @@ impl CspManager {
             "#,
             csp_header.replace("'", "\\'")
         ))?;
-        
+
         Ok(())
     }
-    
+
     pub fn validate_resource_access(&self, resource_path: &str) -> bool {
         // Validate that requested resources are within allowed scopes
         let allowed_paths = [
@@ -246,7 +246,7 @@ impl CspManager {
             "/assets/",
             "/static/",
         ];
-        
+
         allowed_paths.iter().any(|path| resource_path.starts_with(path))
     }
 }
@@ -274,13 +274,13 @@ interface CSPViolation {
 class CSPReporter {
   private violations: CSPViolation[] = [];
   private maxViolations = 100;
-  
+
   constructor() {
     this.setupViolationListener();
   }
-  
+
   private setupViolationListener() {
-    document.addEventListener('securitypolicyviolation', (event) => {
+    document.addEventListener('securitypolicyviolation', event => {
       const violation: CSPViolation = {
         documentURI: event.documentURI,
         referrer: event.referrer,
@@ -295,29 +295,29 @@ class CSPReporter {
         statusCode: event.statusCode,
         scriptSample: event.sample,
       };
-      
+
       this.reportViolation(violation);
     });
   }
-  
+
   private reportViolation(violation: CSPViolation) {
     // Store violation
     this.violations.push(violation);
-    
+
     // Limit stored violations
     if (this.violations.length > this.maxViolations) {
       this.violations.shift();
     }
-    
+
     // Log in development
     if (import.meta.env.DEV) {
       console.warn('🚨 CSP Violation:', violation);
     }
-    
+
     // Report to backend for analysis
     this.sendViolationReport(violation);
   }
-  
+
   private async sendViolationReport(violation: CSPViolation) {
     try {
       await window.__TAURI__.invoke('report_csp_violation', { violation });
@@ -325,11 +325,11 @@ class CSPReporter {
       console.error('Failed to report CSP violation:', error);
     }
   }
-  
+
   getViolations(): CSPViolation[] {
     return [...this.violations];
   }
-  
+
   clearViolations() {
     this.violations = [];
   }
@@ -393,20 +393,20 @@ impl SecureUpdater {
     pub fn new(public_key_bytes: &[u8; 32], manifest_url: String) -> tauri::Result<Self> {
         let public_key = PublicKey::from_bytes(public_key_bytes)
             .map_err(|e| tauri::Error::Updater(format!("Invalid public key: {}", e)))?;
-        
+
         let client = Client::builder()
             .timeout(std::time::Duration::from_secs(30))
             .user_agent("Mimic-Desktop-Updater/1.0")
             .build()
             .map_err(|e| tauri::Error::Updater(format!("HTTP client error: {}", e)))?;
-        
+
         Ok(Self {
             public_key,
             client,
             manifest_url,
         })
     }
-    
+
     pub async fn check_for_updates(&self) -> tauri::Result<Option<UpdateManifest>> {
         // Fetch update manifest
         let response = self.client
@@ -414,37 +414,37 @@ impl SecureUpdater {
             .send()
             .await
             .map_err(|e| tauri::Error::Updater(format!("Failed to fetch manifest: {}", e)))?;
-        
+
         if !response.status().is_success() {
             return Err(tauri::Error::Updater(format!(
                 "HTTP error: {}", response.status()
             )));
         }
-        
+
         let manifest_bytes = response.bytes().await
             .map_err(|e| tauri::Error::Updater(format!("Failed to read response: {}", e)))?;
-        
+
         // Verify manifest signature
         let manifest: UpdateManifest = serde_json::from_slice(&manifest_bytes)
             .map_err(|e| tauri::Error::Updater(format!("Invalid manifest format: {}", e)))?;
-        
+
         if !self.verify_signature(&manifest_bytes, &manifest.signature)? {
             return Err(tauri::Error::Updater("Invalid manifest signature".into()));
         }
-        
+
         Ok(Some(manifest))
     }
-    
+
     fn verify_signature(&self, data: &[u8], signature_hex: &str) -> tauri::Result<bool> {
         let signature_bytes = hex::decode(signature_hex)
             .map_err(|e| tauri::Error::Updater(format!("Invalid signature format: {}", e)))?;
-        
+
         let signature = Signature::from_bytes(&signature_bytes)
             .map_err(|e| tauri::Error::Updater(format!("Invalid signature: {}", e)))?;
-        
+
         Ok(self.public_key.verify(data, &signature).is_ok())
     }
-    
+
     pub async fn download_and_verify_update(
         &self,
         platform_update: &PlatformUpdate,
@@ -455,30 +455,30 @@ impl SecureUpdater {
             .send()
             .await
             .map_err(|e| tauri::Error::Updater(format!("Download failed: {}", e)))?;
-        
+
         if !response.status().is_success() {
             return Err(tauri::Error::Updater(format!(
                 "Download HTTP error: {}", response.status()
             )));
         }
-        
+
         let update_bytes = response.bytes().await
             .map_err(|e| tauri::Error::Updater(format!("Failed to read update: {}", e)))?;
-        
+
         // Verify checksum
         let mut hasher = Sha256::new();
         hasher.update(&update_bytes);
         let calculated_checksum = hex::encode(hasher.finalize());
-        
+
         if calculated_checksum != platform_update.checksum {
             return Err(tauri::Error::Updater("Checksum verification failed".into()));
         }
-        
+
         // Verify signature
         if !self.verify_signature(&update_bytes, &platform_update.signature)? {
             return Err(tauri::Error::Updater("Update signature verification failed".into()));
         }
-        
+
         Ok(update_bytes.to_vec())
     }
 }
@@ -489,10 +489,10 @@ pub async fn check_for_updates<R: Runtime>(
 ) -> Result<Option<UpdateManifest>, String> {
     let public_key = include_bytes!("../../../keys/public.key");
     let manifest_url = "https://releases.mimic.design/manifest.json".to_string();
-    
+
     let updater = SecureUpdater::new(public_key, manifest_url)
         .map_err(|e| format!("Updater initialization failed: {}", e))?;
-    
+
     updater.check_for_updates().await
         .map_err(|e| format!("Update check failed: {}", e))
 }
@@ -514,15 +514,15 @@ impl SecureInstaller {
     pub fn new() -> tauri::Result<Self> {
         let temp_dir = std::env::temp_dir().join("mimic-updates");
         let backup_dir = std::env::temp_dir().join("mimic-backup");
-        
+
         std::fs::create_dir_all(&temp_dir)
             .map_err(|e| tauri::Error::Io(e))?;
         std::fs::create_dir_all(&backup_dir)
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         Ok(Self { temp_dir, backup_dir })
     }
-    
+
     pub async fn install_update<R: Runtime>(
         &self,
         app: &tauri::AppHandle<R>,
@@ -530,57 +530,57 @@ impl SecureInstaller {
     ) -> tauri::Result<()> {
         // Create backup of current installation
         self.create_backup(app)?;
-        
+
         // Write update to temporary location
         let temp_update_path = self.temp_dir.join("update.bundle");
         tokio::fs::write(&temp_update_path, update_data).await
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         // Verify update integrity one more time
         self.verify_update_integrity(&temp_update_path)?;
-        
+
         // Install update atomically
         self.atomic_install(app, &temp_update_path)?;
-        
+
         // Cleanup temporary files
         let _ = std::fs::remove_file(temp_update_path);
-        
+
         Ok(())
     }
-    
+
     fn create_backup<R: Runtime>(&self, app: &tauri::AppHandle<R>) -> tauri::Result<()> {
         let app_dir = app.path_resolver().app_dir()
             .ok_or_else(|| tauri::Error::PathNotAllowed("App directory not found".into()))?;
-        
+
         // Copy critical files to backup
         let backup_path = self.backup_dir.join(format!("backup-{}", chrono::Utc::now().timestamp()));
-        
+
         copy_dir_all(&app_dir, &backup_path)
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         Ok(())
     }
-    
+
     fn verify_update_integrity(&self, update_path: &PathBuf) -> tauri::Result<()> {
         // Additional integrity checks specific to our application
         // - Verify it's a valid bundle
         // - Check for required files
         // - Validate permissions
-        
+
         if !update_path.exists() {
             return Err(tauri::Error::Updater("Update file not found".into()));
         }
-        
+
         let metadata = std::fs::metadata(update_path)
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         if metadata.len() == 0 {
             return Err(tauri::Error::Updater("Update file is empty".into()));
         }
-        
+
         Ok(())
     }
-    
+
     fn atomic_install<R: Runtime>(
         &self,
         app: &tauri::AppHandle<R>,
@@ -591,18 +591,18 @@ impl SecureInstaller {
         {
             self.windows_install(app, update_path)
         }
-        
+
         #[cfg(target_os = "macos")]
         {
             self.macos_install(app, update_path)
         }
-        
+
         #[cfg(target_os = "linux")]
         {
             self.linux_install(app, update_path)
         }
     }
-    
+
     #[cfg(target_os = "windows")]
     fn windows_install<R: Runtime>(
         &self,
@@ -610,10 +610,10 @@ impl SecureInstaller {
         update_path: &PathBuf,
     ) -> tauri::Result<()> {
         use std::process::Command;
-        
+
         let app_dir = app.path_resolver().app_dir()
             .ok_or_else(|| tauri::Error::PathNotAllowed("App directory not found".into()))?;
-        
+
         // Use Windows installer with elevated privileges
         let output = Command::new("powershell")
             .args(&[
@@ -627,16 +627,16 @@ impl SecureInstaller {
             ])
             .output()
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         if !output.status.success() {
             return Err(tauri::Error::Updater(
                 format!("Installation failed: {}", String::from_utf8_lossy(&output.stderr))
             ));
         }
-        
+
         Ok(())
     }
-    
+
     #[cfg(target_os = "macos")]
     fn macos_install<R: Runtime>(
         &self,
@@ -644,23 +644,23 @@ impl SecureInstaller {
         update_path: &PathBuf,
     ) -> tauri::Result<()> {
         use std::process::Command;
-        
+
         // Extract and install .app bundle
         let output = Command::new("hdiutil")
             .args(&["attach", "-nobrowse", &update_path.to_string_lossy()])
             .output()
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         if !output.status.success() {
             return Err(tauri::Error::Updater("Failed to mount DMG".into()));
         }
-        
+
         // Copy app bundle to Applications
         // Note: This is simplified - real implementation would need more robust handling
-        
+
         Ok(())
     }
-    
+
     #[cfg(target_os = "linux")]
     fn linux_install<R: Runtime>(
         &self,
@@ -668,17 +668,17 @@ impl SecureInstaller {
         update_path: &PathBuf,
     ) -> tauri::Result<()> {
         use std::process::Command;
-        
+
         // Extract and install AppImage or .deb package
         let output = Command::new("chmod")
             .args(&["+x", &update_path.to_string_lossy()])
             .output()
             .map_err(|e| tauri::Error::Io(e))?;
-        
+
         if !output.status.success() {
             return Err(tauri::Error::Updater("Failed to make update executable".into()));
         }
-        
+
         Ok(())
     }
 }
@@ -761,15 +761,15 @@ fn copy_dir_all(src: impl AsRef<std::path::Path>, dst: impl AsRef<std::path::Pat
     <!-- Network access for token synchronization -->
     <key>com.apple.security.network.client</key>
     <true/>
-    
+
     <!-- File system access for token files -->
     <key>com.apple.security.files.user-selected.read-write</key>
     <true/>
-    
+
     <!-- Auto-updater requirements -->
     <key>com.apple.security.network.server</key>
     <false/>
-    
+
     <!-- Hardened runtime -->
     <key>com.apple.security.cs.allow-jit</key>
     <false/>
@@ -779,7 +779,7 @@ fn copy_dir_all(src: impl AsRef<std::path::Path>, dst: impl AsRef<std::path::Pat
     <false/>
     <key>com.apple.security.cs.disable-library-validation</key>
     <false/>
-    
+
     <!-- Notarization requirements -->
     <key>com.apple.security.app-sandbox</key>
     <false/>
@@ -873,24 +873,24 @@ impl TokenCrypto {
     pub fn new(password: &str, salt: &[u8]) -> Result<Self, Box<dyn std::error::Error>> {
         let argon2 = Argon2::default();
         let mut key = [0u8; 32];
-        
+
         argon2.hash_password_into(password.as_bytes(), salt, &mut key)?;
-        
+
         let cipher = Aes256Gcm::new_from_slice(&key)?;
-        
+
         Ok(Self { cipher })
     }
-    
+
     pub fn encrypt_tokens(&self, tokens: &str) -> Result<EncryptedTokens, Box<dyn std::error::Error>> {
         let mut nonce_bytes = [0u8; 12];
         OsRng.fill_bytes(&mut nonce_bytes);
         let nonce = Nonce::from_slice(&nonce_bytes);
-        
+
         let data = self.cipher.encrypt(nonce, tokens.as_bytes())?;
-        
+
         let mut salt = [0u8; 16];
         OsRng.fill_bytes(&mut salt);
-        
+
         Ok(EncryptedTokens {
             data,
             nonce: nonce_bytes.to_vec(),
@@ -898,11 +898,11 @@ impl TokenCrypto {
             version: 1,
         })
     }
-    
+
     pub fn decrypt_tokens(&self, encrypted: &EncryptedTokens) -> Result<String, Box<dyn std::error::Error>> {
         let nonce = Nonce::from_slice(&encrypted.nonce);
         let decrypted = self.cipher.decrypt(nonce, encrypted.data.as_ref())?;
-        
+
         Ok(String::from_utf8(decrypted)?)
     }
 }
@@ -915,19 +915,19 @@ pub async fn save_encrypted_tokens(
 ) -> Result<(), String> {
     let mut salt = [0u8; 16];
     OsRng.fill_bytes(&mut salt);
-    
+
     let crypto = TokenCrypto::new(&password, &salt)
         .map_err(|e| format!("Encryption setup failed: {}", e))?;
-    
+
     let encrypted = crypto.encrypt_tokens(&tokens)
         .map_err(|e| format!("Encryption failed: {}", e))?;
-    
+
     let serialized = bincode::serialize(&encrypted)
         .map_err(|e| format!("Serialization failed: {}", e))?;
-    
+
     tokio::fs::write(path, serialized).await
         .map_err(|e| format!("File write failed: {}", e))?;
-    
+
     Ok(())
 }
 
@@ -938,16 +938,16 @@ pub async fn load_encrypted_tokens(
 ) -> Result<String, String> {
     let data = tokio::fs::read(path).await
         .map_err(|e| format!("File read failed: {}", e))?;
-    
+
     let encrypted: EncryptedTokens = bincode::deserialize(&data)
         .map_err(|e| format!("Deserialization failed: {}", e))?;
-    
+
     let crypto = TokenCrypto::new(&password, &encrypted.salt)
         .map_err(|e| format!("Decryption setup failed: {}", e))?;
-    
+
     let tokens = crypto.decrypt_tokens(&encrypted)
         .map_err(|e| format!("Decryption failed: {}", e))?;
-    
+
     Ok(tokens)
 }
 ```
@@ -978,7 +978,7 @@ pub struct IPCValidator {
 impl IPCValidator {
     pub fn new() -> Self {
         let mut allowed_commands = HashMap::new();
-        
+
         // Define allowed commands and their permitted origins
         allowed_commands.insert(
             "load_tokens".to_string(),
@@ -992,10 +992,10 @@ impl IPCValidator {
             "update_theme".to_string(),
             vec!["tauri://localhost".to_string()],
         );
-        
+
         Self { allowed_commands }
     }
-    
+
     pub fn validate_command<R: Runtime>(
         &self,
         window: &Window<R>,
@@ -1004,17 +1004,17 @@ impl IPCValidator {
         // Check if command is allowed
         let allowed_origins = self.allowed_commands.get(command)
             .ok_or_else(|| format!("Command '{}' not allowed", command))?;
-        
+
         // Get window origin (in a real implementation)
         let origin = "tauri://localhost"; // Simplified
-        
+
         if !allowed_origins.contains(&origin.to_string()) {
             return Err(format!("Origin '{}' not allowed for command '{}'", origin, command));
         }
-        
+
         Ok(())
     }
-    
+
     pub fn rate_limit_check(&self, command: &str, window_id: &str) -> Result<(), String> {
         // Implement rate limiting logic
         // This is a simplified example - real implementation would track timing
@@ -1034,15 +1034,15 @@ where
 {
     let command_name = command_name.to_string();
     let validator = validator.clone();
-    
+
     move |window: tauri::Window<R>, payload: serde_json::Value| {
         // Validate command
         validator.validate_command(&window, &command_name)?;
-        
+
         // Rate limiting
         let window_id = window.label();
         validator.rate_limit_check(&command_name, window_id)?;
-        
+
         // Execute command
         handler(payload)
     }
@@ -1098,17 +1098,17 @@ impl SecurityMonitor {
         thresholds.insert(SecurityEventType::CSPViolation, 10);
         thresholds.insert(SecurityEventType::UnauthorizedAccess, 5);
         thresholds.insert(SecurityEventType::RateLimitExceeded, 20);
-        
+
         Self {
             events: Arc::new(Mutex::new(Vec::new())),
             thresholds,
         }
     }
-    
+
     pub fn log_event(&self, event: SecurityEvent) {
         let mut events = self.events.lock().unwrap();
         events.push(event.clone());
-        
+
         // Check thresholds
         if let Some(&threshold) = self.thresholds.get(&event.event_type) {
             let recent_count = events
@@ -1118,18 +1118,18 @@ impl SecurityMonitor {
                     (Utc::now() - e.timestamp).num_minutes() < 10
                 })
                 .count();
-            
+
             if recent_count >= threshold {
                 self.trigger_security_response(&event.event_type);
             }
         }
-        
+
         // Limit stored events
         if events.len() > 1000 {
             events.drain(0..100);
         }
     }
-    
+
     fn trigger_security_response(&self, event_type: &SecurityEventType) {
         match event_type {
             SecurityEventType::CSPViolation => {
@@ -1147,11 +1147,11 @@ impl SecurityMonitor {
             }
         }
     }
-    
+
     pub fn get_recent_events(&self, minutes: i64) -> Vec<SecurityEvent> {
         let events = self.events.lock().unwrap();
         let cutoff = Utc::now() - chrono::Duration::minutes(minutes);
-        
+
         events
             .iter()
             .filter(|e| e.timestamp > cutoff)

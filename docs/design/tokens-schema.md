@@ -1,6 +1,6 @@
 # Design Token Schema
 
-**Version**: 2.0.0  
+**Version**: 2.0.0\
 **Last Updated**: June 2025
 
 This document defines the required naming conventions and structure for design tokens in the

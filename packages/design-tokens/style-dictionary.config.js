@@ -83,7 +83,7 @@ StyleDictionary.registerFormat({
     tokens.forEach((token, index) => {
       const path = token.path.join('.');
       let value = token.$value;
-      
+
       // Handle different value types properly
       if (typeof value === 'string') {
         value = `'${value}'`;
@@ -91,7 +91,7 @@ StyleDictionary.registerFormat({
         // Convert objects to JSON string for complex tokens like shadows
         value = `'${JSON.stringify(value)}'`;
       }
-      
+
       output += `  '${path}': ${value}`;
       if (index < tokens.length - 1) output += ',';
       output += '\n';
@@ -279,7 +279,10 @@ StyleDictionary.registerFormat({
           value = JSON.stringify(value, null, 0);
         }
 
-        const formattedValue = (typeof value === 'string' && !value.startsWith('{')) ? `"${value}"` : value;
+        const formattedValue =
+          typeof value === 'string' && !value.startsWith('{')
+            ? `"${value}"`
+            : value;
         const comment = token.comment ? ` // ${token.comment}` : '';
         output += `  ${name}: ${formattedValue},${comment}\n`;
       });

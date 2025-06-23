@@ -9,7 +9,7 @@ and dprint for additional file formatting across the Mimic workspace.
 
 ## Biome Configuration
 
-### Installation & Setup
+### Biome Installation & Setup
 
 ```bash
 # Install Biome
@@ -341,13 +341,8 @@ npx dprint init
 ```json
 // .vscode/extensions.json
 {
-  "recommendations": [
-    "biomejs.biome",
-    "dprint.dprint"
-  ],
-  "unwantedRecommendations": [
-    "esbenp.prettier-vscode"
-  ]
+  "recommendations": ["biomejs.biome", "dprint.dprint"],
+  "unwantedRecommendations": ["esbenp.prettier-vscode"]
 }
 ```
 
@@ -460,22 +455,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Check formatting
         run: pnpm run ci:format
-      
+
       - name: Check linting
         run: pnpm run ci:lint
-      
+
       - name: Check affected projects
         run: pnpm nx affected --target=lint --base=origin/main
         if: github.event_name == 'pull_request'
@@ -498,34 +493,34 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Run quality checks
         run: |
           echo "🔍 Running quality gate checks..."
-          
+
           # Format check
           pnpm run format:check
-          
+
           # Lint check
           pnpm run lint
-          
+
           # Type check
           pnpm run type-check
-          
+
           # Test affected
           pnpm nx affected --target=test --base=origin/main
-          
+
           echo "✅ Quality gate passed"
-      
+
       - name: Comment PR
         uses: actions/github-script@v7
         if: failure()
@@ -553,7 +548,7 @@ export const noHardcodedColors: Rule = {
     return {
       StringLiteral(node) {
         const value = node.value;
-        
+
         // Check for hex colors
         if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(value)) {
           context.report({
@@ -562,24 +557,24 @@ export const noHardcodedColors: Rule = {
             suggest: [
               {
                 desc: 'Replace with design token',
-                fix: (fixer) => {
+                fix: fixer => {
                   return fixer.replaceText(node, `tokens.color.primary`);
-                }
-              }
-            ]
+                },
+              },
+            ],
           });
         }
-        
+
         // Check for rgb/rgba colors
         if (/rgb\(|rgba\(/.test(value)) {
           context.report({
             node,
-            message: 'Use design tokens instead of hardcoded RGB colors'
+            message: 'Use design tokens instead of hardcoded RGB colors',
           });
         }
-      }
+      },
     };
-  }
+  },
 };
 ```
 
@@ -600,19 +595,19 @@ export function createDesignDocsPlugin(config: DesignDocsConfig) {
     name: 'design-docs',
     format: (text: string, filePath: string) => {
       let formatted = text;
-      
+
       // Validate token references in markdown
       if (config.enforceTokenReferences && filePath.includes('docs/')) {
         formatted = validateTokenReferences(formatted);
       }
-      
+
       // Format code blocks
       if (config.validateCodeBlocks) {
         formatted = formatCodeBlocks(formatted);
       }
-      
+
       return formatted;
-    }
+    },
   };
 }
 ```
@@ -662,7 +657,7 @@ biome lint --max-diagnostics=50 .
    ```bash
    # Remove Prettier configuration
    rm -f .prettierrc .prettierrc.js .prettierrc.json
-   
+
    # Update VS Code settings
    # Remove prettier extensions and configs
    ```
@@ -672,7 +667,7 @@ biome lint --max-diagnostics=50 .
    ```bash
    # Clear dprint cache
    dprint clear-cache
-   
+
    # Run incremental formatting
    dprint fmt --incremental
    ```

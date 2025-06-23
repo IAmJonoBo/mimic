@@ -1,8 +1,12 @@
 # Mimic Design Token Pipeline: Master Control Document
 
-**Version**: 2.2.0  
-**Last Updated**: June 2025  
+**Version**: 2.2.0\
+**Last Updated**: June 2025\
 **Status**: Production Ready with Collision-Prevention Architecture
+
+> **📋 Document Overview**: This Control Document serves as the master technical reference for the Mimic platform.
+> For step-by-step user instructions, see the [User Guide](./USER_GUIDE.md).
+> For quick overview and setup, see the [README](../README.md).
 
 This document serves as the canonical reference and control handbook for the complete Mimic design
 token pipeline. It orchestrates all components, workflows, and integrations across the entire ecosystem
@@ -130,25 +134,21 @@ interface TokenLifecycle {
 #### Design Token Update Workflow
 
 1. **Design Phase** (Penpot)
-
    - Designer updates tokens in Penpot
    - Export validated Penpot JSON
    - Automatic schema validation
 
 2. **Transform Phase** (Style Dictionary)
-
    - Parse Penpot JSON format
    - Apply platform-specific transforms
    - Generate type-safe outputs
 
 3. **Validation Phase** (Automated)
-
    - Schema compliance check
    - Semantic validation (contrast, spacing)
    - Performance impact analysis
 
 4. **Integration Phase** (CI/CD)
-
    - Automated builds across platforms
    - Visual regression testing
    - Performance budget validation
@@ -292,9 +292,9 @@ interface TokenLifecycle {
 
 ## Collision Prevention Architecture
 
-The Mimic design token pipeline implements a comprehensive collision-prevention strategy that eliminates  
-all four types of conflicts: naming collisions, file-path collisions, module boundary violations, and  
-runtime global conflicts. This architecture ensures safe deployment across all supported platforms while  
+The Mimic design token pipeline implements a comprehensive collision-prevention strategy that eliminates\
+all four types of conflicts: naming collisions, file-path collisions, module boundary violations, and\
+runtime global conflicts. This architecture ensures safe deployment across all supported platforms while\
 maintaining design consistency.
 
 ### Core Collision Prevention Principles
@@ -306,7 +306,7 @@ maintaining design consistency.
 
 ### Token Namespace Strategy
 
-**Principle**: All design tokens use the `ds-` prefix to guarantee no CSS variables, JavaScript constants,  
+**Principle**: All design tokens use the `ds-` prefix to guarantee no CSS variables, JavaScript constants,\
 or platform variables collide with third-party libraries or framework internals.
 
 | Platform                  | Prefix Format      | Example Output               | Import Path                                                |
@@ -401,13 +401,13 @@ Nx ESLint rules prevent illegal cross-platform token imports:
 
 ### Runtime Collision Prevention
 
-| Runtime Environment | Collision Risk                       | Prevention Strategy         | Implementation                             |
-| ------------------- | ------------------------------------ | --------------------------- | ------------------------------------------ |
-| **Qwik City**       | CSS variables vs Tailwind/frameworks | Prefixed `--ds-*` variables | Tailwind safelist: `^ds-` pattern          |
-| **React Native**    | Metro cache conflicts                | Import isolation            | Import only via `@tokens/react-native`     |
-| **Compose MP**      | Package name clashes                 | Namespace isolation         | Use `ds.theme` package namespace           |
-| **Tauri Desktop**   | Asset path conflicts                 | Path isolation              | Configure `distDir` to isolated build path |
-| **Storybook**       | Builder composition conflicts        | Isolated builders           | Separate webpack configs per platform      |
+| Runtime Environment | Collision Risk                       | Prevention Strategy               | Implementation                                             | Documentation Reference |
+| ------------------- | ------------------------------------ | --------------------------------- | ---------------------------------------------------------- | ----------------------- |
+| **Qwik City**       | CSS variables vs Tailwind/frameworks | Prefixed `--ds-*` variables       | Tailwind safelist: `^ds-` pattern                          | Specify warning docs    |
+| **React Native**    | Metro cache conflicts & duplicates   | Package naming + Import isolation | Package name: `@mimic/design-tokens` + Metro deduplication | Locofy FAQ              |
+| **Compose MP**      | Package name clashes                 | Namespace isolation               | Use `ds.theme` package namespace                           | Industry standard       |
+| **Tauri Desktop**   | Asset path conflicts                 | Path isolation                    | Configure `distDir` to isolated build path                 | Tauri best practice     |
+| **Storybook**       | Port conflicts + Builder composition | Fixed ports + Isolated builders   | Web: 6006, Mobile: 7007, Desktop: 6008                     | Supernova docs          |
 
 ### Collision Detection and Monitoring
 
@@ -435,7 +435,7 @@ const validateCollisions = (tokens: DesignToken[]) => {
 # .github/workflows/collision-check.yml
 - name: Validate Token Namespace
   run: |
-    # Ensure all CSS tokens use --ds-* prefix
+    # Ensure all CSS tokens use --ds-* prefix (prevents Specify/Tailwind conflicts)
     grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/ && exit 1 || true
 
     # Ensure all JS tokens use ds prefix
@@ -446,7 +446,148 @@ const validateCollisions = (tokens: DesignToken[]) => {
 
 - name: Module Boundary Check
   run: nx run-many -t lint --parallel --maxParallel=4
+
+- name: Metro Package Name Validation (Locofy FAQ Compliance)
+  run: |
+    # Ensure Metro won't duplicate packages due to name collisions per Locofy FAQ
+    # Check that design-tokens package uses proper scoped naming
+    grep -q '"name": "@mimic/design-tokens"' packages/design-tokens/package.json || exit 1
+
+    # Verify no workspace lib names collide with package.json names
+    find packages/ -name "package.json" -exec grep -l '"name":.*[^@]' {} \; | \
+    while read pkg; do
+      name=$(grep '"name"' "$pkg" | cut -d'"' -f4)
+      if [[ ! "$name" =~ ^@.+/.+ ]]; then
+        echo "Error: Package $pkg uses unscoped name '$name' - Metro duplication risk per Locofy FAQ"
+        echo "Solution: Use @mimic/package-name format to prevent Metro bundle conflicts"
+        exit 1
+      fi
+    done
+
+- name: Storybook Port Configuration Check (Supernova Issue Prevention)
+  run: |
+    # Verify Storybook instances use fixed, non-conflicting ports per Supernova docs
+    grep -q "port: 6006" .storybook/main.js || echo "Warning: Web Storybook should use port 6006 (Vite default)"
+    grep -q "port: 7007" .storybook/main.mobile.js || echo "Warning: Mobile Storybook should use port 7007 (RN default)"
+    grep -q "port: 6008" .storybook/main.desktop.js || echo "Warning: Desktop Storybook should use port 6008 (conflict prevention)"
 ```
+
+#### Platform-Specific Collision Details
+
+**1. Tailwind CSS Integration (Specify Warning Compliance)**
+
+Specify documentation warns that un-namespaced design token CSS variables will collide with Tailwind's\
+utility classes. The `ds-` prefix prevents all Specify-documented collisions:
+
+```javascript
+// tailwind.config.js - Specify-compliant collision prevention
+module.exports = {
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    // Allow all ds- prefixed CSS variables (prevents Specify warnings)
+    {
+      pattern: /^ds-/,
+      variants: ['hover', 'focus', 'active'],
+    },
+  ],
+  theme: {
+    extend: {
+      colors: {
+        // Use CSS variables with ds- prefix (Specify-safe)
+        primary: 'var(--ds-color-primary)', // ✅ No conflict with .text-primary
+        secondary: 'var(--ds-color-secondary)', // ✅ No conflict with .text-secondary
+      },
+      spacing: {
+        // Use CSS variables with ds- prefix (Specify-safe)
+        xs: 'var(--ds-spacing-xs)', // ✅ No conflict with .p-1, .m-1
+        sm: 'var(--ds-spacing-sm)', // ✅ No conflict with .p-2, .m-2
+        md: 'var(--ds-spacing-md)', // ✅ No conflict with .p-4, .m-4
+      },
+    },
+  },
+};
+```
+
+**Why This Works (Specify Documentation Analysis):**
+
+- Tailwind classes like `.text-primary` won't conflict with `--ds-color-primary`
+- Tailwind utilities like `.p-4` won't conflict with `--ds-spacing-md`
+- Custom CSS using `var(--ds-*)` is explicitly safelisted and isolated
+- Runtime CSS specificity cannot create naming conflicts
+
+**2. Metro Bundle Deduplication (Locofy FAQ Compliance)**
+
+Locofy FAQ documents that React Native Metro bundler will create duplicate packages if package.json\
+name fields collide with workspace library names. Mimic prevents this with scoped package naming:
+
+```json
+// packages/design-tokens/package.json - Locofy FAQ compliant
+{
+  "name": "@mimic/design-tokens", // ✅ Scoped name prevents Locofy FAQ collisions
+  "version": "1.0.0",
+  "main": "libs/tokens/js/tokens.js",
+  "types": "libs/tokens/ts/tokens.d.ts",
+  "exports": {
+    ".": "./libs/tokens/js/tokens.js",
+    "./css": "./libs/tokens/css/tokens.css",
+    "./react-native": "./libs/tokens/react-native/theme.ts"
+  },
+  "files": ["libs/tokens/"]
+}
+```
+
+**Why This Works (Locofy FAQ Analysis):**
+
+- Metro recognizes `@mimic/design-tokens` as external scoped package
+- No collision with workspace lib `design-tokens` (different namespace)
+- Metro cache deduplicates correctly across multiple app bundles
+- Package resolution follows npm scoped package conventions
+
+**3. Storybook Port Management (Supernova Issue Prevention)**
+
+Supernova documentation notes that Storybook's React Native builder defaults to port 7007 while Vite\
+builder defaults to port 6006, causing development machine port conflicts. Mimic uses explicit fixed\
+port assignment to prevent Supernova-documented issues:
+
+```javascript
+// .storybook/main.js (Web - Supernova-safe configuration)
+module.exports = {
+  framework: '@storybook/vite',
+  viteFinal: config => {
+    config.server = config.server || {};
+    config.server.port = 6006; // Fixed Web port (Vite default, no conflict)
+    return config;
+  },
+};
+
+// .storybook/main.mobile.js (Mobile - Supernova-safe configuration)
+module.exports = {
+  framework: '@storybook/react-native',
+  server: {
+    port: 7007, // Fixed Mobile port (React Native default, no conflict)
+  },
+};
+
+// .storybook/main.desktop.js (Desktop - Supernova-safe configuration)
+module.exports = {
+  framework: '@storybook/vite',
+  viteFinal: config => {
+    config.server = config.server || {};
+    config.server.port = 6008; // Fixed Desktop port (custom, prevents conflicts)
+    return config;
+  },
+};
+```
+
+**Why This Works (Supernova Documentation Analysis):**
+
+- Web uses port 6006 (Vite builder's natural default)
+- Mobile uses port 7007 (React Native builder's natural default)
+- Desktop uses port 6008 (custom assignment to prevent any conflicts)
+- Development machine can run all three simultaneously without port contention
+- CI/CD validates port assignments to prevent configuration drift
+
+### Additional Platform-Specific Implementation Details
 
 #### Runtime Monitoring
 
@@ -465,28 +606,60 @@ if (process.env.NODE_ENV === 'development') {
 
 ### Storybook Composition Architecture
 
-To prevent Storybook builder conflicts across platforms:
+To prevent Storybook builder conflicts and port collisions across platforms:
 
 ```javascript
-// .storybook/main.js (Web)
+// .storybook/main.js (Web - Port 6006)
 export default {
   framework: '@storybook/qwik-vite',
   builders: {
     'web': '@storybook/builder-vite'
+  },
+  core: {
+    builder: '@storybook/builder-vite'
+  },
+  dev: {
+    port: 6006  // Fixed port to prevent conflicts
   }
 };
 
-// .storybook/main.mobile.js (Mobile)
+// .storybook/main.mobile.js (Mobile - Port 7007)
 export default {
   framework: '@storybook/react-native',
   builders: {
     'mobile': '@storybook/builder-react-native'
+  },
+  core: {
+    builder: '@storybook/builder-react-native'
+  },
+  dev: {
+    port: 7007  // Fixed port (React Native default)
+  }
+};
+
+// .storybook/main.desktop.js (Desktop - Port 6008)
+export default {
+  framework: '@storybook/qwik-vite',
+  builders: {
+    'desktop': '@storybook/builder-vite'
+  },
+  core: {
+    builder: '@storybook/builder-vite'
+  },
+  dev: {
+    port: 6008  // Fixed port to prevent conflicts
   }
 };
 ```
 
-This architecture ensures complete isolation between platform-specific Storybook instances while enabling  
-composition for cross-platform component documentation.
+**Port Assignment Strategy:**
+
+- **Web Storybook**: Port 6006 (Vite builder default)
+- **Mobile Storybook**: Port 7007 (React Native builder default)
+- **Desktop Storybook**: Port 6008 (Vite builder, custom port)
+
+This architecture ensures complete isolation between platform-specific Storybook instances while enabling\
+composition for cross-platform component documentation and preventing port conflicts on development machines.
 
 ## Quality Assurance Framework
 

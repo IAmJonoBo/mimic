@@ -213,15 +213,14 @@ const primaryColor = getToken('color.primary.500', '#007bff');
 const mediumSpacing = getToken('spacing.md', '1rem');
 
 // Pattern-based token discovery
-const allColors = getTokensByPattern('color.*');
-const primaryShades = getTokensByPattern('color.primary.*');
+const allColors = getTokensByPattern('color._');
+const primaryShades = getTokensByPattern('color.primary._');
 
 // Component-specific tokens
 const buttonPadding = getToken('component.button.padding.md');
 const cardShadow = getToken('component.card.shadow');
 
-```javascript
-
+````javascript
 ### CSS Variables (Web)
 
 ```css
@@ -234,7 +233,7 @@ const cardShadow = getToken('component.card.shadow');
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-md);
 }
-```
+````
 
 ### Qwik + Vanilla Extract Integration
 
@@ -277,76 +276,76 @@ Our token system provides comprehensive coverage for all design decisions:
 
 ```typescript
 // Primary brand colors (50-900 scale)
-getToken('color.primary.50')    // #eff6ff
-getToken('color.primary.500')   // #3b82f6 (base)
-getToken('color.primary.900')   // #1e3a8a
+getToken('color.primary.50'); // #eff6ff
+getToken('color.primary.500'); // #3b82f6 (base)
+getToken('color.primary.900'); // #1e3a8a
 
 // Semantic state colors
-getToken('color.success.500')   // #22c55e
-getToken('color.warning.500')   // #f59e0b
-getToken('color.error.500')     // #ef4444
-getToken('color.info.500')      // #3b82f6
+getToken('color.success.500'); // #22c55e
+getToken('color.warning.500'); // #f59e0b
+getToken('color.error.500'); // #ef4444
+getToken('color.info.500'); // #3b82f6
 
 // Neutral scale for backgrounds and text
-getToken('color.neutral.50')    // #f9fafb
-getToken('color.neutral.500')   // #6b7280
-getToken('color.neutral.900')   // #111827
+getToken('color.neutral.50'); // #f9fafb
+getToken('color.neutral.500'); // #6b7280
+getToken('color.neutral.900'); // #111827
 ```
 
 #### Typography
 
 ```typescript
 // Font families
-getToken('font.family.sans')      // System sans-serif stack
-getToken('font.family.serif')     // System serif stack
-getToken('font.family.mono')      // System monospace stack
+getToken('font.family.sans'); // System sans-serif stack
+getToken('font.family.serif'); // System serif stack
+getToken('font.family.mono'); // System monospace stack
 
 // Font sizes (responsive scale)
-getToken('font.size.xs')          // 0.75rem (12px)
-getToken('font.size.base')        // 1rem (16px)
-getToken('font.size.xl')          // 1.25rem (20px)
-getToken('font.size.3xl')         // 1.875rem (30px)
+getToken('font.size.xs'); // 0.75rem (12px)
+getToken('font.size.base'); // 1rem (16px)
+getToken('font.size.xl'); // 1.25rem (20px)
+getToken('font.size.3xl'); // 1.875rem (30px)
 
 // Font weights
-getToken('font.weight.normal')    // 400
-getToken('font.weight.medium')    // 500
-getToken('font.weight.semibold')  // 600
-getToken('font.weight.bold')      // 700
+getToken('font.weight.normal'); // 400
+getToken('font.weight.medium'); // 500
+getToken('font.weight.semibold'); // 600
+getToken('font.weight.bold'); // 700
 
 // Line heights
-getToken('line.height.tight')     // 1.25
-getToken('line.height.normal')    // 1.5
-getToken('line.height.relaxed')   // 1.75
+getToken('line.height.tight'); // 1.25
+getToken('line.height.normal'); // 1.5
+getToken('line.height.relaxed'); // 1.75
 ```
 
 #### Spacing & Layout
 
 ```typescript
 // T-shirt sizing scale
-getToken('spacing.xs')    // 0.25rem (4px)
-getToken('spacing.sm')    // 0.5rem (8px)
-getToken('spacing.md')    // 1rem (16px)
-getToken('spacing.lg')    // 1.5rem (24px)
-getToken('spacing.xl')    // 2rem (32px)
-getToken('spacing.2xl')   // 2.5rem (40px)
-getToken('spacing.3xl')   // 3rem (48px)
+getToken('spacing.xs'); // 0.25rem (4px)
+getToken('spacing.sm'); // 0.5rem (8px)
+getToken('spacing.md'); // 1rem (16px)
+getToken('spacing.lg'); // 1.5rem (24px)
+getToken('spacing.xl'); // 2rem (32px)
+getToken('spacing.2xl'); // 2.5rem (40px)
+getToken('spacing.3xl'); // 3rem (48px)
 ```
 
 #### Borders & Effects
 
 ```typescript
 // Border radius scale
-getToken('border.radius.none')    // 0
-getToken('border.radius.sm')      // 0.125rem (2px)
-getToken('border.radius.md')      // 0.375rem (6px)
-getToken('border.radius.lg')      // 0.5rem (8px)
-getToken('border.radius.full')    // 9999px (circle)
+getToken('border.radius.none'); // 0
+getToken('border.radius.sm'); // 0.125rem (2px)
+getToken('border.radius.md'); // 0.375rem (6px)
+getToken('border.radius.lg'); // 0.5rem (8px)
+getToken('border.radius.full'); // 9999px (circle)
 
 // Elevation shadows
-getToken('shadow.sm')     // 0 1px 2px 0 rgb(0 0 0 / 0.05)
-getToken('shadow.md')     // 0 4px 6px -1px rgb(0 0 0 / 0.1)
-getToken('shadow.lg')     // 0 10px 15px -3px rgb(0 0 0 / 0.1)
-getToken('shadow.xl')     // 0 20px 25px -5px rgb(0 0 0 / 0.1)
+getToken('shadow.sm'); // 0 1px 2px 0 rgb(0 0 0 / 0.05)
+getToken('shadow.md'); // 0 4px 6px -1px rgb(0 0 0 / 0.1)
+getToken('shadow.lg'); // 0 10px 15px -3px rgb(0 0 0 / 0.1)
+getToken('shadow.xl'); // 0 20px 25px -5px rgb(0 0 0 / 0.1)
 ```
 
 ## 🛠️ Development
@@ -437,14 +436,14 @@ dist/
 
 ### Platform Integration
 
-| Platform | Import Path | Usage Example |
-|----------|-------------|---------------|
-| **Web (CSS)** | `@mimic/design-tokens/css` | `var(--color-primary-500)` |
-| **Web (JS/TS)** | `@mimic/design-tokens` | `getToken('color.primary.500')` |
-| **React Native** | `@mimic/design-tokens` | `getToken('spacing.md')` |
-| **Storybook** | `@mimic/design-tokens/json` | Token documentation |
-| **Mobile (Future)** | `@mimic/design-tokens/dart` | Flutter theming |
-| **Desktop** | Inherits from web | Tauri web view styling |
+| Platform            | Import Path                 | Usage Example                   |
+| ------------------- | --------------------------- | ------------------------------- |
+| **Web (CSS)**       | `@mimic/design-tokens/css`  | `var(--color-primary-500)`      |
+| **Web (JS/TS)**     | `@mimic/design-tokens`      | `getToken('color.primary.500')` |
+| **React Native**    | `@mimic/design-tokens`      | `getToken('spacing.md')`        |
+| **Storybook**       | `@mimic/design-tokens/json` | Token documentation             |
+| **Mobile (Future)** | `@mimic/design-tokens/dart` | Flutter theming                 |
+| **Desktop**         | Inherits from web           | Tauri web view styling          |
 
 ## 🎨 Token Design Philosophy
 
@@ -581,8 +580,8 @@ export const parameters = {
     theme: {
       colorPrimary: 'var(--color-primary-500)',
       colorSecondary: 'var(--color-secondary-500)',
-    }
-  }
+    },
+  },
 };
 ```
 

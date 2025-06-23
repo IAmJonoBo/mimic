@@ -30,7 +30,10 @@ remote caching, and automated release workflows.
               },
               {
                 "sourceTag": "type:ui-components",
-                "onlyDependOnLibsWithTags": ["type:design-tokens", "type:utility"]
+                "onlyDependOnLibsWithTags": [
+                  "type:design-tokens",
+                  "type:utility"
+                ]
               },
               {
                 "sourceTag": "type:app",
@@ -43,10 +46,7 @@ remote caching, and automated release workflows.
               },
               {
                 "sourceTag": "platform:web",
-                "onlyDependOnLibsWithTags": [
-                  "platform:web",
-                  "platform:shared"
-                ]
+                "onlyDependOnLibsWithTags": ["platform:web", "platform:shared"]
               },
               {
                 "sourceTag": "platform:mobile",
@@ -156,9 +156,7 @@ npx nx g @nx/workspace:ci-workflow --ci=github
         "{projectRoot}/tokens/**/*",
         "{workspaceRoot}/style-dictionary.config.js"
       ],
-      "outputs": [
-        "{projectRoot}/dist"
-      ]
+      "outputs": ["{projectRoot}/dist"]
     }
   }
 }
@@ -302,7 +300,7 @@ export default async function (tree: Tree, schema: any) {
   generateFiles(tree, templatePath, projectRoot, {
     ...schema,
     ...names(schema.name),
-    template: ''
+    template: '',
   });
 
   await formatFiles(tree);
@@ -313,15 +311,15 @@ export const schema = {
   properties: {
     name: {
       type: 'string',
-      description: 'Token package name'
+      description: 'Token package name',
     },
     platform: {
       type: 'string',
       enum: ['web', 'mobile', 'desktop'],
-      description: 'Target platform'
-    }
+      description: 'Target platform',
+    },
   },
-  required: ['name', 'platform']
+  required: ['name', 'platform'],
 };
 ```
 
@@ -335,22 +333,17 @@ export default async function (tree: Tree, schema: ComponentSchema) {
   const projectRoot = `libs/ui-components`;
   const componentPath = `${projectRoot}/src/lib/${names(schema.name).fileName}`;
 
-  generateFiles(
-    tree,
-    join(__dirname, 'files'),
-    componentPath,
-    {
-      ...schema,
-      ...names(schema.name),
-      template: ''
-    }
-  );
+  generateFiles(tree, join(__dirname, 'files'), componentPath, {
+    ...schema,
+    ...names(schema.name),
+    template: '',
+  });
 
   // Update barrel export
   const indexPath = `${projectRoot}/src/index.ts`;
   const indexContent = tree.read(indexPath, 'utf-8') || '';
   const exportLine = `export * from './lib/${names(schema.name).fileName}';`;
-  
+
   if (!indexContent.includes(exportLine)) {
     tree.write(indexPath, `${indexContent}\n${exportLine}`);
   }
@@ -457,7 +450,7 @@ npx nx migrate --run-migrations
 import { Tree, visitNotIgnoredFiles } from '@nx/devkit';
 
 export default async function (tree: Tree) {
-  visitNotIgnoredFiles(tree, 'tokens', (filePath) => {
+  visitNotIgnoredFiles(tree, 'tokens', filePath => {
     if (filePath.endsWith('.json')) {
       const content = tree.read(filePath, 'utf-8');
       if (content) {
@@ -484,7 +477,7 @@ function migrateTokenSchema(tokens: any): any {
    ```bash
    # Check specific violations
    npx nx lint --verbose
-   
+
    # Fix auto-fixable issues
    npx nx lint --fix
    ```
@@ -494,7 +487,7 @@ function migrateTokenSchema(tokens: any): any {
    ```bash
    # Clear Nx cache
    npx nx reset
-   
+
    # Clear npm cache
    npm cache clean --force
    ```
@@ -504,7 +497,7 @@ function migrateTokenSchema(tokens: any): any {
    ```bash
    # Analyze build performance
    npx nx run-many --target=build --all --verbose
-   
+
    # Check daemon status
    npx nx daemon
    ```

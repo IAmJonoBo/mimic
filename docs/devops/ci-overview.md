@@ -41,7 +41,7 @@ env:
 jobs:
   # Pipeline orchestration and planning
   pipeline-init:
-    name: "🚀 Pipeline Initialization"
+    name: '🚀 Pipeline Initialization'
     runs-on: ubuntu-latest
     outputs:
       should-build-tokens: ${{ steps.changes.outputs.tokens }}
@@ -50,13 +50,13 @@ jobs:
       should-build-desktop: ${{ steps.changes.outputs.desktop }}
       should-deploy: ${{ steps.deploy-check.outputs.should-deploy }}
       version: ${{ steps.version.outputs.version }}
-      
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      
+
       - name: Detect changes
         uses: dorny/paths-filter@v2
         id: changes
@@ -74,7 +74,7 @@ jobs:
             desktop:
               - 'apps/desktop/**'
               - 'src-tauri/**'
-      
+
       - name: Determine version
         id: version
         run: |
@@ -84,7 +84,7 @@ jobs:
             VERSION="dev-${GITHUB_SHA::8}"
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      
+
       - name: Check deployment conditions
         id: deploy-check
         run: |
@@ -96,7 +96,7 @@ jobs:
 
   # Foundation: Design Token Processing
   build-tokens:
-    name: "🎨 Design Tokens"
+    name: '🎨 Design Tokens'
     needs: pipeline-init
     if: needs.pipeline-init.outputs.should-build-tokens == 'true'
     uses: ./.github/workflows/tokens.yml
@@ -106,7 +106,7 @@ jobs:
 
   # Platform Builds (Parallel)
   build-web:
-    name: "🌐 Web Platform"
+    name: '🌐 Web Platform'
     needs: [pipeline-init, build-tokens]
     if: always() && (needs.pipeline-init.outputs.should-build-web == 'true' || needs.build-tokens.result == 'success')
     uses: ./.github/workflows/web.yml
@@ -115,7 +115,7 @@ jobs:
     secrets: inherit
 
   build-mobile:
-    name: "📱 Mobile Platform"
+    name: '📱 Mobile Platform'
     needs: [pipeline-init, build-tokens]
     if: always() && (needs.pipeline-init.outputs.should-build-mobile == 'true' || needs.build-tokens.result == 'success')
     uses: ./.github/workflows/mobile.yml
@@ -124,7 +124,7 @@ jobs:
     secrets: inherit
 
   build-desktop:
-    name: "🖥️ Desktop Platform"
+    name: '🖥️ Desktop Platform'
     needs: [pipeline-init, build-tokens]
     if: always() && (needs.pipeline-init.outputs.should-build-desktop == 'true' || needs.build-tokens.result == 'success')
     uses: ./.github/workflows/desktop.yml
@@ -134,7 +134,7 @@ jobs:
 
   # Integration Testing
   integration-tests:
-    name: "🔗 Integration Tests"
+    name: '🔗 Integration Tests'
     needs: [build-web, build-mobile, build-desktop]
     if: always() && (needs.build-web.result == 'success' || needs.build-mobile.result == 'success' || needs.build-desktop.result == 'success')
     uses: ./.github/workflows/integration.yml
@@ -142,8 +142,9 @@ jobs:
 
   # Deployment Orchestration
   deploy:
-    name: "🚀 Deploy"
-    needs: [pipeline-init, build-web, build-mobile, build-desktop, integration-tests]
+    name: '🚀 Deploy'
+    needs:
+      [pipeline-init, build-web, build-mobile, build-desktop, integration-tests]
     if: always() && needs.pipeline-init.outputs.should-deploy == 'true' && needs.integration-tests.result == 'success'
     uses: ./.github/workflows/deploy.yml
     with:
@@ -155,7 +156,7 @@ jobs:
 
   # Post-deployment validation
   post-deploy:
-    name: "✅ Post-Deploy Validation"
+    name: '✅ Post-Deploy Validation'
     needs: [deploy]
     if: needs.deploy.result == 'success'
     uses: ./.github/workflows/post-deploy.yml
@@ -169,61 +170,61 @@ jobs:
 ```mermaid
 graph TD
     A[🚀 Pipeline Init] --> B{Changes Detected?}
-    
+
     B -->|Design Tokens| C[🎨 Token Processing]
     B -->|Web| D[🌐 Web Build]
     B -->|Mobile| E[📱 Mobile Build]
     B -->|Desktop| F[🖥️ Desktop Build]
-    
+
     C --> G[Token Validation]
     C --> H[Multi-Platform Export]
     C --> I[Schema Generation]
-    
+
     G --> J[🔗 Integration Tests]
     H --> J
     I --> J
-    
+
     D --> K[Qwik Build]
     D --> L[Storybook Build]
     D --> M[Performance Tests]
-    
+
     K --> J
     L --> J
     M --> J
-    
+
     E --> N[React Native Build]
     E --> O[Android Build]
     E --> P[iOS Build]
-    
+
     N --> J
     O --> J
     P --> J
-    
+
     F --> Q[Tauri Build]
     F --> R[Code Signing]
     F --> S[Security Scan]
-    
+
     Q --> J
     R --> J
     S --> J
-    
+
     J --> T{All Tests Pass?}
     T -->|Yes| U[🚀 Deploy]
     T -->|No| V[❌ Pipeline Fail]
-    
+
     U --> W[Web Deploy]
     U --> X[Mobile Deploy]
     U --> Y[Desktop Deploy]
     U --> Z[Token Registry Update]
-    
+
     W --> AA[✅ Post-Deploy Validation]
     X --> AA
     Y --> AA
     Z --> AA
-    
+
     AA --> BB[🔔 Notifications]
     AA --> CC[📊 Metrics Collection]
-    
+
     style A fill:#e1f5fe
     style C fill:#f3e5f5
     style J fill:#fff3e0
@@ -239,25 +240,25 @@ graph LR
     A --> C[Load Time]
     A --> D[Core Web Vitals]
     A --> E[Memory Usage]
-    
+
     B --> F{Within Budget?}
     C --> G{Within Budget?}
     D --> H{Within Budget?}
     E --> I{Within Budget?}
-    
+
     F -->|No| J[❌ Block Deploy]
     G -->|No| J
     H -->|No| J
     I -->|No| J
-    
+
     F -->|Yes| K[✅ Continue]
     G -->|Yes| K
     H -->|Yes| K
     I -->|Yes| K
-    
+
     K --> L[🚀 Deploy]
     J --> M[📊 Budget Report]
-    
+
     style A fill:#e3f2fd
     style J fill:#ffebee
     style K fill:#e8f5e8
@@ -281,35 +282,35 @@ on:
 
 jobs:
   validate-tokens:
-    name: "🔍 Validate Tokens"
+    name: '🔍 Validate Tokens'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Validate Penpot tokens
         run: pnpm run tokens:validate:penpot
-      
+
       - name: Validate Style Dictionary config
         run: pnpm run tokens:validate:sd
-      
+
       - name: Check token schemas
         run: pnpm run tokens:validate:schema
-      
+
       - name: Lint token files
         run: pnpm run tokens:lint
 
   transform-tokens:
-    name: "🔄 Transform Tokens"
+    name: '🔄 Transform Tokens'
     needs: validate-tokens
     runs-on: ubuntu-latest
     strategy:
@@ -318,13 +319,13 @@ jobs:
     steps:
       - name: Setup environment
         # ... setup steps
-      
+
       - name: Transform tokens for ${{ matrix.platform }}
         run: pnpm run tokens:build:${{ matrix.platform }}
-      
+
       - name: Validate transformed output
         run: pnpm run tokens:validate:output:${{ matrix.platform }}
-      
+
       - name: Upload platform tokens
         uses: actions/upload-artifact@v4
         with:
@@ -333,16 +334,16 @@ jobs:
           retention-days: 7
 
   generate-documentation:
-    name: "📚 Generate Token Docs"
+    name: '📚 Generate Token Docs'
     needs: transform-tokens
     runs-on: ubuntu-latest
     steps:
       - name: Generate token documentation
         run: pnpm run tokens:docs:generate
-      
+
       - name: Generate type definitions
         run: pnpm run tokens:types:generate
-      
+
       - name: Upload documentation
         uses: actions/upload-artifact@v4
         with:
@@ -365,27 +366,27 @@ on:
 
 jobs:
   build-qwik:
-    name: "⚡ Qwik Application"
+    name: '⚡ Qwik Application'
     runs-on: ubuntu-latest
     steps:
       - name: Setup and build
         # ... setup steps
-      
+
       - name: Download design tokens
         uses: actions/download-artifact@v4
         with:
           name: tokens-web
           path: packages/design-tokens/build/web/
-      
+
       - name: Build Qwik app
         run: pnpm run build:qwik
         env:
           NODE_ENV: production
           VITE_VERSION: ${{ inputs.version }}
-      
+
       - name: Analyze bundle
         run: pnpm run analyze:bundle
-      
+
       - name: Check performance budgets
         run: |
           BUNDLE_SIZE=$(du -sb dist/ | cut -f1)
@@ -397,18 +398,18 @@ jobs:
           echo "✅ Bundle size: $BUNDLE_SIZE bytes"
 
   build-storybook:
-    name: "📖 Storybook"
+    name: '📖 Storybook'
     runs-on: ubuntu-latest
     steps:
       - name: Build Storybook
         run: pnpm run build-storybook
-      
+
       - name: Visual regression tests
         run: pnpm run test:visual
-      
+
       - name: Accessibility tests
         run: pnpm run test:a11y
-      
+
       - name: Upload Storybook
         uses: actions/upload-artifact@v4
         with:
@@ -416,7 +417,7 @@ jobs:
           path: storybook-static/
 
   lighthouse-audit:
-    name: "💡 Lighthouse Audit"
+    name: '💡 Lighthouse Audit'
     needs: build-qwik
     runs-on: ubuntu-latest
     steps:
@@ -425,7 +426,7 @@ jobs:
         with:
           name: qwik-build
           path: dist/
-      
+
       - name: Serve and audit
         run: |
           npx http-server dist -p 8080 &
@@ -434,24 +435,24 @@ jobs:
             --output=json \
             --output-path=lighthouse-results.json \
             --chrome-flags="--headless"
-      
+
       - name: Check Lighthouse scores
         run: |
           PERFORMANCE=$(cat lighthouse-results.json | jq '.categories.performance.score * 100')
           ACCESSIBILITY=$(cat lighthouse-results.json | jq '.categories.accessibility.score * 100')
           BEST_PRACTICES=$(cat lighthouse-results.json | jq '.categories["best-practices"].score * 100')
           SEO=$(cat lighthouse-results.json | jq '.categories.seo.score * 100')
-          
+
           echo "Performance: $PERFORMANCE"
           echo "Accessibility: $ACCESSIBILITY"
           echo "Best Practices: $BEST_PRACTICES"
           echo "SEO: $SEO"
-          
+
           if (( $(echo "$PERFORMANCE < 90" | bc -l) )); then
             echo "❌ Performance score too low: $PERFORMANCE"
             exit 1
           fi
-          
+
           if (( $(echo "$ACCESSIBILITY < 95" | bc -l) )); then
             echo "❌ Accessibility score too low: $ACCESSIBILITY"
             exit 1
@@ -473,18 +474,18 @@ on:
 
 jobs:
   build-react-native:
-    name: "⚛️ React Native"
+    name: '⚛️ React Native'
     runs-on: ubuntu-latest
     steps:
       - name: Setup and build
         # ... setup steps
-      
+
       - name: Download design tokens
         uses: actions/download-artifact@v4
         with:
           name: tokens-mobile
           path: packages/design-tokens/build/mobile/
-      
+
       - name: Build React Native bundle
         run: |
           cd apps/mobile
@@ -494,7 +495,7 @@ jobs:
             --entry-file index.js \
             --bundle-output android/app/src/main/assets/index.android.bundle \
             --assets-dest android/app/src/main/res/
-      
+
       - name: Analyze bundle size
         run: |
           BUNDLE_SIZE=$(wc -c < apps/mobile/android/app/src/main/assets/index.android.bundle)
@@ -505,7 +506,7 @@ jobs:
           fi
 
   build-android:
-    name: "🤖 Android Build"
+    name: '🤖 Android Build'
     needs: build-react-native
     runs-on: ubuntu-latest
     steps:
@@ -514,15 +515,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      
+
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
-      
+
       - name: Build Android APK
         run: |
           cd apps/mobile/android
           ./gradlew assembleRelease
-      
+
       - name: Sign APK
         run: |
           jarsigner -verbose -sigalg SHA256withRSA -digestalg SHA-256 \
@@ -532,7 +533,7 @@ jobs:
             mimic
 
   build-ios:
-    name: "🍎 iOS Build"
+    name: '🍎 iOS Build'
     needs: build-react-native
     runs-on: macos-latest
     steps:
@@ -540,15 +541,15 @@ jobs:
         uses: maxim-lobanov/setup-xcode@v1
         with:
           xcode-version: latest-stable
-      
+
       - name: Install CocoaPods
         run: gem install cocoapods
-      
+
       - name: Install iOS dependencies
         run: |
           cd apps/mobile/ios
           pod install
-      
+
       - name: Build iOS app
         run: |
           cd apps/mobile/ios
@@ -575,7 +576,7 @@ on:
 
 jobs:
   build-tauri:
-    name: "🦀 Tauri Build"
+    name: '🦀 Tauri Build'
     strategy:
       matrix:
         platform: [ubuntu-latest, windows-latest, macos-latest]
@@ -583,25 +584,25 @@ jobs:
     steps:
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
-      
+
       - name: Download design tokens
         uses: actions/download-artifact@v4
         with:
           name: tokens-desktop
           path: packages/design-tokens/build/desktop/
-      
+
       - name: Build Tauri app
         run: pnpm run tauri:build
         env:
           TAURI_PRIVATE_KEY: ${{ secrets.TAURI_PRIVATE_KEY }}
           TAURI_KEY_PASSWORD: ${{ secrets.TAURI_KEY_PASSWORD }}
-      
+
       - name: Code signing (macOS)
         if: matrix.platform == 'macos-latest'
         run: |
@@ -611,19 +612,19 @@ jobs:
           security default-keychain -s build.keychain
           security unlock-keychain -p "${{ secrets.MACOS_KEYCHAIN_PASSWORD }}" build.keychain
           security import certificate.p12 -k build.keychain -P "${{ secrets.MACOS_CERTIFICATE_PASSWORD }}" -T /usr/bin/codesign
-          
+
           # Sign and notarize
           codesign --force --deep --sign "${{ secrets.MACOS_DEVELOPER_ID }}" \
             --options runtime \
             src-tauri/target/release/bundle/macos/Mimic.app
-          
+
           xcrun notarytool submit \
             src-tauri/target/release/bundle/dmg/Mimic_*.dmg \
             --team-id "${{ secrets.MACOS_TEAM_ID }}" \
             --wait
 
   security-scan:
-    name: "🔒 Security Scan"
+    name: '🔒 Security Scan'
     runs-on: ubuntu-latest
     steps:
       - name: Rust security audit
@@ -631,10 +632,10 @@ jobs:
           cargo install cargo-audit
           cd src-tauri
           cargo audit
-      
+
       - name: Dependency vulnerability scan
         run: pnpm audit --audit-level moderate
-      
+
       - name: SAST scan
         uses: github/codeql-action/analyze@v2
         with:
@@ -715,60 +716,62 @@ class BudgetChecker {
   constructor() {
     this.violations = [];
   }
-  
+
   checkWebBundleSize() {
     const distPath = path.join(__dirname, '../apps/web/dist');
     if (!fs.existsSync(distPath)) return;
-    
+
     const totalSize = this.getFolderSize(distPath);
     const budgetSize = this.parseSize(budgets.budgets.web.bundle.total);
-    
+
     if (totalSize > budgetSize) {
       this.violations.push({
         type: 'web-bundle-size',
         actual: this.formatSize(totalSize),
         budget: budgets.budgets.web.bundle.total,
-        severity: 'error'
+        severity: 'error',
       });
     }
   }
-  
+
   checkTokenFileSize() {
     const tokenPaths = [
       'packages/design-tokens/build/web/tokens.json',
       'packages/design-tokens/build/web/tokens.css',
-      'packages/design-tokens/build/web/tokens.js'
+      'packages/design-tokens/build/web/tokens.js',
     ];
-    
+
     tokenPaths.forEach(tokenPath => {
       if (!fs.existsSync(tokenPath)) return;
-      
+
       const size = fs.statSync(tokenPath).size;
       const extension = path.extname(tokenPath).slice(1);
       const budget = this.parseSize(budgets.budgets.tokens.fileSize[extension]);
-      
+
       if (size > budget) {
         this.violations.push({
           type: 'token-file-size',
           file: tokenPath,
           actual: this.formatSize(size),
           budget: budgets.budgets.tokens.fileSize[extension],
-          severity: 'warning'
+          severity: 'warning',
         });
       }
     });
   }
-  
+
   async checkLighthouseScores() {
     try {
-      const results = JSON.parse(fs.readFileSync('lighthouse-results.json', 'utf8'));
+      const results = JSON.parse(
+        fs.readFileSync('lighthouse-results.json', 'utf8')
+      );
       const scores = {
         performance: results.categories.performance.score * 100,
         accessibility: results.categories.accessibility.score * 100,
         bestPractices: results.categories['best-practices'].score * 100,
-        seo: results.categories.seo.score * 100
+        seo: results.categories.seo.score * 100,
       };
-      
+
       Object.entries(scores).forEach(([category, score]) => {
         const budget = budgets.budgets.web.lighthouse[category];
         if (score < budget) {
@@ -777,7 +780,7 @@ class BudgetChecker {
             category,
             actual: score,
             budget,
-            severity: score < budget - 10 ? 'error' : 'warning'
+            severity: score < budget - 10 ? 'error' : 'warning',
           });
         }
       });
@@ -785,64 +788,66 @@ class BudgetChecker {
       console.warn('Could not check Lighthouse scores:', error.message);
     }
   }
-  
+
   getFolderSize(folderPath) {
     let totalSize = 0;
     const files = fs.readdirSync(folderPath);
-    
+
     files.forEach(file => {
       const filePath = path.join(folderPath, file);
       const stats = fs.statSync(filePath);
-      
+
       if (stats.isDirectory()) {
         totalSize += this.getFolderSize(filePath);
       } else {
         totalSize += stats.size;
       }
     });
-    
+
     return totalSize;
   }
-  
+
   parseSize(sizeStr) {
     const units = { B: 1, KB: 1024, MB: 1024 * 1024, GB: 1024 * 1024 * 1024 };
     const match = sizeStr.match(/^(\d+(?:\.\d+)?)(B|KB|MB|GB)$/);
     if (!match) throw new Error(`Invalid size format: ${sizeStr}`);
-    
+
     return parseFloat(match[1]) * units[match[2]];
   }
-  
+
   formatSize(bytes) {
     const units = ['B', 'KB', 'MB', 'GB'];
     let size = bytes;
     let unitIndex = 0;
-    
+
     while (size >= 1024 && unitIndex < units.length - 1) {
       size /= 1024;
       unitIndex++;
     }
-    
+
     return `${size.toFixed(2)}${units[unitIndex]}`;
   }
-  
+
   async run() {
     console.log('🎯 Checking performance budgets...');
-    
+
     this.checkWebBundleSize();
     this.checkTokenFileSize();
     await this.checkLighthouseScores();
-    
+
     if (this.violations.length === 0) {
       console.log('✅ All performance budgets passed!');
       return true;
     }
-    
+
     console.log('❌ Performance budget violations:');
     this.violations.forEach(violation => {
       const icon = violation.severity === 'error' ? '🚨' : '⚠️';
-      console.log(`${icon} ${violation.type}: ${violation.actual} (budget: ${violation.budget})`);
+      console.log(
+        `${icon} ${violation.type}: ${violation.actual} (budget: ${violation.budget})`
+      );
     });
-    
+
     const hasErrors = this.violations.some(v => v.severity === 'error');
     return !hasErrors;
   }
@@ -870,17 +875,17 @@ on:
 
 jobs:
   code-quality:
-    name: "📏 Code Quality"
+    name: '📏 Code Quality'
     runs-on: ubuntu-latest
     steps:
       - name: ESLint
         run: pnpm run lint:js
         continue-on-error: false
-      
+
       - name: TypeScript check
         run: pnpm run type-check
         continue-on-error: false
-      
+
       - name: Rust clippy
         run: |
           cd src-tauri
@@ -888,18 +893,18 @@ jobs:
         continue-on-error: false
 
   test-coverage:
-    name: "🧪 Test Coverage"
+    name: '🧪 Test Coverage'
     runs-on: ubuntu-latest
     steps:
       - name: Unit tests
         run: pnpm run test:unit --coverage
-      
+
       - name: Integration tests
         run: pnpm run test:integration --coverage
-      
+
       - name: E2E tests
         run: pnpm run test:e2e
-      
+
       - name: Check coverage thresholds
         run: |
           COVERAGE=$(cat coverage/coverage-summary.json | jq '.total.lines.pct')
@@ -910,19 +915,19 @@ jobs:
           echo "✅ Coverage: $COVERAGE%"
 
   security-check:
-    name: "🔒 Security"
+    name: '🔒 Security'
     runs-on: ubuntu-latest
     steps:
       - name: Audit dependencies
         run: pnpm audit --audit-level moderate
-      
+
       - name: Security scan
         uses: securecodewarrior/github-action-add-sarif@v1
         with:
           sarif-file: security-results.sarif
 
   performance-budget:
-    name: "⚡ Performance"
+    name: '⚡ Performance'
     runs-on: ubuntu-latest
     steps:
       - name: Check budgets
@@ -955,7 +960,7 @@ on:
 
 jobs:
   deploy-staging:
-    name: "🎭 Deploy to Staging"
+    name: '🎭 Deploy to Staging'
     runs-on: ubuntu-latest
     environment: staging
     steps:
@@ -964,19 +969,19 @@ jobs:
         run: |
           # Deploy to staging environment
           echo "Deploying web to staging..."
-      
+
       - name: Deploy tokens to CDN
         run: |
           # Upload design tokens to CDN
           echo "Uploading tokens to staging CDN..."
-      
+
       - name: Run smoke tests
         run: |
           # Basic functionality tests
           echo "Running staging smoke tests..."
 
   deploy-production:
-    name: "🚀 Deploy to Production"
+    name: '🚀 Deploy to Production'
     needs: deploy-staging
     runs-on: ubuntu-latest
     environment: production
@@ -986,12 +991,12 @@ jobs:
         run: |
           # Blue-green deployment strategy
           echo "Starting blue-green deployment..."
-      
+
       - name: Update token registry
         run: |
           # Update global token registry
           echo "Updating token registry..."
-      
+
       - name: Notify distribution channels
         run: |
           # Notify mobile app stores, desktop updates, etc.
@@ -1008,7 +1013,7 @@ name: Pipeline Monitoring
 
 on:
   workflow_run:
-    workflows: ["Mimic CI/CD Pipeline"]
+    workflows: ['Mimic CI/CD Pipeline']
     types: [completed]
 
 jobs:
@@ -1020,7 +1025,7 @@ jobs:
           # Collect pipeline timing and success metrics
           PIPELINE_DURATION=$(($(date +%s) - ${{ github.event.workflow_run.created_at }}))
           PIPELINE_STATUS="${{ github.event.workflow_run.conclusion }}"
-          
+
           # Send to monitoring system
           curl -X POST https://metrics.mimic.design/pipeline \
             -H "Content-Type: application/json" \
@@ -1031,7 +1036,7 @@ jobs:
               \"commit\": \"${{ github.sha }}\",
               \"timestamp\": \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\"
             }"
-      
+
       - name: Alert on failure
         if: github.event.workflow_run.conclusion == 'failure'
         run: |
