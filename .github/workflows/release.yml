@@ -31,7 +31,7 @@ jobs:
           cache: 'pnpm'
 
       - name: 📦 Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         with:
           version: 9
 
@@ -55,7 +55,7 @@ jobs:
         continue-on-error: true
 
       - name: 📊 Upload coverage
-        uses: codecov/codecov-action@v4.4.1
+        uses: codecov/codecov-action@v4.6.0
         with:
           directory: ./coverage
           fail_ci_if_error: false
