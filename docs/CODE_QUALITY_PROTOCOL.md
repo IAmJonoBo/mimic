@@ -272,7 +272,7 @@ module.exports = {
 
 ### **6. Prettier** (`prettier.config.js`)
 
-_Edge-case formatting with Tailwind plugin_
+#### Edge-case formatting with Tailwind plugin
 
 ```javascript
 export default {
@@ -295,7 +295,7 @@ export default {
 
 ### **7. Trunk Orchestration** (`.trunk/trunk.yaml`)
 
-_Central tool coordination and caching_
+#### Central tool coordination and caching
 
 ```yaml
 version: 0.1
@@ -781,27 +781,6 @@ nx affected -t lint:md          # Process only affected files
 - [ ] Performance benchmark reviews
 - [ ] Team feedback and process improvements
 - [ ] Documentation updates
-
----
-
-## 📚 **Reference Links**
-
-### **Primary Tool Documentation**
-
-- [Biome](https://biomejs.dev/): Rust-speed formatting and linting
-- [Trunk](https://docs.trunk.io/): Multi-tool orchestration
-- [dprint](https://dprint.dev/): Multi-language Rust formatting
-- [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2): Modern Markdown linting
-- [ESLint 9](https://eslint.org/docs/latest/): Modern JavaScript linting
-- [Nx](https://nx.dev/): Monorepo tooling and caching
-
-### **Community Resources**
-
-- [Awesome ESLint](https://github.com/dustinspecker/awesome-eslint): ESLint plugins and configs
-- [Awesome Prettier](https://github.com/prettier/awesome-prettier): Prettier plugins and tools
-- [Trunk Community](https://slack.trunk.io/): Trunk support and discussions
-
----
 
 **🎉 You now have a world-class, enterprise-grade code quality pipeline that's optimized for speed,
 consistency, and developer experience in 2025!**

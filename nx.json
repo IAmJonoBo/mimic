@@ -24,11 +24,7 @@
   "targetDefaults": {
     "@nx/eslint:lint": {
       "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/eslint.config.js",
-        "{workspaceRoot}/.eslintignore"
-      ]
+      "inputs": ["default", "{workspaceRoot}/eslint.config.js"]
     },
     "@nx/jest:jest": {
       "cache": true,

@@ -4,13 +4,13 @@ Thank you for your interest in contributing to Mimic! We welcome contributions f
 
 ## 📋 Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [Code Style Guidelines](#code-style-guidelines)
-- [Testing Requirements](#testing-requirements)
-- [Submitting Changes](#submitting-changes)
-- [Review Process](#review-process)
+- [Code of Conduct](#-code-of-conduct)
+- [Getting Started](#-getting-started)
+- [Development Workflow](#-development-workflow)
+- [Code Style Guidelines](#-code-style-guidelines)
+- [Testing Requirements](#-testing-requirements)
+- [Submitting Changes](#-submitting-changes)
+- [Review Process](#-review-process)
 
 ## 📜 Code of Conduct
 

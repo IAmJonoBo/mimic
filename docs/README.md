@@ -10,7 +10,7 @@ Welcome to the comprehensive documentation for the Mimic design system monorepo.
 
 ## 📦 Package Documentation
 
-### Design Tokens
+### Design Tokens Overview
 
 - **[Design Tokens README](../packages/design-tokens/README.md)** - W3C-compliant design tokens with Style Dictionary
 
@@ -46,7 +46,7 @@ Welcome to the comprehensive documentation for the Mimic design system monorepo.
 - **[Storybook](https://iamjonobo.github.io/mimic/storybook/)** - Interactive component documentation
 - **[Component Guidelines](../CONTRIBUTING.md#component-guidelines)** - Best practices for component development
 
-### Design Tokens
+### Design Tokens Usage
 
 - **[Token Categories](../packages/design-tokens/README.md#token-categories)** - Available design tokens
 - **[Token Usage](../packages/design-tokens/README.md#usage)** - How to use tokens in your applications

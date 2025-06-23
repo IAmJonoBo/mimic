@@ -1,6 +1,9 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
+/* global console */
 
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
+import process from 'node:process';
 
 function log(message) {
   console.log(`🧹 [Apple Cleaner] ${message}`);
@@ -81,10 +84,10 @@ function cleanAppleJunk(projectRoot = '.') {
   log('🎉 Apple junk cleanup completed!');
 }
 
-// CLI usage
-if (require.main === module) {
+// CLI usage - ES module check
+if (process.argv[1]?.endsWith('apple-cleaner.js')) {
   const projectRoot = process.argv[2] || '.';
   cleanAppleJunk(projectRoot);
 }
 
-module.exports = { cleanAppleJunk };
+export { cleanAppleJunk };

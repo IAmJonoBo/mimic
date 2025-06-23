@@ -4,15 +4,15 @@
 echo "🎨 Setting up Mimic monorepo..."
 
 # Check if pnpm is installed
-if ! command -v pnpm &> /dev/null; then
-    echo "❌ pnpm not found. Installing pnpm..."
-    npm install -g pnpm@9.0.0
+if ! command -v pnpm &>/dev/null; then
+	echo "❌ pnpm not found. Installing pnpm..."
+	npm install -g pnpm@9.0.0
 fi
 
 # Check if Nx CLI is installed
-if ! command -v nx &> /dev/null; then
-    echo "📦 Installing Nx CLI..."
-    pnpm add -g @nx/cli@latest
+if ! command -v nx &>/dev/null; then
+	echo "📦 Installing Nx CLI..."
+	pnpm add -g @nx/cli@latest
 fi
 
 echo "📥 Installing dependencies..."
@@ -27,14 +27,14 @@ pnpm nx run-many -t test --parallel=3
 echo "📚 Setting up Git hooks..."
 npx husky install
 npx husky add .husky/pre-commit "npx lint-staged"
-npx husky add .husky/commit-msg "npx commitlint --edit \$1"
+npx husky add .husky/commit-msg 'npx commitlint --edit $1'
 
 echo "🔧 Setting up Ollama (if available)..."
-if command -v ollama &> /dev/null; then
-    ollama pull llama3:8b &
-    echo "🤖 Llama 3 8B model download started in background"
+if command -v ollama &>/dev/null; then
+	ollama pull llama3:8b &
+	echo "🤖 Llama 3 8B model download started in background"
 else
-    echo "ℹ️  Ollama not found. Install from https://ollama.ai for AI features"
+	echo "ℹ️  Ollama not found. Install from https://ollama.ai for AI features"
 fi
 
 echo "✅ Setup complete!"

@@ -4,6 +4,45 @@ import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 
 export default [
+  // Global ignores - must be first and only contain ignores
+  {
+    ignores: [
+      '**/dist/**',
+      '**/build/**',
+      '**/lib/**',
+      '**/node_modules/**',
+      '**/*.d.ts',
+      '**/.nx/cache/**',
+      '**/.nx/workspace-data/**',
+      '**/.pnpm-store/**',
+      '**/storybook-static/**',
+      '**/coverage/**',
+      '**/tmp/**',
+      '**/temp/**',
+      '**/.temp/**',
+      '**/.tmp/**',
+      '**/temporary/**',
+      '*.tsbuildinfo',
+      'vite.config.*.timestamp*',
+      'vitest.config.*.timestamp*',
+      // Temporary and cache files
+      '**/*.tmp',
+      '**/*.temp',
+      '**/*.cache',
+      '**/*.swp',
+      '**/*.swo',
+      '**/*~',
+      '**/#*#',
+      '**/.#*',
+      // macOS metadata files
+      '**/._*',
+      '**/.DS_Store',
+      // Generated files
+      '**/generated/**',
+      '**/auto-generated/**',
+    ],
+  },
+
   // Base recommended configurations
   js.configs.recommended,
   ...tseslint.configs.strict,
@@ -19,28 +58,6 @@ export default [
         es2024: true,
       },
     },
-    ignores: [
-      '**/dist/**',
-      '**/build/**',
-      '**/lib/**',
-      '**/node_modules/**',
-      '**/*.d.ts',
-      '**/.nx/cache/**',
-      '**/.nx/workspace-data/**',
-      '**/.pnpm-store/**',
-      '**/storybook-static/**',
-      '**/coverage/**',
-      '**/tmp/**',
-      '*.tsbuildinfo',
-      'vite.config.*.timestamp*',
-      'vitest.config.*.timestamp*',
-      // macOS metadata files
-      '**/._*',
-      '**/.DS_Store',
-      // Generated files
-      '**/generated/**',
-      '**/auto-generated/**',
-    ],
   },
 
   // TypeScript and JavaScript files

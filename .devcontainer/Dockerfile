@@ -8,13 +8,15 @@ USER appuser
 RUN npm install -g pnpm@9.0.0
 
 # Install Rust and Cargo (for Tauri)
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+SHELL ["/bin/sh", "-c"]
 ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install system dependencies for mobile development
 RUN apt-get update && apt-get install -y \
-    openjdk-17-jdk \
-    android-sdk \
+    openjdk-17-jdk=17.0.11+9-1~deb12u1 \
+    android-sdk=25.2.5+6 \
     && rm -rf /var/lib/apt/lists/*
 
 # Set JAVA_HOME

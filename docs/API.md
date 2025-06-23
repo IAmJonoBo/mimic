@@ -4,9 +4,9 @@ Complete API reference for all Mimic packages and their exported functions, comp
 
 ## 📋 Table of Contents
 
-- [@mimic/design-tokens API](#mimic-design-tokens-api)
-- [@mimic/design-system API](#mimic-design-system-api)
-- [@mimic/shared-utils API](#mimic-shared-utils-api)
+- [@mimic/design-tokens API](#mimicdesign-tokens-api)
+- [@mimic/design-system API](#mimicdesign-system-api)
+- [@mimic/shared-utils API](#mimicshared-utils-api)
 - [Type Definitions](#type-definitions)
 - [Integration Examples](#integration-examples)
 

@@ -24,7 +24,18 @@ packages/design-tokens/dist/
 
 # Temporary files
 tmp/
+temp/
+.tmp/
+.temp/
+temporary/
+*.tmp
+*.temp
 .cache/
+*.swp
+*.swo
+*~
+#*#
+.#*
 target/
 
 # Config timestamps

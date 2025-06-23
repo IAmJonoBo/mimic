@@ -6,6 +6,7 @@
  */
 
 import { readFileSync, writeFileSync } from 'fs';
+
 import { glob } from 'glob';
 
 const MAX_LINE_LENGTH = 120;

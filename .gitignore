@@ -116,6 +116,14 @@ local.properties
 *.tmp
 *.temp
 .cache/
+tmp/
+temp/
+.tmp/
+.temp/
+temporary/
+*~
+#*#
+.#*
 
 # Docker
 .docker/
