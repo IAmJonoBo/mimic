@@ -1,0 +1,75 @@
+# This file controls the behavior of Trunk: https://docs.trunk.io/cli
+# To learn more about the format of this file, see https://docs.trunk.io/reference/trunk-yaml
+version: 0.1
+cli:
+  version: 1.24.0
+
+# Trunk provides extensibility via plugins. (https://docs.trunk.io/plugins)
+plugins:
+  sources:
+    - id: trunk
+      ref: v1.7.0
+      uri: https://github.com/trunk-io/plugins
+
+# Many linters and tools depend on runtimes - configure them here. (https://docs.trunk.io/runtimes)
+runtimes:
+  enabled:
+    - go@1.21.0
+    - node@22.16.0
+    - python@3.10.8
+
+# This is the section where you manage your linters. (https://docs.trunk.io/check/configuration)
+lint:
+  disabled:
+    - markdownlint
+  enabled:
+    # Multi-formatter strategy: Biome (Rust-speed JS/TS), Prettier (edge cases), targeted tools
+    # Note: dprint configured separately for MD/TOML/YAML (see dprint.json)
+    - eslint@9.0.0
+    - markdownlint-cli2@0.18.1
+    - biome@2.0.4:
+        run_linter: false # Use ESLint for linting
+        run_formatter: true # Fast Rust-based JS/TS/JSON formatting
+    - prettier@3.5.3:
+        include: ['**/*.html', '**/*.astro'] # Only for files Biome doesn't handle
+        run_fmt: true
+    - stylelint@16.21.0:
+        include: ['**/*.{css,scss,sass}']
+
+    # Documentation & Markdown
+    - actionlint@1.7.7
+    - checkov@3.2.443
+    - git-diff-check
+    - hadolint@2.12.1-beta
+    - osv-scanner@2.0.3
+    - renovate@41.1.3
+    - shellcheck@0.10.0
+    - shfmt@3.6.0
+    - trufflehog@3.89.2
+    - yamllint@1.37.1
+
+  ignore:
+    - linters: [ALL]
+      paths:
+        # Build outputs and caches
+        - dist/**
+        - build/**
+        - lib/**
+        - node_modules/**
+        - .nx/**
+        - .pnpm-store/**
+        - storybook-static/**
+        - coverage/**
+        - tmp/**
+        - '*.tsbuildinfo'
+        # OS and editor files
+        - '*.tmp'
+        - '**/.vscode/**'
+        - '**/.idea/**'
+
+actions:
+  enabled:
+    - trunk-announce
+    - trunk-check-pre-push
+    - trunk-fmt-pre-commit
+    - trunk-upgrade-available

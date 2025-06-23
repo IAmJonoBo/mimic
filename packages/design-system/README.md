@@ -1,10 +1,13 @@
 # 🧩 @mimic/design-system
 
-A modern Qwik-based design system component library built with design tokens, featuring Storybook documentation and comprehensive testing.
+A modern Qwik-based design system component library built with design tokens, featuring Storybook documentation and
+comprehensive testing.
 
 ## 📋 Overview
 
-This package provides a collection of reusable, accessible UI components built with Qwik and styled using design tokens from `@mimic/design-tokens`. It includes comprehensive documentation through Storybook, visual regression testing, and accessibility testing.
+This package provides a collection of reusable, accessible UI components built with Qwik and styled using design tokens
+from `@mimic/design-tokens`. It includes comprehensive documentation through Storybook, visual regression testing, and
+accessibility testing.
 
 ## 🎯 Key Features
 
@@ -457,7 +460,7 @@ export const NewComponent = component$<NewComponentProps>(({
 });
 ```
 
-2. **Create Stories**:
+1. **Create Stories**:
 
 ```typescript
 // src/components/NewComponent/NewComponent.stories.ts
@@ -477,14 +480,14 @@ export const Default: Story = {
 };
 ```
 
-3. **Export Component**:
+1. **Export Component**:
 
 ```typescript
 // src/index.ts
 export { NewComponent } from './components/NewComponent/NewComponent';
 ```
 
-4. **Add Tests**:
+1. **Add Tests**:
 
 ```typescript
 // src/components/NewComponent/NewComponent.test.tsx

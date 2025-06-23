@@ -26,9 +26,8 @@
       "cache": true,
       "inputs": [
         "default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.js"
+        "{workspaceRoot}/eslint.config.js",
+        "{workspaceRoot}/.eslintignore"
       ]
     },
     "@nx/jest:jest": {
@@ -63,6 +62,18 @@
     },
     "lint": {
       "cache": true
+    },
+    "format": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json"]
+    },
+    "lint:css": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/stylelint.config.cjs"]
+    },
+    "lint:md": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/.markdownlint-cli2.yaml"]
     },
     "typecheck": {
       "cache": true

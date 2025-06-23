@@ -1,0 +1,74 @@
+{
+  "name": "workspace-format",
+  "targets": {
+    "format": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "trunk fmt --fix",
+        "parallel": false
+      },
+      "configurations": {
+        "check": {
+          "command": "trunk fmt --no-fix --print-failures"
+        },
+        "affected": {
+          "command": "trunk fmt --fix --files {files}"
+        }
+      }
+    },
+    "format:biome": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "biome format --write {files}",
+        "parallel": false
+      },
+      "configurations": {
+        "check": {
+          "command": "biome check --formatter-enabled=true {files}"
+        }
+      }
+    },
+    "format:dprint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "dprint fmt",
+        "parallel": false
+      },
+      "configurations": {
+        "check": {
+          "command": "dprint check"
+        }
+      }
+    },
+    "format:prettier": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "prettier --write {files}",
+        "parallel": false
+      },
+      "configurations": {
+        "check": {
+          "command": "prettier --check {files}"
+        }
+      }
+    },
+    "lint:md": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "markdownlint-cli2 --fix",
+        "parallel": false
+      },
+      "configurations": {
+        "check": {
+          "command": "markdownlint-cli2"
+        },
+        "affected": {
+          "command": "markdownlint-cli2 --fix {files}"
+        }
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/.markdownlint-cli2.yaml"]
+    }
+  },
+  "tags": ["format", "tooling", "dx"]
+}

@@ -1,5 +1,9 @@
 FROM mcr.microsoft.com/devcontainers/typescript-node:18
 
+# Create a non-root user and switch to it
+RUN useradd -m appuser && chown -R appuser /workspace
+USER appuser
+
 # Install pnpm
 RUN npm install -g pnpm@9.0.0
 
@@ -33,8 +37,12 @@ WORKDIR /workspace
 # Copy package files for dependency installation
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
 
-# Install dependencies
-RUN pnpm install --frozen-lockfile
+RUN echo '#!/bin/bash\nollama pull llama3:8b &' > /usr/local/bin/setup-ollama.sh && \
+    chmod +x /usr/local/bin/setup-ollama.sh
+
+# Add a simple healthcheck (checks if node is available)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+  CMD node --version || exit 1
 
 # Install Ollama models in the background after container starts
 RUN echo '#!/bin/bash\nollama pull llama3:8b &' > /usr/local/bin/setup-ollama.sh && \

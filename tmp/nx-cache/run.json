@@ -1,0 +1,21 @@
+{
+  "run": {
+    "command": "nx run workspace-format:lint:md:check",
+    "startTime": "2025-06-23T01:14:42.618Z",
+    "endTime": "2025-06-23T01:14:43.587Z",
+    "inner": false
+  },
+  "tasks": [
+    {
+      "taskId": "workspace-format:lint:md:check",
+      "target": "lint:md",
+      "projectName": "workspace-format",
+      "hash": "9441754691068225672",
+      "startTime": "2025-06-23T01:14:42.689Z",
+      "endTime": "2025-06-23T01:14:43.585Z",
+      "params": "",
+      "cacheStatus": "cache-miss",
+      "status": 1
+    }
+  ]
+}

@@ -23,7 +23,8 @@ This document contains the architecture decisions made for the Mimic design syst
 
 ### Context
 
-We need to manage multiple related packages (design tokens, component library, utilities) that share dependencies and require coordinated releases. Options considered:
+We need to manage multiple related packages (design tokens, component library, utilities) that share dependencies and
+require coordinated releases. Options considered:
 
 1. **Separate repositories** - Simple but coordination overhead
 2. **Lerna monorepo** - Traditional choice but maintenance burden
@@ -72,7 +73,8 @@ Use Nx for monorepo management with pnpm workspaces.
 
 ### Context
 
-Design tokens need to be transformed from design tool exports into multiple platform-specific formats. Options evaluated:
+Design tokens need to be transformed from design tool exports into multiple platform-specific formats. Options
+evaluated:
 
 1. **Manual CSS variables** - Simple but no transformation pipeline
 2. **Sass/Less variables** - Limited platform support

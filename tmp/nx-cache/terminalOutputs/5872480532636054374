@@ -1,0 +1,19 @@
+> nx run design-system:test
+
+[1m[33mUnable to load test config from config file /Volumes/MagicBag/GitHub/Mimic/Mimic/packages/design-system/vite.config.ts[39m[22m
+[1m[33mSome settings may not be applied as expected.[39m[22m
+[1m[33mYou can manually set the config in the project, design-system, configuration.[39m[22m
+[?25lusing deprecated parameters for the initialization function; pass a single object instead
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mUnrecognized target environment "ES2024"[0m [tsconfig.json]
+
+    tsconfig.json:3:14:
+[37m      3 │     "target": [32m"ES2024"[37m,
+        ╵               [32m~~~~~~~~[0m
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mUnrecognized target environment "ES2024"[0m [tsconfig.json]
+
+    tsconfig.json:3:14:
+[37m      3 │     "target": [32m"ES2024"[37m,
+        ╵               [32m~~~~~~~~[0m
+
+[?25h

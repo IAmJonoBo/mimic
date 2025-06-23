@@ -1,10 +1,13 @@
 # 🎨 @mimic/design-tokens
 
-Design tokens generated from Penpot using Style Dictionary, providing the single source of truth for all visual properties across the Mimic design system.
+Design tokens generated from Penpot using Style Dictionary, providing the single source of truth for all visual
+properties across the Mimic design system.
 
 ## 📋 Overview
 
-This package transforms W3C Design Token Community Group (DTCG) compliant JSON tokens into platform-specific formats using Style Dictionary. It serves as the foundation for consistent visual design across web, mobile, and desktop applications.
+This package transforms W3C Design Token Community Group (DTCG) compliant JSON tokens into platform-specific formats
+using Style Dictionary. It serves as the foundation for consistent visual design across web, mobile, and desktop
+applications.
 
 ## 🎯 Key Features
 

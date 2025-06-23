@@ -1,0 +1,7 @@
+> nx run design-tokens:lint
+
+
+Linting "design-tokens"...
+
+✔ All files pass linting
+

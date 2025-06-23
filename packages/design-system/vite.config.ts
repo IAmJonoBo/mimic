@@ -5,7 +5,7 @@ import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 export default defineConfig(() => {
   return {
     build: {
-      target: 'es2020',
+      target: 'es2024',
       lib: {
         entry: './src/index.ts',
         formats: ['es', 'cjs'],

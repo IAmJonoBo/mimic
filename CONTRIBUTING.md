@@ -35,6 +35,7 @@ By participating in this project, you agree to abide by our [Code of Conduct](CO
    ```
 
 3. **Add upstream** remote:
+
    ```bash
    git remote add upstream https://github.com/IAmJonoBo/mimic.git
    ```
@@ -160,7 +161,7 @@ Button.displayName = 'Button';
 
 ### File Organization
 
-```
+```bash
 packages/design-system/src/
 ├── components/
 │   ├── Button/

@@ -1,0 +1,76 @@
+# markdownlint-cli2 configuration for modern 2025 best practices
+# https://github.com/DavidAnson/markdownlint-cli2
+
+# Configuration for markdownlint rules
+config:
+  # Use Prettier-friendly defaults and modern best practices
+  default: true
+
+  # Override specific rules for 2025 best practices
+  MD041: false # Allow first line to not be a top-level heading (for READMs with badges)
+  MD033: false # Allow inline HTML (needed for modern component docs)
+  MD013: # Line length - More flexible for modern content
+    line_length: 120 # Modern standard, accommodates wider screens
+    tables: false # Don't enforce line length in tables
+    code_blocks: false # Don't enforce in code blocks
+    headings: false # Don't enforce in headings (often contain long names)
+  MD007: # Unordered list indentation
+    indent: 2 # Modern 2-space indentation
+  MD024: false # Allow multiple headers with same content (common in component docs)
+  MD036: false # Allow emphasis for warnings/notes
+  MD046: # Code block style
+    style: fenced # Prefer fenced code blocks (```)
+  MD051: false # Disable link fragment validation (often problematic with generated TOCs)
+
+# Enhanced glob patterns - Project-focused targeting
+globs:
+  # Include project markdown files
+  - README.md
+  - CONTRIBUTING.md
+  - DEVELOPMENT.md
+  - docs/**/*.md
+  - docs/**/*.mdx
+  - packages/**/*.md
+  - packages/**/*.mdx
+  - .github/**/*.md
+
+  # Exclude ALL third-party content
+  - '!**/node_modules/**'
+  - '!node_modules/**'
+  - '!**/dist/**'
+  - '!**/build/**'
+  - '!**/lib/**'
+  - '!**/coverage/**'
+  - '!**/tmp/**'
+  - '!**/.nx/**'
+  - '!**/storybook-static/**'
+
+  # Exclude cache and temporary directories
+  - '!**/.pnpm-store/**'
+  - '!**/.turbo/**'
+  - '!**/.next/**'
+  - '!**/.vscode/**'
+  - '!**/.devcontainer/**'
+
+  # Exclude Trunk and tooling files
+  - '!**/.trunk/**'
+  - '!**/.trunk/plugins/**'
+
+  # Exclude Apple and system files
+  - '!**/._*'
+  - '!**/.DS_Store'
+
+  # Exclude generated or temporary files
+  - '!**/CHANGELOG.md'
+  - '!**/CHANGELOG*.md'
+  - '!**/*_COMPLETE.md'
+  - '!**/*_SUMMARY.md'
+  - '!**/*MIGRATION*.md'
+  - '!**/*RESOLVED.md'
+  - '!**/*CLEANING*.md'
+
+# Fix common issues automatically
+fix: true
+
+# Show rule names and descriptions for violations
+showFound: true

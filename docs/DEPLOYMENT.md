@@ -207,6 +207,7 @@ npm publish
    ```
 
 2. **CI Integration**:
+
    ```yaml
    # Add to .github/workflows/ci.yml
    - name: Visual Regression Tests
@@ -627,6 +628,7 @@ checkBundleSize();
    ```
 
 3. **Emergency Procedures**:
+
    ```bash
    # Quick fix process
    git checkout -b hotfix/critical-fix
@@ -665,4 +667,5 @@ checkBundleSize();
 - [ ] Performance monitoring active
 - [ ] User feedback collection
 
-This deployment guide ensures reliable, automated releases while maintaining high quality standards for the Mimic design system.
+This deployment guide ensures reliable, automated releases while maintaining high quality standards for the Mimic design
+system.

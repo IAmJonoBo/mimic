@@ -1,6 +1,7 @@
 {
   "name": "mimic",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "description": "Design-token-driven pipeline using 100% libre tooling",
   "repository": {
@@ -26,6 +27,10 @@
     "test:affected": "nx affected -t test",
     "lint": "nx run-many -t lint",
     "lint:affected": "nx affected -t lint",
+    "lint:css": "stylelint 'packages/**/*.{css,scss,sass}' --fix",
+    "lint:md": "markdownlint-cli2 --fix",
+    "lint:md:fix-line-length": "node scripts/fix-markdown-line-length.js",
+    "lint:commits": "commitlint --from=HEAD~1 --to=HEAD",
     "e2e": "nx run-many -t e2e",
     "dev": "nx run-many -t serve --parallel=10",
     "clean": "nx reset && rm -rf node_modules && pnpm install",
@@ -39,8 +44,12 @@
     "clean:workspace": "nx run-many -t clean",
     "clean:apple:workspace": "nx run-many -t clean:apple",
     "precommit:clean": "npm run clean:ds-store",
-    "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format": "trunk fmt",
+    "format:check": "trunk fmt --no-fix --print-failures",
+    "format:biome": "biome format --write .",
+    "format:biome:check": "biome check --formatter-enabled=true .",
+    "format:dprint": "dprint fmt",
+    "format:dprint:check": "dprint check",
     "typecheck": "nx run-many -t typecheck",
     "visual-test": "nx run-many -t visual-test",
     "storybook": "nx run design-system:storybook",
@@ -64,6 +73,10 @@
     "analyze": "pnpm build && pnpm workspace:info"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.0.4",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/config-nx-scopes": "^19.8.1",
     "@eslint/js": "^8.57.0",
     "@nx/eslint": "21.2.1",
     "@nx/eslint-plugin": "21.2.1",
@@ -75,26 +88,56 @@
     "@nx/storybook": "21.2.1",
     "@nx/vite": "21.2.1",
     "@nx/workspace": "21.2.1",
-    "@typescript-eslint/eslint-plugin": "^7.18.0",
-    "@typescript-eslint/parser": "^7.18.0",
-    "eslint": "^8.57.1",
+    "@types/node": "^24.0.3",
+    "@typescript-eslint/eslint-plugin": "^8.34.1",
+    "@typescript-eslint/parser": "^8.34.1",
+    "dprint": "^0.50.0",
+    "eslint": "^9.29.0",
     "eslint-config-prettier": "10.1.5",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "glob": "^11.0.3",
     "husky": "^9.1.7",
     "jiti": "2.4.2",
     "jsdom": "^26.1.0",
     "lint-staged": "^16.1.2",
+    "markdownlint-cli2": "^0.18.1",
     "nx": "21.2.1",
     "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.13",
+    "stylelint": "^16.21.0",
+    "stylelint-config-standard": "^38.0.0",
+    "stylelint-config-tailwindcss": "^1.0.0",
     "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1",
     "vitest": "^3.2.4"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx,json,css,scss,md}": [
-      "prettier --write"
+    "*.{js,jsx,ts,tsx,json}": [
+      "biome format --write",
+      "biome check --write"
     ],
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix"
+    ],
+    "*.{html,astro}": [
+      "prettier --write"
+    ],
+    "*.{css,scss,sass}": [
+      "stylelint --fix"
+    ],
+    "*.{md,mdx}": [
+      "markdownlint-cli2 --fix"
+    ],
+    "*.{toml,yaml,yml,xml}": [
+      "dprint fmt --stdin {}"
     ]
+  },
+  "pnpm": {
+    "overrides": {
+      "react": "19.1.0",
+      "react-dom": "19.1.0"
+    }
   },
   "dependencies": {
     "storybook": "8.6.14"

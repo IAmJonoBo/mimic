@@ -52,17 +52,28 @@ export const platformUtils = {
   isNode: (): boolean => {
     try {
       return (
-        typeof process !== 'undefined' && process?.versions?.node !== undefined
+        typeof globalThis !== 'undefined' &&
+        'process' in globalThis &&
+        typeof (globalThis as { process?: { versions?: { node?: string } } })
+          .process?.versions?.node !== 'undefined'
       );
     } catch {
       return false;
     }
   },
   isMobile: (): boolean => {
-    if (typeof navigator === 'undefined') return false;
-    return /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-      navigator.userAgent
-    );
+    try {
+      return (
+        typeof globalThis !== 'undefined' &&
+        'navigator' in globalThis &&
+        /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          (globalThis as { navigator?: { userAgent?: string } }).navigator
+            ?.userAgent ?? ''
+        )
+      );
+    } catch {
+      return false;
+    }
   },
 };
 

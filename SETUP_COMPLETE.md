@@ -6,20 +6,20 @@ Your optimized Nx and pnpm monorepo for the Mimic design-token-driven pipeline i
 
 ### Core Structure
 
-```
+```markdown
 mimic/
 ├── 📦 packages/
-│   ├── design-tokens/          # Style Dictionary + W3C tokens
-│   ├── design-system/          # Qwik components + Storybook
-│   └── shared-utils/           # Cross-platform utilities
+│ ├── design-tokens/ # Style Dictionary + W3C tokens
+│ ├── design-system/ # Qwik components + Storybook
+│ └── shared-utils/ # Cross-platform utilities
 ├── 🚀 apps/
-│   ├── web/                    # Qwik City application
-│   ├── mobile/                 # React Native + Compose MP
-│   └── desktop/                # Tauri desktop shell
+│ ├── web/ # Qwik City application
+│ ├── mobile/ # React Native + Compose MP
+│ └── desktop/ # Tauri desktop shell
 ├── 🔧 tools/
-│   └── penpot-export/          # Token extraction from Penpot
-├── 🐳 .devcontainer/           # Docker dev environment
-├── 🔄 .github/workflows/       # CI/CD pipelines
+│ └── penpot-export/ # Token extraction from Penpot
+├── 🐳 .devcontainer/ # Docker dev environment
+├── 🔄 .github/workflows/ # CI/CD pipelines
 └── 📋 Configuration files
 ```
 

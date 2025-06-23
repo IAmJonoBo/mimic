@@ -1,0 +1,23 @@
+[32minfo[0m[35m[0m => Starting manager..
+[0m[30;43mWARN[0m[35m[0m No story files found for the specified pattern: [34mpackages/design-system/src/**/*.stories.@(js|jsx|ts|tsx|mdx)[39m
+[0m[30;43mWARN[0m[35m[0m unable to find package.json for @builder.io/qwik
+[0m[32minfo[0m[35m[0m => Starting preview..
+[0m[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mUnrecognized target environment "ES2024"[0m [tsconfig.json]
+
+    tsconfig.json:3:14:
+[37m      3 │     "target": [32m"ES2024"[37m,
+        ╵               [32m~~~~~~~~[0m
+
+[33m▲ [43;33m[[43;30mWARNING[43;33m][0m [1mUnrecognized target environment "ES2024"[0m [tsconfig.json]
+
+    tsconfig.json:3:14:
+[37m      3 │     "target": [32m"ES2024"[37m,
+        ╵               [32m~~~~~~~~[0m
+
+using deprecated parameters for the initialization function; pass a single object instead
+[38;2;241;97;97m=> Failed to build the preview[39m
+
+[0m[7m[1m[31m NX [39m[22m[27m[0m  [31mQwik input "/Volumes/MagicBag/GitHub/Mimic/Mimic/packages/design-system/src/root" not found.[39m
+
+Pass --verbose to see the stacktrace.
+

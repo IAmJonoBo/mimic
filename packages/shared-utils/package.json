@@ -1,6 +1,7 @@
 {
   "name": "@mimic/shared-utils",
   "version": "0.1.0",
+  "type": "module",
   "description": "Shared utilities across all Mimic packages",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

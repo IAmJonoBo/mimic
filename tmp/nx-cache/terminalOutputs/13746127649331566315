@@ -1,0 +1,19 @@
+
+Linting "design-tokens"...
+[0m[0m
+[0m[4m/Volumes/MagicBag/GitHub/Mimic/Mimic/packages/design-tokens/dist/src/._index.d.ts[24m[0m
+[0m  [2m1:0[22m  [31merror[39m  Parsing error: Invalid character[0m
+[0m[0m
+[0m[4m/Volumes/MagicBag/GitHub/Mimic/Mimic/packages/design-tokens/dist/src/._index.js[24m[0m
+[0m  [2m1:0[22m  [31merror[39m  Parsing error: Invalid character[0m
+[0m[0m
+[0m[4m/Volumes/MagicBag/GitHub/Mimic/Mimic/packages/design-tokens/vitest.config.ts[24m[0m
+[0m  [2m1:1[22m   [31merror[39m    Resolve error: typescript with invalid interface loaded as resolver  [2mimport/no-unresolved[22m[0m
+[0m  [2m1:1[22m   [31merror[39m    Resolve error: typescript with invalid interface loaded as resolver  [2mimport/no-duplicates[22m[0m
+[0m  [2m1:1[22m   [33mwarning[39m  Resolve error: typescript with invalid interface loaded as resolver  [2mimport/order[22m[0m
+[0m  [2m1:30[22m  [31merror[39m    Unable to resolve path to module 'vitest/config'                     [2mimport/no-unresolved[22m[0m
+[0m[0m
+[0m[31m[1m✖ 6 problems (5 errors, 1 warning)[22m[39m[0m
+[0m[31m[1m[22m[39m[0m
+✖ 6 problems (5 errors, 1 warning)
+

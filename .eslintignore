@@ -1,0 +1,50 @@
+# Ignore build outputs and dependencies
+node_modules/
+dist/
+build/
+lib/
+*.tsbuildinfo
+
+# Ignore caches and logs
+.pnpm-store/
+.pnpm-debug.log*
+.nx/cache
+.nx/workspace-data
+
+# Ignore environment files
+.env
+.env.*
+
+# IDE and OS files
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*.swo
+
+# TypeScript declaration files
+*.d.ts
+
+# Storybook build output
+storybook-static/
+
+# Testing outputs
+coverage/
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
+# Misc
+tmp/
+target/
+.cache/
+.docker/
+.ollama/
+
+# Config timestamps
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+
+# ESLint config itself
+.eslintrc.cjs

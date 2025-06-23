@@ -87,6 +87,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Verify package.json dependencies:**
+
    ```bash
    # Check if workspace dependencies are correctly defined
    grep -r "workspace:" packages/*/package.json
@@ -118,6 +119,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Rebuild dependencies in order:**
+
    ```bash
    pnpm nx run design-tokens:build
    pnpm nx run shared-utils:build
@@ -147,6 +149,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Force rebuild without cache:**
+
    ```bash
    pnpm nx run-many -t build --skip-nx-cache
    ```
@@ -164,17 +167,22 @@ Common issues and solutions for the Mimic design system monorepo.
 
    ```bash
    # Validate JSON files
-   find packages/design-tokens/tokens -name "*.json" -exec node -e "JSON.parse(require('fs').readFileSync('{}', 'utf8'))" \;
    ```
+
+find packages/design-tokens/tokens -name "\*.json" -exec node -e "JSON.parse(require('fs').readFileSync('{}', 'utf8'))"
+\;
+
+````bash
 
 2. **Rebuild tokens explicitly:**
 
-   ```bash
-   cd packages/design-tokens
-   pnpm build:tokens
-   ```
+```bash
+cd packages/design-tokens
+pnpm build:tokens
+````
 
 3. **Check Style Dictionary config:**
+
    ```bash
    # Verify configuration
    cat packages/design-tokens/style-dictionary.config.js
@@ -212,6 +220,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Check for background processes:**
+
    ```bash
    # List Node.js processes
    ps aux | grep node
@@ -331,6 +340,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Update Storybook:**
+
    ```bash
    pnpm storybook upgrade
    ```
@@ -359,6 +369,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Check story exports:**
+
    ```typescript
    // Stories must have default export
    export default {
@@ -392,6 +403,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Run tests with verbose output:**
+
    ```bash
    pnpm test --reporter=verbose
    ```
@@ -419,6 +431,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Compare specific stories:**
+
    ```bash
    pnpm loki test --stories "Button.*"
    ```
@@ -449,6 +462,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Skip hooks temporarily (not recommended):**
+
    ```bash
    git commit --no-verify -m "temporary commit"
    ```
@@ -477,6 +491,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Check Git configuration:**
+
    ```bash
    # Verify hooks path
    git config core.hooksPath
@@ -508,6 +523,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Parallel builds:**
+
    ```bash
    # Increase parallel processes
    pnpm nx run-many -t build --parallel=4
@@ -575,6 +591,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Verify package exports:**
+
    ```json
    // package.json
    {
@@ -639,6 +656,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Configure Git globally:**
+
    ```bash
    echo ".DS_Store" >> ~/.gitignore_global
    git config --global core.excludesfile ~/.gitignore_global
@@ -666,6 +684,7 @@ Common issues and solutions for the Mimic design system monorepo.
    ```
 
 3. **Use local npm prefix:**
+
    ```bash
    npm config set prefix ~/.npm-global
    export PATH=~/.npm-global/bin:$PATH

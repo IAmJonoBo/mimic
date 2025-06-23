@@ -906,4 +906,5 @@ export const FormExample = component$(() => {
 });
 ```
 
-This comprehensive API documentation provides complete reference material for all Mimic packages, making it easy for developers to understand and use the design system effectively.
+This comprehensive API documentation provides complete reference material for all Mimic packages, making it easy for
+developers to understand and use the design system effectively.

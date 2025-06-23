@@ -1,6 +1,7 @@
 {
   "name": "@mimic/design-system",
   "version": "0.1.0",
+  "type": "module",
   "description": "Qwik-based design system components using design tokens",
   "main": "dist/index.qwik.js",
   "qwik": "dist/index.qwik.js",

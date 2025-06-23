@@ -21,7 +21,7 @@ pnpm dev
 
 ## Project Structure
 
-```
+```bash
 mimic/
 ├── packages/
 │   ├── design-tokens/     # Style Dictionary + W3C tokens
@@ -111,7 +111,7 @@ ollama run llama3:8b "Generate a Qwik button component using @mimic/design-token
 
 ### Self-Hosted Instance
 
-- **URL**: http://localhost:9001 (Dev Container)
+- **URL**: <http://localhost:9001> (Dev Container)
 - **Credentials**: Create during first setup
 - **Token Export**: Manual via UI or automated CI job
 
@@ -185,6 +185,7 @@ pnpm nx run desktop:build --release
    ```
 
 3. **Mobile builds fail**
+
    ```bash
    # Ensure Android SDK is configured
    export ANDROID_SDK_ROOT=/usr/lib/android-sdk

@@ -1,0 +1,36 @@
+# Build outputs and dependencies
+node_modules/
+dist/
+build/
+lib/
+*.tsbuildinfo
+
+# Nx workspace cache
+.nx/cache
+.nx/workspace-data
+
+# Testing outputs
+coverage/
+test-results/
+playwright-report/
+blob-report/
+
+# Storybook build output
+storybook-static/
+
+# Generated or compiled files
+*.d.ts
+packages/design-tokens/dist/
+
+# Temporary files
+tmp/
+.cache/
+target/
+
+# Config timestamps
+vite.config.*.timestamp*
+vitest.config.*.timestamp*
+
+# Generated files
+.cursor/rules/nx-rules.mdc
+.github/instructions/nx.instructions.md

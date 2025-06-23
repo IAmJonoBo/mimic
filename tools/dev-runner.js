@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-const { execSync } = require('child_process');
+import { execSync } from 'node:child_process';
+import process from 'node:process';
 
 const tasks = {
   '🏗️ build': {

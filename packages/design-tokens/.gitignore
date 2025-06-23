@@ -1,2 +1,6 @@
+# Local Nx cache for this project
 .nx/cache
 .nx/workspace-data
+
+# Build outputs specific to design-tokens
+dist/

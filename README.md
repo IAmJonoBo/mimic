@@ -5,11 +5,14 @@
 [![Nx](https://img.shields.io/badge/built%20with-Nx-blue)](https://nx.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)](https://www.typescriptlang.org/)
 
-> A modern, design-token-driven development pipeline using 100% libre tooling for building scalable design systems and multi-platform applications.
+> A modern, design-token-driven development pipeline using 100% libre tooling for building scalable design systems and
+> multi-platform applications.
 
 ## 🌟 Overview
 
-Mimic is a comprehensive monorepo that demonstrates how to build a complete design system pipeline using only open-source tools. It provides a seamless workflow from design tokens to production-ready components across multiple platforms.
+Mimic is a comprehensive monorepo that demonstrates how to build a complete design system pipeline using only
+open-source tools. It provides a seamless workflow from design tokens to production-ready components across multiple
+platforms.
 
 ### ✨ Key Features
 
@@ -43,7 +46,11 @@ graph TB
 
 ## Executive Summary
 
-We will self-host Penpot v2 for design, export its W3C-compliant JSON tokens into Git, transform them with Style Dictionary, and compile one set of components for web, mobile/desktop, and desktop shell. Automated visual, unit, and interaction tests gate every pull request. Optional local LLMs (Llama 3 8B via Ollama) extend scaffolding without license cost. All moving parts are MIT, Apache-2.0, or AGPL—permitting on-premises deployment and zero SaaS spend.
+We will self-host Penpot v2 for design, export its W3C-compliant JSON tokens into Git,
+transform them with Style Dictionary, and compile one set of components for web, mobile/desktop,
+and desktop shell. Automated visual, unit, and interaction tests gate every pull request.
+Optional local LLMs (Llama 3 8B via Ollama) extend scaffolding without license cost.
+All moving parts are MIT, Apache-2.0, or AGPL—permitting on-premises deployment and zero SaaS spend.
 
 ## Project Objectives
 
@@ -301,4 +308,5 @@ Built with ❤️ using 100% open-source tools
 
 ---
 
-This brief gives each discipline a concrete, OSS-only tool-chain while leaving space for incremental enhancements—ensuring the organisation controls every byte from design ideation to shipped binary.
+This brief gives each discipline a concrete, OSS-only tool-chain while leaving space for incremental
+enhancements—ensuring the organisation controls every byte from design ideation to shipped binary.

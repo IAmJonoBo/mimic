@@ -1,10 +1,12 @@
 # 🔧 @mimic/shared-utils
 
-Shared utilities and helper functions for the Mimic monorepo, providing common functionality across web, mobile, and desktop applications.
+Shared utilities and helper functions for the Mimic monorepo, providing common functionality across web, mobile, and
+desktop applications.
 
 ## 📋 Overview
 
-This package contains reusable TypeScript utilities, type definitions, and helper functions that are shared across all Mimic packages. It provides a foundation of common functionality to reduce code duplication and ensure consistency.
+This package contains reusable TypeScript utilities, type definitions, and helper functions that are shared across all
+Mimic packages. It provides a foundation of common functionality to reduce code duplication and ensure consistency.
 
 ## 🎯 Key Features
 
@@ -480,7 +482,7 @@ export function newUtility<T>(input: T): T {
 }
 ```
 
-2. **Add Tests**:
+1. **Add Tests**:
 
 ```typescript
 // src/utilities/newUtility.test.ts
@@ -494,14 +496,14 @@ describe('newUtility', () => {
 });
 ```
 
-3. **Export Utility**:
+1. **Export Utility**:
 
 ```typescript
 // src/index.ts
 export { newUtility } from './utilities/newUtility';
 ```
 
-4. **Update Documentation**: Add the new utility to this README
+1. **Update Documentation**: Add the new utility to this README
 
 ### Code Guidelines
 

@@ -1,0 +1,15 @@
+
+Linting "design-system"...
+[0m[0m
+[0m[4m/Volumes/MagicBag/GitHub/Mimic/Mimic/packages/design-system/vite.config.ts[24m[0m
+[0m  [2m1:1[22m  [31merror[39m    Resolve error: typescript with invalid interface loaded as resolver  [2mimport/no-duplicates[22m[0m
+[0m  [2m1:1[22m  [33mwarning[39m  Resolve error: typescript with invalid interface loaded as resolver  [2mimport/order[22m[0m
+[0m  [2m1:1[22m  [33mwarning[39m  Run autofix to sort these imports!                                   [2msimple-import-sort/imports[22m[0m
+[0m[0m
+[0m[31m[1m✖ 3 problems (1 error, 2 warnings)[22m[39m[0m
+[0m[31m[1m[22m[39m[31m[1m  0 errors and 1 warning potentially fixable with the `--fix` option.[22m[39m[0m
+[0m[31m[1m[22m[39m[0m
+✖ 3 problems (1 error, 2 warnings)
+
+  0 errors and 1 warning are potentially fixable with the `--fix` option.
+
