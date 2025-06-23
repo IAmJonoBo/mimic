@@ -1,20 +1,20 @@
 {
   "run": {
-    "command": "nx run workspace-format:clean:ds-store",
-    "startTime": "2025-06-23T03:38:26.789Z",
-    "endTime": "2025-06-23T03:38:40.965Z",
+    "command": "nx run workspace-format:typecheck --verbose",
+    "startTime": "2025-06-23T04:03:02.189Z",
+    "endTime": "2025-06-23T04:03:02.319Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "workspace-format:clean:ds-store",
-      "target": "clean:ds-store",
+      "taskId": "workspace-format:typecheck",
+      "target": "typecheck",
       "projectName": "workspace-format",
-      "hash": "2208964638174246417",
-      "startTime": "2025-06-23T03:38:26.882Z",
-      "endTime": "2025-06-23T03:38:40.962Z",
+      "hash": "4474776792793429551",
+      "startTime": "2025-06-23T04:03:02.265Z",
+      "endTime": "2025-06-23T04:03:02.282Z",
       "params": "",
-      "cacheStatus": "cache-miss",
+      "cacheStatus": "local-cache-hit",
       "status": 0
     }
   ]
