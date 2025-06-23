@@ -190,15 +190,6 @@ pnpm test collision-prevention
 pnpm lint
 pnpm build
 
-```bash
-# Run all collision prevention checks
-pnpm validate:collision-prevention
-
-# Run specific checks
-pnpm test collision-prevention
-pnpm lint
-pnpm build
-
 # Manual validation
 node packages/shared-utils/dist/collision-prevention.js
 ```
@@ -218,4 +209,3 @@ predictable behavior across all platforms and development tools.
 
 **Implementation Complete**: All collision-prevention strategies documented in Specify warnings, Supernova docs,
 and Locofy FAQ are now enforced through code, configuration, and automated validation.
-

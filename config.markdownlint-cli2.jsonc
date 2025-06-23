@@ -4,11 +4,11 @@
       "line_length": 120,
       "code_block_line_length": 120,
       "tables": false,
-      "strict": true
+      "strict": true,
     },
     "MD036": false,
     "MD040": false,
-    "MD051": false
+    "MD051": false,
   },
   "ignores": [
     "**/node_modules/**",
@@ -101,6 +101,6 @@
 
     // Changelog files
     "CHANGELOG.md",
-    "**/CHANGELOG.md"
-  ]
+    "**/CHANGELOG.md",
+  ],
 }
