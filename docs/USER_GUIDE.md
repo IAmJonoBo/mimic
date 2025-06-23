@@ -4,7 +4,8 @@
 **Last Updated**: June 2025\
 **Target Audience**: Designers, Developers, DevOps Engineers
 
-> **📖 Document Overview**: This User Guide provides step-by-step instructions for using the Mimic design token pipeline.
+> **📖 Document Overview**: This User Guide provides step-by-step instructions for using the Mimic design token
+pipeline.
 > For comprehensive technical details, see the [Control Document](./CONTROL_DOCUMENT.md).
 > For quick setup, see the [README](../README.md).
 

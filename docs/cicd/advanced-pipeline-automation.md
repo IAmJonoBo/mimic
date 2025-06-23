@@ -5,12 +5,19 @@ cross-platform deployment, performance monitoring, and release orchestration.
 
 ## Table of Contents
 
-- [Multi-Stage Pipeline Architecture](#multi-stage-pipeline-architecture)
-- [Token Validation Automation](#token-validation-automation)
-- [Cross-Platform Build Matrix](#cross-platform-build-matrix)
-- [Performance Monitoring](#performance-monitoring)
-- [Automated Release Management](#automated-release-management)
-- [Security and Compliance](#security-and-compliance)
+- [Advanced CI/CD Pipeline Automation](#advanced-cicd-pipeline-automation)
+  - [Table of Contents](#table-of-contents)
+  - [Multi-Stage Pipeline Architecture](#multi-stage-pipeline-architecture)
+    - [GitHub Actions Workflow Matrix](#github-actions-workflow-matrix)
+  - [Token Validation Automation](#token-validation-automation)
+    - [Schema Validation Pipeline](#schema-validation-pipeline)
+    - [Breaking Change Detection](#breaking-change-detection)
+  - [Cross-Platform Build Matrix](#cross-platform-build-matrix)
+    - [Platform-Specific Build Configurations](#platform-specific-build-configurations)
+  - [Performance Monitoring](#performance-monitoring)
+    - [Automated Performance Tracking](#automated-performance-tracking)
+  - [Automated Release Management](#automated-release-management)
+    - [Semantic Release Configuration](#semantic-release-configuration)
 
 ## Multi-Stage Pipeline Architecture
 

@@ -5,7 +5,10 @@
       "code_block_line_length": 120,
       "tables": false,
       "strict": true
-    }
+    },
+    "MD036": false,
+    "MD040": false,
+    "MD051": false
   },
   "ignores": [
     "**/node_modules/**",
@@ -84,6 +87,17 @@
     "**/*.timestamp-*",
     "**/vite.config.*.timestamp*",
     "**/vitest.config.*.timestamp*",
+
+    // Nx cache and build artifacts
+    "**/nx-cache/**",
+    "**/.nx-cache/**",
+
+    // Completion and status files
+    "**/*_COMPLETE.md",
+    "**/*_COMPLETION_*.md",
+    "**/PIPELINE_*.md",
+    "**/APPLE_*.md",
+    "**/COLLISION_*.md",
 
     // Changelog files
     "CHANGELOG.md",

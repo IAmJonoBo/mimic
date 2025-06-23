@@ -214,4 +214,5 @@ This document summarizes all the comprehensive documentation created for the Mim
 - **Update Process**: Integrated with release workflow
 - **Feedback Channel**: GitHub issues and discussions
 
-This comprehensive documentation set ensures that the Mimic design system is well-documented, easy to use, and maintainable for both current and future team members.
+This comprehensive documentation set ensures that the Mimic design system is well-documented, easy to use, and
+maintainable for both current and future team members.

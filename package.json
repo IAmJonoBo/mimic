@@ -29,14 +29,15 @@
     "lint:workspace": "nx run workspace-format:lint",
     "lint:affected": "nx affected -t lint",
     "lint:css": "stylelint 'packages/**/*.{css,scss,sass}' --fix",
-    "lint:md": "markdownlint-cli2 --fix '**/*.md' '!**/node_modules/**' '!**/.git/**' '!**/.trunk/**' '!**/.nx/**' '!**/._*' '!**/.github/instructions/**'",
+    "lint:md": "markdownlint-cli2 --config config.markdownlint-cli2.jsonc --fix '**/*.md'",
+    "lint:md:fix": "node scripts/fix-markdown-line-length.js && pnpm lint:md",
     "lint:md:fix-line-length": "node scripts/fix-markdown-line-length.js",
     "lint:commits": "commitlint --from=HEAD~1 --to=HEAD",
     "e2e": "nx run-many -t e2e",
     "dev": "nx run-many -t serve --parallel=10",
     "clean": "nx reset && rm -rf node_modules && pnpm install",
     "clean:apple": "node tools/apple-cleaner.js",
-    "clean:ds-store": "find . -name '.DS_Store' -type f -delete",
+    "clean:ds-store": "find . -name '.DS_Store' -type f -delete && find . -name '._*' -type f -delete",
     "clean:xcode": "find . -name '*.xcuserdata*' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name 'xcuserdata' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name '*.xcworkspace/xcuserdata' -type d -exec rm -rf {} + 2>/dev/null || true",
     "clean:apple-logs": "find . -name '*.crash' -type f -delete 2>/dev/null || true; find . -name '*.crashlog' -type f -delete 2>/dev/null || true; find . -name '*.diag' -type f -delete 2>/dev/null || true",
     "clean:spotlight": "find . -name '.Spotlight-V100' -type d -exec rm -rf {} + 2>/dev/null || true; find . -name '.fseventsd' -type d -exec rm -rf {} + 2>/dev/null || true",
@@ -138,7 +139,8 @@
       "stylelint --fix"
     ],
     "*.{md,mdx}": [
-      "markdownlint-cli2 --fix"
+      "node scripts/fix-markdown-line-length.js",
+      "markdownlint-cli2 --config config.markdownlint-cli2.jsonc --fix"
     ],
     "*.{toml,yaml,yml,xml}": [
       "dprint fmt --stdin {}"
@@ -149,8 +151,8 @@
     "overrides": {
       "react": "19.1.0",
       "react-dom": "19.1.0",
-      "esbuild@<=0.24.2": ">=0.25.0",
-      "koa@<2.16.1": ">=2.16.1"
+      "esbuild@<=0.24.2": ">=0.25.5",
+      "koa@<2.16.1": ">=3.0.0"
     },
     "onlyBuiltDependencies": [
       "@bundled-es-modules/glob",

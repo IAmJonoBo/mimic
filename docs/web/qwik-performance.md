@@ -1,6 +1,7 @@
 # Qwik City Performance Optimization
 
-Complete guide to Qwik City performance: image optimization, prefetch strategies, service worker integration, and build optimizations.
+Complete guide to Qwik City performance: image optimization, prefetch strategies, service worker integration, and build
+optimizations.
 
 ## Table of Contents
 
@@ -816,4 +817,5 @@ if [ -f "dist/manifest.json" ]; then
 fi
 ```
 
-This comprehensive Qwik City performance documentation covers essential optimization strategies for excellent Core Web Vitals.
+This comprehensive Qwik City performance documentation covers essential optimization strategies for excellent Core Web
+Vitals.

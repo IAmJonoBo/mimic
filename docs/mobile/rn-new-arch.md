@@ -682,4 +682,5 @@ module.exports = config;
 ```
 
 This comprehensive guide ensures seamless integration of Mimic design tokens with React Native's New Architecture,\
-providing optimal performance and platform-specific optimizations while maintaining token consistency across all platforms.
+providing optimal performance and platform-specific optimizations while maintaining token consistency across all
+platforms.

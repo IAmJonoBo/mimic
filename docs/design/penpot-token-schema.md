@@ -544,4 +544,5 @@ CHOKIDAR_USEPOLLING=true pnpm tokens:watch
 
 ---
 
-This documentation ensures that the Penpot → Style Dictionary → Multi-platform pipeline is fully traceable and maintainable.
+This documentation ensures that the Penpot → Style Dictionary → Multi-platform pipeline is fully traceable and
+maintainable.

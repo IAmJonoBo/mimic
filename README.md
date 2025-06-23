@@ -301,8 +301,10 @@ naming collisions, file-path collisions, module boundary violations, and runtime
 3. **Module Boundary Enforcement**: Nx rules prevent illegal cross-platform imports
 4. **Runtime Isolation**: Platform-specific global scoping prevents conflicts
 5. **Tailwind CSS Compatibility**: `ds-` prefix prevents utility class conflicts per Specify/Locofy warnings
-6. **Metro Deduplication**: Scoped package names (`@mimic/design-tokens`) prevent React Native bundle duplication per Locofy FAQ
-7. **Storybook Port Management**: Fixed ports (Web:6006, Mobile:7007, Desktop:6008) prevent dev-machine conflicts per Supernova docs
+6. **Metro Deduplication**: Scoped package names (`@mimic/design-tokens`) prevent React Native bundle duplication per
+Locofy FAQ
+7. **Storybook Port Management**: Fixed ports (Web:6006, Mobile:7007, Desktop:6008) prevent dev-machine conflicts per
+Supernova docs
 
 ### Token Namespace Strategy
 

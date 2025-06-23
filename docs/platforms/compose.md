@@ -948,4 +948,5 @@ class IOSThemeTest {
 
 ---
 
-_This documentation is updated with each Compose Multiplatform release and covers the latest platform-specific features._
+_This documentation is updated with each Compose Multiplatform release and covers the latest platform-specific
+features._
