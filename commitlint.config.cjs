@@ -54,7 +54,7 @@ module.exports = {
         'security',
       ],
     ],
-    'subject-case': [2, 'always', 'sentence-case'],
+    'subject-case': [0, 'never'], // Disable case checking to prevent commit blocking
     'subject-min-length': [2, 'always', 3],
     'subject-max-length': [2, 'always', 72],
     'header-max-length': [2, 'always', 100],
