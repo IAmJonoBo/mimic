@@ -7,7 +7,7 @@ Thank you for your interest in contributing to Mimic! We welcome contributions f
 - [Code of Conduct](#-code-of-conduct)
 - [Getting Started](#-getting-started)
 - [Development Workflow](#-development-workflow)
-- [Architecture Guidelines](#-architecture-guidelines)
+- [Architecture Guidelines](#architecture-guidelines)
 - [Code Style Guidelines](#-code-style-guidelines)
 - [Testing Requirements](#-testing-requirements)
 - [Submitting Changes](#-submitting-changes)
@@ -387,7 +387,7 @@ Include screenshots for UI changes.
 - **Make changes** in separate commits
 - **Update tests** if implementation changes
 
-## 🏗️ Architecture Guidelines
+## Architecture Guidelines
 
 Mimic implements a comprehensive collision-prevention architecture with strict module boundaries to ensure
 system integrity and prevent conflicts across platforms.
