@@ -37,7 +37,7 @@ services:
       - mimic-dev
 
   penpot-redis:
-    image: redis:7
+    image: redis:8
     restart: always
     networks:
       - mimic-dev
