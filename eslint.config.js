@@ -17,6 +17,7 @@ export default [
       '**/.pnpm-store/**',
       '**/storybook-static/**',
       '**/coverage/**',
+      '/tmp/**',
       '**/tmp/**',
       '**/temp/**',
       '**/.temp/**',

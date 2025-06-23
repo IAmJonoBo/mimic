@@ -1,7 +1,0 @@
-> nx run design-system:lint
-
-
-Linting "design-system"...
-
-✔ All files pass linting
-

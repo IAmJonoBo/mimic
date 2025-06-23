@@ -68,6 +68,18 @@
       },
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/.markdownlint-cli2.yaml"]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "*.{js,ts,mjs,cjs}",
+          "tools/**/*.{js,ts,mjs,cjs}",
+          "scripts/**/*.{js,ts,mjs,cjs}",
+          "apps/**/*.{js,ts,tsx,jsx}",
+          "!packages/**/*"
+        ]
+      }
     }
   },
   "tags": ["format", "tooling", "dx"]

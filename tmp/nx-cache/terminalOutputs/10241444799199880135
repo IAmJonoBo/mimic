@@ -1,7 +1,0 @@
-> nx run shared-utils:lint
-
-
-Linting "shared-utils"...
-
-✔ All files pass linting
-
