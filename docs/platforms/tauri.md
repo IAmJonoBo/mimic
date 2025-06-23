@@ -358,88 +358,387 @@ if (typeof window !== 'undefined') {
 }
 ```
 
-## Frontend Folder Configuration
+## Token Integration
 
-### Development and Build Configuration
+### Design Token Loading in Tauri
 
-Point Tauri to Qwik build output in tauri.conf.json:
+Import and use design tokens in your Tauri frontend:
+
+```typescript
+// src/lib/tokens.ts
+import '@mimic/design-tokens/css';
+import { dsColors, dsSpacing, dsTypography } from '@mimic/design-tokens/js';
+
+export class TokenManager {
+  static loadTokens() {
+    // Tokens are automatically available via CSS imports
+    // JavaScript tokens are available for dynamic usage
+    console.log('Design tokens loaded:', {
+      colors: dsColors,
+      spacing: dsSpacing,
+      typography: dsTypography,
+    });
+  }
+
+  static applyTheme(theme: 'light' | 'dark') {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
+}
+```
+
+### CSS Token Usage
+
+Apply design tokens in your Tauri app styles:
+
+```css
+/* src/styles/app.css */
+.tauri-app {
+  font-family: var(--ds-typography-body-font-family);
+  color: var(--ds-color-text-primary);
+  background-color: var(--ds-color-background-primary);
+  padding: var(--ds-spacing-md);
+}
+
+.tauri-button {
+  background-color: var(--ds-color-primary-500);
+  color: var(--ds-color-primary-contrast);
+  padding: var(--ds-spacing-sm) var(--ds-spacing-md);
+  border-radius: var(--ds-border-radius-md);
+  border: none;
+  font-size: var(--ds-typography-button-font-size);
+  font-weight: var(--ds-typography-button-font-weight);
+}
+
+.tauri-button:hover {
+  background-color: var(--ds-color-primary-600);
+}
+```
+
+### Dynamic Token Application
+
+Use tokens dynamically in TypeScript:
+
+```typescript
+// src/components/TauriComponent.tsx
+import { dsColors, dsSpacing } from '@mimic/design-tokens/js';
+
+export function TauriComponent() {
+  const dynamicStyles = {
+    backgroundColor: dsColors.primary[500],
+    padding: `${dsSpacing.sm} ${dsSpacing.md}`,
+    margin: dsSpacing.lg,
+  };
+
+  return (
+    <div style={dynamicStyles}>
+      <h1>Tauri App with Design Tokens</h1>
+    </div>
+  );
+}
+```
+
+### Token Bundling Configuration
+
+Ensure tokens are properly bundled with your Tauri app:
 
 ```json
 {
-  "build": {
-    "beforeDevCommand": "nx run web:serve",
-    "beforeBuildCommand": "nx run web:build",
-    "devPath": "http://localhost:5173",
-    "distDir": "../../../dist/apps/web",
-    "withGlobalTauri": false
-  },
-  "package": {
-    "productName": "Mimic Design System",
-    "version": "1.0.0"
-  },
+  "tauri": {
+    "bundle": {
+      "resources": [
+        "tokens/**",
+        "assets/**",
+        "../../../packages/design-tokens/dist/**"
+      ]
+    }
+  }
+}
+```
+
+## Security Checklist
+
+### Essential Security Configuration
+
+- [ ] **CSP Configuration**: Implement strict Content Security Policy
+- [ ] **Asset Protocol**: Enable secure asset loading with proper scope
+- [ ] **API Allowlist**: Minimize enabled APIs to only what's needed
+- [ ] **File System Access**: Restrict to specific directories only
+- [ ] **Network Access**: Limit HTTP requests to trusted domains
+- [ ] **Shell Commands**: Disable or strictly limit shell access
+
+### CSP Security Validation
+
+Verify your CSP configuration:
+
+```bash
+# Test CSP headers in development
+curl -I http://localhost:5173
+
+# Check for CSP violations in browser console
+# Look for: "Content Security Policy directive violated"
+```
+
+### API Surface Minimization
+
+Audit your allowlist configuration:
+
+```json
+{
   "tauri": {
     "allowlist": {
-      "all": false
-    },
+      "all": false,
+      "shell": {
+        "all": false,
+        "open": true,
+        "scope": [
+          {
+            "name": "browser",
+            "cmd": "open",
+            "args": {
+              "url": {
+                "validator": "^https://github\\.com/.*|^https://design\\.penpot\\.app/.*"
+              }
+            }
+          }
+        ]
+      },
+      "fs": {
+        "all": false,
+        "readFile": true,
+        "writeFile": true,
+        "scope": ["$APPDATA/mimic/**"]
+      }
+    }
+  }
+}
+```
+
+### Code Signing and Distribution
+
+Configure code signing for production builds:
+
+```json
+{
+  "tauri": {
     "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "app.mimic.design",
-      "icon": [
-        "icons/32x32.png",
-        "icons/128x128.png",
-        "icons/128x128@2x.png",
-        "icons/icon.icns",
-        "icons/icon.ico"
-      ],
-      "resources": ["tokens/**", "assets/**"],
-      "externalBin": [],
-      "copyright": "",
-      "category": "DeveloperTool",
-      "shortDescription": "Open-source design system",
-      "longDescription": "Mimic is an open-source design system built with design tokens for consistent, scalable UI development."
-    },
+      "macOS": {
+        "signingIdentity": "Developer ID Application: Your Name",
+        "hardenedRuntime": true,
+        "entitlements": "entitlements.plist"
+      },
+      "windows": {
+        "certificateThumbprint": "YOUR_CERT_THUMBPRINT",
+        "timestampUrl": "http://timestamp.digicert.com"
+      }
+    }
+  }
+}
+```
+
+### Security Testing
+
+Regular security validation:
+
+```bash
+# Audit dependencies
+cargo audit
+
+# Check for security vulnerabilities
+npm audit
+
+# Run security linting
+cargo clippy -- -D warnings
+
+# Test CSP compliance
+npm run test:security
+```
+
+## Advanced Configuration
+
+### Multi-Window Configuration
+
+Configure multiple windows for advanced desktop features:
+
+```json
+{
+  "tauri": {
     "windows": [
       {
-        "fullscreen": false,
-        "resizable": true,
+        "label": "main",
         "title": "Mimic Design System",
         "width": 1200,
         "height": 800,
         "minWidth": 800,
-        "minHeight": 600
+        "minHeight": 600,
+        "resizable": true,
+        "fullscreen": false
+      },
+      {
+        "label": "preferences",
+        "title": "Preferences",
+        "width": 600,
+        "height": 400,
+        "resizable": false,
+        "center": true,
+        "visible": false
       }
     ]
   }
 }
 ```
 
-### Nx Integration for Tauri Build
+### System Tray Integration
 
-Configure Nx to work with Tauri builds:
+Add system tray functionality:
 
-```json
-{
-  "name": "build-tauri",
-  "executor": "@nx/run-commands:run-commands",
-  "options": {
-    "command": "tauri build",
-    "cwd": "apps/desktop/src-tauri"
-  },
-  "dependsOn": ["build"]
+```rust
+// src-tauri/src/main.rs
+use tauri::{CustomMenuItem, SystemTray, SystemTrayMenu, SystemTrayEvent};
+
+fn main() {
+    let quit = CustomMenuItem::new("quit".to_string(), "Quit");
+    let preferences = CustomMenuItem::new("preferences".to_string(), "Preferences");
+    let tray_menu = SystemTrayMenu::new()
+        .add_item(preferences)
+        .add_native_item(tauri::SystemTrayMenuItem::Separator)
+        .add_item(quit);
+
+    let system_tray = SystemTray::new().with_menu(tray_menu);
+
+    tauri::Builder::default()
+        .system_tray(system_tray)
+        .on_system_tray_event(|app, event| match event {
+            SystemTrayEvent::LeftClick {
+                position: _,
+                size: _,
+                ..
+            } => {
+                let window = app.get_window("main").unwrap();
+                window.show().unwrap();
+                window.set_focus().unwrap();
+            }
+            SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
+                "quit" => {
+                    std::process::exit(0);
+                }
+                "preferences" => {
+                    let window = app.get_window("preferences").unwrap();
+                    window.show().unwrap();
+                    window.set_focus().unwrap();
+                }
+                _ => {}
+            },
+            _ => {}
+        })
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }
 ```
 
-Tauri development script:
+### Native Menu Integration
+
+Configure native application menus:
+
+```rust
+// src-tauri/src/main.rs
+use tauri::{Menu, MenuItem, Submenu};
+
+fn main() {
+    let menu = Menu::new()
+        .add_submenu(Submenu::new(
+            "File",
+            Menu::new()
+                .add_item(MenuItem::CloseWindow)
+                .add_native_item(tauri::MenuItem::Separator)
+                .add_item(MenuItem::Quit),
+        ))
+        .add_submenu(Submenu::new(
+            "Edit",
+            Menu::new()
+                .add_item(MenuItem::Undo)
+                .add_item(MenuItem::Redo)
+                .add_native_item(tauri::MenuItem::Separator)
+                .add_item(MenuItem::Cut)
+                .add_item(MenuItem::Copy)
+                .add_item(MenuItem::Paste),
+        ))
+        .add_submenu(Submenu::new(
+            "View",
+            Menu::new()
+                .add_item(MenuItem::EnterFullScreen)
+                .add_item(MenuItem::Minimize)
+                .add_item(MenuItem::Zoom),
+        ));
+
+    tauri::Builder::default()
+        .menu(menu)
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
+```
+
+### Performance Optimization
+
+Optimize Tauri app performance:
 
 ```json
 {
-  "name": "dev-tauri",
-  "executor": "@nx/run-commands:run-commands",
-  "options": {
-    "command": "tauri dev",
-    "cwd": "apps/desktop/src-tauri"
+  "tauri": {
+    "bundle": {
+      "resources": ["tokens/**"],
+      "externalBin": [],
+      "deb": {
+        "depends": []
+      }
+    },
+    "allowlist": {
+      "all": false
+    }
   },
-  "dependsOn": ["serve"]
+  "build": {
+    "withGlobalTauri": false
+  }
+}
+```
+
+### Development Tools Integration
+
+Configure development tools:
+
+```json
+{
+  "scripts": {
+    "tauri:dev": "nx run web:serve & tauri dev",
+    "tauri:build": "nx run web:build && tauri build",
+    "tauri:bundle": "tauri build --bundles all"
+  }
+}
+```
+
+### Cross-Platform Considerations
+
+Platform-specific configurations:
+
+```json
+{
+  "tauri": {
+    "bundle": {
+      "macOS": {
+        "frameworks": [],
+        "minimumSystemVersion": "10.13",
+        "useBootstrapper": false
+      },
+      "windows": {
+        "wix": {
+          "language": "en-US"
+        }
+      },
+      "linux": {
+        "deb": {
+          "depends": ["libwebkit2gtk-4.0-37"]
+        }
+      }
+    }
+  }
 }
 ```
