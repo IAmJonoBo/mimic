@@ -1,7 +1,7 @@
 import js from '@eslint/js';
+import nxEslintPlugin from '@nx/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
-import nxEslintPlugin from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
 
 export default [
