@@ -1,6 +1,7 @@
 import js from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import nxEslintPlugin from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
 
 export default [
@@ -67,6 +68,7 @@ export default [
     plugins: {
       import: importPlugin,
       'simple-import-sort': simpleImportSort,
+      '@nx': nxEslintPlugin,
     },
     rules: {
       // Import ordering and organization
@@ -87,6 +89,43 @@ export default [
             'parent',
             'sibling',
             'index',
+          ],
+        },
+      ],
+
+      // Nx module boundary enforcement
+      '@nx/enforce-module-boundaries': [
+        'error',
+        {
+          depConstraints: [
+            {
+              sourceTag: 'scope:tokens',
+              onlyDependOnLibsWithTags: ['scope:shared'],
+            },
+            {
+              sourceTag: 'scope:design-system',
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens'],
+            },
+            {
+              sourceTag: 'scope:web',
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens', 'scope:design-system'],
+            },
+            {
+              sourceTag: 'scope:mobile',
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens'],
+            },
+            {
+              sourceTag: 'scope:desktop',
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens', 'scope:design-system'],
+            },
+            {
+              sourceTag: 'type:lib',
+              onlyDependOnLibsWithTags: ['type:lib', 'type:util'],
+            },
+            {
+              sourceTag: 'type:app',
+              onlyDependOnLibsWithTags: ['type:lib', 'type:util', 'scope:shared'],
+            },
           ],
         },
       ],

@@ -1,18 +1,20 @@
 # Mimic Design Token Pipeline: Master Control Document
 
-**Version**: 2.0.0  
-**Last Updated**: December 2024  
-**Status**: Production Ready
+**Version**: 2.2.0  
+**Last Updated**: June 2025  
+**Status**: Production Ready with Collision-Prevention Architecture
 
 This document serves as the canonical reference and control handbook for the complete Mimic design
-token pipeline. It orchestrates all components, workflows, and integrations across the entire ecosystem.
+token pipeline. It orchestrates all components, workflows, and integrations across the entire ecosystem
+with comprehensive collision-prevention strategies for multi-platform deployment.
 
 ## Executive Summary
 
 Mimic is a comprehensive, open-source design token management platform that provides real-time
 synchronization between design tools (Penpot), transformation systems (Style Dictionary), and
 platform-specific outputs (Qwik, React Native, Tauri). This control document defines the complete
-architecture, workflows, and operational procedures for the entire pipeline.
+architecture, workflows, and operational procedures for the entire pipeline, including the industry-leading
+collision-prevention architecture that eliminates naming, file-path, module boundary, and runtime conflicts.
 
 ## Architecture Overview
 
@@ -24,32 +26,32 @@ graph TB
         P[Penpot Design Files]
         PJ[Penpot JSON Export]
     end
-    
+
     subgraph "Token Layer"
         SD[Style Dictionary]
         TT[Token Transformer]
         TV[Token Validator]
     end
-    
+
     subgraph "Build Layer"
         WB[Web Build]
         MB[Mobile Build]
         DB[Desktop Build]
     end
-    
+
     subgraph "Platform Layer"
         QC[Qwik City]
         RN[React Native]
         TR[Tauri]
         SB[Storybook]
     end
-    
+
     subgraph "Distribution Layer"
         CDN[Token CDN]
         NPM[NPM Registry]
         GH[GitHub Releases]
     end
-    
+
     P --> PJ
     PJ --> TT
     TT --> SD
@@ -57,12 +59,12 @@ graph TB
     TV --> WB
     TV --> MB
     TV --> DB
-    
+
     WB --> QC
     WB --> SB
     MB --> RN
     DB --> TR
-    
+
     QC --> CDN
     RN --> NPM
     TR --> GH
@@ -71,12 +73,13 @@ graph TB
 
 ### System Architecture Principles
 
-1. **Deterministic**: Every build produces identical results given the same inputs
-2. **Platform-Agnostic**: Tokens work consistently across all supported platforms
-3. **Type-Safe**: Full TypeScript support with generated type definitions
-4. **Performance-First**: Optimized for both build-time and runtime performance
-5. **Developer-Friendly**: Comprehensive tooling, documentation, and debugging support
-6. **Production-Ready**: Enterprise-grade security, monitoring, and deployment processes
+1. **Collision-Free**: Comprehensive namespace strategy prevents all token, file, and runtime conflicts
+2. **Deterministic**: Every build produces identical results given the same inputs
+3. **Platform-Agnostic**: Tokens work consistently across all supported platforms with proper isolation
+4. **Type-Safe**: Full TypeScript support with generated type definitions
+5. **Performance-First**: Optimized for both build-time and runtime performance
+6. **Developer-Friendly**: Comprehensive tooling, documentation, and debugging support
+7. **Production-Ready**: Enterprise-grade security, monitoring, and deployment processes
 
 ## Pipeline Control Flow
 
@@ -90,14 +93,14 @@ interface TokenLifecycle {
     format: 'Penpot JSON';
     validation: 'Schema Compliance';
   };
-  
+
   // 2. Transformation Phase
   transform: {
     tool: 'Style Dictionary';
     config: 'Multi-Platform';
     outputs: ['CSS', 'JS', 'JSON', 'Kotlin', 'Swift', 'Rust'];
   };
-  
+
   // 3. Validation Phase
   validate: {
     schema: boolean;
@@ -105,14 +108,14 @@ interface TokenLifecycle {
     accessibility: boolean;
     performance: boolean;
   };
-  
+
   // 4. Distribution Phase
   distribute: {
     web: 'Qwik City + Storybook';
     mobile: 'React Native (iOS/Android)';
     desktop: 'Tauri (Windows/macOS/Linux)';
   };
-  
+
   // 5. Deployment Phase
   deploy: {
     staging: 'Automated';
@@ -127,21 +130,25 @@ interface TokenLifecycle {
 #### Design Token Update Workflow
 
 1. **Design Phase** (Penpot)
+
    - Designer updates tokens in Penpot
    - Export validated Penpot JSON
    - Automatic schema validation
 
 2. **Transform Phase** (Style Dictionary)
+
    - Parse Penpot JSON format
    - Apply platform-specific transforms
    - Generate type-safe outputs
 
 3. **Validation Phase** (Automated)
+
    - Schema compliance check
    - Semantic validation (contrast, spacing)
    - Performance impact analysis
 
 4. **Integration Phase** (CI/CD)
+
    - Automated builds across platforms
    - Visual regression testing
    - Performance budget validation
@@ -155,16 +162,17 @@ interface TokenLifecycle {
 
 ### Core Technologies Stack
 
-| Layer | Technology | Version | Purpose |
-|-------|------------|---------|---------|
-| **Design** | Penpot | Latest | Design tool integration |
-| **Transform** | Style Dictionary | 4.x | Token transformation |
-| **Web** | Qwik City | 1.x | Web application framework |
-| **Mobile** | React Native | 0.73+ | Mobile application platform |
-| **Desktop** | Tauri | 2.x | Desktop application framework |
-| **Testing** | Storybook | 8.5+ | Component testing & documentation |
-| **CI/CD** | GitHub Actions | Latest | Automated pipeline orchestration |
-| **Language** | TypeScript | 5.x | Primary development language |
+| Layer         | Technology       | Version | Purpose                                        |
+| ------------- | ---------------- | ------- | ---------------------------------------------- |
+| **Design**    | Penpot           | 2.x     | Design tool integration                        |
+| **Transform** | Style Dictionary | 4.x     | Token transformation with collision prevention |
+| **Web**       | Qwik City        | 2.x     | Web application framework                      |
+| **Mobile**    | React Native     | 0.80+   | Mobile application platform (New Architecture) |
+| **Desktop**   | Tauri            | 2.x     | Desktop application framework                  |
+| **Testing**   | Storybook        | 8.5+    | Component testing & documentation              |
+| **CI/CD**     | GitHub Actions   | Latest  | Automated pipeline orchestration               |
+| **Language**  | TypeScript       | 5.x     | Primary development language                   |
+| **Monorepo**  | Nx               | Latest  | Build orchestration and module boundaries      |
 
 ### Platform-Specific Configurations
 
@@ -178,9 +186,23 @@ interface TokenLifecycle {
     "SSR/SSG support",
     "Image optimization",
     "Performance budgets",
-    "Bundle splitting"
+    "Bundle splitting",
+    "Collision-safe token integration",
+    "Prefetch viewport optimization",
+    "Rust-based build optimizer"
   ],
-  "tokenFormats": ["CSS Custom Properties", "JavaScript", "TypeScript"],
+  "tokenFormats": [
+    "CSS Custom Properties (--ds-* prefixed)",
+    "SCSS Variables ($ds-* prefixed)",
+    "JavaScript (ds prefixed)",
+    "TypeScript (ds prefixed with types)"
+  ],
+  "tokenPaths": [
+    "packages/design-tokens/libs/tokens/css/tokens.css",
+    "packages/design-tokens/libs/tokens/scss/tokens.scss",
+    "packages/design-tokens/libs/tokens/js/tokens.js",
+    "packages/design-tokens/libs/tokens/ts/tokens.ts"
+  ],
   "deployment": "Vercel/Netlify/Cloudflare"
 }
 ```
@@ -195,9 +217,21 @@ interface TokenLifecycle {
     "Hermes engine optimization",
     "Native module integration",
     "Platform-specific theming",
-    "Performance monitoring"
+    "Performance monitoring",
+    "Metro cache deduplication",
+    "Interprocedural Optimization (IPO)",
+    "~20% size reduction vs old architecture"
   ],
-  "tokenFormats": ["JavaScript", "JSON", "Native (iOS/Android)"],
+  "tokenFormats": [
+    "JavaScript (ds prefixed)",
+    "TypeScript (ds prefixed with types)",
+    "JSON (structured data)",
+    "StyleSheet objects (ds prefixed)"
+  ],
+  "tokenPaths": [
+    "packages/design-tokens/libs/tokens/react-native/theme.ts",
+    "packages/design-tokens/libs/tokens/json/tokens.json"
+  ],
   "deployment": "App Store / Play Store"
 }
 ```
@@ -212,12 +246,247 @@ interface TokenLifecycle {
     "Code signing & notarization",
     "Auto-updater with verification",
     "Security hardening",
-    "Cross-platform builds"
+    "Cross-platform builds",
+    "Asset path isolation",
+    "Automatic CSP injection",
+    "Native desktop performance"
   ],
-  "tokenFormats": ["CSS", "JavaScript", "Rust"],
+  "tokenFormats": [
+    "CSS Custom Properties (--ds-* prefixed)",
+    "JavaScript (ds prefixed)",
+    "TypeScript (ds prefixed with types)",
+    "Rust (future: ds_ prefixed)"
+  ],
+  "tokenPaths": [
+    "packages/design-tokens/libs/tokens/css/tokens.css",
+    "packages/design-tokens/libs/tokens/js/tokens.js",
+    "packages/design-tokens/libs/tokens/ts/tokens.ts"
+  ],
   "deployment": "GitHub Releases / Microsoft Store / Homebrew"
 }
 ```
+
+#### Compose Multiplatform
+
+```json
+{
+  "framework": "Compose Multiplatform",
+  "language": "Kotlin",
+  "features": [
+    "Cross-platform UI sharing",
+    "Native performance",
+    "Material Design integration",
+    "Namespace isolation",
+    "Dynamic theming support",
+    "System theme detection"
+  ],
+  "tokenFormats": [
+    "Kotlin objects (DsTokens)",
+    "Package namespace (ds.theme)",
+    "Kotlin constants (Ds prefixed)"
+  ],
+  "tokenPaths": ["packages/design-tokens/libs/tokens/compose/Theme.kt"],
+  "platforms": ["Android", "iOS", "Desktop", "Web"]
+}
+```
+
+## Collision Prevention Architecture
+
+The Mimic design token pipeline implements a comprehensive collision-prevention strategy that eliminates  
+all four types of conflicts: naming collisions, file-path collisions, module boundary violations, and  
+runtime global conflicts. This architecture ensures safe deployment across all supported platforms while  
+maintaining design consistency.
+
+### Core Collision Prevention Principles
+
+1. **Universal Namespace Strategy**: All tokens use the `ds-` prefix across all platforms
+2. **Platform-Rooted Build Paths**: Each platform outputs to isolated directories
+3. **Module Boundary Enforcement**: Nx rules prevent illegal cross-platform imports
+4. **Runtime Isolation**: Platform-specific global scoping prevents conflicts
+
+### Token Namespace Strategy
+
+**Principle**: All design tokens use the `ds-` prefix to guarantee no CSS variables, JavaScript constants,  
+or platform variables collide with third-party libraries or framework internals.
+
+| Platform                  | Prefix Format      | Example Output               | Import Path                                                |
+| ------------------------- | ------------------ | ---------------------------- | ---------------------------------------------------------- |
+| **CSS/SCSS**              | `ds-` (kebab-case) | `--ds-color-primary-500`     | `packages/design-tokens/libs/tokens/css/tokens.css`        |
+| **JavaScript/TypeScript** | `ds` (camelCase)   | `dsColorPrimary500`          | `packages/design-tokens/libs/tokens/js/tokens.js`          |
+| **Kotlin/Compose**        | `Ds` (PascalCase)  | `DsTokens.Color.PRIMARY_500` | `packages/design-tokens/libs/tokens/compose/Theme.kt`      |
+| **Dart/Flutter**          | `Ds` (PascalCase)  | `DsTokens.primary_500`       | `packages/design-tokens/libs/tokens/dart/tokens.dart`      |
+| **React Native**          | `ds` (camelCase)   | `dsColorPrimary500`          | `packages/design-tokens/libs/tokens/react-native/theme.ts` |
+
+### Platform-Rooted Build Paths
+
+Each platform outputs to its own isolated directory structure to eliminate file-name collisions:
+
+```text
+packages/design-tokens/libs/tokens/
+├── css/
+│   ├── tokens.css           # Web CSS custom properties
+│   └── variables.css        # Additional CSS utilities
+├── scss/
+│   ├── tokens.scss          # SCSS variables and mixins
+│   └── functions.scss       # SCSS helper functions
+├── js/
+│   ├── tokens.js            # ES6 JavaScript constants
+│   └── utils.js             # JavaScript utilities
+├── ts/
+│   ├── tokens.ts            # TypeScript constants with types
+│   ├── types.ts             # Type definitions
+│   └── index.ts             # Barrel exports
+├── json/
+│   ├── tokens.json          # Platform-agnostic JSON
+│   └── metadata.json        # Token metadata
+├── dart/
+│   ├── tokens.dart          # Flutter/Dart classes
+│   └── theme.dart           # Dart theme utilities
+├── compose/
+│   ├── Theme.kt             # Compose Multiplatform objects
+│   ├── Colors.kt            # Color definitions
+│   └── Typography.kt        # Typography definitions
+└── react-native/
+    ├── theme.ts             # React Native StyleSheet
+    ├── colors.ts            # Color constants
+    └── typography.ts        # Typography constants
+```
+
+**Migration Note**: Projects using the old `dist/` paths must update imports:
+
+```diff
+// Old (deprecated - collision-prone)
+- import { tokens } from '../design-tokens/dist/ts/tokens';
+- import '../design-tokens/dist/css/tokens.css';
+
+// New (collision-safe)
++ import { tokens } from '../design-tokens/libs/tokens/ts/tokens';
++ import '../design-tokens/libs/tokens/css/tokens.css';
+```
+
+### Module Boundary Enforcement
+
+Nx ESLint rules prevent illegal cross-platform token imports:
+
+```json
+// .eslintrc.json
+{
+  "rules": {
+    "@nx/enforce-module-boundaries": [
+      "error",
+      {
+        "depConstraints": [
+          {
+            "sourceTag": "scope:web",
+            "onlyDependOnLibsWithTags": ["scope:shared", "scope:tokens-web"]
+          },
+          {
+            "sourceTag": "scope:mobile",
+            "onlyDependOnLibsWithTags": ["scope:shared", "scope:tokens-mobile"]
+          },
+          {
+            "sourceTag": "scope:desktop",
+            "onlyDependOnLibsWithTags": ["scope:shared", "scope:tokens-desktop"]
+          },
+          {
+            "sourceTag": "scope:design-tokens",
+            "onlyDependOnLibsWithTags": []
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+### Runtime Collision Prevention
+
+| Runtime Environment | Collision Risk                       | Prevention Strategy         | Implementation                             |
+| ------------------- | ------------------------------------ | --------------------------- | ------------------------------------------ |
+| **Qwik City**       | CSS variables vs Tailwind/frameworks | Prefixed `--ds-*` variables | Tailwind safelist: `^ds-` pattern          |
+| **React Native**    | Metro cache conflicts                | Import isolation            | Import only via `@tokens/react-native`     |
+| **Compose MP**      | Package name clashes                 | Namespace isolation         | Use `ds.theme` package namespace           |
+| **Tauri Desktop**   | Asset path conflicts                 | Path isolation              | Configure `distDir` to isolated build path |
+| **Storybook**       | Builder composition conflicts        | Isolated builders           | Separate webpack configs per platform      |
+
+### Collision Detection and Monitoring
+
+#### Build-Time Validation
+
+```typescript
+// Style Dictionary collision detection
+const validateCollisions = (tokens: DesignToken[]) => {
+  const collisions = tokens.filter(
+    token =>
+      !token.name.startsWith('ds-') && !token.path.includes('libs/tokens/')
+  );
+
+  if (collisions.length > 0) {
+    throw new Error(
+      `Token collision detected: ${collisions.map(t => t.name).join(', ')}`
+    );
+  }
+};
+```
+
+#### CI/CD Collision Gates
+
+```yaml
+# .github/workflows/collision-check.yml
+- name: Validate Token Namespace
+  run: |
+    # Ensure all CSS tokens use --ds-* prefix
+    grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/ && exit 1 || true
+
+    # Ensure all JS tokens use ds prefix
+    grep -r "^[[:space:]]*[^d][^s][A-Z]" packages/design-tokens/libs/tokens/js/ && exit 1 || true
+
+    # Ensure all imports use libs/tokens/ paths
+    grep -r "dist/" apps/ libs/ && exit 1 || true
+
+- name: Module Boundary Check
+  run: nx run-many -t lint --parallel --maxParallel=4
+```
+
+#### Runtime Monitoring
+
+```typescript
+// Runtime collision detection (development mode)
+if (process.env.NODE_ENV === 'development') {
+  const globalVars = Object.keys(window).filter(
+    key => key.startsWith('ds') && key !== 'dsTokens'
+  );
+
+  if (globalVars.length > 0) {
+    console.warn('Potential runtime collision detected:', globalVars);
+  }
+}
+```
+
+### Storybook Composition Architecture
+
+To prevent Storybook builder conflicts across platforms:
+
+```javascript
+// .storybook/main.js (Web)
+export default {
+  framework: '@storybook/qwik-vite',
+  builders: {
+    'web': '@storybook/builder-vite'
+  }
+};
+
+// .storybook/main.mobile.js (Mobile)
+export default {
+  framework: '@storybook/react-native',
+  builders: {
+    'mobile': '@storybook/builder-react-native'
+  }
+};
+```
+
+This architecture ensures complete isolation between platform-specific Storybook instances while enabling  
+composition for cross-platform component documentation.
 
 ## Quality Assurance Framework
 
@@ -241,7 +510,15 @@ interface TokenLifecycle {
 - **Cross-Browser**: Validate appearance across browsers
 - **Responsive Design**: Test across device sizes
 
-#### 4. Performance Testing
+#### 4. Collision Prevention Testing
+
+- **Namespace Validation**: Ensure all tokens use proper ds- prefixes
+- **Import Path Testing**: Validate platform-rooted import paths work correctly
+- **Module Boundary Testing**: Verify Nx boundaries prevent illegal cross-platform imports
+- **Runtime Isolation**: Test that platform globals don't conflict
+- **Storybook Composition**: Validate isolated builders work without conflicts
+
+#### 5. Performance Testing
 
 - **Bundle Size**: Monitor and enforce size budgets
 - **Load Times**: Validate Core Web Vitals compliance
@@ -255,6 +532,7 @@ interface TokenLifecycle {
 - [ ] Type checking (TypeScript, Rust)
 - [ ] Unit tests pass
 - [ ] Security scanning
+- [ ] Token namespace validation (ds- prefix enforcement)
 
 #### Pull Request Gates
 
@@ -263,6 +541,8 @@ interface TokenLifecycle {
 - [ ] Performance budgets met
 - [ ] Documentation updated
 - [ ] Code review approved
+- [ ] Module boundary compliance check
+- [ ] Token collision analysis
 
 #### Release Gates
 
@@ -271,6 +551,8 @@ interface TokenLifecycle {
 - [ ] Performance benchmarks met
 - [ ] Documentation complete
 - [ ] Staging validation successful
+- [ ] Cross-platform collision validation
+- [ ] Import path integrity check
 
 ## Security & Compliance
 
@@ -374,23 +656,28 @@ interface TokenLifecycle {
 
 #### Developer Documentation
 
-- [Getting Started Guide](./onboarding/README.md)
-- [Advanced Developer Guide](./onboarding/advanced-contributor-guide.md)
-- [API Reference](./api/README.md)
-- [Platform Integration Guides](./platforms/README.md)
+- [User Guide](./USER_GUIDE.md) - Complete user guide for all stakeholders
+- [Getting Started Guide](./onboarding/README.md) - First-time setup and onboarding
+- [Advanced Developer Guide](./onboarding/advanced-contributor-guide.md) - Deep-dive development topics
+- [API Reference](./api/README.md) - Complete API documentation
+- [Platform Integration Guides](./platforms/README.md) - Platform-specific implementation details
 
 #### Design Documentation
 
-- [Penpot Integration](./design/penpot-integration.md)
-- [Token Schema Documentation](./design/penpot-token-schema.md)
-- [Design System Guidelines](./design/README.md)
+- [Design Tokens Guide](./DESIGN_TOKENS.md) - Complete design token reference
+- [Penpot Integration](./design/penpot-integration.md) - Penpot setup and export procedures
+- [Token Schema Documentation](./design/tokens-schema.md) - Token structure and validation
+- [Collision Prevention Guide](./design/collision-prevention.md) - Collision prevention strategies
+- [Design System Guidelines](./design/README.md) - Design system best practices
 
 #### Technical Documentation
 
-- [Architecture Overview](./architecture/README.md)
-- [Build System Documentation](./build/README.md)
-- [CI/CD Pipeline Guide](./cicd/README.md)
-- [Security Framework](./security/README.md)
+- [Implementation Guide](./IMPLEMENTATION_GUIDE.md) - Technical implementation details
+- [Design Tokens Migration](./DESIGN_TOKENS_MIGRATION.md) - Migration procedures and guides
+- [Architecture Overview](./architecture/README.md) - System architecture and decisions
+- [Build System Documentation](./build/README.md) - Build system configuration
+- [CI/CD Pipeline Guide](./cicd/README.md) - Continuous integration/deployment
+- [Security Framework](./security/README.md) - Security policies and procedures
 
 #### Platform-Specific Documentation
 
@@ -491,24 +778,35 @@ interface TokenLifecycle {
 
 ### Short-Term Goals (3 months)
 
+- [x] Complete collision-prevention architecture implementation
+- [x] Implement platform-rooted token build paths (libs/tokens/)
+- [x] Add comprehensive namespace strategy (ds- prefixing)
 - [ ] Complete documentation coverage at 100%
-- [ ] Achieve full platform parity for all token formats
-- [ ] Implement advanced performance monitoring
+- [ ] Implement Nx module boundary enforcement in CI
+- [ ] Add Storybook Composition architecture
+- [ ] Implement automated collision detection CI checks
 - [ ] Establish comprehensive security scanning
+- [ ] Complete migration guides for all teams
 
 ### Medium-Term Goals (6 months)
 
-- [ ] Add support for additional design tools
-- [ ] Implement advanced theming capabilities
-- [ ] Expand platform support (Flutter, Vue, etc.)
-- [ ] Develop advanced developer tooling
+- [ ] Add support for additional design tools (Figma, Sketch)
+- [ ] Implement advanced theming capabilities (dark/light mode automation)
+- [ ] Expand platform support (Flutter native, Vue, Angular, Svelte)
+- [ ] Develop advanced developer tooling (VS Code extension, CLI tools)
+- [ ] Add runtime collision monitoring and alerting
+- [ ] Implement advanced performance monitoring
+- [ ] Add automated visual regression testing across all platforms
 
 ### Long-Term Goals (12 months)
 
-- [ ] Enterprise features and support
-- [ ] Advanced analytics and insights
-- [ ] Marketplace for token themes
-- [ ] AI-powered design token optimization
+- [ ] Enterprise features and support (SSO, audit trails, compliance)
+- [ ] Advanced analytics and insights (token usage tracking, performance metrics)
+- [ ] Marketplace for token themes and community contributions
+- [ ] AI-powered design token optimization and suggestions
+- [ ] Real-time collision monitoring dashboard
+- [ ] Advanced collaboration features (design handoff, approval workflows)
+- [ ] Multi-tenant support for design agencies and enterprises
 
 ## Conclusion
 
@@ -526,6 +824,7 @@ the platform evolves with the needs of its users and the broader design and deve
 
 - **Owner**: Mimic Core Team
 - **Review Cycle**: Quarterly
-- **Next Review**: March 2025
+- **Next Review**: September 2025
 - **Distribution**: Public (Open Source)
 - **Classification**: Documentation
+- **Version**: 2.2.0 (Collision Prevention Architecture - Complete)

@@ -1,5 +1,8 @@
 // Shared utilities for the Mimic design system
 
+// Runtime collision detection and guard-rails
+import RuntimeGuards, { runtimeGuards } from './runtime-guards.js';
+
 /**
  * Utility functions for design token manipulation
  */
@@ -96,4 +99,9 @@ export default {
   tokenUtils,
   platformUtils,
   validationUtils,
+  RuntimeGuards,
+  runtimeGuards,
 };
+
+// Runtime collision detection and guard-rails
+export { default as RuntimeGuards, runtimeGuards } from './runtime-guards.js';

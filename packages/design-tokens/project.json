@@ -20,7 +20,39 @@
     "tokens:build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "style-dictionary build",
+        "command": "style-dictionary build -c style-dictionary.config.js",
+        "cwd": "packages/design-tokens"
+      }
+    },
+    "tokens:export": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd ../../tools/penpot-export && docker-compose up --build",
+        "cwd": "packages/design-tokens"
+      }
+    },
+    "tokens:sync": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run design-tokens:tokens:export",
+          "nx run design-tokens:tokens:build"
+        ],
+        "cwd": "packages/design-tokens",
+        "parallel": false
+      }
+    },
+    "tokens:validate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm run build && pnpm test && pnpm run validate",
+        "cwd": "packages/design-tokens"
+      }
+    },
+    "watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "style-dictionary build --watch",
         "cwd": "packages/design-tokens"
       }
     },
@@ -28,7 +60,10 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/design-tokens/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "packages/design-tokens/**/*.{ts,tsx,js,jsx}",
+          "!packages/design-tokens/libs/tokens/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "test": {

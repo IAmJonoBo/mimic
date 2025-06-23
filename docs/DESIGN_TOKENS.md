@@ -1,22 +1,25 @@
 # 🎨 Design Tokens Guide
 
-Complete guide to the Mimic design system's token architecture, usage patterns, and best practices.
+Complete guide to the Mimic design system's collision-free token architecture, usage patterns, and best practices.
 
 ## 📋 Overview
 
 The `@mimic/design-tokens` package provides the foundation for consistent visual design across all Mimic
-applications. Built with W3C Design Token Community Group (DTCG) standards and powered by Style Dictionary, it
-transforms design tokens exported from Penpot into platform-specific formats for web, mobile, and desktop
-applications.
+applications with comprehensive collision prevention. Built with W3C Design Token Community Group (DTCG)
+standards and powered by Style Dictionary, it transforms design tokens exported from Penpot into
+platform-specific, namespaced formats for web, mobile, and desktop applications.
 
 ## 🔄 Penpot to Production Workflow
 
-Our design token system follows a complete design-to-code pipeline:
+Our design token system follows a complete design-to-code pipeline with collision-free architecture:
 
 ```text
-Penpot Design → Token Export → Style Dictionary → Platform Outputs → Applications
-     ↓              ↓              ↓               ↓             ↓
-  Design File   tokens.json    Transforms     CSS/TS/Dart    Web/Mobile/Desktop
+Penpot Design → Token Export → Style Dictionary → Namespaced Outputs → Applications
+     ↓              ↓              ↓                    ↓                ↓
+  Design File   tokens.json    Transforms         Platform-Rooted      Web/Mobile/Desktop
+                                   +               CSS/TS/Dart/Kotlin   with ds- Prefixes
+                               Collision            (libs/tokens/)
+                              Prevention
 ```
 
 ### 1. Design in Penpot
@@ -26,6 +29,7 @@ Designers create and manage tokens directly in Penpot v2 using the built-in desi
 - **Global Tokens**: Base values (colors, spacing, typography)
 - **Alias Tokens**: Semantic references (primary, secondary, success)
 - **W3C DTCG Format**: Automatic compliance with industry standards
+- **Collision-Safe Naming**: Following ds- prefix conventions
 
 ### 2. Automated Export
 
@@ -39,15 +43,16 @@ pnpm run tokens:export
 # Runs via dev-container with penpot-export CLI
 ```
 
-### 3. Style Dictionary Transform
+### 3. Style Dictionary Transform with Collision Prevention
 
-The exported `tokens.json` flows through Style Dictionary to generate:
+The exported `tokens.json` flows through Style Dictionary to generate collision-free outputs:
 
-- **CSS Variables**: `--color-primary-500` for web styling
-- **TypeScript**: Type-safe token access functions
-- **Dart**: Theme objects for Flutter/Compose Multiplatform
-- **Kotlin**: Material Design theme integration
-- **JSON**: Raw token data for any platform
+- **CSS Variables**: `--ds-color-primary-500` for web styling (namespaced)
+- **TypeScript**: `dsColorPrimary500` type-safe token access (prefixed)
+- **Dart**: `DsTokens.primary_500` classes for Flutter (prefixed)
+- **Kotlin**: `ds.theme.DsTokens` Material Design integration (namespaced)
+- **JSON**: Platform-agnostic token data
+- **Platform-Rooted Paths**: `libs/tokens/{platform}/` structure
 
 ### 4. Multi-Platform Distribution
 
@@ -67,12 +72,12 @@ design properties like colors, spacing, typography, and more.
 
 ```typescript
 // Instead of magic values scattered throughout code
-backgroundColor: '#007bff'
-padding: '16px'
+backgroundColor: '#007bff';
+padding: '16px';
 
 // Use semantic, maintainable tokens
-backgroundColor: getToken('color.primary.500')
-padding: getToken('spacing.md')
+backgroundColor: getToken('color.primary.500');
+padding: getToken('spacing.md');
 ```
 
 ### Token Hierarchy
@@ -81,7 +86,7 @@ padding: getToken('spacing.md')
 Base Tokens (primitives)
     ↓ reference
 Semantic Tokens (contextual)
-    ↓ reference  
+    ↓ reference
 Component Tokens (specific)
     ↓ reference
 Platform Tokens (overrides)
@@ -134,27 +139,27 @@ Our color system provides semantic meaning and accessibility compliance:
 
 ```typescript
 // Primary brand colors
-getToken('color.primary.50')   // Lightest
-getToken('color.primary.500')  // Base
-getToken('color.primary.900')  // Darkest
+getToken('color.primary.50'); // Lightest
+getToken('color.primary.500'); // Base
+getToken('color.primary.900'); // Darkest
 
 // Secondary colors
-getToken('color.secondary.500')
+getToken('color.secondary.500');
 
 // Neutral scale (50-900)
-getToken('color.neutral.100')  // Light backgrounds
-getToken('color.neutral.600')  // Text colors
-getToken('color.neutral.900')  // Dark text
+getToken('color.neutral.100'); // Light backgrounds
+getToken('color.neutral.600'); // Text colors
+getToken('color.neutral.900'); // Dark text
 ```
 
 #### Semantic Colors
 
 ```typescript
 // State colors
-getToken('color.success.500')  // #22c55e
-getToken('color.warning.500')  // #f59e0b  
-getToken('color.error.500')    // #ef4444
-getToken('color.info.500')     // #3b82f6
+getToken('color.success.500'); // #22c55e
+getToken('color.warning.500'); // #f59e0b
+getToken('color.error.500'); // #ef4444
+getToken('color.info.500'); // #3b82f6
 ```
 
 #### Usage Examples
@@ -182,35 +187,35 @@ Typography tokens ensure consistent text rendering:
 #### Font Families
 
 ```typescript
-getToken('font.family.sans')      // Primary sans-serif stack
-getToken('font.family.serif')     // Serif for headings  
-getToken('font.family.mono')      // Code and monospace
+getToken('font.family.sans'); // Primary sans-serif stack
+getToken('font.family.serif'); // Serif for headings
+getToken('font.family.mono'); // Code and monospace
 ```
 
 #### Font Sizes
 
 ```typescript
 // Scale: xs, sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl
-getToken('font.size.xs')     // 0.75rem (12px)
-getToken('font.size.base')   // 1rem (16px)
-getToken('font.size.2xl')    // 1.5rem (24px)
+getToken('font.size.xs'); // 0.75rem (12px)
+getToken('font.size.base'); // 1rem (16px)
+getToken('font.size.2xl'); // 1.5rem (24px)
 ```
 
 #### Font Weights
 
 ```typescript
-getToken('font.weight.normal')    // 400
-getToken('font.weight.medium')    // 500
-getToken('font.weight.semibold')  // 600
-getToken('font.weight.bold')      // 700
+getToken('font.weight.normal'); // 400
+getToken('font.weight.medium'); // 500
+getToken('font.weight.semibold'); // 600
+getToken('font.weight.bold'); // 700
 ```
 
 #### Line Heights
 
 ```typescript
-getToken('line.height.tight')     // 1.25
-getToken('line.height.normal')    // 1.5
-getToken('line.height.relaxed')   // 1.75
+getToken('line.height.tight'); // 1.25
+getToken('line.height.normal'); // 1.5
+getToken('line.height.relaxed'); // 1.75
 ```
 
 ### Spacing
@@ -219,13 +224,13 @@ Consistent spacing creates visual rhythm:
 
 ```typescript
 // T-shirt sizing scale
-getToken('spacing.xs')   // 0.25rem (4px)
-getToken('spacing.sm')   // 0.5rem (8px)
-getToken('spacing.md')   // 1rem (16px)
-getToken('spacing.lg')   // 1.5rem (24px)
-getToken('spacing.xl')   // 2rem (32px)
-getToken('spacing.2xl')  // 2.5rem (40px)
-getToken('spacing.3xl')  // 3rem (48px)
+getToken('spacing.xs'); // 0.25rem (4px)
+getToken('spacing.sm'); // 0.5rem (8px)
+getToken('spacing.md'); // 1rem (16px)
+getToken('spacing.lg'); // 1.5rem (24px)
+getToken('spacing.xl'); // 2rem (32px)
+getToken('spacing.2xl'); // 2.5rem (40px)
+getToken('spacing.3xl'); // 3rem (48px)
 ```
 
 #### Usage Patterns
@@ -247,11 +252,11 @@ getToken('spacing.3xl')  // 3rem (48px)
 ### Border Radius
 
 ```typescript
-getToken('border.radius.none')   // 0
-getToken('border.radius.sm')     // 0.125rem (2px)
-getToken('border.radius.md')     // 0.375rem (6px) 
-getToken('border.radius.lg')     // 0.5rem (8px)
-getToken('border.radius.full')   // 9999px (circle)
+getToken('border.radius.none'); // 0
+getToken('border.radius.sm'); // 0.125rem (2px)
+getToken('border.radius.md'); // 0.375rem (6px)
+getToken('border.radius.lg'); // 0.5rem (8px)
+getToken('border.radius.full'); // 9999px (circle)
 ```
 
 ### Shadows
@@ -259,10 +264,10 @@ getToken('border.radius.full')   // 9999px (circle)
 Elevation system for depth and hierarchy:
 
 ```typescript
-getToken('shadow.sm')     // Subtle shadow
-getToken('shadow.md')     // Card shadow
-getToken('shadow.lg')     // Modal shadow
-getToken('shadow.xl')     // Floating elements
+getToken('shadow.sm'); // Subtle shadow
+getToken('shadow.md'); // Card shadow
+getToken('shadow.lg'); // Modal shadow
+getToken('shadow.xl'); // Floating elements
 ```
 
 ## 🛠️ Advanced Usage
@@ -314,19 +319,19 @@ if (!result.isValid) {
 
 ```typescript
 // Component-specific tokens
-getToken('component.button.padding.sm')     // Small button padding
-getToken('component.button.padding.md')     // Medium button padding  
-getToken('component.button.border.radius')  // Button border radius
-getToken('component.button.font.weight')    // Button text weight
+getToken('component.button.padding.sm'); // Small button padding
+getToken('component.button.padding.md'); // Medium button padding
+getToken('component.button.border.radius'); // Button border radius
+getToken('component.button.font.weight'); // Button text weight
 ```
 
 ### Card Component
 
 ```typescript
-getToken('component.card.padding')          // Card internal padding
-getToken('component.card.border.radius')    // Card corner radius
-getToken('component.card.shadow')           // Card elevation shadow
-getToken('component.card.background')       // Card background color
+getToken('component.card.padding'); // Card internal padding
+getToken('component.card.border.radius'); // Card corner radius
+getToken('component.card.shadow'); // Card elevation shadow
+getToken('component.card.background'); // Card background color
 ```
 
 ## 🎯 Best Practices
@@ -370,7 +375,7 @@ const Button = styled.button`
 const responsiveSpacing = {
   mobile: getToken('spacing.sm'),
   tablet: getToken('spacing.md'),
-  desktop: getToken('spacing.lg')
+  desktop: getToken('spacing.lg'),
 };
 
 // ✅ Good: Dynamic token access
@@ -379,7 +384,7 @@ const getStatusColor = (status: string) => {
     success: getToken('color.success.500'),
     warning: getToken('color.warning.500'),
     error: getToken('color.error.500'),
-    info: getToken('color.info.500')
+    info: getToken('color.info.500'),
   };
   return statusMap[status] || getToken('color.neutral.500');
 };
@@ -414,7 +419,7 @@ tokens/
 # Build all token outputs
 pnpm run build
 
-# Watch for changes during development  
+# Watch for changes during development
 pnpm run watch
 
 # Run validation tests
@@ -453,12 +458,12 @@ import { getToken } from '@mimic/design-tokens';
 const theme = {
   colors: {
     primary: getToken('color.primary.500'),
-    text: getToken('color.neutral.900')
+    text: getToken('color.neutral.900'),
   },
   spacing: {
     small: getToken('spacing.sm'),
-    medium: getToken('spacing.md')
-  }
+    medium: getToken('spacing.md'),
+  },
 };
 ```
 
@@ -472,8 +477,8 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: tokens.color.primary['500'],
     paddingHorizontal: tokens.spacing.md,
-    borderRadius: tokens.borderRadius.md
-  }
+    borderRadius: tokens.borderRadius.md,
+  },
 });
 ```
 
@@ -523,7 +528,10 @@ console.table(allTokens);
 
 // Check specific category
 const colors = getTokensByPattern('color.*');
-console.log('Available colors:', colors.map(t => t.path));
+console.log(
+  'Available colors:',
+  colors.map(t => t.path)
+);
 
 // Validate custom tokens
 import { validateTokens } from '@mimic/design-tokens';
@@ -536,7 +544,7 @@ console.log('Validation:', result);
 Current token system includes:
 
 - **115+ Total Tokens**: Comprehensive coverage across all categories
-- **10 Color Scales**: Primary, secondary, neutral, and semantic colors  
+- **10 Color Scales**: Primary, secondary, neutral, and semantic colors
 - **7 Spacing Steps**: T-shirt sizing from xs to 3xl
 - **5 Font Sizes**: xs to 4xl scale
 - **4 Border Radius**: none to full
@@ -579,23 +587,23 @@ module.exports = {
         primary: {
           50: getToken('color.primary.50'),
           500: getToken('color.primary.500'),
-          900: getToken('color.primary.900')
-        }
+          900: getToken('color.primary.900'),
+        },
       },
       spacing: {
-        'xs': getToken('spacing.xs'),
-        'sm': getToken('spacing.sm'),
-        'md': getToken('spacing.md')
-      }
-    }
-  }
+        xs: getToken('spacing.xs'),
+        sm: getToken('spacing.sm'),
+        md: getToken('spacing.md'),
+      },
+    },
+  },
 };
 ```
 
 ## 📚 References
 
 - **[W3C Design Token Community Group](https://www.w3.org/community/design-tokens/)** - Standards and specifications
-- **[Style Dictionary Documentation](https://amzn.github.io/style-dictionary/)** - Build tool documentation  
+- **[Style Dictionary Documentation](https://amzn.github.io/style-dictionary/)** - Build tool documentation
 - **[Design Tokens Handbook](https://designtokens.dev/)** - Best practices and patterns
 - **[Figma Tokens](https://docs.tokens.studio/)** - Design tool integration
 - **[Package Documentation](../packages/design-tokens/README.md)** - Technical implementation details
@@ -613,7 +621,7 @@ module.exports = {
 ### Proposing Changes
 
 1. Open an issue describing the token changes
-2. Provide use cases and rationale  
+2. Provide use cases and rationale
 3. Include accessibility considerations
 4. Test across all output formats
 5. Update relevant documentation

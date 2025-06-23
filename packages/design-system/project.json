@@ -25,12 +25,74 @@
         }
       }
     },
+    "storybook:mobile": {
+      "executor": "@nx/storybook:storybook",
+      "options": {
+        "port": 4401,
+        "configDir": "packages/design-system/.storybook",
+        "config": {
+          "configPath": "packages/design-system/.storybook/main.mobile.ts"
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "storybook:desktop": {
+      "executor": "@nx/storybook:storybook",
+      "options": {
+        "port": 4402,
+        "configDir": "packages/design-system/.storybook",
+        "config": {
+          "configPath": "packages/design-system/.storybook/main.desktop.ts"
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
     "build-storybook": {
       "executor": "@nx/storybook:build",
       "outputs": ["{options.outputDir}"],
       "options": {
         "outputDir": "packages/design-system/storybook-static",
         "configDir": "packages/design-system/.storybook"
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook:mobile": {
+      "executor": "@nx/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "packages/design-system/storybook-static-mobile",
+        "configDir": "packages/design-system/.storybook",
+        "config": {
+          "configPath": "packages/design-system/.storybook/main.mobile.ts"
+        }
+      },
+      "configurations": {
+        "ci": {
+          "quiet": true
+        }
+      }
+    },
+    "build-storybook:desktop": {
+      "executor": "@nx/storybook:build",
+      "outputs": ["{options.outputDir}"],
+      "options": {
+        "outputDir": "packages/design-system/storybook-static-desktop",
+        "configDir": "packages/design-system/.storybook",
+        "config": {
+          "configPath": "packages/design-system/.storybook/main.desktop.ts"
+        }
       },
       "configurations": {
         "ci": {

@@ -5,8 +5,8 @@
 [![Nx](https://img.shields.io/badge/built%20with-Nx-blue)](https://nx.dev)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)](https://www.typescriptlang.org/)
 
-> A modern, design-token-driven development pipeline using 100% libre tooling for building scalable design systems and
-> multi-platform applications.
+> A modern, collision-free design token management platform using 100% libre tooling for building scalable  
+> design systems and multi-platform applications with comprehensive collision prevention architecture.
 
 ## 🌟 Overview
 
@@ -145,7 +145,7 @@ make web-dev
 
 #### Testing & Quality
 
-```bash
+````bash
 # 🧪 Run all tests and linting
 make test
 
@@ -337,3 +337,4 @@ Built with ❤️ using 100% open-source tools
 
 This brief gives each discipline a concrete, OSS-only tool-chain while leaving space for incremental
 enhancements—ensuring the organisation controls every byte from design ideation to shipped binary.
+````
