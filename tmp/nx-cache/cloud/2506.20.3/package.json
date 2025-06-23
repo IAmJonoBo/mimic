@@ -10,7 +10,7 @@
     "enquirer": "2.4.1",
     "dotenv": "~10.0.0",
     "node-machine-id": "^1.1.12",
-    "tar": "6.1.11",
+    "tar": "6.2.1",
     "strip-json-comments": "^5.0.1",
     "chalk": "^4.1.0",
     "yargs-parser": ">=21.1.1",
