@@ -2,7 +2,9 @@
 
 ## Summary
 
-The collision-prevention strategies for the Mimic design token pipeline have been fully implemented and tested. All three critical collision-prevention strategies documented in the design system are now enforced through code, configuration, and CI/CD automation.
+The collision-prevention strategies for the Mimic design token pipeline have been fully implemented and tested.
+All three critical collision-prevention strategies documented in the design system are now enforced through code,
+configuration, and CI/CD automation.
 
 ## Implemented Strategies
 
@@ -117,18 +119,18 @@ The collision-prevention strategies for the Mimic design token pipeline have bee
 
 ## Implementation Architecture
 
-``markdown
+```text
 Mimic Design Token Pipeline
 ├── Collision Prevention (This Implementation)
-│ ├── Token Namespace Guards (ds- prefix)
-│ ├── Storybook Port Isolation (6006/7007/6008)
-│ ├── Metro Deduplication (@mimic/ scope)
-│ └── Runtime Validation (shared-utils)
+│   ├── Token Namespace Guards (ds- prefix)
+│   ├── Storybook Port Isolation (6006/7007/6008)
+│   ├── Metro Deduplication (@mimic/ scope)
+│   └── Runtime Validation (shared-utils)
 ├── Style Dictionary Pipeline
 ├── Platform Output Generation
 └── CI/CD Automation
+```
 
-``````markdown
 ## Key Technical Decisions
 
 1. **Prefix Strategy**: Used `ds-` prefix instead of generic names to prevent Tailwind conflicts
@@ -138,10 +140,10 @@ Mimic Design Token Pipeline
 
 ## Files Created
 
-`````markdown
+```text
 New Files:
 ├── packages/shared-utils/src/collision-prevention.ts (Runtime validation)
-├── packages/shared-utils/src/**tests**/collision-prevention.test.ts (Tests)
+├── packages/shared-utils/src/__tests__/collision-prevention.test.ts (Tests)
 ├── tailwind.config.example.ts (Example configuration)
 ├── metro.config.example.js (Example configuration)
 └── docs/COLLISION_PREVENTION.md (Documentation)
@@ -153,8 +155,8 @@ Modified Files:
 ├── packages/design-system/.storybook/main.mobile.ts (Port 7007)
 ├── packages/design-system/.storybook/main.desktop.ts (Port 6008)
 └── .github/workflows/collision-prevention.yml (Enhanced validation)
+```
 
-````markdown
 ## Next Steps
 
 ### For Team Integration
@@ -188,17 +190,17 @@ pnpm test collision-prevention
 pnpm lint
 pnpm build
 
+```bash
+# Run all collision prevention checks
+pnpm validate:collision-prevention
+
+# Run specific checks
+pnpm test collision-prevention
+pnpm lint
+pnpm build
+
 # Manual validation
 node packages/shared-utils/dist/collision-prevention.js
-```
-````
-`````
-``````
-
-````
-
-```
-
 ```
 
 ## Success Metrics
@@ -209,9 +211,11 @@ node packages/shared-utils/dist/collision-prevention.js
 - ✅ **100% Test Coverage**: All collision scenarios covered by tests
 - ✅ **CI/CD Integration**: Automated validation in every PR/push
 
-The Mimic design token pipeline now has comprehensive collision-prevention strategies that ensure stable, predictable behavior across all platforms and development tools.
+The Mimic design token pipeline now has comprehensive collision-prevention strategies that ensure stable,
+predictable behavior across all platforms and development tools.
 
 ---
 
-**Implementation Complete**: All collision-prevention strategies documented in Specify warnings, Supernova docs, and Locofy FAQ are now enforced through code, configuration, and automated validation.
-````
+**Implementation Complete**: All collision-prevention strategies documented in Specify warnings, Supernova docs,
+and Locofy FAQ are now enforced through code, configuration, and automated validation.
+
