@@ -1,11 +1,13 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
+/* global console, process */
 
 /**
  * Automated Markdown Line Length Fixer
  * Handles common MD013 violations with intelligent text wrapping
  */
 
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 import { glob } from 'glob';
 
@@ -67,7 +69,7 @@ function processMarkdownFile(filePath) {
 
     let inCodeBlock = false;
 
-    for (let line of lines) {
+    for (const line of lines) {
       // Track code blocks to avoid processing them
       if (line.startsWith('```')) {
         inCodeBlock = !inCodeBlock;

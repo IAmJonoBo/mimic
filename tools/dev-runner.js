@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
+/* global console */
 
 import { execSync } from 'node:child_process';
 import process from 'node:process';

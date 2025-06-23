@@ -44,7 +44,7 @@ through Trunk, optimized for developer experience and CI/CD performance in 2025.
 
 ### **1. Biome** (`biome.json`)
 
-_Primary JS/TS/JSON formatter - Rust-speed performance_
+### Primary JS/TS/JSON formatter - Rust-speed performance
 
 ```json
 {
@@ -84,7 +84,7 @@ _Primary JS/TS/JSON formatter - Rust-speed performance_
 
 ### **2. ESLint 9** (`eslint.config.js`)
 
-_Modern flat config with TypeScript support_
+#### Modern flat config with TypeScript support
 
 ```javascript
 import js from '@eslint/js';
@@ -122,7 +122,7 @@ export default [
 
 ### **3. markdownlint-cli2** (`.markdownlint-cli2.yaml`)
 
-_Modern Markdown linting with 2025 best practices & project-focused targeting_
+#### Modern Markdown linting with 2025 best practices & project-focused targeting
 
 ```yaml
 # markdownlint-cli2 configuration for modern 2025 best practices
@@ -216,7 +216,7 @@ nx affected -t lint:md
 
 ### **4. dprint** (`dprint.json`)
 
-_Rust-speed multi-language formatting_
+#### Rust-speed multi-language formatting
 
 ```json
 {
@@ -240,7 +240,7 @@ _Rust-speed multi-language formatting_
 
 ### **5. Stylelint** (`stylelint.config.cjs`)
 
-_CSS/SCSS linting with Tailwind support_
+#### CSS/SCSS linting with Tailwind support
 
 ```javascript
 module.exports = {
