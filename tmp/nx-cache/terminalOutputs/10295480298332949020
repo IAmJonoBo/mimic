@@ -1,0 +1,20 @@
+> markdownlint-cli2 --fix
+
+markdownlint-cli2 v0.18.1 (markdownlint v0.38.0)
+Finding: README.md CONTRIBUTING.md DEVELOPMENT.md docs/**/*.md docs/**/*.mdx packages/**/*.md packages/**/*.mdx .github/**/*.md !**/node_modules/** !node_modules/** !**/dist/** !**/build/** !**/lib/** !**/coverage/** !**/tmp/** !**/.nx/** !**/storybook-static/** !**/.pnpm-store/** !**/.turbo/** !**/.next/** !**/.vscode/** !**/.devcontainer/** !**/.trunk/** !**/.trunk/plugins/** !**/._* !**/.DS_Store !**/CHANGELOG.md !**/CHANGELOG*.md !**/*_COMPLETE.md !**/*_SUMMARY.md !**/*MIGRATION*.md !**/*RESOLVED.md !**/*CLEANING*.md
+Found:
+ .github/instructions/nx.instructions.md
+ CONTRIBUTING.md
+ DEVELOPMENT.md
+ README.md
+ docs/ADR.md
+ docs/API.md
+ docs/CODE_QUALITY_PROTOCOL.md
+ docs/DEPLOYMENT.md
+ docs/README.md
+ docs/TROUBLESHOOTING.md
+ packages/design-system/README.md
+ packages/design-tokens/README.md
+ packages/shared-utils/README.md
+Linting: 13 file(s)
+Summary: 0 error(s)

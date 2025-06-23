@@ -1,5 +1,4 @@
 /* eslint-env node */
-/* eslint-disable */
 module.exports = {
   root: true,
   extends: ['eslint:recommended', 'prettier'],

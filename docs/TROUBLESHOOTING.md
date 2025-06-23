@@ -181,7 +181,7 @@ cd packages/design-tokens
 pnpm build:tokens
 ````
 
-3. **Check Style Dictionary config:**
+1. **Check Style Dictionary config:**
 
    ```bash
    # Verify configuration

@@ -1,21 +1,21 @@
 {
   "run": {
-    "command": "nx run workspace-format:lint:md:check",
-    "startTime": "2025-06-23T01:14:42.618Z",
-    "endTime": "2025-06-23T01:14:43.587Z",
+    "command": "nx affected -t lint:md --base=HEAD~1",
+    "startTime": "2025-06-23T01:31:01.295Z",
+    "endTime": "2025-06-23T01:31:02.350Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "workspace-format:lint:md:check",
+      "taskId": "workspace-format:lint:md",
       "target": "lint:md",
       "projectName": "workspace-format",
-      "hash": "9441754691068225672",
-      "startTime": "2025-06-23T01:14:42.689Z",
-      "endTime": "2025-06-23T01:14:43.585Z",
+      "hash": "10295480298332949020",
+      "startTime": "2025-06-23T01:31:01.363Z",
+      "endTime": "2025-06-23T01:31:02.338Z",
       "params": "",
       "cacheStatus": "cache-miss",
-      "status": 1
+      "status": 0
     }
   ]
 }

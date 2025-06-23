@@ -14,7 +14,8 @@ Thank you for your interest in contributing to Mimic! We welcome contributions f
 
 ## 📜 Code of Conduct
 
-By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). We are committed to creating a welcoming and inclusive environment for everyone.
+By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). We
+are committed to creating a welcoming and inclusive environment for everyone.
 
 ## 🚀 Getting Started
 
