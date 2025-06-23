@@ -142,7 +142,17 @@
       "react-dom": "19.1.0",
       "esbuild@<=0.24.2": ">=0.25.0",
       "koa@<2.16.1": ">=2.16.1"
-    }
+    },
+    "onlyBuiltDependencies": [
+      "@bundled-es-modules/glob",
+      "@swc/core",
+      "aws-sdk",
+      "dprint",
+      "esbuild",
+      "nx",
+      "sharp",
+      "style-dictionary"
+    ]
   },
   "dependencies": {
     "storybook": "9.0.12"
