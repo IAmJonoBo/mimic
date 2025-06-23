@@ -12,7 +12,9 @@
         "outputPath": "packages/design-tokens/dist",
         "main": "packages/design-tokens/src/index.ts",
         "tsConfig": "packages/design-tokens/tsconfig.json",
-        "assets": ["packages/design-tokens/*.md"]
+        "assets": ["packages/design-tokens/*.md"],
+        "format": ["esm"],
+        "generatePackageJson": true
       }
     },
     "tokens:build": {

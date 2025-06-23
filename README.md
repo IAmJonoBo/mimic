@@ -89,11 +89,12 @@ All moving parts are MIT, Apache-2.0, or AGPL—permitting on-premises deploymen
 
 ### Prerequisites
 
-- **Node.js**: 18.0.0 or later
-- **pnpm**: 9.0.0 or later
+- **Node.js**: 20.0.0 LTS or later with corepack enabled
+- **pnpm**: 8.0.0 or later (install via `corepack enable`)
 - **Git**: For version control
+- **Docker**: For Penpot export automation (optional)
 
-### Installation
+### Installation & Bootstrap
 
 ```bash
 # Clone the repository
@@ -103,37 +104,63 @@ cd mimic
 # Install dependencies
 pnpm install
 
-# Build all packages
-pnpm build
+# Set up environment (optional - for Penpot integration)
+cp .env.example .env
+# Edit .env with your Penpot credentials
 
-# Start development
-pnpm dev
+# Build design tokens and all packages
+make tokens-build  # or: pnpm nx run tokens:build-all
+
+# Start full development environment
+make dev          # or: pnpm nx run dev:full-stack
 ```
 
-### Development Commands
+### Essential Commands
+
+#### Design Token Workflow
 
 ```bash
-# 🏗️ Build all packages
-pnpm build
+# � Export tokens from Penpot and build all outputs
+make tokens-sync    # Requires .env configuration
 
-# 🧪 Run all tests
-pnpm test
+# 👀 Watch tokens and rebuild on changes
+make tokens-watch
 
-# 🔍 Lint all packages
-pnpm lint
+# � Build design tokens only
+make tokens-build
+```
 
-# 📚 Start Storybook
-pnpm storybook
+#### Development Environment
 
-# 🎨 Build design tokens
-pnpm tokens:build
+```bash
+# 🚀 Start complete development environment (tokens + Storybook)
+make dev
+
+# 📚 Start Storybook component workshop
+make storybook
+
+# � Start web application development (when implemented)
+make web-dev
+```
+
+#### Testing & Quality
+
+```bash
+# 🧪 Run all tests and linting
+make test
+
+# 👀 Run visual regression tests
+make visual-test
+
+# 🔍 Run tests for affected projects only
+make test-affected
 
 # 🧹 Clean workspace
 pnpm clean:all
 
 # 📊 View dependency graph
 pnpm graph
-```
+```bash
 
 ## 📦 Package Structure
 

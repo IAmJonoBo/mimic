@@ -1,0 +1,54 @@
+{
+  "$description": "Mobile platform specific token overrides",
+  "typography": {
+    "fontSize": {
+      "$description": "Mobile-optimized font sizes using dp/pt units",
+      "xs": {
+        "$value": "12dp",
+        "$type": "dimension",
+        "$description": "Extra small font size for mobile"
+      },
+      "sm": {
+        "$value": "14dp",
+        "$type": "dimension",
+        "$description": "Small font size for mobile"
+      },
+      "base": {
+        "$value": "16dp",
+        "$type": "dimension",
+        "$description": "Base font size for mobile"
+      }
+    }
+  },
+  "spacing": {
+    "$description": "Mobile-optimized spacing using dp units",
+    "xs": {
+      "$value": "4dp",
+      "$type": "dimension",
+      "$description": "Extra small spacing for mobile"
+    },
+    "sm": {
+      "$value": "8dp",
+      "$type": "dimension",
+      "$description": "Small spacing for mobile"
+    },
+    "md": {
+      "$value": "16dp",
+      "$type": "dimension",
+      "$description": "Medium spacing for mobile"
+    }
+  },
+  "touch": {
+    "$description": "Touch target specific tokens",
+    "minSize": {
+      "$value": "44dp",
+      "$type": "dimension",
+      "$description": "Minimum touch target size"
+    },
+    "padding": {
+      "$value": "12dp",
+      "$type": "dimension",
+      "$description": "Touch target padding"
+    }
+  }
+}

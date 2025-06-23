@@ -1,0 +1,160 @@
+{
+  "$description": "Component-specific design tokens",
+  "button": {
+    "$description": "Button component tokens",
+    "padding": {
+      "$description": "Button padding tokens",
+      "small": {
+        "$value": "{spacing.xs} {spacing.sm}",
+        "$type": "dimension",
+        "$description": "Small button padding"
+      },
+      "medium": {
+        "$value": "{spacing.sm} {spacing.md}",
+        "$type": "dimension",
+        "$description": "Medium button padding"
+      },
+      "large": {
+        "$value": "{spacing.md} {spacing.lg}",
+        "$type": "dimension",
+        "$description": "Large button padding"
+      }
+    },
+    "borderRadius": {
+      "$value": "{border.radius.md}",
+      "$type": "dimension",
+      "$description": "Button border radius"
+    },
+    "fontSize": {
+      "$description": "Button font size tokens",
+      "small": {
+        "$value": "{typography.fontSize.sm}",
+        "$type": "dimension",
+        "$description": "Small button font size"
+      },
+      "medium": {
+        "$value": "{typography.fontSize.base}",
+        "$type": "dimension",
+        "$description": "Medium button font size"
+      },
+      "large": {
+        "$value": "{typography.fontSize.lg}",
+        "$type": "dimension",
+        "$description": "Large button font size"
+      }
+    },
+    "fontWeight": {
+      "$value": "{typography.fontWeight.medium}",
+      "$type": "fontWeight",
+      "$description": "Button font weight"
+    }
+  },
+  "card": {
+    "$description": "Card component tokens",
+    "padding": {
+      "$value": "{spacing.lg}",
+      "$type": "dimension",
+      "$description": "Card padding"
+    },
+    "borderRadius": {
+      "$value": "{border.radius.lg}",
+      "$type": "dimension",
+      "$description": "Card border radius"
+    },
+    "shadow": {
+      "$value": "{shadow.md}",
+      "$type": "shadow",
+      "$description": "Card shadow"
+    },
+    "border": {
+      "$value": "{border.width.thin} solid {color.border.default}",
+      "$type": "border",
+      "$description": "Card border"
+    }
+  },
+  "input": {
+    "$description": "Input component tokens",
+    "padding": {
+      "$value": "{spacing.sm} {spacing.md}",
+      "$type": "dimension",
+      "$description": "Input padding"
+    },
+    "borderRadius": {
+      "$value": "{border.radius.md}",
+      "$type": "dimension",
+      "$description": "Input border radius"
+    },
+    "fontSize": {
+      "$value": "{typography.fontSize.base}",
+      "$type": "dimension",
+      "$description": "Input font size"
+    },
+    "border": {
+      "$value": "{border.width.thin} solid {color.border.default}",
+      "$type": "border",
+      "$description": "Input border"
+    },
+    "borderFocus": {
+      "$value": "{border.width.medium} solid {color.border.brand}",
+      "$type": "border",
+      "$description": "Input focus border"
+    }
+  },
+  "heading": {
+    "$description": "Heading component tokens",
+    "fontFamily": {
+      "$value": "{typography.fontFamily.heading}",
+      "$type": "fontFamily",
+      "$description": "Heading font family"
+    },
+    "fontWeight": {
+      "$value": "{typography.fontWeight.bold}",
+      "$type": "fontWeight",
+      "$description": "Heading font weight"
+    },
+    "lineHeight": {
+      "$value": "{typography.lineHeight.tight}",
+      "$type": "number",
+      "$description": "Heading line height"
+    },
+    "h1": {
+      "$description": "H1 heading tokens",
+      "fontSize": {
+        "$value": "{typography.fontSize.4xl}",
+        "$type": "dimension",
+        "$description": "H1 font size"
+      },
+      "marginBottom": {
+        "$value": "{spacing.lg}",
+        "$type": "dimension",
+        "$description": "H1 bottom margin"
+      }
+    },
+    "h2": {
+      "$description": "H2 heading tokens",
+      "fontSize": {
+        "$value": "{typography.fontSize.3xl}",
+        "$type": "dimension",
+        "$description": "H2 font size"
+      },
+      "marginBottom": {
+        "$value": "{spacing.md}",
+        "$type": "dimension",
+        "$description": "H2 bottom margin"
+      }
+    },
+    "h3": {
+      "$description": "H3 heading tokens",
+      "fontSize": {
+        "$value": "{typography.fontSize.2xl}",
+        "$type": "dimension",
+        "$description": "H3 font size"
+      },
+      "marginBottom": {
+        "$value": "{spacing.md}",
+        "$type": "dimension",
+        "$description": "H3 bottom margin"
+      }
+    }
+  }
+}

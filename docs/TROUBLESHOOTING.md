@@ -262,27 +262,87 @@ pnpm build:tokens
 
 - CSS variables show old values
 - Component styles not reflecting token changes
+- `getToken()` returns stale values
 
 **Solutions:**
 
 1. **Rebuild token pipeline:**
 
    ```bash
-   pnpm nx run design-tokens:build
-   pnpm nx run design-system:build
+   cd packages/design-tokens
+   pnpm run clean && pnpm run build
    ```
 
 2. **Check token imports:**
 
    ```typescript
-   // Verify token imports are correct
-   import { tokens } from '@mimic/design-tokens';
-   console.log(tokens.color.primary.value);
+   // Verify token access is working
+   import { getToken } from '@mimic/design-tokens';
+   console.log('Primary color:', getToken('color.primary.500'));
    ```
 
-3. **Clear browser cache:**
-   - Hard refresh (Cmd+Shift+R / Ctrl+Shift+R)
-   - Clear browser cache completely
+3. **Clear build cache:**
+
+   ```bash
+   # Clear all caches
+   pnpm nx reset
+   rm -rf packages/design-tokens/dist
+   pnpm run build:tokens
+   ```
+
+4. **Verify token file changes:**
+
+   ```bash
+   # Check if token files have been modified
+   git status tokens/
+   pnpm test  # Run validation tests
+   ```
+
+### Token Not Found Errors
+
+**Symptoms:**
+
+- `getToken()` returns empty string or fallback value
+- Console warnings about missing tokens
+- CSS variables showing as `var(--undefined)`
+
+**Solutions:**
+
+1. **Check token path:**
+
+   ```typescript
+   // Debug token availability
+   import { getTokensByPattern } from '@mimic/design-tokens';
+   
+   // List all available tokens
+   const allTokens = getTokensByPattern('*');
+   console.table(allTokens);
+   
+   // Check specific category
+   const colors = getTokensByPattern('color.*');
+   console.log('Available colors:', colors.map(t => t.path));
+   ```
+
+2. **Verify token structure:**
+
+   ```bash
+   # Check token files exist
+   ls -la packages/design-tokens/tokens/
+   
+   # Validate token structure
+   pnpm test
+   ```
+
+3. **Use correct path format:**
+
+   ```typescript
+   // ✅ Correct: dot-separated path
+   getToken('color.primary.500')
+   
+   // ❌ Wrong: slash or other separators
+   getToken('color/primary/500')
+   getToken('color-primary-500')
+   ```
 
 ### CSS Variables Not Loading
 
@@ -290,29 +350,221 @@ pnpm build:tokens
 
 - Styles appear unstyled
 - CSS custom properties showing as `var(--undefined)`
+- Browser dev tools show missing CSS variables
 
 **Solutions:**
 
-1. **Check CSS import:**
+1. **Check CSS import order:**
 
    ```css
-   /* Ensure CSS variables are imported */
-   @import '@mimic/design-tokens/dist/css/variables.css';
+   /* ✅ Import tokens before using them */
+   @import '@mimic/design-tokens/css';
+   
+   .component {
+     color: var(--color-primary-500);
+   }
    ```
 
-2. **Verify token generation:**
+2. **Verify CSS generation:**
 
    ```bash
-   # Check if CSS file exists
+   # Check if CSS file exists and has content
    ls -la packages/design-tokens/dist/css/
-
-   # Check CSS content
-   cat packages/design-tokens/dist/css/variables.css
+   head -20 packages/design-tokens/dist/css/tokens.css
    ```
 
-3. **Check browser support:**
-   - CSS custom properties require modern browsers
-   - IE11 needs polyfill
+3. **Browser compatibility:**
+
+   ```css
+   /* Provide fallbacks for older browsers */
+   .component {
+     color: #007bff; /* fallback */
+     color: var(--color-primary-500, #007bff);
+   }
+   ```
+
+4. **Check build process:**
+
+   ```bash
+   # Ensure Style Dictionary build succeeds
+   cd packages/design-tokens
+   pnpm run build:tokens --verbose
+   ```
+
+### Token Validation Failures
+
+**Symptoms:**
+
+- Tests failing with validation errors
+- Build process showing token structure warnings
+- Missing `$value` or `$type` properties
+
+**Solutions:**
+
+1. **Run validation manually:**
+
+   ```typescript
+   import { validateTokens } from '@mimic/design-tokens';
+   
+   const result = validateTokens();
+   if (!result.isValid) {
+     console.error('Validation errors:', result.errors);
+     console.warn('Validation warnings:', result.warnings);
+   }
+   ```
+
+2. **Fix W3C DTCG format:**
+
+   ```json
+   // ✅ Correct format
+   {
+     "color": {
+       "primary": {
+         "500": {
+           "$value": "#007bff",
+           "$type": "color",
+           "$description": "Primary brand color"
+         }
+       }
+     }
+   }
+   
+   // ❌ Wrong format  
+   {
+     "color": {
+       "primary": {
+         "500": "#007bff"
+       }
+     }
+   }
+   ```
+
+3. **Check token file syntax:**
+
+   ```bash
+   # Validate JSON syntax
+   pnpm exec jsonlint tokens/base.json
+   pnpm exec jsonlint tokens/semantic.json
+   ```
+
+### Pattern Matching Issues
+
+**Symptoms:**
+
+- `getTokensByPattern()` returns empty array
+- Wildcard patterns not working as expected
+- Pattern matching too restrictive or too broad
+
+**Solutions:**
+
+1. **Test pattern matching:**
+
+   ```typescript
+   import { matchesPattern } from '@mimic/design-tokens';
+   
+   // Test specific patterns
+   console.log(matchesPattern('color.primary.500', 'color.primary.*')); // true
+   console.log(matchesPattern('color.primary.500', 'color.*')); // false
+   console.log(matchesPattern('anything', '*')); // true
+   ```
+
+2. **Use correct pattern syntax:**
+
+   ```typescript
+   // ✅ Correct patterns
+   getTokensByPattern('color.primary.*')  // All primary colors
+   getTokensByPattern('spacing.*')        // All spacing tokens
+   getTokensByPattern('*')                // All tokens
+   
+   // ❌ Wrong patterns
+   getTokensByPattern('color.primary.**') // Double asterisk not supported
+   getTokensByPattern('color.*.500')      // Middle wildcards not supported
+   ```
+
+3. **Debug pattern results:**
+
+   ```typescript
+   const pattern = 'color.primary.*';
+   const results = getTokensByPattern(pattern);
+   console.log(`Pattern "${pattern}" found ${results.length} tokens:`, 
+     results.map(r => r.path));
+   ```
+
+### Build Performance Issues
+
+**Symptoms:**
+
+- Slow token compilation
+- Style Dictionary taking too long
+- Watch mode not responding
+
+**Solutions:**
+
+1. **Optimize token structure:**
+
+   ```bash
+   # Check for deeply nested or large token files
+   find tokens/ -name "*.json" -exec wc -l {} \;
+   ```
+
+2. **Use incremental builds:**
+
+   ```bash
+   # Use watch mode for development
+   pnpm run watch
+   
+   # Build only what changed
+   pnpm nx affected:build
+   ```
+
+3. **Profile build performance:**
+
+   ```bash
+   # Run with timing information
+   time pnpm run build:tokens
+   
+   # Use verbose logging
+   pnpm run build:tokens --verbose
+   ```
+
+### Integration Issues
+
+**Symptoms:**
+
+- Tokens not available in consuming applications
+- Import/export errors
+- Module resolution failures
+
+**Solutions:**
+
+1. **Check package exports:**
+
+   ```json
+   // Verify package.json exports are correct
+   {
+     "exports": {
+       ".": "./dist/index.js",
+       "./css": "./dist/css/tokens.css",
+       "./json": "./dist/json/tokens.json"
+     }
+   }
+   ```
+
+2. **Verify build outputs:**
+
+   ```bash
+   # Check all expected files exist
+   ls -la packages/design-tokens/dist/
+   ```
+
+3. **Test import paths:**
+
+   ```typescript
+   // Test different import methods
+   import { getToken } from '@mimic/design-tokens';
+   import '@mimic/design-tokens/css';
+   import tokens from '@mimic/design-tokens/json';
+   ```
 
 ## Storybook Issues
 

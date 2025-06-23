@@ -49,6 +49,9 @@ Thumbs.db
 .AppleDouble
 .LSOverride
 
+# Ignore Nx Console auto-generated instructions
+.github/instructions/nx.instructions.md
+
 # macOS specific
 .DocumentRevisions-V100
 .fseventsd

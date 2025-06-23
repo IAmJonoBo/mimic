@@ -1,18 +1,18 @@
 {
   "run": {
-    "command": "nx run workspace-format:clean:ds-store",
-    "startTime": "2025-06-23T05:09:10.696Z",
-    "endTime": "2025-06-23T05:09:24.751Z",
+    "command": "nx run design-tokens:build --skip-nx-cache",
+    "startTime": "2025-06-23T07:38:42.365Z",
+    "endTime": "2025-06-23T07:38:44.107Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "workspace-format:clean:ds-store",
-      "target": "clean:ds-store",
-      "projectName": "workspace-format",
-      "hash": "8787732455336462137",
-      "startTime": "2025-06-23T05:09:10.769Z",
-      "endTime": "2025-06-23T05:09:24.748Z",
+      "taskId": "design-tokens:build",
+      "target": "build",
+      "projectName": "design-tokens",
+      "hash": "2181856644030762636",
+      "startTime": "2025-06-23T07:38:42.448Z",
+      "endTime": "2025-06-23T07:38:44.092Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

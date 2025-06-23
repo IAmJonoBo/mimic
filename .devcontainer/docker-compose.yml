@@ -98,6 +98,35 @@ services:
     networks:
       - mimic-dev
 
+  # Penpot token export automation
+  penpot-export:
+    image: ghcr.io/penpot/penpot-export:latest
+    container_name: mimic-penpot-export
+    volumes:
+      - ../packages/design-tokens/tokens:/out
+      - ../tools/penpot-export:/workspace
+    working_dir: /workspace
+    environment:
+      # Set these in your .env file or GitHub Secrets for CI
+      - PENPOT_FILE_ID=${PENPOT_FILE_ID:-}
+      - PENPOT_ACCESS_TOKEN=${PENPOT_ACCESS_TOKEN:-}
+      - PENPOT_TEAM_ID=${PENPOT_TEAM_ID:-}
+    command: >
+      sh -c "
+        echo 'Starting Penpot token export...' &&
+        penpot-export
+          --file $$PENPOT_FILE_ID
+          --token $$PENPOT_ACCESS_TOKEN
+          --team $$PENPOT_TEAM_ID
+          --out /out/base.json
+          --format dtcg &&
+        echo 'Export completed successfully!'
+      "
+    profiles:
+      - penpot-sync
+    networks:
+      - mimic-dev
+
 volumes:
   node_modules:
   pnpm_store:

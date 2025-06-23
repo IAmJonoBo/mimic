@@ -106,6 +106,10 @@ export default [
           alwaysTryTypes: true,
           project: ['./tsconfig.json', './packages/*/tsconfig.json'],
         },
+        'eslint-import-resolver-typescript': {
+          alwaysTryTypes: true,
+          project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+        },
       },
       'import/parsers': {
         '@typescript-eslint/parser': ['.ts', '.tsx'],

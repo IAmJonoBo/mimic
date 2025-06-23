@@ -57,8 +57,12 @@
     "visual-test": "nx run-many -t visual-test",
     "storybook": "nx run design-system:storybook",
     "build-storybook": "nx run design-system:build-storybook",
-    "tokens:build": "nx run tokens:build",
-    "tokens:watch": "nx run tokens:build --watch",
+    "tokens:build": "nx run design-tokens:build",
+    "tokens:build-all": "nx run design-tokens:build && nx run-many -t build",
+    "tokens:sync": "nx run design-tokens:tokens:sync",
+    "tokens:sync-all": "nx run design-tokens:tokens:sync && nx run-many -t build --skip-nx-cache",
+    "tokens:watch": "nx run design-tokens:watch",
+    "dev:full-stack": "concurrently 'nx run design-tokens:watch' 'nx run design-system:storybook'",
     "prepare": "husky",
     "graph": "nx graph",
     "graph:affected": "nx affected:graph",
@@ -97,6 +101,7 @@
     "dprint": "^0.50.0",
     "eslint": "^9.29.0",
     "eslint-config-prettier": "10.1.5",
+    "eslint-import-resolver-typescript": "^4.4.3",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "glob": "^11.0.3",
@@ -134,7 +139,8 @@
     ],
     "*.{toml,yaml,yml,xml}": [
       "dprint fmt --stdin {}"
-    ]
+    ],
+    ".github/instructions/nx.instructions.md": "skip"
   },
   "pnpm": {
     "overrides": {

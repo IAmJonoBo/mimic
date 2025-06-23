@@ -556,6 +556,16 @@ const buttonStyle = style({
 4. **Visual Tests**: Ensure visual regression tests pass
 5. **Documentation**: Update README if needed
 
+## 📚 Advanced Documentation
+
+For comprehensive guides on advanced workflows and enterprise features:
+
+- **[Qwik Integration Advanced](../../docs/platforms/qwik.md)** - SSR optimization, image handling, and service worker integration
+- **[Storybook 8.5 Features](../../docs/platforms/storybook.md)** - Interaction testing and test-runner automation
+- **[Comprehensive Testing Strategy](../../docs/testing/comprehensive-testing.md)** - Visual regression and accessibility
+- **[Advanced Development Workflows](../../docs/development/advanced-workflows.md)** - Hot reload optimization and debugging
+- **[Security Compliance](../../docs/security/security-compliance-framework.md)** - Component security scanning and validation
+
 ## 📚 Resources
 
 - [Qwik Documentation](https://qwik.builder.io/)

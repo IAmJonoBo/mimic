@@ -38,6 +38,7 @@ globs:
   - '!**/node_modules/**'
   - '!node_modules/**'
   - '!**/dist/**'
+  - '!.github/instructions/nx.instructions.md'
   - '!**/build/**'
   - '!**/lib/**'
   - '!**/coverage/**'

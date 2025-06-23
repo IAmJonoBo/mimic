@@ -1,0 +1,113 @@
+{
+  "$description": "Semantic design tokens that reference base tokens",
+  "color": {
+    "$description": "Semantic color assignments",
+    "text": {
+      "$description": "Text color tokens",
+      "primary": {
+        "$value": "{color.neutral.900}",
+        "$type": "color",
+        "$description": "Primary text color"
+      },
+      "secondary": {
+        "$value": "{color.neutral.600}",
+        "$type": "color",
+        "$description": "Secondary text color"
+      },
+      "muted": {
+        "$value": "{color.neutral.400}",
+        "$type": "color",
+        "$description": "Muted text color"
+      },
+      "inverse": {
+        "$value": "{color.neutral.50}",
+        "$type": "color",
+        "$description": "Inverse text color"
+      },
+      "link": {
+        "$value": "{color.primary.600}",
+        "$type": "color",
+        "$description": "Link text color"
+      },
+      "linkHover": {
+        "$value": "{color.primary.700}",
+        "$type": "color",
+        "$description": "Link hover text color"
+      }
+    },
+    "background": {
+      "$description": "Background color tokens",
+      "primary": {
+        "$value": "{color.neutral.50}",
+        "$type": "color",
+        "$description": "Primary background color"
+      },
+      "secondary": {
+        "$value": "{color.neutral.100}",
+        "$type": "color",
+        "$description": "Secondary background color"
+      },
+      "tertiary": {
+        "$value": "{color.neutral.200}",
+        "$type": "color",
+        "$description": "Tertiary background color"
+      },
+      "inverse": {
+        "$value": "{color.neutral.900}",
+        "$type": "color",
+        "$description": "Inverse background color"
+      },
+      "brand": {
+        "$value": "{color.primary.500}",
+        "$type": "color",
+        "$description": "Brand background color"
+      }
+    },
+    "border": {
+      "$description": "Border color tokens",
+      "default": {
+        "$value": "{color.neutral.200}",
+        "$type": "color",
+        "$description": "Default border color"
+      },
+      "muted": {
+        "$value": "{color.neutral.100}",
+        "$type": "color",
+        "$description": "Muted border color"
+      },
+      "emphasis": {
+        "$value": "{color.neutral.300}",
+        "$type": "color",
+        "$description": "Emphasis border color"
+      },
+      "brand": {
+        "$value": "{color.primary.500}",
+        "$type": "color",
+        "$description": "Brand border color"
+      }
+    },
+    "feedback": {
+      "$description": "Feedback color tokens",
+      "success": {
+        "$value": "{color.semantic.success}",
+        "$type": "color",
+        "$description": "Success feedback color"
+      },
+      "warning": {
+        "$value": "{color.semantic.warning}",
+        "$type": "color",
+        "$description": "Warning feedback color"
+      },
+      "error": {
+        "$value": "{color.semantic.error}",
+        "$type": "color",
+        "$description": "Error feedback color"
+      },
+      "info": {
+        "$value": "{color.semantic.info}",
+        "$type": "color",
+        "$description": "Info feedback color"
+      }
+    }
+  }
+}

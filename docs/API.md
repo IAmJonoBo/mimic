@@ -12,141 +12,289 @@ Complete API reference for all Mimic packages and their exported functions, comp
 
 ## @mimic/design-tokens API
 
-### Core Exports
+### Core Functions
 
-#### `tokens` Object
+#### `getToken(path, fallback?)`
+
+Retrieves a token value by its path with optional fallback.
 
 ```typescript
-interface TokenSystem {
-  color: ColorTokens;
-  spacing: SpacingTokens;
-  fontSize: FontSizeTokens;
-  fontWeight: FontWeightTokens;
-  fontFamily: FontFamilyTokens;
-  borderRadius: BorderRadiusTokens;
-  boxShadow: BoxShadowTokens;
-  breakpoint: BreakpointTokens;
-}
-
-export const tokens: TokenSystem;
+function getToken(path: string, fallback?: string): string;
 ```
 
-### Color Tokens
+**Parameters:**
+
+- `path` - Dot-separated token path (e.g., 'color.primary.500')  
+- `fallback` - Optional fallback value if token is not found
+
+**Returns:** Token value as string or fallback
+
+**Examples:**
 
 ```typescript
-interface ColorTokens {
-  // Brand Colors
-  primary: Token<string>;
-  secondary: Token<string>;
-  tertiary: Token<string>;
+import { getToken } from '@mimic/design-tokens';
 
-  // Semantic Colors
-  success: Token<string>;
-  warning: Token<string>;
-  error: Token<string>;
-  info: Token<string>;
+// Get a color token
+const primaryColor = getToken('color.primary.500'); // '#007bff'
 
-  // Neutral Colors
-  neutral: {
-    50: Token<string>;
-    100: Token<string>;
-    200: Token<string>;
-    300: Token<string>;
-    400: Token<string>;
-    500: Token<string>;
-    600: Token<string>;
-    700: Token<string>;
-    800: Token<string>;
-    900: Token<string>;
-    950: Token<string>;
+// With fallback
+const customColor = getToken('color.brand.custom', '#000000');
+
+// Spacing token
+const padding = getToken('spacing.md'); // '1rem'
+```
+
+#### `getTokensByPattern(pattern)`
+
+Retrieves all tokens matching a glob-like pattern.
+
+```typescript
+function getTokensByPattern(pattern: string): Array<{
+  path: string;
+  value: string;
+  type?: string;
+}>;
+```
+
+**Parameters:**
+
+- `pattern` - Glob pattern with wildcard support (e.g., 'color.primary.*', '*')
+
+**Returns:** Array of token objects with path, value, and optional type
+
+**Examples:**
+
+```typescript
+import { getTokensByPattern } from '@mimic/design-tokens';
+
+// Get all primary colors
+const primaryColors = getTokensByPattern('color.primary.*');
+// Returns: [{ path: 'color.primary.50', value: '#eff6ff' }, ...]
+
+// Get all spacing tokens
+const spacing = getTokensByPattern('spacing.*');
+
+// Get all tokens
+const allTokens = getTokensByPattern('*');
+```
+
+#### `validateTokens(tokenObj?)`
+
+Validates token structure against W3C DTCG standards.
+
+```typescript
+interface TokenValidationResult {
+  isValid: boolean;
+  errors: string[];
+  warnings: string[];
+}
+
+function validateTokens(tokenObj?: Record<string, unknown>): TokenValidationResult;
+```
+
+**Parameters:**
+
+- `tokenObj` - Optional token object to validate (defaults to built-in tokens)
+
+**Returns:** Validation result with errors and warnings
+
+**Examples:**
+
+```typescript
+import { validateTokens } from '@mimic/design-tokens';
+
+// Validate built-in tokens
+const result = validateTokens();
+console.log('Valid:', result.isValid);
+
+// Validate custom tokens
+const customTokens = { color: { primary: { $value: '#007bff', $type: 'color' } } };
+const customResult = validateTokens(customTokens);
+if (!customResult.isValid) {
+  console.error('Validation errors:', customResult.errors);
+}
+```
+
+#### `matchesPattern(path, pattern)`
+
+Utility function for testing if a token path matches a pattern.
+
+```typescript
+function matchesPattern(path: string, pattern: string): boolean;
+```
+
+**Parameters:**
+
+- `path` - Token path to test
+- `pattern` - Pattern with wildcard support
+
+**Returns:** Boolean indicating if path matches pattern
+
+**Examples:**
+
+```typescript
+import { matchesPattern } from '@mimic/design-tokens';
+
+matchesPattern('color.primary.500', 'color.primary.*'); // true
+matchesPattern('spacing.md', 'color.*'); // false
+matchesPattern('any.token.path', '*'); // true
+```
+
+### Token Structure
+
+Our tokens follow W3C DTCG format with the following structure:
+
+```typescript
+interface Token {
+  $value: string | number;
+  $type?: 'color' | 'dimension' | 'fontFamily' | 'fontWeight' | 'duration' | 'cubicBezier' | 'number' | 'strokeStyle' | 'border' | 'transition' | 'shadow' | 'gradient' | 'typography';
+  $description?: string;
+}
+
+interface TokenGroup {
+  $type?: string;
+  $description?: string;
+  [key: string]: Token | TokenGroup | string | undefined;
+}
+```
+
+### Available Token Categories
+
+#### Colors
+
+```typescript
+// Base color scale (50-900)
+getToken('color.primary.50')    // Lightest
+getToken('color.primary.500')   // Base 
+getToken('color.primary.900')   // Darkest
+
+// Semantic colors
+getToken('color.success.500')   // Success state
+getToken('color.warning.500')   // Warning state  
+getToken('color.error.500')     // Error state
+getToken('color.info.500')      // Info state
+
+// Neutral scale
+getToken('color.neutral.100')   // Light background
+getToken('color.neutral.600')   // Text color
+getToken('color.neutral.900')   // Dark text
+```
+
+#### Typography
+
+```typescript
+// Font families
+getToken('font.family.sans')      // System sans-serif
+getToken('font.family.serif')     // System serif
+getToken('font.family.mono')      // System monospace
+
+// Font sizes (xs, sm, base, lg, xl, 2xl, 3xl, 4xl, 5xl)
+getToken('font.size.base')        // 1rem (16px)
+getToken('font.size.lg')          // 1.125rem (18px)
+getToken('font.size.2xl')         // 1.5rem (24px)
+
+// Font weights  
+getToken('font.weight.normal')    // 400
+getToken('font.weight.medium')    // 500
+getToken('font.weight.bold')      // 700
+
+// Line heights
+getToken('line.height.tight')     // 1.25
+getToken('line.height.normal')    // 1.5
+getToken('line.height.relaxed')   // 1.75
+```
+
+#### Spacing
+
+```typescript
+// T-shirt scale (xs, sm, md, lg, xl, 2xl, 3xl)
+getToken('spacing.xs')    // 0.25rem (4px)
+getToken('spacing.sm')    // 0.5rem (8px)  
+getToken('spacing.md')    // 1rem (16px)
+getToken('spacing.lg')    // 1.5rem (24px)
+getToken('spacing.xl')    // 2rem (32px)
+```
+
+#### Borders & Shadows
+
+```typescript
+// Border radius
+getToken('border.radius.sm')     // 0.125rem (2px)
+getToken('border.radius.md')     // 0.375rem (6px)
+getToken('border.radius.lg')     // 0.5rem (8px)
+getToken('border.radius.full')   // 9999px
+
+// Shadows  
+getToken('shadow.sm')     // Subtle shadow
+getToken('shadow.md')     // Card shadow
+getToken('shadow.lg')     // Modal shadow
+getToken('shadow.xl')     // Floating elements
+```
+
+### Component Tokens
+
+Component-specific tokens for consistent UI patterns:
+
+```typescript
+// Button tokens
+getToken('component.button.padding.sm')     // Small button padding
+getToken('component.button.padding.md')     // Medium button padding
+getToken('component.button.border.radius')  // Button border radius
+getToken('component.button.font.weight')    // Button text weight
+
+// Card tokens
+getToken('component.card.padding')          // Card internal padding
+getToken('component.card.border.radius')    // Card corner radius  
+getToken('component.card.shadow')           // Card elevation
+getToken('component.card.background')       // Card background
+```
+
+### Platform Exports
+
+#### CSS Variables
+
+```css
+/* Automatically generated CSS custom properties */
+:root {
+  --color-primary-500: #007bff;
+  --spacing-md: 1rem;
+  --font-size-lg: 1.125rem;
+  /* ... all tokens as CSS variables */
+}
+```
+
+#### TypeScript Types
+
+```typescript
+// Generated TypeScript definitions
+export interface Tokens {
+  color: {
+    primary: {
+      50: string;
+      100: string;
+      // ... complete type definitions
+    };
   };
-
-  // Surface Colors
-  background: Token<string>;
-  surface: Token<string>;
-  overlay: Token<string>;
-
-  // Text Colors
-  text: {
-    primary: Token<string>;
-    secondary: Token<string>;
-    muted: Token<string>;
-    inverse: Token<string>;
+  spacing: {
+    xs: string;
+    sm: string;
+    // ... complete spacing scale
   };
 }
 ```
 
-### Spacing Tokens
+#### JSON Output
 
-```typescript
-interface SpacingTokens {
-  xs: Token<string>; // 0.25rem (4px)
-  sm: Token<string>; // 0.5rem (8px)
-  md: Token<string>; // 1rem (16px)
-  lg: Token<string>; // 1.5rem (24px)
-  xl: Token<string>; // 2rem (32px)
-  '2xl': Token<string>; // 2.5rem (40px)
-  '3xl': Token<string>; // 3rem (48px)
-  '4xl': Token<string>; // 4rem (64px)
-  '5xl': Token<string>; // 5rem (80px)
-}
-```
-
-### Typography Tokens
-
-```typescript
-interface FontSizeTokens {
-  xs: Token<string>; // 0.75rem (12px)
-  sm: Token<string>; // 0.875rem (14px)
-  base: Token<string>; // 1rem (16px)
-  lg: Token<string>; // 1.125rem (18px)
-  xl: Token<string>; // 1.25rem (20px)
-  '2xl': Token<string>; // 1.5rem (24px)
-  '3xl': Token<string>; // 1.875rem (30px)
-  '4xl': Token<string>; // 2.25rem (36px)
-  '5xl': Token<string>; // 3rem (48px)
-}
-
-interface FontWeightTokens {
-  thin: Token<number>; // 100
-  light: Token<number>; // 300
-  normal: Token<number>; // 400
-  medium: Token<number>; // 500
-  semibold: Token<number>; // 600
-  bold: Token<number>; // 700
-  extrabold: Token<number>; // 800
-  black: Token<number>; // 900
-}
-
-interface FontFamilyTokens {
-  sans: Token<string>; // System sans-serif stack
-  serif: Token<string>; // System serif stack
-  mono: Token<string>; // System monospace stack
-}
-```
-
-### Border and Shadow Tokens
-
-```typescript
-interface BorderRadiusTokens {
-  none: Token<string>; // 0
-  sm: Token<string>; // 0.125rem (2px)
-  base: Token<string>; // 0.25rem (4px)
-  md: Token<string>; // 0.375rem (6px)
-  lg: Token<string>; // 0.5rem (8px)
-  xl: Token<string>; // 0.75rem (12px)
-  '2xl': Token<string>; // 1rem (16px)
-  full: Token<string>; // 50%
-}
-
-interface BoxShadowTokens {
-  none: Token<string>;
-  sm: Token<string>; // Small shadow
-  base: Token<string>; // Default shadow
-  md: Token<string>; // Medium shadow
-  lg: Token<string>; // Large shadow
-  xl: Token<string>; // Extra large shadow
-  inner: Token<string>; // Inset shadow
+```json
+{
+  "color": {
+    "primary": {
+      "500": {
+        "value": "#007bff",
+        "type": "color"
+      }
+    }
+  }
 }
 ```
 

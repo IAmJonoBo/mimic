@@ -592,6 +592,14 @@ pnpm test --reporter=verbose
 pnpm test --coverage
 ```
 
+## 📚 Advanced Documentation
+
+For comprehensive guides on advanced workflows and enterprise features:
+
+- **[Advanced Development Workflows](../../docs/development/advanced-workflows.md)** - Development tooling and optimization
+- **[Security Compliance Framework](../../docs/security/security-compliance-framework.md)** - Security scanning and validation
+- **[Advanced Contributor Guide](../../docs/onboarding/advanced-contributor-guide.md)** - Comprehensive setup automation
+
 ## 📄 License
 
 MIT License - see the [LICENSE](../../LICENSE) file for details.

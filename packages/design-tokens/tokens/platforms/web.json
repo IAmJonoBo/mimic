@@ -1,0 +1,41 @@
+{
+  "$description": "Web platform specific token overrides",
+  "typography": {
+    "fontSize": {
+      "$description": "Web-optimized font sizes",
+      "xs": {
+        "$value": "0.75rem",
+        "$type": "dimension",
+        "$description": "Extra small font size (12px)"
+      },
+      "sm": {
+        "$value": "0.875rem",
+        "$type": "dimension",
+        "$description": "Small font size (14px)"
+      },
+      "base": {
+        "$value": "1rem",
+        "$type": "dimension",
+        "$description": "Base font size (16px)"
+      }
+    }
+  },
+  "spacing": {
+    "$description": "Web-optimized spacing using rem units",
+    "xs": {
+      "$value": "0.25rem",
+      "$type": "dimension",
+      "$description": "Extra small spacing for web"
+    },
+    "sm": {
+      "$value": "0.5rem",
+      "$type": "dimension",
+      "$description": "Small spacing for web"
+    },
+    "md": {
+      "$value": "1rem",
+      "$type": "dimension",
+      "$description": "Medium spacing for web"
+    }
+  }
+}

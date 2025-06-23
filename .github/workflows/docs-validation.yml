@@ -1,0 +1,152 @@
+# GitHub Actions workflow for documentation validation
+name: Documentation Validation
+
+on:
+  pull_request:
+    paths:
+      - 'docs/**'
+      - 'packages/*/README.md'
+      - '.github/workflows/docs-validation.yml'
+  push:
+    branches:
+      - main
+      - develop
+    paths:
+      - 'docs/**'
+      - 'packages/*/README.md'
+
+jobs:
+  validate-docs:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Validate documentation structure
+        run: ./scripts/validate-docs.sh
+
+      - name: Check markdown linting
+        run: |
+          if command -v markdownlint-cli2 >/dev/null 2>&1; then
+            markdownlint-cli2 "docs/**/*.md" "packages/*/README.md"
+          else
+            echo "⚠️ markdownlint-cli2 not installed, skipping lint check"
+          fi
+
+      - name: Validate documentation links
+        run: |
+          # Check for broken internal links
+          echo "🔍 Checking for broken internal links..."
+
+          # Find all markdown files
+          find docs packages -name "*.md" -type f | while read -r file; do
+            echo "Checking $file"
+            
+            # Extract markdown links
+            grep -oE '\[([^\]]+)\]\(([^)]+)\)' "$file" | while read -r link; do
+              # Extract the URL part
+              url=$(echo "$link" | sed -n 's/.*(\([^)]*\)).*/\1/p')
+              
+              # Skip external URLs and anchors
+              if [[ "$url" =~ ^https?:// ]] || [[ "$url" =~ ^# ]]; then
+                continue
+              fi
+              
+              # Resolve relative paths
+              if [[ "$url" =~ ^\.\. ]]; then
+                # Relative to current file's directory
+                base_dir=$(dirname "$file")
+                full_path="$base_dir/$url"
+              elif [[ "$url" =~ ^\. ]]; then
+                # Relative to current file's directory
+                base_dir=$(dirname "$file")
+                full_path="$base_dir/$url"
+              else
+                # Assume relative to repository root
+                full_path="$url"
+              fi
+              
+              # Normalize path
+              full_path=$(realpath -m "$full_path" 2>/dev/null || echo "$full_path")
+              
+              # Check if file exists
+              if [[ ! -f "$full_path" ]]; then
+                echo "❌ Broken link in $file: $url -> $full_path"
+                exit 1
+              fi
+            done
+          done
+
+          echo "✅ All internal links verified"
+
+  check-coverage:
+    name: Check Documentation Coverage
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Check advanced documentation coverage
+        run: |
+          echo "📊 Checking documentation coverage..."
+
+          # Count advanced documentation files
+          advanced_docs=$(find docs -name "*.md" | grep -E "(advanced|cicd|security|onboarding)" | wc -l)
+          total_docs=$(find docs -name "*.md" | wc -l)
+
+          echo "Advanced docs: $advanced_docs"
+          echo "Total docs: $total_docs"
+
+          # Calculate coverage percentage
+          if [ "$total_docs" -gt 0 ]; then
+            coverage=$((advanced_docs * 100 / total_docs))
+            echo "Advanced documentation coverage: ${coverage}%"
+            
+            # Require at least 40% advanced documentation coverage
+            if [ "$coverage" -lt 40 ]; then
+              echo "❌ Advanced documentation coverage too low: ${coverage}% (minimum: 40%)"
+              exit 1
+            fi
+          fi
+
+          # Check that all packages have advanced documentation sections
+          packages_with_advanced=0
+          total_packages=0
+
+          for readme in packages/*/README.md; do
+            if [ -f "$readme" ]; then
+              total_packages=$((total_packages + 1))
+              if grep -q "Advanced Documentation" "$readme"; then
+                packages_with_advanced=$((packages_with_advanced + 1))
+              else
+                echo "⚠️ $readme missing Advanced Documentation section"
+              fi
+            fi
+          done
+
+          echo "Packages with advanced docs: $packages_with_advanced/$total_packages"
+
+          # Require all packages to have advanced documentation sections
+          if [ "$packages_with_advanced" -lt "$total_packages" ]; then
+            echo "❌ Not all packages have advanced documentation sections"
+            exit 1
+          fi
+
+          echo "✅ Documentation coverage requirements met"
