@@ -45,6 +45,8 @@
     "clean:workspace": "nx run-many -t clean",
     "clean:apple:workspace": "nx run-many -t clean:apple",
     "precommit:clean": "npm run clean:ds-store",
+    "autofix": "./scripts/autofix.sh",
+    "autofix:safe": "./scripts/autofix.sh",
     "format": "trunk fmt",
     "format:check": "trunk fmt --no-fix --print-failures",
     "format:biome": "biome format --write .",

@@ -1,18 +1,18 @@
 {
   "run": {
-    "command": "nx run workspace-format:lint --dry-run",
-    "startTime": "2025-06-23T03:06:28.415Z",
-    "endTime": "2025-06-23T03:06:30.649Z",
+    "command": "nx run workspace-format:clean:ds-store",
+    "startTime": "2025-06-23T03:38:26.789Z",
+    "endTime": "2025-06-23T03:38:40.965Z",
     "inner": false
   },
   "tasks": [
     {
-      "taskId": "workspace-format:lint",
-      "target": "lint",
+      "taskId": "workspace-format:clean:ds-store",
+      "target": "clean:ds-store",
       "projectName": "workspace-format",
-      "hash": "9056200151369506247",
-      "startTime": "2025-06-23T03:06:28.605Z",
-      "endTime": "2025-06-23T03:06:30.641Z",
+      "hash": "2208964638174246417",
+      "startTime": "2025-06-23T03:38:26.882Z",
+      "endTime": "2025-06-23T03:38:40.962Z",
       "params": "",
       "cacheStatus": "cache-miss",
       "status": 0

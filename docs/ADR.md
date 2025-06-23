@@ -1,5 +1,9 @@
 # 🏗️ Architecture Decision Records (ADRs)
 
+<!-- markdownlint-disable MD024 -->
+<!-- Multiple headings with same content are expected in ADR format -->
+<!-- trunk-ignore-all(markdownlint-cli2/MD024) -->
+
 This document contains the architecture decisions made for the Mimic design system monorepo.
 
 ## ADR Index

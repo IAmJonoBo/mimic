@@ -10,7 +10,7 @@ Welcome to the comprehensive documentation for the Mimic design system monorepo.
 
 ## 📦 Package Documentation
 
-### Design Tokens Overview
+### Design Tokens
 
 - **[Design Tokens README](../packages/design-tokens/README.md)** - W3C-compliant design tokens with Style Dictionary
 

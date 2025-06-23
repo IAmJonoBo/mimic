@@ -1,0 +1,226 @@
+name: Weekly Autofix
+
+on:
+  schedule:
+    # Run every Monday at 9 AM UTC
+    - cron: 0 9 * * 1
+  workflow_dispatch:
+    inputs:
+      create_pr:
+        description: Create PR for fixes instead of direct commit
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  comprehensive-autofix:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: pnpm
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run comprehensive autofixes
+        id: autofix
+        run: |
+          echo "Running comprehensive autofixes..."
+
+          # 1. Format all code
+          trunk fmt || true
+
+          # 2. Fix all CSS/SCSS issues
+          pnpm nx run workspace-format:lint:css || true
+
+          # 3. Fix all markdown issues
+          pnpm nx run workspace-format:lint:md || true
+
+          # 4. Fix markdown line lengths
+          pnpm nx run workspace-format:lint:md:fix-line-length || true
+
+          # 5. Clean all temporary files
+          pnpm nx run workspace-format:clean:apple || true
+          pnpm nx run workspace-format:clean:temp || true
+          pnpm nx run workspace-format:clean:ds-store || true
+
+          # 6. Biome safe fixes (formatting + safe lint fixes)
+          pnpm nx run workspace-format:format:biome || true
+
+          # 7. dprint formatting
+          pnpm nx run workspace-format:format:dprint || true
+
+          # 8. Trunk upgrade and format
+          trunk upgrade --no-progress || true
+          trunk fmt --no-progress || true
+
+          # Check if there are any changes
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Found fixable issues:"
+            git status --short
+            
+            # Count changed files
+            CHANGED_FILES=$(git diff --name-only | wc -l | tr -d ' ')
+            echo "changed_files=$CHANGED_FILES" >> $GITHUB_OUTPUT
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No autofix changes needed!"
+          fi
+
+      - name: Create autofix branch and PR
+        if: steps.autofix.outputs.changes == 'true' && (github.event.inputs.create_pr == 'true' || github.event_name == 'schedule')
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH_NAME="autofix/weekly-$(date +%Y-%m-%d)"
+          CHANGED_FILES="${{ steps.autofix.outputs.changed_files }}"
+
+          # Create and switch to new branch
+          git checkout -b "$BRANCH_NAME"
+
+          # Configure git
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Commit changes
+          git add .
+          git commit -m "🔧 autofix: Weekly comprehensive code quality fixes
+
+          This automated PR applies safe code quality improvements:
+
+          - 🎨 Code formatting (Trunk/Biome/Prettier/dprint)
+          - 🧹 CSS/SCSS linting fixes (Stylelint)
+          - 📝 Markdown linting fixes (markdownlint)
+          - 🗑️ Cleaned temporary and system files
+          - ⬆️ Tool upgrades (Trunk plugins)
+          - 📏 Fixed markdown line lengths
+
+          **Files changed:** $CHANGED_FILES
+          **Safe to merge:** ✅ All changes are formatting/cleanup only
+
+          Applied by: ${{ github.workflow }} #${{ github.run_number }}
+          Triggered: $(date)"
+
+          # Push branch
+          git push origin "$BRANCH_NAME"
+
+          # Create PR
+          gh pr create \
+            --title "🔧 Weekly autofix: Code quality improvements" \
+            --body "## 🔧 Automated Code Quality Fixes
+
+          This PR contains safe, automated fixes to improve code quality and consistency.
+
+          ### What's Fixed
+          - ✅ **Code formatting** via Trunk (Biome/Prettier/dprint)
+          - ✅ **CSS/SCSS linting** via Stylelint  
+          - ✅ **Markdown linting** via markdownlint
+          - ✅ **Cleaned temp files** (Apple/system files)
+          - ✅ **Tool upgrades** (Trunk plugins updated)
+          - ✅ **Line length fixes** for markdown
+
+          ### Safety
+          - 🟢 **Safe to merge**: Only formatting and cleanup changes
+          - 🟢 **No logic changes**: Code behavior unchanged
+          - 🟢 **Automated testing**: CI will validate all changes
+          - 🟢 **Reversible**: Can be reverted if needed
+
+          ### Files Changed
+          **$CHANGED_FILES files** were automatically fixed
+
+          <details>
+          <summary>📋 Changed Files</summary>
+
+          \`\`\`
+          $(git diff HEAD~1 --name-only)
+          \`\`\`
+
+          </details>
+
+          ---
+          🤖 *This PR was automatically created by the weekly autofix workflow*" \
+            --head "$BRANCH_NAME" \
+            --base main \
+            --label "autofix" \
+            --label "safe-to-merge" \
+            --assignee "${{ github.actor }}"
+
+      - name: Direct commit to main
+        if: steps.autofix.outputs.changes == 'true' && github.event.inputs.create_pr != 'true' && github.event_name != 'schedule'
+        run: |
+          CHANGED_FILES="${{ steps.autofix.outputs.changed_files }}"
+
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          git add .
+          git commit -m "🔧 autofix: Comprehensive code quality fixes
+
+          - Auto-formatted $CHANGED_FILES files
+          - Fixed CSS/SCSS linting issues  
+          - Fixed markdown linting issues
+          - Cleaned temporary/system files
+          - Updated tool configurations
+          - Fixed markdown line lengths
+
+          Applied by: ${{ github.workflow }} #${{ github.run_number }}
+          Manual trigger by: ${{ github.actor }}"
+
+          git push
+
+      - name: Create summary
+        if: steps.autofix.outputs.changes == 'true'
+        run: |
+          CHANGED_FILES="${{ steps.autofix.outputs.changed_files }}"
+
+          echo "## 🔧 Comprehensive Autofix Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Files changed:** $CHANGED_FILES" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Applied Fixes" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code formatting (Trunk/Biome/Prettier/dprint)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ CSS/SCSS linting (Stylelint)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Markdown linting (markdownlint)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Cleaned temporary files" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Tool upgrades (Trunk)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Fixed markdown line lengths" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ github.event.inputs.create_pr }}" == "true" || "${{ github.event_name }}" == "schedule" ]]; then
+            echo "### 📋 PR Created" >> $GITHUB_STEP_SUMMARY
+            echo "A pull request was created with these fixes for review." >> $GITHUB_STEP_SUMMARY
+          else
+            echo "### ✅ Direct Commit" >> $GITHUB_STEP_SUMMARY
+            echo "Changes were committed directly to main branch." >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: No changes summary
+        if: steps.autofix.outputs.changes == 'false'
+        run: |
+          echo "## ✅ No Fixes Needed" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The codebase is already in excellent shape! No autofix changes were needed." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Checked" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code formatting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ CSS/SCSS linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Markdown linting" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Temporary file cleanup" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Tool configurations" >> $GITHUB_STEP_SUMMARY

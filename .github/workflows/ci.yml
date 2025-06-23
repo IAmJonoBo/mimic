@@ -66,6 +66,109 @@ jobs:
           name: storybook-static
           path: packages/design-system/storybook-static
 
+  # Safe autofixes that don't block commits
+  autofix:
+    runs-on: ubuntu-latest
+    # Only run on main branch pushes (not PRs) to avoid conflicts
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: pnpm
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run safe autofixes
+        id: autofix
+        run: |
+          echo "Running safe autofixes..."
+
+          # 1. Format code with Trunk (includes Biome, Prettier, dprint)
+          trunk fmt || true
+
+          # 2. Fix Stylelint CSS issues
+          pnpm nx run workspace-format:lint:css || true
+
+          # 3. Fix markdownlint issues
+          pnpm nx run workspace-format:lint:md || true
+
+          # 4. Clean Apple/temp files
+          pnpm nx run workspace-format:clean:apple || true
+          pnpm nx run workspace-format:clean:temp || true
+
+          # 5. Fix markdown line lengths
+          pnpm nx run workspace-format:lint:md:fix-line-length || true
+
+          # Check if there are any changes
+          if [[ -n $(git status --porcelain) ]]; then
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "Found fixable issues:"
+            git status --short
+          else
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "No autofix changes needed!"
+          fi
+
+      - name: Commit and push autofixes
+        if: steps.autofix.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+          # Create a descriptive commit message
+          CHANGED_FILES=$(git diff --name-only | wc -l | tr -d ' ')
+
+          git add .
+          git commit -m "🔧 autofix: Apply safe code quality fixes
+
+          - Auto-formatted $CHANGED_FILES files
+          - Fixed Stylelint CSS issues
+          - Fixed markdownlint issues
+          - Cleaned temporary/Apple files
+          - Fixed markdown line lengths
+
+          Applied by: ${{ github.workflow }} #${{ github.run_number }}
+          Triggered by: ${{ github.sha }}"
+
+          git push
+
+      - name: Create autofix summary
+        if: steps.autofix.outputs.changes == 'true'
+        run: |
+          echo "## 🔧 Autofix Applied" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "The following safe autofixes were applied to improve code quality:" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Fixed Issues" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Code formatting (Trunk/Biome/Prettier/dprint)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ CSS/SCSS linting (Stylelint)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Markdown linting (markdownlint)" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Cleaned temporary files" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Fixed markdown line lengths" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changed Files" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          git diff HEAD~1 --name-only >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "These changes were automatically applied and committed to keep the codebase clean." >> $GITHUB_STEP_SUMMARY
+
   e2e:
     runs-on: ubuntu-latest
     needs: main

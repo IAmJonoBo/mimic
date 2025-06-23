@@ -25,8 +25,7 @@ lint:
   enabled:
     # Multi-formatter strategy: Biome (Rust-speed JS/TS), Prettier (edge cases), targeted tools
     # Note: dprint configured separately for MD/TOML/YAML (see dprint.json)
-    - eslint@9.29.0:
-        config_path: eslint.config.js
+    - eslint@9.29.0
     - markdownlint-cli2@0.18.1
     - biome@2.0.4
     - prettier@3.5.3:
