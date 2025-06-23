@@ -742,3 +742,192 @@ Platform-specific configurations:
   }
 }
 ```
+
+## Frontend Folder Configuration
+
+### Project Structure
+
+Configure your Tauri frontend following the recommended structure for design system integration:
+
+```text
+src/
+├── index.html              # Entry point with CSP meta tags
+├── main.ts                 # App initialization and updater setup
+├── lib/
+│   ├── tokens.ts           # Design token management
+│   ├── updater.ts          # Update manager
+│   └── tauri.ts            # Tauri API wrappers
+├── components/
+│   ├── ui/                 # Design system components
+│   └── tauri/              # Tauri-specific components
+├── styles/
+│   ├── app.css             # Global styles with design tokens
+│   ├── components.css      # Component-specific styles
+│   └── tokens.css          # Token imports
+└── assets/
+    ├── icons/              # App icons and favicons
+    └── images/             # Static images
+```
+
+### Tauri Configuration Files
+
+Essential configuration files for frontend integration:
+
+```json
+// tauri.conf.json
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "devPath": "http://localhost:5173",
+    "distDir": "../dist",
+    "withGlobalTauri": false
+  },
+  "tauri": {
+    "bundle": {
+      "active": true,
+      "targets": "all",
+      "identifier": "design.mimic.app",
+      "icon": [
+        "icons/32x32.png",
+        "icons/128x128.png",
+        "icons/128x128@2x.png",
+        "icons/icon.icns",
+        "icons/icon.ico"
+      ],
+      "resources": ["assets/**", "../../../packages/design-tokens/dist/**"]
+    }
+  }
+}
+```
+
+### Package.json Scripts
+
+Configure development and build scripts for Tauri:
+
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:bundle": "tauri build --bundles all"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.0.0",
+    "@tauri-apps/plugin-updater": "^2.0.0",
+    "@mimic/design-tokens": "workspace:*"
+  }
+}
+```
+
+### Vite Configuration
+
+Optimize Vite for Tauri development:
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import { resolve } from 'path';
+
+export default defineConfig(async () => ({
+  plugins: [],
+
+  // Prevent vite from obscuring rust errors
+  clearScreen: false,
+
+  // Tauri expects a fixed port, fail if that port is not available
+  server: {
+    port: 5173,
+    strictPort: true,
+    watch: {
+      // Tell vite to ignore watching `src-tauri`
+      ignored: ['**/src-tauri/**'],
+    },
+  },
+
+  // Production build optimizations
+  build: {
+    // Tauri uses Chromium on Windows and WebKit on macOS and Linux
+    target: process.env.TAURI_PLATFORM == 'windows' ? 'chrome105' : 'safari13',
+
+    // Don't minify for debug builds
+    minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
+
+    // Produce sourcemaps for debug builds
+    sourcemap: !!process.env.TAURI_DEBUG,
+
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+      },
+    },
+  },
+
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, 'src'),
+      '@mimic/tokens': resolve(
+        __dirname,
+        '../../../packages/design-tokens/dist'
+      ),
+    },
+  },
+}));
+```
+
+### HTML Entry Point
+
+Configure your main HTML file for Tauri:
+
+```html
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSP will be injected by Tauri -->
+    <meta http-equiv="Content-Security-Policy" content="" />
+
+    <title>Mimic Design System</title>
+
+    <!-- Design token CSS imports -->
+    <link rel="stylesheet" href="/src/styles/tokens.css" />
+    <link rel="stylesheet" href="/src/styles/app.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
+```
+
+### Frontend Initialization
+
+Initialize your Tauri frontend with proper setup:
+
+```typescript
+// src/main.ts
+import { TokenManager } from './lib/tokens';
+import { UpdateManager } from './lib/updater';
+
+// Initialize design tokens
+TokenManager.loadTokens();
+
+// Initialize update manager
+UpdateManager.getInstance().initialize();
+
+// Initialize your frontend framework
+async function initApp() {
+  // Your app initialization code here
+  console.log('Tauri app initialized with design tokens');
+}
+
+// Wait for DOM and Tauri to be ready
+document.addEventListener('DOMContentLoaded', initApp);
+```
