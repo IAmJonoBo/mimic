@@ -76,7 +76,7 @@ pnpm nx run mobile:build
 pnpm nx run desktop:build
 ```
 
-### 4. Quality Gates
+### 6. Quality Gates
 
 ```bash
 # Lint all code
@@ -90,6 +90,48 @@ pnpm nx run-many -t test
 
 # E2E tests
 pnpm nx run-many -t e2e
+```
+
+### 4. Platform-Specific Development
+
+```bash
+# Run Storybook for specific platforms
+pnpm nx run design-system:storybook          # Web components
+pnpm nx run design-system:storybook:mobile   # Mobile components  
+pnpm nx run design-system:storybook:desktop  # Desktop components
+
+# Test module boundaries
+pnpm nx run-many -t lint --parallel           # Check all boundaries
+pnpm nx lint design-system                    # Check specific package
+
+# Validate token compliance
+pnpm nx run design-tokens:build-all           # Rebuild and validate tokens
+pnpm nx run design-tokens:validate            # Check token integrity
+```
+
+### 5. Debugging Common Issues
+
+**Module Boundary Violations:**
+
+```bash
+# Error: "Projects cannot depend on..."
+# Solution: Check project tags in project.json and ESLint rules
+pnpm nx show projects --with-deps design-system
+```
+
+**Token Collision Warnings:**
+
+```bash
+# Check for namespace conflicts
+pnpm nx run design-tokens:collision-check
+```
+
+**Storybook Platform Issues:**
+
+```bash
+# Clear Storybook cache
+rm -rf packages/design-system/storybook-static*
+pnpm nx run design-system:build-storybook
 ```
 
 ## AI-Assisted Development

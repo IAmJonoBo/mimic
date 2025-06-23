@@ -7,10 +7,12 @@ Thank you for your interest in contributing to Mimic! We welcome contributions f
 - [Code of Conduct](#-code-of-conduct)
 - [Getting Started](#-getting-started)
 - [Development Workflow](#-development-workflow)
+- [Architecture Guidelines](#-architecture-guidelines)
 - [Code Style Guidelines](#-code-style-guidelines)
 - [Testing Requirements](#-testing-requirements)
 - [Submitting Changes](#-submitting-changes)
 - [Review Process](#-review-process)
+- [Architecture Guidelines](#-architecture-guidelines)
 
 ## 📜 Code of Conduct
 
@@ -389,56 +391,261 @@ Include screenshots for UI changes.
 - **Make changes** in separate commits
 - **Update tests** if implementation changes
 
-## 🎯 Contribution Areas
+## 🏗️ Architecture Guidelines
 
-### 🐛 Bug Reports
+Mimic implements a comprehensive collision-prevention architecture with strict module boundaries to ensure
+system integrity and prevent conflicts across platforms.
 
-Found a bug? Please [create an issue](https://github.com/IAmJonoBo/mimic/issues/new) with:
+### Module Boundaries
 
-- **Clear description** of the bug
-- **Steps to reproduce**
-- **Expected vs actual behavior**
-- **Environment details** (OS, Node version, etc.)
-- **Screenshots** if applicable
+The project enforces strict architectural boundaries via ESLint rules to prevent cross-platform contamination:
 
-### 💡 Feature Requests
+**Boundary Rules:**
 
-Have an idea? Please [start a discussion](https://github.com/IAmJonoBo/mimic/discussions) with:
+- `scope:tokens` → Can only depend on `scope:shared`
+- `scope:design-system` → Can depend on `scope:shared`, `scope:tokens`
+- `scope:web` → Can depend on `scope:shared`, `scope:tokens`, `scope:design-system`
+- `scope:mobile` → Can only depend on `scope:shared`, `scope:tokens`
+- `scope:desktop` → Can depend on `scope:shared`, `scope:tokens`, `scope:design-system`
 
-- **Use case** description
-- **Proposed solution**
-- **Alternative solutions** considered
-- **Implementation details** (if any)
+**What This Means:**
 
-### 📚 Documentation
+```typescript
+// ✅ Good - Allowed dependencies
+import { dsColors } from '@mimic/design-tokens';           // tokens → shared
+import { Button } from '@mimic/design-system';             // web → design-system
+import { validateToken } from '@mimic/shared-utils';       // any → shared
 
-Documentation improvements are always welcome:
+// ❌ Bad - Boundary violations
+import { MobileComponent } from '../mobile/Component';     // web → mobile (forbidden)
+import { WebUtils } from '../web/utils';                  // mobile → web (forbidden)
+import { DesktopHelper } from '../desktop/helper';        // mobile → desktop (forbidden)
+```
 
-- **Fix typos** and grammar
-- **Improve clarity** of existing docs
-- **Add examples** and tutorials
-- **Translate** documentation
+**Debugging Boundary Violations:**
 
-### 🧩 Components
+```bash
+# Check your package's dependencies
+pnpm nx show projects --with-deps your-package-name
 
-Contributing new components:
+# Run boundary checks
+pnpm nx run-many -t lint --parallel
 
-- **Follow design system** patterns
-- **Include comprehensive tests**
-- **Add Storybook stories**
-- **Ensure accessibility**
+# Check specific package
+pnpm nx lint your-package-name
+```
 
-## 🆘 Getting Help
+### Design Token Guidelines
 
-- **GitHub Discussions**: For questions and general discussion
-- **GitHub Issues**: For bug reports and feature requests
-- **Code Reviews**: For feedback on your contributions
+All design tokens use strict namespacing to prevent collisions with third-party libraries:
 
-## 📞 Contact
+**CSS Tokens:**
 
-- **Maintainer**: [@IAmJonoBo](https://github.com/IAmJonoBo)
-- **Discussions**: [GitHub Discussions](https://github.com/IAmJonoBo/mimic/discussions)
+```css
+/* ✅ Good - All CSS tokens use --ds-* prefix */
+--ds-color-primary: #007bff;
+--ds-spacing-md: 1rem;
+--ds-typography-heading-size: 2rem;
 
----
+/* ❌ Bad - Missing ds- prefix */
+--color-primary: #007bff;        /* Will fail CI */
+--spacing-md: 1rem;              /* Will fail CI */
+```
 
-Thank you for contributing to Mimic! Your efforts help make this project better for everyone. 🙏
+**JavaScript/TypeScript Tokens:**
+
+```typescript
+// ✅ Good - All exports use ds namespace
+export const dsColors = { primary: '#007bff' };
+export const dsSpacing = { md: '1rem' };
+
+// ❌ Bad - Missing ds prefix
+export const colors = { primary: '#007bff' };     // Will fail CI
+export const spacing = { md: '1rem' };            // Will fail CI
+```
+
+**Platform-Specific Namespacing:**
+
+- **CSS/Web**: `--ds-*` (kebab-case)
+- **JavaScript/TypeScript**: `ds*` (camelCase)
+- **Dart**: `DsTokens.*` (PascalCase)
+- **Kotlin**: `ds.theme.*` (object notation)
+
+**Important Rules:**
+
+- ❌ **Never manually edit** files in `packages/design-tokens/libs/tokens/`
+- ✅ **All token changes** must originate from Penpot or base definitions
+- ✅ **Use the ds- prefix** for all custom CSS variables
+- ✅ **Import tokens** from the appropriate platform path
+
+### Storybook Platform Isolation
+
+Storybook uses composition architecture to prevent cross-platform conflicts:
+
+**Platform-Specific Commands:**
+
+```bash
+# Web components (default)
+pnpm nx run design-system:storybook
+
+# Mobile-focused components
+pnpm nx run design-system:storybook:mobile
+
+# Desktop-focused components  
+pnpm nx run design-system:storybook:desktop
+```
+
+**Story File Patterns:**
+
+```bash
+# Platform-specific stories
+Button.web.stories.tsx        # Web-only stories
+Button.mobile.stories.tsx     # Mobile-only stories
+Button.desktop.stories.tsx    # Desktop-only stories
+Button.stories.tsx            # Shared/universal stories
+```
+
+**Story Configuration:**
+
+```typescript
+// ✅ Good - Platform-specific story
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'Mobile/Button',              // Platform prefix
+  component: Button,
+  parameters: {
+    viewport: { defaultViewport: 'mobile1' }, // Mobile viewport
+  },
+};
+```
+
+### CI Validation Pipeline
+
+Your pull requests will be automatically validated for:
+
+**1. Module Boundary Compliance**
+
+```bash
+# What runs in CI
+pnpm nx run-many -t lint --parallel --maxParallel=4
+```
+
+**2. Token Namespace Validation**
+
+```bash
+# CSS token validation
+grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/
+
+# JavaScript token validation  
+grep -r "^[[:space:]]*export.*[^d][^s][A-Z]" packages/design-tokens/libs/tokens/js/
+```
+
+**3. Build Integrity**
+
+```bash
+# All platforms must build successfully
+pnpm nx run design-tokens:build-all
+pnpm nx run-many -t build --parallel
+```
+
+**4. Import Path Integrity**
+
+```bash
+# Validates no cross-platform imports
+pnpm nx run-many -t typecheck --parallel
+```
+
+### Common Issues and Solutions
+
+**Module Boundary Violation:**
+
+```bash
+# Error: "Projects cannot depend on libraries that have not been declared"
+# Solution: Check your imports and project tags
+
+# Debug command
+pnpm nx show projects --with-deps design-system
+```
+
+**Token Collision Warning:**
+
+```bash
+# Error: "Found CSS tokens without ds- prefix"
+# Solution: Use proper namespacing
+
+# Before (bad)
+.my-component {
+  color: var(--primary-color);
+}
+
+# After (good)  
+.my-component {
+  color: var(--ds-color-primary);
+}
+```
+
+**Storybook Build Failure:**
+
+```bash
+# Error: "Cannot resolve module '@mimic/design-tokens/mobile'"
+# Solution: Use correct platform imports
+
+# Platform-specific imports
+import '@mimic/design-tokens/css';      # Web
+import '@mimic/design-tokens/js';       # Universal JS
+import '@mimic/design-tokens/ts';       # TypeScript definitions
+```
+
+**Token Build Failure:**
+
+```bash
+# Error: "Style Dictionary build failed"
+# Solution: Check token definitions and run validation
+
+pnpm nx run design-tokens:validate
+pnpm nx run design-tokens:build-all
+```
+
+### Development Commands
+
+**Module Boundary Testing:**
+
+```bash
+# Test all boundaries
+pnpm nx run-many -t lint --parallel
+
+# Test specific package
+pnpm nx lint design-system
+
+# Show dependency graph
+pnpm nx graph
+```
+
+**Token Development:**
+
+```bash
+# Rebuild tokens after changes
+pnpm nx run design-tokens:build-all
+
+# Watch for token changes
+pnpm nx run design-tokens:build --watch
+
+# Validate token integrity
+pnpm nx run design-tokens:validate
+```
+
+**Storybook Development:**
+
+```bash
+# Start all Storybook instances
+pnpm nx run design-system:storybook          # Web
+pnpm nx run design-system:storybook:mobile   # Mobile
+pnpm nx run design-system:storybook:desktop  # Desktop
+
+# Build for production
+pnpm nx run design-system:build-storybook
+pnpm nx run design-system:build-storybook:mobile
+pnpm nx run design-system:build-storybook:desktop
+```

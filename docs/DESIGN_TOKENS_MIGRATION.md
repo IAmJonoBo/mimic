@@ -4,7 +4,7 @@ Step-by-step guide for migrating existing projects to use the Mimic design token
 
 ## 📋 Overview
 
-This guide helps teams migrate from hardcoded styles, CSS variables, or other design token systems to the 
+This guide helps teams migrate from hardcoded styles, CSS variables, or other design token systems to the
 Mimic design token architecture. The migration process ensures design consistency while minimizing development
 disruption.
 

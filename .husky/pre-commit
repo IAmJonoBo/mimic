@@ -1,5 +1,5 @@
 # Clean Apple junk before committing
-pnpm run precommit:clean
+npx pnpm run precommit:clean
 
 # Run linting and tests
-pnpm exec lint-staged
+npx pnpm exec lint-staged

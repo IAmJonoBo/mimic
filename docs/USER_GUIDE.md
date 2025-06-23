@@ -60,7 +60,9 @@ cd mimic-tokens
 pnpm install
 ```
 
-**Why this matters**: A consistent toolchain ensures reproducible builds across all team members and CI environments. The Nx monorepo structure provides dependency graph management and efficient task execution.
+**Why this matters**: A consistent toolchain ensures reproducible builds across all team
+members and CI environments. The Nx monorepo structure provides dependency graph management and
+efficient task execution.
 
 📖 **Further reading**: [Nx Getting Started Guide](https://nx.dev/getting-started)
 
@@ -100,7 +102,8 @@ The CLI outputs W3C-JSON plus optional SVG/PNG assets for icons and illustration
 2. **(Optional) Add export presets** to icons/illustrations so the same CLI also outputs
    optimized assets for the web bundle.
 
-**Why this matters**: Penpot provides the single source of truth for design decisions. The W3C-DTCG format ensures interoperability with any standards-compliant token system.
+**Why this matters**: Penpot provides the single source of truth for design decisions.
+The W3C-DTCG format ensures interoperability with any standards-compliant token system.
 
 📖 **Further reading**:
 
@@ -202,7 +205,9 @@ pnpm style-dictionary build --dry-run
 pnpm add -D @tokens-studio/sd-transforms
 ```
 
-**Why this matters**: Style Dictionary transforms design tokens into platform-specific formats while maintaining consistency. The watch mode enables real-time development, while CI validation prevents manual token modifications.
+**Why this matters**: Style Dictionary transforms design tokens into platform-specific
+formats while maintaining consistency. The watch mode enables real-time development, while CI
+validation prevents manual token modifications.
 
 📖 **Further reading**:
 
@@ -258,7 +263,9 @@ pnpm qwik add image-optimization
 QWIK_BUILD_MODE=production QWIK_DEBUG=false pnpm build
 ```
 
-**Why this matters**: Qwik's resumability architecture provides instant interactivity. Image optimization and prefetching ensure optimal Core Web Vitals scores, while the Rust optimizer minimizes bundle size.
+**Why this matters**: Qwik's resumability architecture provides instant interactivity.
+Image optimization and prefetching ensure optimal Core Web Vitals scores, while the Rust
+optimizer minimizes bundle size.
 
 📖 **Further reading**:
 
@@ -322,7 +329,9 @@ pnpm add -D @loki/test
 git lfs track "*.loki-reference.png"
 ```
 
-**Why this matters**: Storybook provides living documentation and automated testing. The design-token addon visualizes tokens live, while interaction tests prevent regressions. Visual testing catches unintended design changes.
+**Why this matters**: Storybook provides living documentation and automated testing.
+The design-token addon visualizes tokens live, while interaction tests prevent regressions.
+Visual testing catches unintended design changes.
 
 📖 **Further reading**:
 
@@ -364,7 +373,8 @@ LaunchedEffect(Unit) {
 }
 ```
 
-**Why this matters**: Compose Multiplatform enables true code sharing across Android, iOS, Desktop, and Web while maintaining native performance and platform conventions.
+**Why this matters**: Compose Multiplatform enables true code sharing across Android,
+iOS, Desktop, and Web while maintaining native performance and platform conventions.
 
 📖 **Further reading**: [Compose Multiplatform Theming Codelab](https://developer.android.com/jetpack/compose/themes)
 
@@ -399,7 +409,8 @@ const theme = {
 };
 ```
 
-**Why this matters**: The New Architecture provides Interprocedural Optimization (IPO) and ~20% size reduction. Hermes engine improves startup time and memory usage.
+**Why this matters**: The New Architecture provides Interprocedural Optimization (IPO)
+and ~20% size reduction. Hermes engine improves startup time and memory usage.
 
 📖 **Further reading**:
 
@@ -445,7 +456,9 @@ if (update?.available) {
 <meta http-equiv="Content-Security-Policy" content="" />
 ```
 
-**Why this matters**: Tauri provides native desktop performance with web technologies. The updater enables seamless app updates, while automatic CSP injection ensures security without complexity.
+**Why this matters**: Tauri provides native desktop performance with web technologies.
+The updater enables seamless app updates, while automatic CSP injection ensures security
+without complexity.
 
 📖 **Further reading**:
 
@@ -514,7 +527,9 @@ if (tauriZipSize > 5 * 1024 * 1024) {
 }
 ```
 
-**Why this matters**: Nx provides intelligent build orchestration and caching. Module boundaries prevent architectural violations. Size budgets ensure performance remains optimal.
+**Why this matters**: Nx provides intelligent build orchestration and caching.
+Module boundaries prevent architectural violations. Size budgets ensure performance remains
+optimal.
 
 📖 **Further reading**: [Nx Module Boundaries](https://nx.dev/core-features/enforce-module-boundaries)
 
@@ -577,7 +592,8 @@ pnpm format
 git add . && git commit -m "feat: add new component"
 ```
 
-**Why this matters**: Consistent formatting reduces code review friction. Rust-based tools (Biome, dprint) provide faster execution than Node.js alternatives.
+**Why this matters**: Consistent formatting reduces code review friction. Rust-based
+tools (Biome, dprint) provide faster execution than Node.js alternatives.
 
 📖 **Further reading**: [Biome Documentation](https://biomejs.dev/)
 
@@ -613,17 +629,21 @@ nx run web:storybook
 nx run mobile-rn:start
 ```
 
-**Why this matters**: The watch-based workflow provides immediate feedback. Automated testing and CI gates prevent regressions while maintaining development velocity.
+**Why this matters**: The watch-based workflow provides immediate feedback. Automated
+testing and CI gates prevent regressions while maintaining development velocity.
 
 ---
 
 ## 10. Collision Prevention Architecture
 
-The Mimic design token pipeline implements a comprehensive collision-prevention strategy following industry best practices. This ensures that tokens, build artifacts, and runtime globals never conflict across the multi-platform monorepo.
+The Mimic design token pipeline implements a comprehensive collision-prevention strategy
+following industry best practices. This ensures that tokens, build artifacts, and runtime
+globals never conflict across the multi-platform monorepo.
 
 ### 10.1 Token Namespace Strategy
 
-**Principle**: All tokens use the `ds-` prefix to guarantee no CSS variables or platform constants collide with third-party libraries.
+**Principle**: All tokens use the `ds-` prefix to guarantee no CSS variables or
+platform constants collide with third-party libraries.
 
 | Platform                  | Prefix Format      | Example Output               |
 | ------------------------- | ------------------ | ---------------------------- |
@@ -636,7 +656,7 @@ The Mimic design token pipeline implements a comprehensive collision-prevention 
 
 Each platform outputs to its own isolated directory to eliminate file-name collisions:
 
-```
+```text
 packages/design-tokens/libs/tokens/
 ├── css/tokens.css           # Web CSS variables
 ├── scss/tokens.scss         # Web SCSS variables
@@ -648,7 +668,8 @@ packages/design-tokens/libs/tokens/
 └── react-native/theme.ts    # React Native StyleSheet
 ```
 
-**Migration Note**: The collision-prevention architecture has moved token outputs from `dist/` to `libs/tokens/` with platform-specific directories. Update your imports:
+**Migration Note**: The collision-prevention architecture has moved token outputs from
+`dist/` to `libs/tokens/` with platform-specific directories. Update your imports:
 
 ```diff
 // Old (deprecated)
@@ -696,7 +717,9 @@ Enable strict module boundaries to prevent cross-platform token imports:
 | **Compose MP**    | Package name clashes      | Use `ds.theme` package namespace                      |
 | **Tauri Desktop** | Asset path conflicts      | Configure `distDir` to `apps/web/dist`                |
 
-**Why this matters**: This architecture eliminates all four types of collisions (naming, file-path, module boundary, and runtime globals) while maintaining Penpot as the single source of truth.
+**Why this matters**: This architecture eliminates all four types of collisions (naming,
+file-path, module boundary, and runtime globals) while maintaining Penpot as the single source
+of truth.
 
 📖 **Further reading**: [Token Schema Documentation](./design/tokens-schema.md)
 
@@ -748,7 +771,8 @@ nx show projects --affected
 nx run web:build --verbose
 ```
 
-**Why this matters**: Quick debugging reduces development friction. Understanding common failure modes enables faster problem resolution.
+**Why this matters**: Quick debugging reduces development friction. Understanding
+common failure modes enables faster problem resolution.
 
 ---
 
@@ -759,7 +783,8 @@ nx run web:build --verbose
 - [Penpot User Guide](https://help.penpot.app/) - Token export and design system management
 - [Style Dictionary Documentation](https://amzn.github.io/style-dictionary/) - Installation, configuration, and custom transforms
 - [Qwik City Documentation](https://qwik.builder.io/docs/qwikcity/) - Prefetch strategies and integrations
-- [Storybook Interaction Testing](https://storybook.js.org/docs/writing-tests/interaction-testing) - Play functions and automated testing
+- [Storybook Interaction Testing](https://storybook.js.org/docs/writing-tests/interaction-testing) -
+  Play functions and automated testing
 
 ### Platform-Specific Guides
 
@@ -780,7 +805,8 @@ nx run web:build --verbose
 
 ---
 
-**With these pages in place—plus the referenced documentation files—the pipeline is fully documented, reproducible, and ready for team onboarding or open-source contribution.**
+**With these pages in place—plus the referenced documentation files—the pipeline is
+fully documented, reproducible, and ready for team onboarding or open-source contribution.**
 
 ---
 
