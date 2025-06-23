@@ -130,29 +130,29 @@ use formatter-discretion wrapping.
 
 ### Collision-Free Token System
 
-```
+```markdown
 tokens/
-├── base.json          # Foundational design tokens
-├── semantic.json      # Semantic layer with references
-├── components.json    # Component-specific tokens
+├── base.json # Foundational design tokens
+├── semantic.json # Semantic layer with references
+├── components.json # Component-specific tokens
 └── platforms/
-    ├── web.json       # Web-specific overrides
-    ├── mobile.json    # Mobile-specific overrides
-    └── desktop.json   # Desktop-specific overrides
+├── web.json # Web-specific overrides
+├── mobile.json # Mobile-specific overrides
+└── desktop.json # Desktop-specific overrides
 ```
 
 ### Platform-Rooted Outputs
 
-```
+```markdown
 libs/tokens/
-├── css/               # CSS custom properties (--ds-*)
-├── scss/              # SCSS variables ($ds-*)
-├── js/                # JavaScript exports (grouped by category)
-├── ts/                # TypeScript declarations (dot-notation)
-├── react-native/      # React Native theme objects
-├── dart/              # Flutter/Dart classes
-├── compose/           # Kotlin Compose objects
-└── json/              # Raw JSON (nested + flat)
+├── css/ # CSS custom properties (--ds-_)
+├── scss/ # SCSS variables ($ds-_)
+├── js/ # JavaScript exports (grouped by category)
+├── ts/ # TypeScript declarations (dot-notation)
+├── react-native/ # React Native theme objects
+├── dart/ # Flutter/Dart classes
+├── compose/ # Kotlin Compose objects
+└── json/ # Raw JSON (nested + flat)
 ```
 
 ### Runtime Protection
@@ -229,6 +229,6 @@ The pipeline is ready for:
 
 ---
 
-**🎉 Pipeline Status: PRODUCTION-READY**
+### 🎉 Pipeline Status: PRODUCTION-READY
 
 _The Mimic design token pipeline is now a robust, collision-free, and fully documented system ready for open-source contribution and enterprise deployment._
