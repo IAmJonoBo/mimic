@@ -5,16 +5,11 @@ on:
     # Run every Monday at 9 AM UTC
     - cron: 0 9 * * 1
   workflow_dispatch:
-    inputs:
-      create_pr:
-        description: Create PR for fixes instead of direct commit
-        required: false
-        default: false
-        type: boolean
 
 jobs:
   comprehensive-autofix:
     runs-on: ubuntu-latest
+    # trunk-ignore(checkov/CKV2_GHA_1)
     permissions:
       contents: write
       pull-requests: write
@@ -85,7 +80,7 @@ jobs:
           fi
 
       - name: Create autofix branch and PR
-        if: steps.autofix.outputs.changes == 'true' && (github.event.inputs.create_pr == 'true' || github.event_name == 'schedule')
+        if: steps.autofix.outputs.changes == 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -162,29 +157,6 @@ jobs:
             --label "safe-to-merge" \
             --assignee "${{ github.actor }}"
 
-      - name: Direct commit to main
-        if: steps.autofix.outputs.changes == 'true' && github.event.inputs.create_pr != 'true' && github.event_name != 'schedule'
-        run: |
-          CHANGED_FILES="${{ steps.autofix.outputs.changed_files }}"
-
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-
-          git add .
-          git commit -m "🔧 autofix: Comprehensive code quality fixes
-
-          - Auto-formatted $CHANGED_FILES files
-          - Fixed CSS/SCSS linting issues  
-          - Fixed markdown linting issues
-          - Cleaned temporary/system files
-          - Updated tool configurations
-          - Fixed markdown line lengths
-
-          Applied by: ${{ github.workflow }} #${{ github.run_number }}
-          Manual trigger by: ${{ github.actor }}"
-
-          git push
-
       - name: Create summary
         if: steps.autofix.outputs.changes == 'true'
         run: |
@@ -202,14 +174,8 @@ jobs:
           echo "- ✅ Tool upgrades (Trunk)" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Fixed markdown line lengths" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [[ "${{ github.event.inputs.create_pr }}" == "true" || "${{ github.event_name }}" == "schedule" ]]; then
-            echo "### 📋 PR Created" >> $GITHUB_STEP_SUMMARY
-            echo "A pull request was created with these fixes for review." >> $GITHUB_STEP_SUMMARY
-          else
-            echo "### ✅ Direct Commit" >> $GITHUB_STEP_SUMMARY
-            echo "Changes were committed directly to main branch." >> $GITHUB_STEP_SUMMARY
-          fi
+          echo "### 📋 PR Created" >> $GITHUB_STEP_SUMMARY
+          echo "A pull request was created with these fixes for review." >> $GITHUB_STEP_SUMMARY
 
       - name: No changes summary
         if: steps.autofix.outputs.changes == 'false'

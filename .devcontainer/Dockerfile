@@ -45,7 +45,3 @@ RUN echo '#!/bin/bash\nollama pull llama3:8b &' > /usr/local/bin/setup-ollama.sh
 # Add a simple healthcheck (checks if node is available)
 HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
   CMD node --version || exit 1
-
-# Install Ollama models in the background after container starts
-RUN echo '#!/bin/bash\nollama pull llama3:8b &' > /usr/local/bin/setup-ollama.sh && \
-    chmod +x /usr/local/bin/setup-ollama.sh

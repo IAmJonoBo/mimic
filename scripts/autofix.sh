@@ -14,11 +14,12 @@ if ! git rev-parse --git-dir >/dev/null 2>&1; then
 fi
 
 # Check for uncommitted changes
-if [[ -n $(git status --porcelain) ]]; then
+uncommitted_changes=$(git status --porcelain || true)
+if [[ -n ${uncommitted_changes} ]]; then
 	echo "⚠️  Warning: You have uncommitted changes. Consider committing them first."
 	read -p "Continue anyway? (y/N) " -n 1 -r
 	echo
-	if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+	if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
 		echo "Aborted."
 		exit 1
 	fi
@@ -49,11 +50,12 @@ pnpm nx run workspace-format:clean:temp 2>/dev/null || true
 pnpm nx run workspace-format:clean:ds-store 2>/dev/null || true
 
 # Check what changed
-CHANGED_FILES=$(git diff --name-only | wc -l | tr -d ' ')
+changed_files_count=$(git diff --name-only | wc -l || true)
+changed_files_count=$(echo "${changed_files_count}" | tr -d ' ')
 
-if [[ $CHANGED_FILES -gt 0 ]]; then
+if [[ ${changed_files_count} -gt 0 ]]; then
 	echo ""
-	echo "✅ Autofix complete! Fixed $CHANGED_FILES files:"
+	echo "✅ Autofix complete! Fixed ${changed_files_count} files:"
 	echo ""
 	git status --short
 	echo ""

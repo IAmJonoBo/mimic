@@ -71,6 +71,7 @@ jobs:
     runs-on: ubuntu-latest
     # Only run on main branch pushes (not PRs) to avoid conflicts
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    # trunk-ignore(checkov/CKV2_GHA_1)
     permissions:
       contents: write
       pull-requests: write

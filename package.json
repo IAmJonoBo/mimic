@@ -15,7 +15,7 @@
     "apps/*",
     "tools/*"
   ],
-  "packageManager": "pnpm@9.15.9",
+  "packageManager": "pnpm@10.12.2+sha512.a32540185b964ee30bb4e979e405adc6af59226b438ee4cc19f9e8773667a66d302f5bfee60a39d3cac69e35e4b96e708a71dd002b7e9359c4112a1722ac323f",
   "engines": {
     "node": ">=18.0.0",
     "pnpm": ">=9.0.0"
@@ -139,7 +139,9 @@
   "pnpm": {
     "overrides": {
       "react": "19.1.0",
-      "react-dom": "19.1.0"
+      "react-dom": "19.1.0",
+      "esbuild@<=0.24.2": ">=0.25.0",
+      "koa@<2.16.1": ">=2.16.1"
     }
   },
   "dependencies": {
