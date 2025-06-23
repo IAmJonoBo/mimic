@@ -196,6 +196,7 @@ node packages/shared-utils/dist/collision-prevention.js
 
 ## Success Metrics
 
+```markdown
 - ✅ **0 Token Name Conflicts**: All tokens use collision-safe naming
 - ✅ **0 Port Conflicts**: All Storybook instances use isolated ports
 - ✅ **0 Metro Duplications**: All packages properly scoped and deduplicated
@@ -209,3 +210,4 @@ predictable behavior across all platforms and development tools.
 
 **Implementation Complete**: All collision-prevention strategies documented in Specify warnings, Supernova docs,
 and Locofy FAQ are now enforced through code, configuration, and automated validation.
+```

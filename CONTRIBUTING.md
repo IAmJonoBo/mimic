@@ -12,7 +12,6 @@ Thank you for your interest in contributing to Mimic! We welcome contributions f
 - [Testing Requirements](#-testing-requirements)
 - [Submitting Changes](#-submitting-changes)
 - [Review Process](#-review-process)
-- [Architecture Guidelines](#-architecture-guidelines)
 
 ## 📜 Code of Conduct
 
@@ -549,14 +548,14 @@ const meta: Meta<typeof Button> = {
 
 Your pull requests will be automatically validated for:
 
-**1. Module Boundary Compliance**
+#### 1. Module Boundary Compliance
 
 ```bash
 # What runs in CI
 pnpm nx run-many -t lint --parallel --maxParallel=4
 ```
 
-**2. Token Namespace Validation**
+#### 2. Token Namespace Validation
 
 ```bash
 # CSS token validation
@@ -566,7 +565,7 @@ grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/
 grep -r "^[[:space:]]*export.*[^d][^s][A-Z]" packages/design-tokens/libs/tokens/js/
 ```
 
-**3. Build Integrity**
+#### 3. Build Integrity
 
 ```bash
 # All platforms must build successfully
@@ -574,7 +573,7 @@ pnpm nx run design-tokens:build-all
 pnpm nx run-many -t build --parallel
 ```
 
-**4. Import Path Integrity**
+#### 4. Import Path Integrity
 
 ```bash
 # Validates no cross-platform imports
