@@ -57,7 +57,7 @@ jobs:
         continue-on-error: true
 
       - name: 📊 Upload coverage
-        uses: codecov/codecov-action@v4.6.0
+        uses: codecov/codecov-action@v5.4.3
         with:
           directory: ./coverage
           fail_ci_if_error: false
