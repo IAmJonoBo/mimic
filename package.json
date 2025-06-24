@@ -166,6 +166,6 @@
     ]
   },
   "dependencies": {
-    "storybook": "9.0.12"
+    "storybook": "9.0.13"
   }
 }
