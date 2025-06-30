@@ -49,6 +49,9 @@ secrets.json
 .nx/workspace-data
 .nx/installation
 
+# Nx Cloud cache
+tmp/nx-cache/
+
 # Storybook
 storybook-static/
 chromatic-build/
@@ -172,6 +175,14 @@ temporary/
 .turbo/
 .vercel/
 .nitro/
+
+# Lock files for specific tools (keep pnpm-lock.yaml)
+package-lock.json
+yarn.lock
+
+# Editor swap files
+*.swp
+*.swo
 
 # Docker
 .docker/
