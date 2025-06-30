@@ -1,71 +1,118 @@
 
-// Error feedback color
-$ds-color-feedback-info: #3b82f6;Errorfeedbackcolor$ds-color-feedback-info // Info feedback color
-$ds-spacing-xs: 0.25rem;Infofeedbackcolor$ds-spacing-xs // Extra small spacing
-$ds-spacing-sm: 0.5rem;Extrasmallspacing$ds-spacing-sm // Small spacing
-$ds-spacing-md: 1rem;Smallspacing$ds-spacing-md // Medium spacing
-$ds-spacing-lg: 1.5rem;Mediumspacing$ds-spacing-lg // Large spacing
-$ds-spacing-xl: 2rem;Largespacing$ds-spacing-xl // Extra large spacing
-$ds-spacing-2xl: 3rem;Extralargespacing$ds-spacing-2xl // 2x extra large spacing
-$ds-spacing-3xl: 4rem;2xextralargespacing$ds-spacing-3xl // 3x extra large spacing
-$ds-typography-font-family-primary: inter, system-ui, sans-serif;3xextralargespacing$ds-typography-font-family-primary // Primary font family for body text
-$ds-typography-font-family-heading: inter, system-ui, sans-serif;Primaryfontfamilyforbodytext$ds-typography-font-family-heading // Font family for headings
-$ds-typography-font-family-monospace: 'JetBrains Mono', consolas, monaco, monospace;Fontfamilyforheadings$ds-typography-font-family-monospace // Monospace font family for code
-$ds-typography-font-size-xs: 0.75rem;Monospacefontfamilyforcode$ds-typography-font-size-xs // Extra small font size
-$ds-typography-font-size-sm: 0.875rem;Extrasmallfontsize$ds-typography-font-size-sm // Small font size
-$ds-typography-font-size-base: 1rem;Smallfontsize$ds-typography-font-size-base // Base font size
-$ds-typography-font-size-lg: 1.125rem;Basefontsize$ds-typography-font-size-lg // Large font size
-$ds-typography-font-size-xl: 1.25rem;Largefontsize$ds-typography-font-size-xl // Extra large font size
-$ds-typography-font-size-2xl: 1.5rem;Extralargefontsize$ds-typography-font-size-2xl // 2x extra large font size
-$ds-typography-font-size-3xl: 1.875rem;2xextralargefontsize$ds-typography-font-size-3xl // 3x extra large font size
-$ds-typography-font-size-4xl: 2.25rem;3xextralargefontsize$ds-typography-font-size-4xl // 4x extra large font size
-$ds-typography-font-weight-light: 300;4xextralargefontsize$ds-typography-font-weight-light // Light font weight
-$ds-typography-font-weight-normal: 400;Lightfontweight$ds-typography-font-weight-normal // Normal font weight
-$ds-typography-font-weight-medium: 500;Normalfontweight$ds-typography-font-weight-medium // Medium font weight
-$ds-typography-font-weight-semibold: 600;Mediumfontweight$ds-typography-font-weight-semibold // Semi-bold font weight
-$ds-typography-font-weight-bold: 700;Semi-boldfontweight$ds-typography-font-weight-bold // Bold font weight
-$ds-typography-font-weight-extrabold: 800;Boldfontweight$ds-typography-font-weight-extrabold // Extra bold font weight
-$ds-typography-line-height-tight: 1.25;Extraboldfontweight$ds-typography-line-height-tight // Tight line height
-$ds-typography-line-height-normal: 1.5;Tightlineheight$ds-typography-line-height-normal // Normal line height
-$ds-typography-line-height-relaxed: 1.75;Normallineheight$ds-typography-line-height-relaxed // Relaxed line height
-$ds-border-radius-none: 0;Relaxedlineheight$ds-border-radius-none // No border radius
-$ds-border-radius-xs: 0.125rem;Noborderradius$ds-border-radius-xs // Extra small border radius
-$ds-border-radius-sm: 0.25rem;Extrasmallborderradius$ds-border-radius-sm // Small border radius
-$ds-border-radius-md: 0.375rem;Smallborderradius$ds-border-radius-md // Medium border radius
-$ds-border-radius-lg: 0.5rem;Mediumborderradius$ds-border-radius-lg // Large border radius
-$ds-border-radius-xl: 0.75rem;Largeborderradius$ds-border-radius-xl // Extra large border radius
-$ds-border-radius-2xl: 1rem;Extralargeborderradius$ds-border-radius-2xl // 2x extra large border radius
-$ds-border-radius-full: 9999px;2xextralargeborderradius$ds-border-radius-full // Full border radius (pill shape)
-$ds-border-width-none: 0;Fullborderradius$ds-border-width-none // No border width
-$ds-border-width-thin: 1px;Noborderwidth$ds-border-width-thin // Thin border width
-$ds-border-width-medium: 2px;Thinborderwidth$ds-border-width-medium // Medium border width
-$ds-border-width-thick: 4px;Mediumborderwidth$ds-border-width-thick // Thick border width
-$ds-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 5%);Thickborderwidth$ds-shadow-sm // Small shadow
-$ds-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 10%);Smallshadow$ds-shadow-md // Medium shadow
-$ds-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 10%);Mediumshadow$ds-shadow-lg // Large shadow
-$ds-button-padding-small: 0.25rem 0.5rem;Largeshadow$ds-button-padding-small // Small button padding
-$ds-button-padding-medium: 0.5rem 1rem;Smallbuttonpadding$ds-button-padding-medium // Medium button padding
-$ds-button-padding-large: 1rem 1.5rem;Mediumbuttonpadding$ds-button-padding-large // Large button padding
-$ds-button-border-radius: 0.375rem;Largebuttonpadding$ds-button-border-radius // Button border radius
-$ds-button-font-size-small: 0.875rem;Buttonborderradius$ds-button-font-size-small // Small button font size
-$ds-button-font-size-medium: 1rem;Smallbuttonfontsize$ds-button-font-size-medium // Medium button font size
-$ds-button-font-size-large: 1.125rem;Mediumbuttonfontsize$ds-button-font-size-large // Large button font size
-$ds-button-font-weight: 500;Largebuttonfontsize$ds-button-font-weight // Button font weight
-$ds-card-padding: 1.5rem;Buttonfontweight$ds-card-padding // Card padding
-$ds-card-border-radius: 0.5rem;Cardpadding$ds-card-border-radius // Card border radius
-$ds-card-shadow: 0 4px 6px -1px rgb(0 0 0 / 10%);Cardborderradius$ds-card-shadow // Card shadow
-$ds-card-border: 1px solid #e5e5e5;Cardshadow$ds-card-border // Card border
-$ds-input-padding: 0.5rem 1rem;Cardborder$ds-input-padding // Input padding
-$ds-input-border-radius: 0.375rem;Inputpadding$ds-input-border-radius // Input border radius
-$ds-input-font-size: 1rem;Inputborderradius$ds-input-font-size // Input font size
-$ds-input-border: 1px solid #e5e5e5;Inputfontsize$ds-input-border // Input border
-$ds-input-border-focus: 2px solid #3b82f6;Inputborder$ds-input-border-focus // Input focus border
-$ds-heading-font-family: inter, system-ui, sans-serif;Inputfocusborder$ds-heading-font-family // Heading font family
-$ds-heading-font-weight: 700;Headingfontfamily$ds-heading-font-weight // Heading font weight
-$ds-heading-line-height: 1.25;Headingfontweight$ds-heading-line-height // Heading line height
-$ds-heading-h1-font-size: 2.25rem;Headinglineheight$ds-heading-h1-font-size // H1 font size
-$ds-heading-h1-margin-bottom: 1.5rem;H1fontsize$ds-heading-h1-margin-bottom // H1 bottom margin
-$ds-heading-h2-font-size: 1.875rem;H1bottommargin$ds-heading-h2-font-size // H2 font size
-$ds-heading-h2-margin-bottom: 1rem;H2fontsize$ds-heading-h2-margin-bottom // H2 bottom margin
-$ds-heading-h3-font-size: 1.5rem;H2bottommargin$ds-heading-h3-font-size // H3 font size
-$ds-heading-h3-margin-bottom: 1rem;H3fontsize$ds-heading-h3-margin-bottom // H3 bottom margin
+// Do not edit directly, this file was auto-generated.
+
+$ds-color-primary-50: #eff6ff; // Lightest primary color
+$ds-color-primary-100: #dbeafe; // Very light primary color
+$ds-color-primary-200: #bfdbfe; // Light primary color
+$ds-color-primary-300: #93c5fd; // Medium light primary color
+$ds-color-primary-400: #60a5fa; // Medium primary color
+$ds-color-primary-500: #3b82f6; // Base primary color
+$ds-color-primary-600: #2563eb; // Medium dark primary color
+$ds-color-primary-700: #1d4ed8; // Dark primary color
+$ds-color-primary-800: #1e40af; // Very dark primary color
+$ds-color-primary-900: #1e3a8a; // Darkest primary color
+$ds-color-secondary-50: #f0fdf4; // Lightest secondary color
+$ds-color-secondary-100: #dcfce7; // Very light secondary color
+$ds-color-secondary-500: #22c55e; // Base secondary color
+$ds-color-secondary-900: #14532d; // Darkest secondary color
+$ds-color-neutral-50: #fafafa; // Lightest neutral color
+$ds-color-neutral-100: #f5f5f5; // Very light neutral color
+$ds-color-neutral-200: #e5e5e5; // Light neutral color
+$ds-color-neutral-300: #d4d4d4; // Medium light neutral color
+$ds-color-neutral-400: #a3a3a3; // Medium neutral color
+$ds-color-neutral-500: #737373; // Base neutral color
+$ds-color-neutral-600: #525252; // Medium dark neutral color
+$ds-color-neutral-700: #404040; // Dark neutral color
+$ds-color-neutral-800: #262626; // Very dark neutral color
+$ds-color-neutral-900: #171717; // Darkest neutral color
+$ds-color-semantic-success: #22c55e; // Success state color
+$ds-color-semantic-warning: #f59e0b; // Warning state color
+$ds-color-semantic-error: #ef4444; // Error state color
+$ds-color-semantic-info: #3b82f6; // Information state color
+$ds-color-text-primary: #171717; // Primary text color
+$ds-color-text-secondary: #525252; // Secondary text color
+$ds-color-text-muted: #a3a3a3; // Muted text color
+$ds-color-text-inverse: #fafafa; // Inverse text color
+$ds-color-text-link: #2563eb; // Link text color
+$ds-color-text-link-hover: #1d4ed8; // Link hover text color
+$ds-color-background-primary: #fafafa; // Primary background color
+$ds-color-background-secondary: #f5f5f5; // Secondary background color
+$ds-color-background-tertiary: #e5e5e5; // Tertiary background color
+$ds-color-background-inverse: #171717; // Inverse background color
+$ds-color-background-brand: #3b82f6; // Brand background color
+$ds-color-border-default: #e5e5e5; // Default border color
+$ds-color-border-muted: #f5f5f5; // Muted border color
+$ds-color-border-emphasis: #d4d4d4; // Emphasis border color
+$ds-color-border-brand: #3b82f6; // Brand border color
+$ds-color-feedback-success: #22c55e; // Success feedback color
+$ds-color-feedback-warning: #f59e0b; // Warning feedback color
+$ds-color-feedback-error: #ef4444; // Error feedback color
+$ds-color-feedback-info: #3b82f6; // Info feedback color
+$ds-spacing-xs: 0.25rem; // Extra small spacing
+$ds-spacing-sm: 0.5rem; // Small spacing
+$ds-spacing-md: 1rem; // Medium spacing
+$ds-spacing-lg: 1.5rem; // Large spacing
+$ds-spacing-xl: 2rem; // Extra large spacing
+$ds-spacing-2xl: 3rem; // 2x extra large spacing
+$ds-spacing-3xl: 4rem; // 3x extra large spacing
+$ds-typography-font-family-primary: Inter, system-ui, sans-serif; // Primary font family for body text
+$ds-typography-font-family-heading: Inter, system-ui, sans-serif; // Font family for headings
+$ds-typography-font-family-monospace: 'JetBrains Mono', Consolas, Monaco, monospace; // Monospace font family for code
+$ds-typography-font-size-xs: 0.75rem; // Extra small font size
+$ds-typography-font-size-sm: 0.875rem; // Small font size
+$ds-typography-font-size-base: 1rem; // Base font size
+$ds-typography-font-size-lg: 1.125rem; // Large font size
+$ds-typography-font-size-xl: 1.25rem; // Extra large font size
+$ds-typography-font-size-2xl: 1.5rem; // 2x extra large font size
+$ds-typography-font-size-3xl: 1.875rem; // 3x extra large font size
+$ds-typography-font-size-4xl: 2.25rem; // 4x extra large font size
+$ds-typography-font-weight-light: 300; // Light font weight
+$ds-typography-font-weight-normal: 400; // Normal font weight
+$ds-typography-font-weight-medium: 500; // Medium font weight
+$ds-typography-font-weight-semibold: 600; // Semi-bold font weight
+$ds-typography-font-weight-bold: 700; // Bold font weight
+$ds-typography-font-weight-extrabold: 800; // Extra bold font weight
+$ds-typography-line-height-tight: 1.25; // Tight line height
+$ds-typography-line-height-normal: 1.5; // Normal line height
+$ds-typography-line-height-relaxed: 1.75; // Relaxed line height
+$ds-border-radius-none: 0rem; // No border radius
+$ds-border-radius-xs: 0.125rem; // Extra small border radius
+$ds-border-radius-sm: 0.25rem; // Small border radius
+$ds-border-radius-md: 0.375rem; // Medium border radius
+$ds-border-radius-lg: 0.5rem; // Large border radius
+$ds-border-radius-xl: 0.75rem; // Extra large border radius
+$ds-border-radius-2xl: 1rem; // 2x extra large border radius
+$ds-border-radius-full: 9999px; // Full border radius (pill shape)
+$ds-border-width-none: 0rem; // No border width
+$ds-border-width-thin: 1px; // Thin border width
+$ds-border-width-medium: 2px; // Medium border width
+$ds-border-width-thick: 4px; // Thick border width
+$ds-shadow-sm: 0px 1px 2px 0px rgba(0, 0, 0, 0.05); // Small shadow
+$ds-shadow-md: 0px 4px 6px -1px rgba(0, 0, 0, 0.1); // Medium shadow
+$ds-shadow-lg: 0px 10px 15px -3px rgba(0, 0, 0, 0.1); // Large shadow
+$ds-button-padding-small: 0.25rem 0.5rem; // Small button padding
+$ds-button-padding-medium: 0.5rem 1rem; // Medium button padding
+$ds-button-padding-large: 1rem 1.5rem; // Large button padding
+$ds-button-border-radius: 0.375rem; // Button border radius
+$ds-button-font-size-small: 0.875rem; // Small button font size
+$ds-button-font-size-medium: 1rem; // Medium button font size
+$ds-button-font-size-large: 1.125rem; // Large button font size
+$ds-button-font-weight: 500; // Button font weight
+$ds-card-padding: 1.5rem; // Card padding
+$ds-card-border-radius: 0.5rem; // Card border radius
+$ds-card-shadow: 0px 4px 6px -1px rgba(0, 0, 0, 0.1); // Card shadow
+$ds-card-border: 1px solid #e5e5e5; // Card border
+$ds-input-padding: 0.5rem 1rem; // Input padding
+$ds-input-border-radius: 0.375rem; // Input border radius
+$ds-input-font-size: 1rem; // Input font size
+$ds-input-border: 1px solid #e5e5e5; // Input border
+$ds-input-border-focus: 2px solid #3b82f6; // Input focus border
+$ds-heading-font-family: Inter, system-ui, sans-serif; // Heading font family
+$ds-heading-font-weight: 700; // Heading font weight
+$ds-heading-line-height: 1.25; // Heading line height
+$ds-heading-h1-font-size: 2.25rem; // H1 font size
+$ds-heading-h1-margin-bottom: 1.5rem; // H1 bottom margin
+$ds-heading-h2-font-size: 1.875rem; // H2 font size
+$ds-heading-h2-margin-bottom: 1rem; // H2 bottom margin
+$ds-heading-h3-font-size: 1.5rem; // H3 font size
+$ds-heading-h3-margin-bottom: 1rem; // H3 bottom margin

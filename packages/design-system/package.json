@@ -23,7 +23,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "test-storybook": "test-storybook",
-    "visual-test": "loki test"
+    "visual-test": "loki test",
+    "loki:test": "loki test --requireReference --reactUri file:./storybook-static",
+    "loki:update": "loki update --requireReference --reactUri file:./storybook-static"
   },
   "dependencies": {
     "@builder.io/qwik": "^1.14.1",

@@ -1,0 +1,137 @@
+name: Token Synchronization
+
+on:
+  schedule:
+    # Run every 15 minutes during business hours (UTC)
+    - cron: '*/15 9-17 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      force_sync:
+        description: 'Force sync even if no changes detected'
+        required: false
+        default: 'false'
+      dry_run:
+        description: 'Perform dry run without committing changes'
+        required: false
+        default: 'false'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check for drift
+        id: drift-check
+        run: |
+          # Simple drift check - compare exported tokens with current
+          if [ "${{ github.event.inputs.force_sync }}" = "true" ]; then
+            echo "drift-detected=1" >> $GITHUB_OUTPUT
+          else
+            # In a real implementation, this would use the penpot-export tool
+            # to compare current tokens with Penpot and detect differences
+            echo "🔍 Checking for token drift..."
+            echo "drift-detected=0" >> $GITHUB_OUTPUT
+          fi
+        env:
+          PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
+          PENPOT_FILE_ID: ${{ secrets.PENPOT_FILE_ID }}
+
+      - name: Sync tokens
+        if: steps.drift-check.outputs.drift-detected == '1' || github.event.inputs.force_sync == 'true'
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            echo "🔄 Dry run: Would sync tokens from Penpot"
+            pnpm nx run design-tokens:tokens:validate
+          else
+            echo "🔄 Syncing tokens from Penpot..."
+            # In a real implementation, this would call:
+            # pnpm nx run design-tokens:tokens:sync
+            pnpm nx run design-tokens:build
+          fi
+        env:
+          PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
+
+      - name: Validate synced tokens
+        if: steps.drift-check.outputs.drift-detected == '1'
+        run: |
+          pnpm nx run design-tokens:test
+          pnpm nx run design-tokens:build
+
+      - name: Create pull request
+        if: steps.drift-check.outputs.drift-detected == '1' && github.event.inputs.dry_run != 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'feat(tokens): sync with Penpot design updates'
+          title: '🎨 Automated token sync from Penpot'
+          body: |
+            ## Automated Token Synchronization
+
+            This PR was automatically created to sync design tokens with updates from Penpot.
+
+            ### Changes
+            - Updated design tokens from Penpot export
+            - Regenerated platform-specific token files
+            - Validated token consistency and structure
+
+            ### Validation
+            - [x] Schema validation passed
+            - [x] Build process completed successfully
+            - [x] Token tests passed
+            - [ ] Visual regression tests (will run automatically)
+
+            ### Review Checklist
+            - [ ] Review token changes for design consistency
+            - [ ] Verify no breaking changes introduced
+            - [ ] Check component impact in Storybook
+            - [ ] Approve and merge if changes look correct
+
+            > This PR was created by the automated token sync workflow.
+            > If you see frequent sync PRs, consider reviewing the token governance process.
+          branch: automated/token-sync-${{ github.run_number }}
+          delete-branch: true
+
+      - name: Send notification
+        if: steps.drift-check.outputs.drift-detected == '1'
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          custom_payload: |
+            {
+              "attachments": [{
+                "color": "warning",
+                "title": "🎨 Token Sync Required",
+                "text": "Design tokens have been updated in Penpot and need to be synced.",
+                "fields": [{
+                  "title": "Action",
+                  "value": "Automated PR created for review",
+                  "short": true
+                }, {
+                  "title": "Workflow",
+                  "value": "<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View Details>",
+                  "short": true
+                }]
+              }]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

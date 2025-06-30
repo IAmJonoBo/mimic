@@ -29,6 +29,10 @@ lint:
     - hadolint # Causing daemon stability issues
   enabled:
     # Core formatting and linting (lightweight)
+    - clippy@1.65.0
+    - rustfmt@1.65.0
+    - svgo@4.0.0
+    - taplo@0.9.3
     - ktlint@1.6.0
     - eslint@9.30.0:
         config_path: eslint.config.js

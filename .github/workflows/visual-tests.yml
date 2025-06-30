@@ -1,0 +1,67 @@
+name: Visual Regression Tests
+
+on:
+  pull_request:
+    paths:
+      - 'packages/design-system/**'
+      - 'packages/design-tokens/**'
+      - '.storybook/**'
+
+jobs:
+  loki-visual-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build design tokens
+        run: pnpm nx run design-tokens:build
+
+      - name: Build Storybook
+        run: pnpm nx run design-system:build-storybook
+
+      - name: Download reference images
+        run: |
+          git lfs fetch
+          git lfs checkout
+
+      - name: Run Loki visual tests
+        run: |
+          npx concurrently -k -s first -n "SB,LOKI" -c "magenta,blue" \
+            "npx http-server packages/design-system/storybook-static --port 6006 --silent" \
+            "npx wait-on http://127.0.0.1:6006 && pnpm nx run design-system:loki:test"
+
+      - name: Upload visual diffs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: loki-diffs
+          path: packages/design-system/.loki/current/
+
+      - name: Update references on main
+        if: github.ref == 'refs/heads/main' && success()
+        run: |
+          pnpm nx run design-system:loki:update
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add packages/design-system/.loki/reference/
+          git commit -m "Update Loki reference images" || exit 0
+          git push

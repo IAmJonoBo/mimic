@@ -1,0 +1,217 @@
+/**
+ * Desktop App Styles
+ *
+ * Styles for the Mimic desktop app using design tokens with collision-prevention
+ * architecture. All token CSS variables use the ds- prefix.
+ */
+
+:root {
+  font-family: var(
+    --ds-typography-font-family-primary,
+    'Inter',
+    system-ui,
+    sans-serif
+  );
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: var(--ds-color-text-primary, #171717);
+  background-color: var(--ds-color-background-primary, #fafafa);
+  font-synthesis: none;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--ds-spacing-lg, 1.5rem);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: var(--ds-spacing-2xl, 3rem);
+}
+
+.title {
+  font-size: var(--ds-typography-fontSize-3xl, 1.875rem);
+  font-weight: var(--ds-typography-fontWeight-bold, 700);
+  color: var(--ds-color-text-primary, #171717);
+  margin: 0 0 var(--ds-spacing-sm, 0.5rem) 0;
+}
+
+.subtitle {
+  font-size: var(--ds-typography-fontSize-lg, 1.125rem);
+  color: var(--ds-color-text-secondary, #525252);
+  margin: 0;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-2xl, 3rem);
+}
+
+.section-title {
+  font-size: var(--ds-typography-fontSize-xl, 1.25rem);
+  font-weight: var(--ds-typography-fontWeight-semibold, 600);
+  color: var(--ds-color-text-primary, #171717);
+  margin: 0 0 var(--ds-spacing-lg, 1.5rem) 0;
+}
+
+/* Color Demo Styles */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--ds-spacing-lg, 1.5rem);
+}
+
+.color-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-spacing-md, 1rem);
+  padding: var(--ds-spacing-md, 1rem);
+  background: var(--ds-color-background-secondary, #f5f5f5);
+  border-radius: var(--ds-border-radius-md, 0.375rem);
+}
+
+.color-swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ds-border-radius-sm, 0.25rem);
+  border: 1px solid var(--ds-color-border-default, #e5e5e5);
+  flex-shrink: 0;
+}
+
+.color-swatch.primary {
+  background-color: var(--ds-color-primary-500, #3b82f6);
+}
+
+.color-swatch.secondary {
+  background-color: var(--ds-color-secondary-500, #22c55e);
+}
+
+.color-swatch.neutral {
+  background-color: var(--ds-color-neutral-500, #737373);
+}
+
+.token-label {
+  font-family: monospace;
+  font-size: var(--ds-typography-fontSize-sm, 0.875rem);
+  color: var(--ds-color-text-secondary, #525252);
+}
+
+/* Button Demo Styles */
+.button-grid {
+  display: flex;
+  gap: var(--ds-spacing-lg, 1.5rem);
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: var(--ds-button-padding-medium, 0.5rem 1rem);
+  border-radius: var(--ds-button-borderRadius, 0.375rem);
+  font-size: var(--ds-button-fontSize-medium, 1rem);
+  font-weight: var(--ds-button-fontWeight, 500);
+  border: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}
+
+.btn:active {
+  opacity: 0.8;
+}
+
+.btn-primary {
+  background-color: var(--ds-color-primary-500, #3b82f6);
+  color: var(--ds-color-neutral-50, #fafafa);
+}
+
+.btn-secondary {
+  background-color: var(--ds-color-secondary-500, #22c55e);
+  color: var(--ds-color-neutral-50, #fafafa);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--ds-color-primary-500, #3b82f6);
+  border: 2px solid var(--ds-color-primary-500, #3b82f6);
+}
+
+/* Spacing Demo Styles */
+.spacing-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-spacing-md, 1rem);
+}
+
+.spacing-item {
+  background: var(--ds-color-background-secondary, #f5f5f5);
+  border: 1px solid var(--ds-color-border-default, #e5e5e5);
+  border-radius: var(--ds-border-radius-sm, 0.25rem);
+  color: var(--ds-color-text-secondary, #525252);
+  font-family: monospace;
+  font-size: var(--ds-typography-fontSize-sm, 0.875rem);
+  display: flex;
+  align-items: center;
+}
+
+.spacing-item.spacing-xs {
+  padding: var(--ds-spacing-xs, 0.25rem);
+}
+
+.spacing-item.spacing-sm {
+  padding: var(--ds-spacing-sm, 0.5rem);
+}
+
+.spacing-item.spacing-md {
+  padding: var(--ds-spacing-md, 1rem);
+}
+
+.spacing-item.spacing-lg {
+  padding: var(--ds-spacing-lg, 1.5rem);
+}
+
+/* Footer Styles */
+.footer {
+  margin-top: var(--ds-spacing-2xl, 3rem);
+  padding-top: var(--ds-spacing-lg, 1.5rem);
+  border-top: 1px solid var(--ds-color-border-default, #e5e5e5);
+  text-align: center;
+}
+
+.footer-text {
+  font-size: var(--ds-typography-fontSize-sm, 0.875rem);
+  color: var(--ds-color-text-muted, #a3a3a3);
+  margin: 0;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: var(--ds-color-text-inverse, #fafafa);
+    background-color: var(--ds-color-background-inverse, #171717);
+  }
+}

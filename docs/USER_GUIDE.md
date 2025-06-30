@@ -132,55 +132,86 @@ pnpm style-dictionary init basic
 
 ### 3.2 Multi-Platform Configuration
 
-In `packages/design-tokens/style-dictionary.config.js`, add four platforms:
+The project uses a sophisticated Style Dictionary configuration in
+`packages/design-tokens/style-dictionary.config.js` that generates tokens for multiple platforms with collision
+prevention and namespace prefixing:
 
 ```javascript
-module.exports = {
-  source: ['design/tokens.json'],
+export default {
+  // Multi-source token files
+  source: [
+    'tokens/base.json',
+    'tokens/semantic.json',
+    'tokens/components.json',
+  ],
   platforms: {
     // CSS Custom Properties for web
     css: {
       transformGroup: 'css',
-      buildPath: 'dist/css/',
-      files: [
-        {
-          destination: 'tokens.css',
-          format: 'css/variables',
-        },
+      prefix: 'ds', // Namespace prefix for collision prevention
+      buildPath: 'libs/tokens/css/',
+      source: [
+        'tokens/base.json',
+        'tokens/semantic.json',
+        'tokens/components.json',
+        'tokens/platforms/web.json',
       ],
+      files: [{ destination: 'tokens.css', format: 'css/variables' }],
     },
-    // TypeScript constants
+    // TypeScript with custom declarations and type safety
     ts: {
       transformGroup: 'js',
-      buildPath: 'dist/ts/',
+      transforms: ['value/font-family-quote', 'name/js-numeric-safe'],
+      prefix: 'ds',
+      buildPath: 'libs/tokens/ts/',
+      source: [
+        'tokens/base.json',
+        'tokens/semantic.json',
+        'tokens/components.json',
+        'tokens/platforms/web.json',
+      ],
       files: [
-        {
-          destination: 'tokens.ts',
-          format: 'javascript/es6',
-        },
+        { destination: 'tokens.ts', format: 'typescript/custom-declarations' },
       ],
     },
-    // Dart for Flutter
+    // Dart/Flutter with namespace classes
     dart: {
-      transformGroup: 'flutter',
-      buildPath: 'dist/dart/',
-      files: [
-        {
-          destination: 'tokens.dart',
-          format: 'flutter/class.dart',
-        },
+      transformGroup: 'js',
+      prefix: 'Ds',
+      buildPath: 'libs/tokens/dart/',
+      source: [
+        'tokens/base.json',
+        'tokens/semantic.json',
+        'tokens/components.json',
+        'tokens/platforms/mobile.json',
       ],
+      files: [{ destination: 'tokens.dart', format: 'dart/theme-dart' }],
     },
-    // Kotlin for Compose
+    // Kotlin for Compose Multiplatform
     compose: {
-      transformGroup: 'compose',
-      buildPath: 'dist/compose/',
-      files: [
-        {
-          destination: 'Theme.kt',
-          format: 'compose/object',
-        },
+      transformGroup: 'js',
+      prefix: 'Ds',
+      buildPath: 'libs/tokens/compose/',
+      source: [
+        'tokens/base.json',
+        'tokens/semantic.json',
+        'tokens/components.json',
+        'tokens/platforms/mobile.json',
       ],
+      files: [{ destination: 'Theme.kt', format: 'compose/theme-kt' }],
+    },
+    // React Native with platform overrides
+    'react-native': {
+      transformGroup: 'js',
+      prefix: 'ds',
+      buildPath: 'libs/tokens/react-native/',
+      source: [
+        'tokens/base.json',
+        'tokens/semantic.json',
+        'tokens/components.json',
+        'tokens/platforms/mobile.json',
+      ],
+      files: [{ destination: 'theme.ts', format: 'react-native/theme-ts' }],
     },
   },
 };
@@ -229,39 +260,154 @@ validation prevents manual token modifications.
 # Create Qwik City app
 pnpm create qwik@latest apps/web --qwikcity
 
-# Add CSS-in-JS support
-pnpm add -w vanilla-extract @vanilla-extract/vite-plugin
+# Add Vanilla Extract support (optional - can also use CSS variables directly)
+pnpm add -w @vanilla-extract/css @vanilla-extract/vite-plugin
 ```
 
-Import generated tokens into a theme file:
+#### Method 1: Direct CSS Variables (Recommended for simplicity)
+
+Import CSS tokens in your global stylesheet:
+
+```css
+/* apps/web/src/global.css */
+@import './styles/tokens.css';
+
+body {
+  font-family: var(
+    --ds-typography-font-family-primary,
+    'Inter',
+    system-ui,
+    sans-serif
+  );
+  color: var(--ds-color-neutral-900, #171717);
+  background-color: var(--ds-color-background-primary, #fafafa);
+}
+```
+
+Use tokens directly in components with fallbacks:
+
+```tsx
+// apps/web/src/components/demo.tsx
+export const Demo = component$(() => {
+  return (
+    <button
+      style={{
+        backgroundColor: 'var(--ds-color-primary-500, #3b82f6)',
+        color: 'var(--ds-color-neutral-50, #fafafa)',
+        padding: 'var(--ds-spacing-md, 1rem)',
+        borderRadius: 'var(--ds-border-radius-md, 0.375rem)',
+        border: 'none',
+      }}
+    >
+      Primary Button
+    </button>
+  );
+});
+```
+
+#### Method 2: Vanilla Extract (Advanced)
+
+For complex styling systems, use Vanilla Extract:
 
 ```typescript
 // apps/web/src/styles/theme.css.ts
-import { createTheme } from '@vanilla-extract/css';
-import { tokens } from '../../../packages/design-tokens/dist/ts/tokens';
+import { style } from '@vanilla-extract/css';
+import '@mimic/design-tokens/css';
 
-export const [themeClass, vars] = createTheme(tokens);
+export const buttonPrimary = style({
+  backgroundColor: 'var(--ds-color-primary-500)',
+  color: 'var(--ds-color-neutral-50)',
+  padding: 'var(--ds-spacing-md)',
+  borderRadius: 'var(--ds-border-radius-md)',
+  border: 'none',
+});
+```
+
+#### Package.json Configuration
+
+Ensure your design-tokens package exports are configured for the collision-prevention architecture:
+
+```json
+{
+  "exports": {
+    "./css": "./libs/tokens/css/tokens.css",
+    "./ts": "./libs/tokens/ts/tokens.ts",
+    "./json": "./libs/tokens/json/tokens.json"
+  }
+}
 ```
 
 ### 4.2 Performance Optimizations
 
-**Image Optimization**:
+**Core Web Vitals & Image Optimization**:
+
+Qwik provides excellent performance out of the box with resumability. For additional optimizations:
 
 ```bash
-# Enable automatic image optimization
-pnpm qwik add image-optimization
+# Add Partytown for 3rd-party script optimization
+pnpm qwik add partytown
+
+# Add PostCSS for advanced CSS processing
+pnpm qwik add postcss
+
+# Consider adding Tailwind for utility-first styling alongside design tokens
+pnpm qwik add tailwind-v4
 ```
 
-**Prefetching**:
+**Prefetching & Route Optimization**:
 
 ```tsx
-// Add prefetch to route links
+// Add prefetch to route links for instant navigation
+import { Link } from '@builder.io/qwik-city';
+
 <Link href="/dashboard" prefetch="viewport">
   Dashboard
 </Link>
+
+// Prefetch on hover for better UX
+<Link href="/profile" prefetch="hover">
+  Profile
+</Link>
 ```
 
-**Production Build**:
+**Token-Aware CSS Optimization**:
+
+When using design tokens with CSS frameworks like Tailwind, configure safelist patterns:
+
+```javascript
+// tailwind.config.js - Optimized for design tokens
+module.exports = {
+  content: ['./src/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    // Preserve all ds- prefixed CSS variables
+    { pattern: /^ds-/, variants: ['hover', 'focus', 'active'] },
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: 'var(--ds-color-primary-500)',
+        secondary: 'var(--ds-color-secondary-500)',
+      },
+      spacing: {
+        xs: 'var(--ds-spacing-xs)',
+        sm: 'var(--ds-spacing-sm)',
+        md: 'var(--ds-spacing-md)',
+        lg: 'var(--ds-spacing-lg)',
+      },
+    },
+  },
+};
+```
+
+**Production Build Optimization**:
+
+```bash
+# Enable production optimizations
+QWIK_BUILD_MODE=production pnpm build
+
+# For deployment-specific adapters
+pnpm qwik add cloudflare-pages  # or vercel-edge, netlify-edge, etc.
+```
 
 ```bash
 # Enable Rust optimizer for production
@@ -277,18 +423,88 @@ optimizer minimizes bundle size.
 - [Qwik City Documentation](https://qwik.builder.io/docs/qwikcity/)
 - [Qwik Prefetch Guide](https://qwik.builder.io/docs/advanced/prefetching/)
 
+### 4.3 Deployment Setup
+
+**Cloudflare Pages Adapter**:
+
+The Qwik City app is pre-configured with the Cloudflare Pages adapter for optimal edge deployment:
+
+```bash
+# Build for production (includes Cloudflare Pages adapter)
+pnpm build
+
+# Deploy to Cloudflare Pages
+pnpm deploy
+
+# Local preview with Cloudflare Workers runtime
+pnpm serve
+```
+
+**Generated Files**:
+
+The adapter automatically creates:
+
+- `/public/_headers` - Cache control and security headers
+- `/public/_redirects` - URL routing for SPA mode
+- `/src/entry.cloudflare-pages.tsx` - Edge function entry point
+- `/adapters/cloudflare-pages/vite.config.ts` - Cloudflare-specific build config
+
+**Build Output Structure**:
+
+```text
+dist/
+├── _worker.js          # Cloudflare Workers function
+├── _routes.json        # Route configuration
+├── assets/             # Static assets with cache headers
+├── build/              # JavaScript chunks
+└── *.html             # Pre-rendered pages
+```
+
+**Cache Headers Configuration**:
+
+The adapter includes optimized cache headers in `_headers`:
+
+```text
+/build/*
+  Cache-Control: public, max-age=31536000, s-maxage=31536000, immutable
+/assets/*
+  Cache-Control: public, max-age=31536000, s-maxage=31536000, immutable
+```
+
+**Alternative Deployment Adapters**:
+
+```bash
+# Other hosting platforms
+pnpm qwik add vercel-edge    # Vercel Edge Functions
+pnpm qwik add netlify-edge   # Netlify Edge Functions
+pnpm qwik add node-express   # Traditional Node.js hosting
+pnpm qwik add static         # Static site generation
+```
+
+**Why this matters**: Edge deployment with Cloudflare Pages provides:
+
+- Global CDN distribution for <100ms response times
+- Zero cold starts with edge functions
+- Automatic SSL and DDoS protection
+- Seamless integration with design tokens for fast CSS delivery
+
+📖 **Further reading**:
+
+- [Qwik Cloudflare Pages Guide](https://qwik.builder.io/docs/deployments/cloudflare-pages/)
+- [Cloudflare Pages Documentation](https://developers.cloudflare.com/pages/)
+
 ---
 
-## 5. Documentation & Testing: Storybook 8.5
+## 6. Documentation & Testing: Storybook 8.5
 
-### 5.1 Setup and Configuration
+### 6.1 Setup and Configuration
 
 ```bash
 # Initialize Storybook for Qwik
 pnpm dlx storybook@next init --builder vite --type qwik
 ```
 
-### 5.2 Design Integration Addons
+### 6.2 Design Integration Addons
 
 Add design-focused addons to `.storybook/main.ts`:
 
@@ -302,7 +518,7 @@ export default {
 };
 ```
 
-### 5.3 Testing Strategy
+### 6.3 Testing Strategy
 
 **Interaction Tests**:
 
@@ -345,9 +561,9 @@ Visual testing catches unintended design changes.
 
 ---
 
-## 6. Mobile & Desktop
+## 7. Mobile & Desktop
 
-### 6.1 Compose Multiplatform 1.7
+### 7.1 Compose Multiplatform 1.7
 
 **Token Integration**:
 
@@ -383,7 +599,7 @@ iOS, Desktop, and Web while maintaining native performance and platform conventi
 
 📖 **Further reading**: [Compose Multiplatform Theming Codelab](https://developer.android.com/jetpack/compose/themes)
 
-### 6.2 React Native 0.80
+### 7.2 React Native 0.80
 
 **Performance Configuration**:
 
@@ -422,7 +638,7 @@ and ~20% size reduction. Hermes engine improves startup time and memory usage.
 - [React Native New Architecture](https://reactnative.dev/docs/the-new-architecture/landing-page)
 - [Hermes Engine Guide](https://hermesengine.dev/)
 
-### 6.3 Tauri 2
+### 7.3 Tauri 2
 
 **Configuration**:
 
@@ -472,20 +688,20 @@ without complexity.
 
 ---
 
-## 7. Nx, pnpm & CI
+## 8. Nx, pnpm & CI
 
-### 7.1 Essential Tasks
+### 8.1 Essential Tasks
 
 | Task                | Command                                     | Purpose                                     |
 | ------------------- | ------------------------------------------- | ------------------------------------------- |
 | **Build tokens**    | `nx run design-tokens:build`                | Transform Penpot JSON to platform artifacts |
 | **Serve web**       | `nx run web:serve`                          | Development server with hot reload          |
 | **Storybook**       | `nx run web:storybook`                      | Component documentation and testing         |
-| **Mobile**          | `nx run mobile-rn:ios` / `:android`         | Native mobile builds                        |
+| **Mobile**          | `nx run mobile:run-ios` / `:run-android`    | Native mobile builds                        |
 | **Desktop**         | `nx run desktop:tauri dev`                  | Desktop development mode                    |
 | **Full test suite** | `nx affected -t=lint,test,storytest,visual` | Run all affected tests                      |
 
-### 7.2 Module Boundaries
+### 8.2 Module Boundaries
 
 Enable the `enforce-module-boundaries` ESLint rule to prevent illegal imports:
 
@@ -508,7 +724,7 @@ Enable the `enforce-module-boundaries` ESLint rule to prevent illegal imports:
 }
 ```
 
-### 7.3 CI Configuration
+### 8.3 CI Configuration
 
 **GitHub Actions Cache**:
 
@@ -532,17 +748,61 @@ if (tauriZipSize > 5 * 1024 * 1024) {
 }
 ```
 
-**Why this matters**: Nx provides intelligent build orchestration and caching.
-Module boundaries prevent architectural violations. Size budgets ensure performance remains
-optimal.
+### 8.4 Automated Apple Junk Cleanup
 
-📖 **Further reading**: [Nx Module Boundaries](https://nx.dev/core-features/enforce-module-boundaries)
+The pipeline includes automatic Apple junk cleanup to prevent macOS metadata conflicts:
+
+**Post-Build Chain Integration**:
+
+```bash
+# Automatically runs after every build
+pnpm build                    # Includes post-build Apple cleanup
+pnpm nx run design-tokens:build  # Includes token output cleanup
+```
+
+**Manual Cleanup Commands**:
+
+```bash
+# Clean entire workspace
+pnpm run clean:apple
+
+# Clean specific directory
+node tools/apple-cleaner.js path/to/directory
+
+# Post-build chain with validation
+./scripts/postbuild-chain.sh dist --validate
+```
+
+**What Gets Cleaned**:
+
+- `.DS_Store` files (Finder metadata)
+- `._*` AppleDouble resource fork files
+- `.Spotlight-V100` search indexes
+- `.fseventsd` filesystem event logs
+- Xcode user data and crash logs
+- Temporary and backup files
+
+**Automatic Integration Points**:
+
+| Build Stage           | Cleanup Target        | Validation |
+| --------------------- | --------------------- | ---------- |
+| **Token Export**      | `tokens/` directory   | ✅         |
+| **Token Build**       | `libs/tokens/` output | ✅         |
+| **Web App Build**     | `dist/` directory     | ✅         |
+| **Pre-commit**        | Entire workspace      | ✅         |
+| **Cloudflare Deploy** | Build artifacts       | ✅         |
+
+**Why this matters**: AppleDouble files (.\_filename) can cause deployment conflicts,
+increase bundle sizes, and trigger linting errors. The automated cleanup ensures
+clean builds and prevents platform-specific junk from reaching production.
+
+📖 **Further reading**: [Apple File System Guide](https://developer.apple.com/library/archive/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/)
 
 ---
 
-## 8. Formatting & Linting
+## 9. Formatting & Linting
 
-### 8.1 Tool Configuration
+### 9.1 Tool Configuration
 
 **Biome** handles JS/TS/JSON at Rust speed:
 
@@ -587,7 +847,7 @@ lint:
     - dprint@0.44.0
 ```
 
-### 8.2 Automation
+### 9.2 Automation
 
 ```bash
 # Format all files
@@ -604,20 +864,20 @@ tools (Biome, dprint) provide faster execution than Node.js alternatives.
 
 ---
 
-## 9. Daily Workflow
+## 10. Daily Workflow
 
-### 9.1 Typical Development Cycle
+### 10.1 Typical Development Cycle
 
-1. **Design** → Edit Penpot tokens, export via CLI or menu
-2. **Build** → `pnpm nx run design-tokens:build` (Style Dictionary watch handles live dev)
+1. **Design** → Edit Penpot tokens, export via CLI or menu (auto-cleaned)
+2. **Build** → `pnpm nx run design-tokens:build` (Style Dictionary watch handles live dev, auto-cleaned)
 3. **Develop** → Hot-reload via Qwik Vite server; RN Metro or Compose hot restart as needed
 4. **Document** → Write/adjust Storybook stories for new components
 5. **Test** → `nx affected` runs ESLint, unit, interaction & visual tests
-6. **Commit** → Pre-commit hooks automatically format, lint, and validate token drift
+6. **Commit** → Pre-commit hooks automatically format, lint, clean Apple junk, and validate token drift
 7. **CI** → Style Dictionary drift check, Storybook test-runner, Loki visual diff, size budgets
-8. **Release** → `nx release`, Tauri updater manifest, mobile store uploads
+8. **Release** → `nx release`, `pnpm deploy` (Cloudflare Pages, auto-cleaned), Tauri updater manifest, mobile store uploads
 
-### 9.2 Live Development Setup
+### 10.2 Live Development Setup
 
 ```bash
 # Terminal 1: Token watching
@@ -631,7 +891,7 @@ nx run web:serve
 nx run web:storybook
 
 # Terminal 4: Mobile (optional)
-nx run mobile-rn:start
+nx run mobile:start
 ```
 
 **Why this matters**: The watch-based workflow provides immediate feedback. Automated
@@ -639,13 +899,13 @@ testing and CI gates prevent regressions while maintaining development velocity.
 
 ---
 
-## 10. Collision Prevention Architecture
+## 11. Collision Prevention Architecture
 
 The Mimic design token pipeline implements a comprehensive collision-prevention strategy
 following industry best practices. This ensures that tokens, build artifacts, and runtime
 globals never conflict across the multi-platform monorepo.
 
-### 10.1 Token Namespace Strategy
+### 11.1 Token Namespace Strategy
 
 **Principle**: All tokens use the `ds-` prefix to guarantee no CSS variables or
 platform constants collide with third-party libraries.
@@ -657,7 +917,7 @@ platform constants collide with third-party libraries.
 | **Kotlin/Compose**        | `Ds` (PascalCase)  | `DsTokens.Color.PRIMARY_500` |
 | **Dart/Flutter**          | `Ds` (PascalCase)  | `DsTokens.primary_500`       |
 
-### 10.2 Platform-Rooted Build Paths
+### 11.2 Platform-Rooted Build Paths
 
 Each platform outputs to its own isolated directory to eliminate file-name collisions:
 
@@ -686,7 +946,7 @@ packages/design-tokens/libs/tokens/
 + import '../design-tokens/libs/tokens/css/tokens.css';
 ```
 
-### 10.3 Nx Module Boundaries
+### 11.3 Nx Module Boundaries
 
 Enable strict module boundaries to prevent cross-platform token imports:
 
@@ -713,7 +973,7 @@ Enable strict module boundaries to prevent cross-platform token imports:
 }
 ```
 
-### 10.4 Runtime Guard-Rails
+### 11.4 Runtime Guard-Rails
 
 | Runtime           | Collision Risk            | Prevention Strategy                                                 | Tooling Reference    |
 | ----------------- | ------------------------- | ------------------------------------------------------------------- | -------------------- |
@@ -725,7 +985,7 @@ Enable strict module boundaries to prevent cross-platform token imports:
 
 #### Critical Implementation Details
 
-**Specify-Documented Tailwind CSS Collision Prevention**
+### Specify-Documented Tailwind CSS Collision Prevention
 
 Specify documentation warns that un-namespaced design token CSS variables will collide with Tailwind\
 utility classes. Mimic's `ds-` prefix completely eliminates this risk:
@@ -758,7 +1018,7 @@ module.exports = {
 };
 ```
 
-**Locofy FAQ Metro Bundle Deduplication**
+### Locofy FAQ Metro Bundle Deduplication
 
 Locofy FAQ documents that Metro will bundle duplicate packages if package.json name fields collide with\
 workspace library names. Mimic prevents this with proper scoped naming:
@@ -784,7 +1044,7 @@ workspace library names. Mimic prevents this with proper scoped naming:
 - No collision with workspace lib `design-tokens` (different namespace)
 - Metro cache deduplicates correctly across multiple app bundles
 
-**Supernova-Documented Storybook Port Management**
+### Supernova-Documented Storybook Port Management
 
 Supernova documentation notes that Storybook's React Native builder defaults to port 7007 while Vite\
 builder defaults to port 6006, causing dev-machine port conflicts. Mimic uses fixed port assignment:
@@ -836,7 +1096,7 @@ of truth.
 
 ---
 
-## 11. Troubleshooting Quick-Hits
+## 12. Troubleshooting Quick-Hits
 
 | Symptom                           | Likely Cause                                      | Fix                                                      |
 | --------------------------------- | ------------------------------------------------- | -------------------------------------------------------- |
@@ -851,6 +1111,11 @@ of truth.
 | **Nx cache issues**               | Corrupted cache state                             | `nx reset` to clear all caches                           |
 | **pnpm install fails**            | Node version mismatch                             | Use Node 20 LTS via nvm/volta                            |
 | **Visual tests failing**          | Loki reference outdated                           | Update references: `pnpm loki update`                    |
+| **Cloudflare deploy fails**       | Missing wrangler authentication                   | `wrangler login` or set CLOUDFLARE_API_TOKEN             |
+| **CF Pages build timeout**        | Large build output or slow CI                     | Optimize build size; use `pnpm build --minify`           |
+| **CF Pages 404 on routes**        | Missing `_redirects` configuration                | Check adapter generated `public/_redirects` file         |
+| **Apple junk in build**           | Post-build cleanup not running                    | Automatic with all builds; manually `pnpm clean:apple`   |
+| **.\_\* files in repository**     | Pre-commit hook bypassed                          | Run `pnpm clean:apple` before committing                 |
 
 ### Advanced Debugging
 
@@ -882,12 +1147,25 @@ nx show projects --affected
 nx run web:build --verbose
 ```
 
+**Cloudflare Pages Deployment**:
+
+```bash
+# Check deployment status
+wrangler pages deployment list
+
+# Debug build output
+pnpm build --verbose
+
+# Test local preview
+pnpm serve
+```
+
 **Why this matters**: Quick debugging reduces development friction. Understanding
 common failure modes enables faster problem resolution.
 
 ---
 
-## 12. Further Reading
+## 13. Further Reading
 
 ### Core Documentation
 

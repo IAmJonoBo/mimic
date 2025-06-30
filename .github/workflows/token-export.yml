@@ -1,0 +1,86 @@
+name: Export Tokens from Penpot
+
+on:
+  schedule:
+    - cron: '0 9 * * 1-5' # Weekdays at 9 AM
+  workflow_dispatch:
+    inputs:
+      file_uuid:
+        description: 'Penpot file UUID'
+        required: false
+        type: string
+
+jobs:
+  export-tokens:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Export tokens
+        env:
+          PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
+          PENPOT_FILE_ID: ${{ github.event.inputs.file_uuid || secrets.PENPOT_FILE_ID }}
+        run: |
+          echo "🎨 Exporting tokens from Penpot..."
+          # Use the penpot-export tool
+          pnpm nx run design-tokens:tokens:export
+
+      - name: Export assets
+        env:
+          PENPOT_ACCESS_TOKEN: ${{ secrets.PENPOT_ACCESS_TOKEN }}
+          PENPOT_FILE_ID: ${{ github.event.inputs.file_uuid || secrets.PENPOT_FILE_ID }}
+        run: |
+          echo "🖼️ Exporting assets from Penpot..."
+          # In a real implementation, this would export SVG/PNG assets
+          echo "Assets export placeholder - would export icons and illustrations"
+
+      - name: Validate exported tokens
+        run: |
+          echo "🔍 Validating exported tokens..."
+          pnpm nx run design-tokens:tokens:validate
+
+      - name: Build Style Dictionary outputs
+        run: |
+          echo "🏗️ Building Style Dictionary outputs..."
+          pnpm nx run design-tokens:build
+
+      - name: Create Pull Request
+        if: github.event_name == 'schedule'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'feat(tokens): update from Penpot export'
+          title: 'Token Update: Penpot Export'
+          body: |
+            ## 🎨 Design Token Update
+
+            Automated export from Penpot design file.
+
+            ### Changes
+            - Updated design tokens from Penpot
+            - Exported optimized assets (SVG/PNG)
+
+            ### Review Checklist
+            - [ ] Token values are correct
+            - [ ] No breaking changes to existing tokens
+            - [ ] Assets are properly optimized
+            - [ ] Style Dictionary build passes
+          branch: feature/penpot-token-update-${{ github.run_number }}

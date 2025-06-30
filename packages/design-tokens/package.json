@@ -3,39 +3,46 @@
   "version": "0.1.0",
   "type": "module",
   "description": "Design tokens generated from Penpot using Style Dictionary",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "libs/tokens/js/tokens.js",
+  "types": "libs/tokens/ts/tokens.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./libs/tokens/ts/tokens.ts",
+      "import": "./libs/tokens/js/tokens.js"
     },
     "./tokens": {
-      "types": "./dist/types/tokens.ts",
-      "import": "./dist/js/tokens.js"
+      "types": "./libs/tokens/ts/tokens.ts",
+      "import": "./libs/tokens/js/tokens.js"
     },
-    "./css": "./dist/css/tokens.css",
-    "./scss": "./dist/scss/tokens.scss",
-    "./json": "./dist/json/tokens.json",
-    "./json/flat": "./dist/json/tokens-flat.json"
+    "./css": "./libs/tokens/css/tokens.css",
+    "./scss": "./libs/tokens/scss/tokens.scss",
+    "./json": "./libs/tokens/json/tokens.json",
+    "./json/flat": "./libs/tokens/json/tokens-flat.json",
+    "./ts": "./libs/tokens/ts/tokens.ts",
+    "./dart": "./libs/tokens/dart/tokens.dart",
+    "./react-native": "./libs/tokens/react-native/theme.ts",
+    "./compose": "./libs/tokens/compose/Theme.kt"
   },
   "files": [
-    "dist",
+    "libs/tokens",
     "tokens",
     "style-dictionary.config.js"
   ],
   "scripts": {
-    "build": "pnpm run build:tokens && pnpm run build:types",
+    "build": "pnpm run build:tokens && pnpm run build:types && pnpm run postbuild:clean",
     "build:tokens": "style-dictionary build -c style-dictionary.config.js",
     "build:types": "tsc",
     "build:watch": "concurrently \"pnpm run build:tokens --watch\" \"pnpm run build:types --watch\"",
+    "postbuild:clean": "../../scripts/postbuild-chain.sh libs/tokens --validate",
     "clean": "rm -rf dist",
+    "clean:apple": "node ../../tools/apple-cleaner.js .",
     "watch": "pnpm run build:tokens --watch",
     "test": "vitest",
     "test:tokens": "node -e \"const tokens = require('./dist/json/tokens.json'); console.log('Tokens loaded successfully:', Object.keys(tokens).length, 'categories');\"",
     "validate": "node -e \"const { validateTokens } = require('./dist/index.js'); const tokens = require('./tokens/base.json'); const result = validateTokens(tokens); console.log('Validation result:', result);\"",
-    "tokens:export": "cd ../../tools/penpot-export && docker-compose up --build",
-    "tokens:sync": "pnpm run tokens:export && pnpm run build:tokens",
+    "tokens:export": "cd ../../tools/penpot-export && docker-compose up --build && cd ../../packages/design-tokens && pnpm run postexport:clean",
+    "tokens:sync": "pnpm run tokens:export && pnpm run build:tokens && pnpm run postbuild:clean",
+    "postexport:clean": "../../scripts/postbuild-chain.sh tokens --validate",
     "tokens:watch": "pnpm run tokens:sync && pnpm run watch",
     "tokens:validate": "pnpm run build && pnpm test && pnpm run validate",
     "prepublishOnly": "pnpm run build"

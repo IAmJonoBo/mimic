@@ -118,8 +118,7 @@ export const button = {
 export const card = {
   padding: 1.5,
   borderRadius: 0.5,
-  shadow:
-    '{"offsetX":"0px","offsetY":"4px","blur":"6px","spread":"-1px","color":"rgba(0, 0, 0, 0.1)"}',
+  shadow: '{"offsetX":"0px","offsetY":"4px","blur":"6px","spread":"-1px","color":"rgba(0, 0, 0, 0.1)"}',
   border: '1px solid #e5e5e5',
 };
 
@@ -142,3 +141,4 @@ export const heading = {
   h3_fontSize: 1.5,
   h3_marginBottom: 1,
 };
+

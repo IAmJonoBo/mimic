@@ -45,15 +45,21 @@ tokens-export: ## Export tokens from Penpot (requires .env configuration)
 	@echo "📥 Exporting tokens from Penpot..."
 	@if [ ! -f .env ]; then echo "❌ .env file not found. Copy .env.example and configure."; exit 1; fi
 	pnpm nx run design-tokens:tokens:export
+	@echo "🧹 Cleaning Apple junk from export..."
+	pnpm run clean:apple
 
 tokens-build: ## Build design tokens only
 	@echo "🎨 Building design tokens..."
 	pnpm run tokens:build
+	@echo "🧹 Cleaning Apple junk from build..."
+	pnpm run clean:apple
 
 tokens-sync: ## Export from Penpot and build all outputs
 	@echo "🔄 Syncing tokens from Penpot..."
 	@if [ ! -f .env ]; then echo "❌ .env file not found. Copy .env.example and configure."; exit 1; fi
 	pnpm run tokens:sync-all
+	@echo "🧹 Cleaning Apple junk from sync..."
+	pnpm run clean:apple
 
 tokens-watch: ## Watch token files and rebuild on changes
 	@echo "👀 Watching tokens for changes..."
