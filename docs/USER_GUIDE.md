@@ -927,7 +927,7 @@ fully documented, reproducible, and ready for team onboarding or open-source con
 
 ---
 
-**Document Information**
+## Document Information
 
 - **Maintainer**: Mimic Core Team
 - **Last Updated**: June 2025
