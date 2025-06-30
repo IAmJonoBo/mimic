@@ -8,8 +8,8 @@
  */
 
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
-import { resolve } from 'path';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { validateCollisionPrevention, validateMetroDuplicationRisks, validateStorybookPortConflicts, validateTokenNameClashes } from '../collision-prevention.js';

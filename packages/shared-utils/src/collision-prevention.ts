@@ -9,8 +9,8 @@
  * 3. Metro duplication (Locofy FAQ compliance)
  */
 
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 export interface CollisionReport {
   tokenNameClashes: string[];

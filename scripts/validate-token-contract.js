@@ -11,8 +11,8 @@
  *   npm run validate:token-contract
  */
 
-const { resolve } = require('path');
-const { existsSync } = require('fs');
+const { resolve } = require('node:path');
+const { existsSync } = require('node:fs');
 
 // Import the validation function from shared-utils
 const { validateTokenContract } = require('../packages/shared-utils/dist/token-contract-validation.js');

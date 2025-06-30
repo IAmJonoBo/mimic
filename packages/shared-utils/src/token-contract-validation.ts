@@ -9,8 +9,8 @@
  * 5. Platform-scoped outputs are generated correctly
  */
 
-import { existsSync, readFileSync } from 'fs';
-import { resolve } from 'path';
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
 
 interface TokenContractValidation {
   prefixCompliance: boolean;
