@@ -16,7 +16,7 @@ importers:
     dependencies:
       storybook:
         specifier: 9.0.14
-        version: 9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.0)
+        version: 9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.2)
     devDependencies:
       '@biomejs/biome':
         specifier: ^2.0.5
@@ -56,7 +56,7 @@ importers:
         version: 21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(@swc/helpers@0.5.17)(@zkochan/js-yaml@0.0.7)(esbuild@0.25.5)(eslint@9.30.0(jiti@2.4.2))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(typescript@5.8.3)(webpack@5.99.9(@swc/core@1.12.6(@swc/helpers@0.5.17))(esbuild@0.25.5))
       '@nx/storybook':
         specifier: 21.2.1
-        version: 21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.30.0(jiti@2.4.2))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(storybook@9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.0))(typescript@5.8.3)
+        version: 21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.30.0(jiti@2.4.2))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(storybook@9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.2))(typescript@5.8.3)
       '@nx/vite':
         specifier: 21.2.1
         version: 21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(typescript@5.8.3)(vite@7.0.0(@types/node@24.0.7)(jiti@2.4.2)(terser@5.43.1)(yaml@2.8.0))(vitest@3.2.4(@types/debug@4.1.12)(@types/node@24.0.7)(jiti@2.4.2)(jsdom@26.1.0)(terser@5.43.1)(yaml@2.8.0))
@@ -113,10 +113,10 @@ importers:
         version: 21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17))
       prettier:
         specifier: ^3.6.0
-        version: 3.6.0
+        version: 3.6.2
       prettier-plugin-tailwindcss:
         specifier: ^0.6.13
-        version: 0.6.13(prettier@3.6.0)
+        version: 0.6.13(prettier@3.6.2)
       stylelint:
         specifier: ^16.21.0
         version: 16.21.0(typescript@5.8.3)
@@ -6497,6 +6497,11 @@ packages:
     engines: {node: '>=14'}
     hasBin: true
 
+  prettier@3.6.2:
+    resolution: {integrity: sha512-I7AIg5boAr5R0FFtJ6rCfD+LFsWHp81dolrFD8S79U9tb8Az2nGrJncnMSnys+bpQJfRUzqs9hnA81OAA3hCuQ==}
+    engines: {node: '>=14'}
+    hasBin: true
+
   pretty-format@27.5.1:
     resolution: {integrity: sha512-Qb1gy5OrP5+zDf2Bvnzdl3jsTf1qXVMazbvCoKhtKqVs4/YK4ozX4gKQJJVyNe+cajNPn0KoC0MC3FUmaHWEmQ==}
     engines: {node: ^10.13.0 || ^12.13.0 || ^14.15.0 || >=15.0.0}
@@ -10539,7 +10544,7 @@ snapshots:
       - webpack
       - webpack-cli
 
-  '@nx/storybook@21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.30.0(jiti@2.4.2))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(storybook@9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.0))(typescript@5.8.3)':
+  '@nx/storybook@21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.30.0(jiti@2.4.2))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(storybook@9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.2))(typescript@5.8.3)':
     dependencies:
       '@nx/cypress': 21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(@zkochan/js-yaml@0.0.7)(eslint@9.30.0(jiti@2.4.2))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))(typescript@5.8.3)
       '@nx/devkit': 21.2.1(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))
@@ -10547,7 +10552,7 @@ snapshots:
       '@nx/js': 21.2.1(@babel/traverse@7.27.4)(@swc/core@1.12.6(@swc/helpers@0.5.17))(nx@21.2.1(@swc/core@1.12.6(@swc/helpers@0.5.17)))
       '@phenomnomnominal/tsquery': 5.0.1(typescript@5.8.3)
       semver: 7.7.2
-      storybook: 9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.0)
+      storybook: 9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.2)
       tslib: 2.8.1
     transitivePeerDependencies:
       - '@babel/traverse'
@@ -16076,11 +16081,13 @@ snapshots:
 
   prelude-ls@1.2.1: {}
 
-  prettier-plugin-tailwindcss@0.6.13(prettier@3.6.0):
+  prettier-plugin-tailwindcss@0.6.13(prettier@3.6.2):
     dependencies:
-      prettier: 3.6.0
+      prettier: 3.6.2
 
   prettier@3.6.0: {}
+
+  prettier@3.6.2: {}
 
   pretty-format@27.5.1:
     dependencies:
@@ -16753,7 +16760,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  storybook@9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.0):
+  storybook@9.0.14(@testing-library/dom@10.4.0)(prettier@3.6.2):
     dependencies:
       '@storybook/global': 5.0.0
       '@testing-library/jest-dom': 6.6.3
@@ -16767,7 +16774,7 @@ snapshots:
       semver: 7.7.2
       ws: 8.18.3
     optionalDependencies:
-      prettier: 3.6.0
+      prettier: 3.6.2
     transitivePeerDependencies:
       - '@testing-library/dom'
       - bufferutil
@@ -16892,7 +16899,7 @@ snapshots:
       json5: 2.2.3
       patch-package: 8.0.0
       path-unified: 0.2.0
-      prettier: 3.6.0
+      prettier: 3.6.2
       tinycolor2: 1.6.0
 
   style-to-js@1.1.17:
