@@ -20,7 +20,7 @@
     "@vitest/ui": "^1.6.0",
     "jsdom": "^23.0.1",
     "typescript": "^5.8.3",
-    "vite": "^5.3.5",
+    "vite": "^5.4.19",
     "vitest": "^1.6.0"
   },
   "engines": {
