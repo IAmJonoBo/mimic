@@ -14,7 +14,7 @@ This project is using Qwik with [QwikCity](https://qwik.dev/qwikcity/overview/).
 
 Inside your project, you'll see the following directory structure:
 
-```
+```markdown
 ├── public/
 │   └── ...
 └── src/
@@ -68,7 +68,7 @@ pnpm build # or `pnpm build`
 
 Cloudflare's [wrangler](https://github.com/cloudflare/wrangler) CLI can be used to preview a production build locally. To start a local server, run:
 
-```
+```markdown
 pnpm serve
 ```
 
@@ -89,7 +89,7 @@ This is useful to determine if a page response should be Server-Side Rendered (S
 
 By default, the Cloudflare pages adaptor _does not_ include a `public/_routes.json` config, but rather it is auto-generated from the build by the Cloudflare adaptor. An example of an auto-generate `dist/_routes.json` would be:
 
-```
+```markdown
 {
   "include": [
     "/*"

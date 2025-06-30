@@ -15,9 +15,9 @@ import {
   View,
 } from 'react-native';
 
-import { ThemeProvider } from './theme/ThemeProvider';
-import { TokenDemo } from './components/TokenDemo';
 import { ButtonDemo } from './components/ButtonDemo';
+import { TokenDemo } from './components/TokenDemo';
+import { ThemeProvider } from './theme/ThemeProvider';
 
 const App: React.FC = () => {
   return (
