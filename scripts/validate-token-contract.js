@@ -15,15 +15,11 @@ const { resolve } = require('path');
 const { existsSync } = require('fs');
 
 // Import the validation function from shared-utils
-const {
-  validateTokenContract,
-} = require('../packages/shared-utils/dist/token-contract-validation.js');
+const { validateTokenContract } = require('../packages/shared-utils/dist/token-contract-validation.js');
 
 function main() {
   console.log('🔍 Mimic Token Contract Validation\n');
-  console.log(
-    'Validating formal contract compliance for collision-free tokens...\n'
-  );
+  console.log('Validating formal contract compliance for collision-free tokens...\n');
 
   const workspaceRoot = process.cwd();
   const tokensPath = resolve(workspaceRoot, 'tokens.json');
@@ -33,9 +29,7 @@ function main() {
     console.log('❌ tokens.json not found in workspace root');
     console.log('Expected path:', tokensPath);
     console.log('\nTo fix this:');
-    console.log(
-      '1. Export tokens from Penpot using CLI: npx penpot-export --file <FILE_UUID> --out tokens.json'
-    );
+    console.log('1. Export tokens from Penpot using CLI: npx penpot-export --file <FILE_UUID> --out tokens.json');
     console.log('2. Or use Penpot UI: Tokens ▶ Export button');
     process.exit(1);
   }
@@ -110,20 +104,12 @@ function main() {
     }
 
     // Overall status
-    const allPassed =
-      validation.prefixCompliance &&
-      validation.namingCompliance &&
-      validation.structureCompliance &&
-      validation.typeCompliance &&
-      validation.platformOutputs &&
-      validation.storybookPorts;
+    const allPassed = validation.prefixCompliance && validation.namingCompliance && validation.structureCompliance && validation.typeCompliance && validation.platformOutputs && validation.storybookPorts;
 
     if (allPassed) {
       console.log('🎉 TOKEN CONTRACT VALIDATION: PASSED\n');
       console.log('✨ Your tokens are ready for collision-free consumption!');
-      console.log(
-        '✨ All platforms (Qwik, React Native, Compose MP, Tauri 2, Storybook) will work seamlessly.'
-      );
+      console.log('✨ All platforms (Qwik, React Native, Compose MP, Tauri 2, Storybook) will work seamlessly.');
       console.log('✨ Pipeline is stable and ready for deployment.\n');
 
       // Show next steps
@@ -136,9 +122,7 @@ function main() {
     } else {
       console.log('❌ TOKEN CONTRACT VALIDATION: FAILED\n');
       console.log('Please fix the violations above before proceeding.');
-      console.log(
-        'The contract ensures collision-free operation across all platforms.\n'
-      );
+      console.log('The contract ensures collision-free operation across all platforms.\n');
 
       // Show fix guidance
       console.log('🔧 Quick Fixes:');
@@ -149,22 +133,16 @@ function main() {
         console.log('   • Use kebab-case naming (lowercase-with-hyphens)');
       }
       if (!validation.structureCompliance) {
-        console.log(
-          '   • Organize tokens: global → alias → semantic hierarchy'
-        );
+        console.log('   • Organize tokens: global → alias → semantic hierarchy');
       }
       if (!validation.typeCompliance) {
-        console.log(
-          '   • Use 6-digit hex colors (#RRGGBB), unitless dimensions'
-        );
+        console.log('   • Use 6-digit hex colors (#RRGGBB), unitless dimensions');
       }
       if (!validation.platformOutputs) {
         console.log('   • Run: pnpm build:tokens');
       }
       if (!validation.storybookPorts) {
-        console.log(
-          '   • Configure Storybook ports: Qwik (6006), React Native (7007)'
-        );
+        console.log('   • Configure Storybook ports: Qwik (6006), React Native (7007)');
       }
       console.log('');
 

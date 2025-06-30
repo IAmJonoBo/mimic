@@ -34,10 +34,7 @@
     "tokens:sync": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "nx run design-tokens:tokens:export",
-          "nx run design-tokens:tokens:build"
-        ],
+        "commands": ["nx run design-tokens:tokens:export", "nx run design-tokens:tokens:build"],
         "cwd": "packages/design-tokens",
         "parallel": false
       }
@@ -60,10 +57,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "packages/design-tokens/**/*.{ts,tsx,js,jsx}",
-          "!packages/design-tokens/libs/tokens/**/*.{ts,tsx,js,jsx}"
-        ]
+        "lintFilePatterns": ["packages/design-tokens/**/*.{ts,tsx,js,jsx}", "!packages/design-tokens/libs/tokens/**/*.{ts,tsx,js,jsx}"]
       }
     },
     "test": {

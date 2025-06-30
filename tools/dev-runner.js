@@ -66,9 +66,7 @@ function runTask(taskKey) {
     execSync(task.command, { stdio: 'inherit', cwd: process.cwd() });
     console.log(`\n✅ Task "${taskKey}" completed successfully!`);
   } catch (error) {
-    console.error(
-      `\n❌ Task "${taskKey}" failed with exit code ${error.status}`
-    );
+    console.error(`\n❌ Task "${taskKey}" failed with exit code ${error.status}`);
     process.exit(error.status || 1);
   }
 }

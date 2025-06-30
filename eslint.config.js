@@ -160,14 +160,7 @@ export default [
         'warn',
         {
           'newlines-between': 'always',
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
+          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
         },
       ],
 
@@ -186,11 +179,7 @@ export default [
             },
             {
               sourceTag: 'scope:web',
-              onlyDependOnLibsWithTags: [
-                'scope:shared',
-                'scope:tokens',
-                'scope:design-system',
-              ],
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens', 'scope:design-system'],
             },
             {
               sourceTag: 'scope:mobile',
@@ -198,11 +187,7 @@ export default [
             },
             {
               sourceTag: 'scope:desktop',
-              onlyDependOnLibsWithTags: [
-                'scope:shared',
-                'scope:tokens',
-                'scope:design-system',
-              ],
+              onlyDependOnLibsWithTags: ['scope:shared', 'scope:tokens', 'scope:design-system'],
             },
             {
               sourceTag: 'type:lib',
@@ -210,11 +195,7 @@ export default [
             },
             {
               sourceTag: 'type:app',
-              onlyDependOnLibsWithTags: [
-                'type:lib',
-                'type:util',
-                'scope:shared',
-              ],
+              onlyDependOnLibsWithTags: ['type:lib', 'type:util', 'scope:shared'],
             },
           ],
         },

@@ -98,10 +98,9 @@ function processMarkdownFile(filePath) {
       writeFileSync(filePath, newContent);
       console.log(`✅ Fixed line length issues in ${filePath}`);
       return true;
-    } else {
-      console.log(`ℹ️  No changes needed in ${filePath}`);
-      return false;
     }
+    console.log(`ℹ️  No changes needed in ${filePath}`);
+    return false;
   } catch (error) {
     console.error(`❌ Error processing ${filePath}:`, error.message);
     return false;
@@ -115,27 +114,9 @@ async function main() {
   console.log('🔧 Automated Markdown Line Length Fixer\n');
 
   // Get all markdown files (excluding node_modules, etc.)
-  const files = await glob(
-    [
-      'README.md',
-      'CONTRIBUTING.md',
-      'DEVELOPMENT.md',
-      'docs/**/*.md',
-      'packages/**/*.md',
-      '.github/**/*.md',
-    ],
-    {
-      ignore: [
-        '**/node_modules/**',
-        '**/dist/**',
-        '**/build/**',
-        '**/.nx/**',
-        '**/CHANGELOG*.md',
-        '**/*_COMPLETE.md',
-        '**/*_SUMMARY.md',
-      ],
-    }
-  );
+  const files = await glob(['README.md', 'CONTRIBUTING.md', 'DEVELOPMENT.md', 'docs/**/*.md', 'packages/**/*.md', '.github/**/*.md'], {
+    ignore: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.nx/**', '**/CHANGELOG*.md', '**/*_COMPLETE.md', '**/*_SUMMARY.md'],
+  });
 
   console.log(`Found ${files.length} markdown files to process\n`);
 
@@ -148,7 +129,7 @@ async function main() {
     if (wasFixed) fixedCount++;
   }
 
-  console.log(`\n📊 Summary:`);
+  console.log('\n📊 Summary:');
   console.log(`   Processed: ${processedCount} files`);
   console.log(`   Fixed: ${fixedCount} files`);
   console.log(`   Skipped: ${processedCount - fixedCount} files`);
