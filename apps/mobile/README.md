@@ -60,7 +60,7 @@ const primaryColor = getToken('color.primary_500', '#3b82f6');
 
 ### Component Structure
 
-```
+```markdown
 src/
 ├── App.tsx                 # Main app component
 ├── main.tsx               # Entry point

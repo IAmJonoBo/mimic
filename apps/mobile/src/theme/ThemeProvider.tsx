@@ -32,11 +32,13 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Listen for system theme changes
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme }) => {
-      if (userTheme === 'system') {
-        // Theme will update automatically via systemColorScheme
+    const subscription = Appearance.addChangeListener(
+      ({ colorScheme: _colorScheme }) => {
+        if (userTheme === 'system') {
+          // Theme will update automatically via systemColorScheme
+        }
       }
-    });
+    );
 
     return () => subscription?.remove();
   }, [userTheme]);
@@ -69,8 +71,12 @@ export const useTheme = (): ThemeContextType => {
 export const useTokens = () => {
   const { tokens } = useTheme();
 
-  const getToken = (tokenPath: string, fallback?: string | number) => {
+  const getToken = (
+    tokenPath: string,
+    fallback?: string | number
+  ): string | number | undefined => {
     const keys = tokenPath.split('.');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let value: any = tokens;
 
     for (const key of keys) {
@@ -81,7 +87,7 @@ export const useTokens = () => {
       }
     }
 
-    return value !== undefined ? value : fallback;
+    return value ?? fallback;
   };
 
   return {

@@ -7,7 +7,11 @@ import { qwikVite } from '@builder.io/qwik/optimizer';
 import { qwikCity } from '@builder.io/qwik-city/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pkg from './package.json';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 type PkgDep = Record<string, string>;
 const { dependencies = {}, devDependencies = {} } = pkg as unknown as {
@@ -22,7 +26,23 @@ errorOnDuplicatesPkgDeps(devDependencies, dependencies);
  */
 export default defineConfig((): UserConfig => {
   return {
-    plugins: [qwikCity(), qwikVite(), vanillaExtractPlugin(), tsconfigPaths()],
+    plugins: [
+      qwikCity({
+        routesDir: resolve(__dirname, 'src/routes'),
+      }),
+      qwikVite({
+        srcDir: resolve(__dirname, 'src'),
+      }),
+      vanillaExtractPlugin(),
+      tsconfigPaths(),
+    ],
+
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, 'src'),
+      },
+    },
+
     // This tells Vite which dependencies to pre-build in dev mode.
     optimizeDeps: {
       // Put problematic deps that break bundling here, mostly those with binaries.
@@ -33,19 +53,19 @@ export default defineConfig((): UserConfig => {
     /**
      * This is an advanced setting. It improves the bundling of your server code. To use it, make sure you understand when your consumed packages are dependencies or dev dependencies. (otherwise things will break in production)
      */
-    // ssr:
-    //   command === "build" && mode === "production"
-    //     ? {
-    //         // All dev dependencies should be bundled in the server build
-    //         noExternal: Object.keys(devDependencies),
-    //         // Anything marked as a dependency will not be bundled
-    //         // These should only be production binary deps (including deps of deps), CLI deps, and their module graph
-    //         // If a dep-of-dep needs to be external, add it here
-    //         // For example, if something uses `bcrypt` but you don't have it as a dep, you can write
-    //         // external: [...Object.keys(dependencies), 'bcrypt']
-    //         external: Object.keys(dependencies),
-    //       }
-    //     : undefined,
+    ssr: {
+      // All dev dependencies should be bundled in the server build
+      noExternal: Object.keys(devDependencies),
+      // Nothing should be external for the build to work properly
+      external: [],
+    },
+
+    build: {
+      rollupOptions: {
+        // Don't externalize any Qwik packages - they need to be bundled
+        external: [],
+      },
+    },
 
     server: {
       headers: {

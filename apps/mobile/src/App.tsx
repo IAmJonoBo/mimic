@@ -13,7 +13,6 @@ import {
   StyleSheet,
   Text,
   View,
-  Pressable,
 } from 'react-native';
 
 import { ThemeProvider } from './theme/ThemeProvider';

@@ -5,8 +5,8 @@
  * the Mimic design token system with collision-prevention architecture.
  */
 
-import React from 'react';
 import { AppRegistry } from 'react-native';
+
 import App from './App';
 
 const name = 'MimicMobile';

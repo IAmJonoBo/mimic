@@ -5,6 +5,23 @@
   "sourceRoot": "apps/web/src",
   "targets": {
     "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/apps/web/dist"],
+      "defaultConfiguration": "production",
+      "options": {
+        "command": "npm run build.client",
+        "cwd": "apps/web"
+      },
+      "configurations": {
+        "development": {
+          "command": "npm run build.client"
+        },
+        "production": {
+          "command": "npm run build.client"
+        }
+      }
+    },
+    "build-nx-vite": {
       "executor": "@nx/vite:build",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
@@ -20,6 +37,14 @@
           "mode": "production",
           "sourcemap": false
         }
+      }
+    },
+    "build-direct": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/apps/web/dist"],
+      "options": {
+        "command": "npm run build.client",
+        "cwd": "apps/web"
       }
     },
     "serve": {

@@ -56,7 +56,7 @@ font-size: var(--ds-typography-fontSize-lg, 1.125rem);
 
 ### File Structure
 
-```
+```markdown
 apps/desktop/
 ├── src/
 │   ├── main.ts            # Frontend entry point

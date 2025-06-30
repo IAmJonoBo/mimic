@@ -45,7 +45,12 @@ export const ButtonDemo: React.FC = () => {
           primaryButtonStyle,
           pressed && { opacity: 0.8 },
         ]}
-        onPress={() => console.log('Primary button pressed')}
+        onPress={() => {
+          // Development demo only - replace with actual functionality
+          if (__DEV__) {
+            console.log('Primary button pressed');
+          }
+        }}
       >
         <Text style={styles.primaryButtonText}>Primary Button</Text>
       </Pressable>
@@ -55,7 +60,12 @@ export const ButtonDemo: React.FC = () => {
           secondaryButtonStyle,
           pressed && { opacity: 0.8 },
         ]}
-        onPress={() => console.log('Secondary button pressed')}
+        onPress={() => {
+          // Development demo only - replace with actual functionality
+          if (__DEV__) {
+            console.log('Secondary button pressed');
+          }
+        }}
       >
         <Text style={styles.primaryButtonText}>Secondary Button</Text>
       </Pressable>
@@ -65,7 +75,12 @@ export const ButtonDemo: React.FC = () => {
           outlineButtonStyle,
           pressed && { opacity: 0.8 },
         ]}
-        onPress={() => console.log('Outline button pressed')}
+        onPress={() => {
+          // Development demo only - replace with actual functionality
+          if (__DEV__) {
+            console.log('Outline button pressed');
+          }
+        }}
       >
         <Text
           style={[

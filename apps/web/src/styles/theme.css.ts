@@ -1,9 +1,9 @@
-import { style } from '@vanilla-extract/css';
-
 // Import the generated CSS tokens directly following USER_GUIDE.md collision-safe architecture
 // This ensures we use the ds- prefixed tokens as documented in section 10.1
 // Using local copy to avoid module resolution issues during development
 import './tokens.css';
+
+import { style } from '@vanilla-extract/css';
 
 // Create component styles using the design tokens
 // Following the Vanilla Extract pattern documented in the USER_GUIDE.md

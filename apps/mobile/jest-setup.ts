@@ -1,14 +1,15 @@
-import '@testing-library/jest-native/extend-expect';
+// Modern Jest matchers are now included in @testing-library/react-native v12.4+
+// No need to import jest-native as it's been deprecated and integrated
 
 // Mock react-native-gesture-handler
 jest.mock('react-native-gesture-handler', () => {
-  return {
-    ...require('react-native-gesture-handler/jestSetup'),
-  };
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require('react-native-gesture-handler/jestSetup');
 });
 
 // Mock react-native-reanimated
 jest.mock('react-native-reanimated', () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const Reanimated = require('react-native-reanimated/mock');
   Reanimated.default.call = () => {};
   return Reanimated;

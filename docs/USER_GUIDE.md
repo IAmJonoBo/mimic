@@ -1,6 +1,6 @@
 # Mimic Design Token Pipeline: User Guide
 
-**Version**: 2.2.0\
+**Version**: 2.3.0\
 **Last Updated**: June 2025\
 **Target Audience**: Designers, Developers, DevOps Engineers
 
