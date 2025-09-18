@@ -31,7 +31,7 @@
     "@builder.io/qwik-city": "^1.14.1",
     "@eslint/js": "latest",
     "@mimic/design-tokens": "workspace:*",
-    "@types/node": "24.0.7",
+    "@types/node": "24.5.2",
     "eslint": "9.30.0",
     "eslint-plugin-qwik": "^1.14.1",
     "globals": "16.2.0",
