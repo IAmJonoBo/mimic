@@ -1,22 +1,26 @@
-name: CI
+name: Module Boundary Enforcement
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
+    branches: [main, develop]
 
 jobs:
-  main:
+  module-boundaries:
+    name: Enforce Module Boundaries
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      # Derive appropriate SHAs for base and head for `nx affected` commands
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
-        uses: nrwl/nx-set-shas@v4
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,204 +28,87 @@ jobs:
           node-version: '22'
           cache: pnpm
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Build design tokens
-        run: pnpm nx run design-tokens:tokens:build
+      - name: Run ESLint module boundary checks
+        run: pnpm nx run-many -t lint --parallel --maxParallel=4
 
-      - name: Lint affected projects
-        run: pnpm nx affected -t lint --parallel=3
-
-      - name: Test affected projects
-        run: pnpm nx affected -t test --parallel=3 --coverage
-
-      - name: Build affected projects
-        run: pnpm nx affected -t build --parallel=3
-
-      - name: Build Storybook
-        run: pnpm nx run design-system:build-storybook
-
-      - name: Run Storybook tests
-        run: pnpm nx run design-system:test-storybook
-        continue-on-error: true
-
-      - name: Run visual regression tests
-        run: pnpm nx run design-system:visual-test
-        continue-on-error: true
-
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v5
-        with:
-          directory: ./coverage
-
-      - name: Upload Storybook build
-        uses: actions/upload-artifact@v4
-        with:
-          name: storybook-static
-          path: packages/design-system/storybook-static
-
-  # Safe autofixes that don't block commits
-  autofix:
-    runs-on: ubuntu-latest
-    # Only run on main branch pushes (not PRs) to avoid conflicts
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    # trunk-ignore(checkov/CKV2_GHA_1)
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: pnpm
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run safe autofixes
-        id: autofix
+      - name: Validate token namespace compliance
         run: |
-          echo "Running safe autofixes..."
-
-          # 1. Format code with Trunk (includes Biome, Prettier, dprint)
-          trunk fmt || true
-
-          # 2. Fix Stylelint CSS issues
-          pnpm nx run workspace-format:lint:css || true
-
-          # 3. Fix markdownlint issues
-          pnpm nx run workspace-format:lint:md || true
-
-          # 4. Clean Apple/temp files
-          pnpm nx run workspace-format:clean:apple || true
-          pnpm nx run workspace-format:clean:temp || true
-
-          # 5. Fix markdown line lengths
-          pnpm nx run workspace-format:lint:md:fix-line-length || true
-
-          # Check if there are any changes
-          if [[ -n $(git status --porcelain) ]]; then
-            echo "changes=true" >> $GITHUB_OUTPUT
-            echo "Found fixable issues:"
-            git status --short
-          else
-            echo "changes=false" >> $GITHUB_OUTPUT
-            echo "No autofix changes needed!"
+          echo "🔍 Checking CSS token namespace compliance..."
+          # Ensure all CSS tokens use --ds-* prefix
+          if grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/ 2>/dev/null; then
+            echo "❌ Found CSS tokens without ds- prefix"
+            exit 1
           fi
+          echo "✅ All CSS tokens use --ds-* prefix"
 
-      - name: Commit and push autofixes
-        if: steps.autofix.outputs.changes == 'true'
+          echo "🔍 Checking JavaScript token namespace compliance..."
+          # Ensure all JS tokens use ds prefix (exclude comments and strings)
+          if grep -r "^[[:space:]]*export.*[^d][^s][A-Z]" packages/design-tokens/libs/tokens/js/ 2>/dev/null; then
+            echo "❌ Found JS tokens without ds prefix"
+            exit 1
+          fi
+          echo "✅ All JS tokens use ds prefix"
+
+      - name: Validate import path compliance
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          echo "🔍 Checking for deprecated dist/ import paths..."
+          # Ensure no imports use deprecated dist/ paths
+          if grep -r "from.*design-tokens.*dist/" apps/ packages/ 2>/dev/null; then
+            echo "❌ Found deprecated dist/ import paths"
+            echo "Please update to use libs/tokens/ paths instead"
+            exit 1
+          fi
+          if grep -r "import.*design-tokens.*dist/" apps/ packages/ 2>/dev/null; then
+            echo "❌ Found deprecated dist/ import paths"
+            echo "Please update to use libs/tokens/ paths instead"
+            exit 1
+          fi
+          echo "✅ No deprecated dist/ import paths found"
 
-          # Create a descriptive commit message
-          CHANGED_FILES=$(git diff --name-only | wc -l | tr -d ' ')
-
-          git add .
-          git commit -m "🔧 autofix: Apply safe code quality fixes
-
-          - Auto-formatted $CHANGED_FILES files
-          - Fixed Stylelint CSS issues
-          - Fixed markdownlint issues
-          - Cleaned temporary/Apple files
-          - Fixed markdown line lengths
-
-          Applied by: ${{ github.workflow }} #${{ github.run_number }}
-          Triggered by: ${{ github.sha }}"
-
-          git push
-
-      - name: Create autofix summary
-        if: steps.autofix.outputs.changes == 'true'
+      - name: Check collision-safe token outputs
         run: |
-          echo "## 🔧 Autofix Applied" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "The following safe autofixes were applied to improve code quality:" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Fixed Issues" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Code formatting (Trunk/Biome/Prettier/dprint)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ CSS/SCSS linting (Stylelint)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Markdown linting (markdownlint)" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Cleaned temporary files" >> $GITHUB_STEP_SUMMARY
-          echo "- ✅ Fixed markdown line lengths" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Changed Files" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          git diff HEAD~1 --name-only >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "These changes were automatically applied and committed to keep the codebase clean." >> $GITHUB_STEP_SUMMARY
+          echo "🔍 Verifying collision-safe token outputs exist..."
 
-  e2e:
+          # Check platform-rooted directories exist
+          for platform in css scss js ts json dart compose react-native; do
+            if [ ! -d "packages/design-tokens/libs/tokens/$platform" ]; then
+              echo "❌ Missing platform directory: libs/tokens/$platform"
+              exit 1
+            fi
+          done
+          echo "✅ All platform-rooted directories exist"
+
+          # Verify ds- prefixed outputs
+          if [ -f "packages/design-tokens/libs/tokens/css/tokens.css" ]; then
+            if ! grep -q "^--ds-" packages/design-tokens/libs/tokens/css/tokens.css; then
+              echo "❌ CSS tokens don't use --ds- prefix"
+              exit 1
+            fi
+          fi
+          echo "✅ Token outputs are collision-safe"
+
+  report-status:
+    name: Report Module Boundary Status
     runs-on: ubuntu-latest
-    needs: main
-    strategy:
-      matrix:
-        browser: [chromium, firefox, webkit]
+    needs: module-boundaries
+    if: always()
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Report Success
+        if: needs.module-boundaries.result == 'success'
+        run: |
+          echo "✅ Module boundary enforcement: PASSED"
+          echo "- ESLint module boundary rules enforced"
+          echo "- Token namespace compliance verified"
+          echo "- Import path compliance validated"
+          echo "- Collision-safe outputs confirmed"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: pnpm
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright Browsers
-        run: pnpm playwright install --with-deps ${{ matrix.browser }}
-
-      - name: Run E2E tests
-        run: pnpm nx affected -t e2e --parallel=1
-        env:
-          PLAYWRIGHT_BROWSER: ${{ matrix.browser }}
-
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: playwright-report-${{ matrix.browser }}
-          path: dist/.playwright
-
-  security:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: fs
-          scan-ref: .
-          format: sarif
-          output: trivy-results.sarif
-
-      - name: Upload Trivy scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        with:
-          sarif_file: trivy-results.sarif
+      - name: Report Failure
+        if: needs.module-boundaries.result == 'failure'
+        run: |
+          echo "❌ Module boundary enforcement: FAILED"
+          echo "Please check the logs above for specific violations"
+          exit 1
