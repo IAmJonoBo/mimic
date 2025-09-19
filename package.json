@@ -125,7 +125,7 @@
     "markdownlint-cli2": "0.18.1",
     "nx": "21.5.3",
     "prettier": "3.6.2",
-    "prettier-plugin-tailwindcss": "0.6.13",
+    "prettier-plugin-tailwindcss": "0.6.14",
     "stylelint": "16.24.0",
     "stylelint-config-standard": "39.0.0",
     "stylelint-config-tailwindcss": "1.0.0",
