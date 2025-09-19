@@ -131,15 +131,15 @@ release: ## Create release (requires proper git setup)
 # Docker Development
 docker-dev: ## Start development environment in Docker
 	@echo "🐳 Starting Docker development environment..."
-	docker-compose -f .devcontainer/docker-compose.yml --profile dev up -d
+	docker-compose -f infra/containers/devcontainer/docker-compose.yml --profile dev up -d
 
 docker-tokens: ## Export tokens using Docker
 	@echo "🐳 Exporting tokens via Docker..."
-	docker-compose -f .devcontainer/docker-compose.yml --profile penpot-sync up penpot-export
+	docker-compose -f infra/containers/devcontainer/docker-compose.yml --profile penpot-sync up penpot-export
 
 docker-stop: ## Stop all Docker services
 	@echo "🛑 Stopping Docker services..."
-	docker-compose -f .devcontainer/docker-compose.yml down
+	docker-compose -f infra/containers/devcontainer/docker-compose.yml down
 
 # Utility Commands
 graph: ## Show project dependency graph

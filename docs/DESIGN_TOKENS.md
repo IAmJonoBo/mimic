@@ -24,7 +24,7 @@ Penpot Design → Token Export → Style Dictionary → Namespaced Outputs → A
 
 ### 1. Design in Penpot
 
-Designers create and manage tokens directly in Penpot v2 using the built-in design token panel:
+Designers create and manage tokens directly in Penpot v2.8 using the built-in design token panel:
 
 - **Global Tokens**: Base values (colors, spacing, typography)
 - **Alias Tokens**: Semantic references (primary, secondary, success)

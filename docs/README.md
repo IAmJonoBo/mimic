@@ -67,7 +67,7 @@ and integrations across the entire ecosystem.
 ### Platform Integration
 
 - **[Qwik Integration](./platforms/qwik.md)** - Qwik City integration, image optimization, prefetch, service worker
-- **[Storybook Advanced](./platforms/storybook.md)** - Storybook 8.5 integration, interaction/visual testing, test-runner
+- **[Storybook Advanced](./platforms/storybook.md)** - Storybook 9.1 integration, interaction/visual testing, test-runner
 - **[Compose Multiplatform](./platforms/compose.md)** - Compose theme injection, iOS/Wasm quirks, React Native
 - **[Tauri Integration](./platforms/tauri.md)** - Tauri security checklist, auto-updater, token integration
 

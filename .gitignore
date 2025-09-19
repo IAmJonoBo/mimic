@@ -113,6 +113,10 @@ Temporary Items
 Icon
 
 
+# External standalone projects
+mimic-token-cli/
+
+
 # Xcode (iOS/macOS development)
 *.xccheckout
 *.xcscmblueprint

@@ -197,7 +197,7 @@ const preview: Preview = {
 export default preview;
 ```
 
-## Storybook 8.5 Advanced Features
+## Storybook 9.1 Advanced Features
 
 ### Design Token Surfacing with Live Tables
 
@@ -605,21 +605,21 @@ jobs:
             coverage/
 ```
 
-### Storybook 8.5 Advanced Features
+### Storybook 9.1 Advanced Features
 
 #### Enhanced Story Indexing and Build Performance
 
-Configure Storybook 8.5's advanced indexing and build optimizations:
+Configure Storybook 9.1's advanced indexing and build optimizations:
 
 ```typescript
-// .storybook/main.ts - Enhanced Storybook 8.5 configuration
+// .storybook/main.ts - Enhanced Storybook 9.1 configuration
 import type { StorybookConfig } from '@storybook/vite';
 import { mergeConfig } from 'vite';
 
 const config: StorybookConfig = {
   // ...existing configuration...
 
-  // Storybook 8.5 specific features
+  // Storybook 9.1 specific features
   features: {
     interactionsDebugger: true,
     buildStoriesJson: true,
@@ -675,7 +675,7 @@ const config: StorybookConfig = {
   addons: [
     // ...existing addons...
 
-    // Storybook 8.5 enhanced addons
+    // Storybook 9.1 enhanced addons
     {
       name: '@storybook/addon-docs',
       options: {
@@ -711,7 +711,7 @@ const config: StorybookConfig = {
     },
   ],
 
-  // Vite configuration with Storybook 8.5 optimizations
+  // Vite configuration with Storybook 9.1 optimizations
   viteFinal: async config => {
     return mergeConfig(config, {
       // ...existing config...
@@ -740,12 +740,12 @@ const config: StorybookConfig = {
 export default config;
 ```
 
-#### Advanced Testing Integration with Storybook 8.5
+#### Advanced Testing Integration with Storybook 9.1
 
-Enhanced test runner configuration with Storybook 8.5 features:
+Enhanced test runner configuration with Storybook 9.1 features:
 
 ```typescript
-// .storybook/test-runner.ts - Storybook 8.5 enhanced test runner
+// .storybook/test-runner.ts - Storybook 9.1 enhanced test runner
 import type { TestRunnerConfig } from '@storybook/test-runner';
 import { checkA11y, injectAxe, configureAxe } from 'axe-playwright';
 import { toMatchImageSnapshot } from 'jest-image-snapshot';
@@ -754,8 +754,8 @@ expect.extend({ toMatchImageSnapshot });
 
 const config: TestRunnerConfig = {
   setup() {
-    // Enhanced test setup for Storybook 8.5
-    console.log('🚀 Storybook 8.5 Test Runner Starting...');
+    // Enhanced test setup for Storybook 9.1
+    console.log('🚀 Storybook 9.1 Test Runner Starting...');
   },
 
   async preVisit(page, context) {
@@ -781,7 +781,7 @@ const config: TestRunnerConfig = {
   },
 
   async preRender(page, story) {
-    // Enhanced pre-render setup for Storybook 8.5
+    // Enhanced pre-render setup for Storybook 9.1
     await injectAxe(page);
 
     // Configure axe with custom rules
@@ -813,7 +813,7 @@ const config: TestRunnerConfig = {
   },
 
   async postRender(page, story) {
-    // Enhanced post-render validation for Storybook 8.5
+    // Enhanced post-render validation for Storybook 9.1
 
     // Accessibility testing with enhanced reporting
     if (!story.parameters?.a11y?.disable) {
@@ -890,7 +890,7 @@ const config: TestRunnerConfig = {
   // Enhanced test configuration
   testTimeout: 60000, // 60 seconds for complex stories
 
-  // Story filtering with Storybook 8.5 features
+  // Story filtering with Storybook 9.1 features
   async getStorybookUrl(config) {
     return `http://127.0.0.1:6006`;
   },
@@ -980,11 +980,11 @@ export const WithMultipleDesignEmbeds: Story = {
 };
 ```
 
-#### Complete CI/CD Integration for Storybook 8.5
+#### Complete CI/CD Integration for Storybook 9.1
 
 ```yaml
 # .github/workflows/storybook-8.5-ci.yml
-name: Storybook 8.5 CI/CD Pipeline
+name: Storybook 9.1 CI/CD Pipeline
 
 on:
   push:
@@ -1029,7 +1029,7 @@ jobs:
       - name: Build design tokens
         run: pnpm nx build design-tokens
 
-      - name: Build Storybook 8.5
+      - name: Build Storybook 9.1
         run: |
           echo "🏗️ Building Storybook with optimizations..."
           pnpm nx build-storybook design-system \
@@ -1172,7 +1172,7 @@ jobs:
           status: ${{ job.status }}
           channel: '#design-system'
           text: |
-            🚀 Storybook 8.5 deployed successfully!
+            🚀 Storybook 9.1 deployed successfully!
             📚 GitHub Pages: https://storybook.mimic-design.com
             🌐 Netlify: https://mimic-storybook.netlify.app
         env:

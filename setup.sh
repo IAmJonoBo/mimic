@@ -15,14 +15,14 @@ if command -v nvm >/dev/null 2>&1; then
 		nvm use
 	fi
 else
-	echo "ℹ️ nvm not found; ensure your Node version matches $(cat .nvmrc 2>/dev/null || echo '22')"
+	echo "ℹ️ nvm not found; ensure your Node version matches $(cat .nvmrc 2>/dev/null || echo '22.19.0')"
 fi
 
 # Enable corepack and prepare pnpm
 if command -v corepack >/dev/null 2>&1; then
 	echo "⚙️ Enabling corepack and preparing pnpm..."
 	corepack enable
-	corepack prepare pnpm@10.12.4 --activate
+	corepack prepare pnpm@10.17.0 --activate
 else
 	echo "⚠️ corepack not found; install pnpm manually if needed"
 fi
@@ -37,4 +37,3 @@ echo "🧹 Post-install cleanup..."
 pnpm run clean:apple || true
 
 echo "✅ Dev environment setup complete. Try: pnpm dev or pnpm storybook"
-

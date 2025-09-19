@@ -17,7 +17,7 @@ deeper dives. Follow it in order the first time; afterwards you can jump to any 
 
 We start in Penpot, export W3C-DTCG tokens, transform them with Style Dictionary, and consume the
 generated artefacts in Qwik City (web), Compose Multiplatform and React Native (mobile/desktop).
-Components are documented and tested in Storybook 8, packaged for the desktop with Tauri 2, and
+Components are documented and tested in Storybook 9, packaged for the desktop with Tauri 2, and
 guarded by Nx-driven CI gates. Each stage is 100% open-source and self-hostable.
 
 ```mermaid
@@ -42,7 +42,7 @@ graph LR
 
 | Tool                             | Version       | Purpose                                     |
 | -------------------------------- | ------------- | ------------------------------------------- |
-| **Node 20 LTS + pnpm 8**         | Latest LTS    | JS runtimes, monorepo PM                    |
+| **Node 22 LTS + pnpm 10**        | Latest LTS    | JS runtimes, monorepo PM                    |
 | **Rust & Cargo**                 | Latest stable | Tauri CLI builds                            |
 | **JDK 17 / Android SDK / Xcode** | Latest        | Compose MP & RN native targets              |
 | **Docker (optional)**            | Latest        | Dev-container with Penpot, Postgres, Ollama |
@@ -495,7 +495,7 @@ pnpm qwik add static         # Static site generation
 
 ---
 
-## 6. Documentation & Testing: Storybook 8.5
+## 6. Documentation & Testing: Storybook 9.1
 
 ### 6.1 Setup and Configuration
 
@@ -1107,9 +1107,9 @@ of truth.
 | **Qwik route script heavy**       | Missing `prefetch="viewport"`                     | Add attribute; rebuild                                   |
 | **RN build size grew**            | `newArchEnabled=false`                            | Re-enable New Architecture & clean Gradle                |
 | **Tauri build fails CSP**         | Manual meta tag overriding                        | Remove custom CSP policy                                 |
-| **Storybook stories broken**      | Outdated addon versions                           | Update to Storybook 8.5+                                 |
+| **Storybook stories broken**      | Outdated addon versions                           | Update to Storybook 9.1+                                 |
 | **Nx cache issues**               | Corrupted cache state                             | `nx reset` to clear all caches                           |
-| **pnpm install fails**            | Node version mismatch                             | Use Node 20 LTS via nvm/volta                            |
+| **pnpm install fails**            | Node version mismatch                             | Use Node 22 LTS via nvm/volta                            |
 | **Visual tests failing**          | Loki reference outdated                           | Update references: `pnpm loki update`                    |
 | **Cloudflare deploy fails**       | Missing wrangler authentication                   | `wrangler login` or set CLOUDFLARE_API_TOKEN             |
 | **CF Pages build timeout**        | Large build output or slow CI                     | Optimize build size; use `pnpm build --minify`           |

@@ -1,6 +1,6 @@
 # Penpot Token Schema & Integration
 
-Complete guide to Penpot v2 token export, W3C DTCG JSON schema, and automated integration with Style Dictionary.
+Complete guide to Penpot v2.8 token export, W3C DTCG JSON schema, and automated integration with Style Dictionary.
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ Complete guide to Penpot v2 token export, W3C DTCG JSON schema, and automated in
 
 ### Manual Export from Penpot
 
-Designers can export tokens directly from Penpot v2:
+Designers can export tokens directly from Penpot v2.8:
 
 1. **Open Design File** - Navigate to your Penpot design file
 2. **Access Tokens Panel** - Click on the **Tokens** panel in the right sidebar
@@ -48,7 +48,7 @@ PENPOT_BASE_URL=https://design.penpot.app
 
 ## W3C DTCG JSON Schema
 
-Penpot v2 exports tokens in W3C Design Token Community Group (DTCG) format. Here's the complete schema structure:
+Penpot v2.8 exports tokens in W3C Design Token Community Group (DTCG) format. Here's the complete schema structure:
 
 ### Basic Token Structure
 

@@ -171,7 +171,7 @@ globs:
   - '!**/.turbo/**'
   - '!**/.next/**'
   - '!**/.vscode/**'
-  - '!**/.devcontainer/**'
+  - '!infra/containers/devcontainer/**'
 
   # Exclude Trunk and tooling files
   - '!**/.trunk/**'
@@ -311,7 +311,7 @@ plugins:
 runtimes:
   enabled:
     - go@1.21.0
-    - node@22.16.0
+    - node@22.19.0
     - python@3.10.8
 
 lint:
@@ -320,7 +320,7 @@ lint:
     - biome@2.0.4:
         run_linter: false # ESLint handles linting
         run_formatter: true
-    - eslint@9.0.0
+    - eslint@9.36.0
 
     # Specialized formatters
     - markdownlint-cli2@0.18.1

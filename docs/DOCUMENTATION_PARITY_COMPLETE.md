@@ -51,8 +51,8 @@ addressing specific warnings from Specify, Locofy FAQ, and Supernova documentati
 
 **Technical Stack Versions**: Harmonized across all documents
 
-- Node.js: 20.0.0 LTS (consistent)
-- TypeScript: 5.8.3 (consistent)
+- Node.js: 22.19.0 LTS (consistent)
+- TypeScript: 5.9.2 (consistent)
 - Storybook: 8.5+ (consistent)
 - Style Dictionary: 4.x (added versioning)
 - Document versions: All now 2.2.0

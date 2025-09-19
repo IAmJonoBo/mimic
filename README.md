@@ -3,7 +3,7 @@
 [![CI](https://github.com/IAmJonoBo/mimic/workflows/CI/badge.svg)](https://github.com/IAmJonoBo/mimic/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Nx](https://img.shields.io/badge/built%20with-Nx-blue)](https://nx.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.8.3-blue)](https://www.typescriptlang.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)](https://www.typescriptlang.org/)
 
 > A modern, collision-free design token management platform using 100% libre tooling for building scalable\
 > design systems and multi-platform applications with comprehensive collision prevention architecture.
@@ -18,7 +18,7 @@ platforms.
 
 - 🎯 **Single Source of Truth**: Design tokens managed with W3C-DTCG standards
 - 🚀 **Multi-Platform**: Web, mobile, and desktop from one codebase
-- 🔧 **Modern Tooling**: Nx 21, TypeScript 5.8, Vite, Storybook 8
+- 🔧 **Modern Tooling**: Nx 21.5, TypeScript 5.9, Vite 7, Storybook 9
 - 🧹 **Zero Lock-in**: 100% open-source, self-hostable
 - ⚡ **Developer Experience**: Hot reload, visual testing, automated workflows
 - 🔒 **Enterprise Ready**: Type-safe, tested, documented
@@ -48,7 +48,7 @@ graph TB
 ## Executive Summary
 
 Mimic provides a comprehensive, collision-free design token management platform using 100% open-source tools.
-We self-host Penpot v2 for design, export W3C-DTCG compliant JSON tokens, transform them with Style Dictionary using
+We self-host Penpot v2.8 for design, export W3C-DTCG compliant JSON tokens, transform them with Style Dictionary using
 our industry-leading collision-prevention architecture, and deploy to multiple platforms: Qwik City (web),
 React Native (mobile), Tauri (desktop), and Compose Multiplatform. Automated visual, unit, and interaction tests
 gate every pull request. All components are MIT, Apache-2.0, or AGPL—enabling fully on-premises deployment.
@@ -67,32 +67,32 @@ gate every pull request. All components are MIT, Apache-2.0, or AGPL—enabling 
 
 | Element         | Tool                  | Rationale                                                   |
 | --------------- | --------------------- | ----------------------------------------------------------- |
-| Design canvas   | Penpot v2             | Self-hosted, collaborative, AGPL, native design-token panel |
+| Design canvas   | Penpot v2.8           | Self-hosted, collaborative, AGPL, native design-token panel |
 | Format spec     | W3C-DTCG JSON         | Inter-tool standard for tokens                              |
-| Token transform | Style Dictionary v4.x | Multi-platform token generation with collision prevention   |
+| Token transform | Style Dictionary v5.x | Multi-platform token generation with collision prevention   |
 
 ### Web & Documentation
 
-| Concern    | Tool            | Notes                                  |
-| ---------- | --------------- | -------------------------------------- |
-| Framework  | Qwik City 2.x   | <1 kB hydration, resumability          |
-| Styling    | vanilla-extract | Zero-runtime CSS, type-safe            |
-| Docs/tests | Storybook 8.5+  | Built-in axe checks, visual regression |
+| Concern    | Tool              | Notes                                  |
+| ---------- | ----------------- | -------------------------------------- |
+| Framework  | Qwik City 1.16    | <1 kB hydration, resumability          |
+| Styling    | vanilla-extract   | Zero-runtime CSS, type-safe            |
+| Docs/tests | Storybook 9.1+    | Built-in axe checks, visual regression |
 
 ### Multi-Platform Runtimes
 
-| Target                   | Framework                  | Token Integration                   |
-| ------------------------ | -------------------------- | ----------------------------------- |
-| Android/iOS/Desktop/Wasm | Compose Multiplatform 1.7  | Theme.kt auto-generated from tokens |
-| Mobile JS reuse          | React Native 0.80 + Hermes | tokens.ts; New Architecture + IPO   |
-| Desktop                  | Tauri 2.x                  | Web tokens + native performance     |
+| Target                   | Framework                   | Token Integration                   |
+| ------------------------ | --------------------------- | ----------------------------------- |
+| Android/iOS/Desktop/Wasm | Compose Multiplatform 1.7   | Theme.kt auto-generated from tokens |
+| Mobile JS reuse          | React Native 0.81 + Hermes  | tokens.ts; New Architecture + IPO   |
+| Desktop                  | Tauri 2.8                   | Web tokens + native performance     |
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Node.js**: 20.0.0 LTS or later with corepack enabled
-- **pnpm**: 8.0.0 or later (install via `corepack enable`)
+- **Node.js**: 22.19.0 LTS or later with corepack enabled
+- **pnpm**: 10.17.0 or later (install via `corepack enable`)
 - **Git**: For version control
 - **Docker**: For Penpot export automation (optional)
 - **Rust & Cargo**: For Tauri desktop builds (optional)
@@ -196,16 +196,24 @@ Shared utilities and helper functions
 - Common TypeScript types
 - Helper functions
 
+### 🧱 [`infra/containers/devcontainer`](./infra/containers/devcontainer)
+
+Dev-container and Docker orchestration assets for local Penpot and workspace automation
+
+- Docker Compose stack for Penpot, Redis, Postgres, and Ollama
+- VS Code devcontainer definition targeting Node 22 + Rust toolchain
+- Volume mappings preconfigured for the flattened monorepo structure
+
 ## 🛠️ Technology Stack
 
 ### Core Technologies
 
 | Category            | Technology                               | Version | Purpose                                       |
 | ------------------- | ---------------------------------------- | ------- | --------------------------------------------- |
-| **Monorepo**        | [Nx](https://nx.dev)                     | 21.2.1  | Task orchestration, caching, code generation  |
-| **Package Manager** | [pnpm](https://pnpm.io)                  | 9.0.0   | Fast, disk-space efficient package management |
-| **Language**        | [TypeScript](https://typescriptlang.org) | 5.8.3   | Type-safe JavaScript development              |
-| **Build Tool**      | [Vite](https://vitejs.dev)               | 5.x     | Fast builds and hot module replacement        |
+| **Monorepo**        | [Nx](https://nx.dev)                     | 21.5.3  | Task orchestration, caching, code generation  |
+| **Package Manager** | [pnpm](https://pnpm.io)                  | 10.17.0 | Fast, disk-space efficient package management |
+| **Language**        | [TypeScript](https://typescriptlang.org) | 5.9.2   | Type-safe JavaScript development              |
+| **Build Tool**      | [Vite](https://vitejs.dev)               | 7.1     | Fast builds and hot module replacement        |
 
 ### Design System
 

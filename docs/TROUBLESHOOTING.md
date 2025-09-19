@@ -38,7 +38,7 @@ Common issues and solutions for the Mimic design system monorepo.
 
    ```bash
    node --version  # Should be 18.0.0 or later
-   pnpm --version  # Should be 9.0.0 or later
+   pnpm --version  # Should be 10.17.0 or later
    ```
 
 3. **Reset workspace:**

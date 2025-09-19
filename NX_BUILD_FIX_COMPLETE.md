@@ -5,7 +5,7 @@
 The Qwik City web app in `apps/web/` was experiencing build failures when using the Nx Vite executor (`@nx/vite:build`). The error was:
 
 ```markdown
-[vite]: Rollup failed to resolve import "@builder.io/qwik" from "/Volumes/MagicBag/GitHub/Mimic/Mimic/apps/web/src/root.tsx".
+[vite]: Rollup failed to resolve import "@builder.io/qwik" from "/Volumes/MagicBag/GitHub/Mimic/apps/web/src/root.tsx".
 ```
 
 ## Root Cause

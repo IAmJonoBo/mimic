@@ -21,8 +21,8 @@ Penpot design files to production applications across web, mobile, and desktop p
 
 | Tool        | Version       | Installation Notes                                           |
 | ----------- | ------------- | ------------------------------------------------------------ |
-| Node.js     | ≥ 20 LTS      | `corepack enable && corepack prepare pnpm@latest --activate` |
-| pnpm        | ≥ 8           | Included with Node corepack                                  |
+| Node.js     | ≥ 22 LTS      | `corepack enable && corepack prepare pnpm@10.17.0 --activate` |
+| pnpm        | ≥ 10          | Included with Node corepack                                  |
 | Rust        | Latest stable | Required for Tauri desktop apps                              |
 | Java        | 17+           | For Compose Multiplatform development                        |
 | Xcode       | Latest        | iOS React Native development (macOS only)                    |
@@ -33,7 +33,7 @@ Penpot design files to production applications across web, mobile, and desktop p
 
 ```bash
 # The workspace is already created with Nx
-cd /Volumes/MagicBag/GitHub/Mimic/Mimic
+cd /Volumes/MagicBag/GitHub/Mimic
 
 # Install dependencies
 pnpm install

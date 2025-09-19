@@ -561,7 +561,7 @@ const buttonStyle = style({
 For comprehensive guides on advanced workflows and enterprise features:
 
 - **[Qwik Integration Advanced](../../docs/platforms/qwik.md)** - SSR optimization, image handling, and service worker integration
-- **[Storybook 8.5 Features](../../docs/platforms/storybook.md)** - Interaction testing and test-runner automation
+- **[Storybook 9.1 Features](../../docs/platforms/storybook.md)** - Interaction testing and test-runner automation
 - **[Comprehensive Testing Strategy](../../docs/testing/comprehensive-testing.md)** - Visual regression and accessibility
 - **[Advanced Development Workflows](../../docs/development/advanced-workflows.md)** - Hot reload optimization and debugging
 - **[Security Compliance](../../docs/security/security-compliance-framework.md)** - Component security scanning and validation

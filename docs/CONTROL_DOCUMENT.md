@@ -1009,9 +1009,9 @@ pnpm qwik add static         # Static site generation
 | **Qwik route script heavy**       | Missing `prefetch="viewport"`                     | Add attribute; rebuild                                   |
 | **RN build size grew**            | `newArchEnabled=false`                            | Re-enable New Architecture & clean Gradle                |
 | **Tauri build fails CSP**         | Manual meta tag overriding                        | Remove custom CSP policy                                 |
-| **Storybook stories broken**      | Outdated addon versions                           | Update to Storybook 8.5+                                 |
+| **Storybook stories broken**      | Outdated addon versions                           | Update to Storybook 9.1+                                 |
 | **Nx cache issues**               | Corrupted cache state                             | `nx reset` to clear all caches                           |
-| **pnpm install fails**            | Node version mismatch                             | Use Node 20 LTS via nvm/volta                            |
+| **pnpm install fails**            | Node version mismatch                             | Use Node 22 LTS via nvm/volta                            |
 | **Visual tests failing**          | Loki reference outdated                           | Update references: `pnpm loki update`                    |
 | **Cloudflare deploy fails**       | Missing wrangler authentication                   | `wrangler login` or set CLOUDFLARE_API_TOKEN             |
 | **CF Pages build timeout**        | Large build output or slow CI                     | Optimize build size; use `pnpm build --minify`           |

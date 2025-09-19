@@ -1,31 +1,4 @@
 {
-  "name": "Mimic Development Environment",
-  "dockerComposeFile": "docker-compose.yml",
-  "service": "workspace",
-  "workspaceFolder": "/workspace",
-  "shutdownAction": "stopCompose",
-  "features": {
-    "ghcr.io/devcontainers/features/node:1": {
-      "nodeGypDependencies": true,
-      "version": "22"
-    },
-    "ghcr.io/devcontainers/features/rust:1": {
-      "version": "latest",
-      "profile": "minimal"
-    },
-    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/github-cli:1": {}
-  },
-  "customizations": {
-    "vscode": {
-      "extensions": ["ms-vscode.vscode-typescript-next", "bradlc.vscode-tailwindcss", "esbenp.prettier-vscode", "ms-playwright.playwright", "ms-vscode.vscode-json", "redhat.vscode-yaml", "ms-vscode.vscode-eslint", "nrwl.angular-console", "ms-vscode-remote.remote-containers", "ms-azuretools.vscode-docker"],
-      "settings": {
-        "typescript.preferences.preferTypeOnlyAutoImports": true,
-        "editor.formatOnSave": true,
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
-      }
-    }
-  },
-  "postCreateCommand": "pnpm install && pnpm run build",
-  "remoteUser": "node"
+  "name": "Mimic Infrastructure Dev Container",
+  "extends": "../infra/containers/devcontainer/devcontainer.json"
 }

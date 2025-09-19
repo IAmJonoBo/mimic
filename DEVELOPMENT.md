@@ -6,7 +6,7 @@
 
 ```bash
 # Open in VS Code with Dev Container extension
-code --folder-uri vscode-remote://dev-container+$(pwd)/.devcontainer
+code --folder-uri vscode-remote://dev-container+$(pwd)/infra/containers/devcontainer
 ```
 
 ### Option 2: Local Development
@@ -32,8 +32,11 @@ mimic/
 │   ├── mobile/           # React Native + Compose MP
 │   └── desktop/          # Tauri desktop shell
 ├── tools/
-│   └── penpot-export/    # Figmagic CLI + token extraction
-└── .devcontainer/        # Docker dev environment
+│   ├── apple-cleaner.js  # macOS metadata removal
+│   └── dev-runner.js     # Workspace utility runner
+└── infra/
+    └── containers/
+        └── devcontainer/ # Docker dev environment
 ```
 
 ## Development Workflow

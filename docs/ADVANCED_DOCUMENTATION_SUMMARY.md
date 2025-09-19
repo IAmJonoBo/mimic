@@ -16,7 +16,7 @@ docs/
 │   └── style-dictionary.md   # Advanced Style Dictionary configuration
 ├── platforms/                 # Platform-specific integrations
 │   ├── qwik.md               # Qwik City integration and optimization
-│   ├── storybook.md          # Storybook 8.5 advanced features
+│   ├── storybook.md          # Storybook 9.1 advanced features
 │   ├── compose.md            # Compose Multiplatform integration
 │   └── tauri.md              # Tauri desktop app integration
 ├── quality/                   # Quality assurance and governance
@@ -56,7 +56,7 @@ docs/
 ### Platform Integration Mastery ✅
 
 - **Qwik City** - SSR optimization, image handling, prefetch strategies, service worker integration
-- **Storybook 8.5** - Interaction testing, visual regression, test-runner automation
+- **Storybook 9.1** - Interaction testing, visual regression, test-runner automation
 - **Compose Multiplatform** - Cross-platform theming, iOS/Wasm quirks, React Native notes
 - **Tauri Desktop** - Security configuration, auto-updater, token injection strategies
 
@@ -131,7 +131,7 @@ docs/
 - ✅ **Web Optimization** - Qwik City SSR, prefetch, service worker integration
 - ✅ **Desktop Apps** - Tauri security, auto-updater, native integration
 - ✅ **Mobile Apps** - React Native New Architecture with Fabric + TurboModules
-- ✅ **Documentation** - Storybook 8.5 with advanced testing and automation
+- ✅ **Documentation** - Storybook 9.1 with advanced testing and automation
 
 ### CI/CD Automation
 

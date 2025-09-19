@@ -43,7 +43,7 @@ maintaining type safety and platform consistency.
 
 ## 🎯 Key Features
 
-- **W3C DTCG Compliant**: Standards-based token format exported from Penpot v2
+- **W3C DTCG Compliant**: Standards-based token format exported from Penpot v2.8
 - **Multi-Platform Output**: CSS, TypeScript, Dart, Kotlin, and JSON formats
 - **Style Dictionary Integration**: Powerful transformation pipeline with custom formats for all targets
 - **Type Safety**: Full TypeScript support with generated types and utility functions
@@ -481,7 +481,7 @@ Platform Overrides (platforms/*.json)
 
 ## 🔄 Penpot Integration Workflow
 
-This package is central to our design-to-code workflow using Penpot v2:
+This package is central to our design-to-code workflow using Penpot v2.8:
 
 ### 1. Design Token Creation
 
@@ -501,7 +501,7 @@ This package is central to our design-to-code workflow using Penpot v2:
 pnpm run tokens:export
 
 # Automated via tools/penpot-export
-docker-compose -f .devcontainer/docker-compose.yml up penpot-export
+docker-compose -f infra/containers/devcontainer/docker-compose.yml up penpot-export
 ```
 
 **The export process:**

@@ -20,7 +20,7 @@ The Mimic design system monorepo documentation pipeline has been successfully co
 **Platform Integration Mastery:**
 
 - ✅ `docs/platforms/qwik.md` - Qwik City SSR optimization, image handling, prefetch strategies
-- ✅ `docs/platforms/storybook.md` - Storybook 8.5 advanced features, interaction testing, test-runner
+- ✅ `docs/platforms/storybook.md` - Storybook 9.1 advanced features, interaction testing, test-runner
 - ✅ `docs/platforms/tauri.md` - Tauri security configuration, auto-updater, token injection
 - ✅ `docs/platforms/compose.md` - Compose Multiplatform integration (existing)
 
@@ -100,7 +100,7 @@ The Mimic design system monorepo documentation pipeline has been successfully co
 
 ### Enterprise-Grade Documentation Pipeline
 
-1. **Complete Tooling Coverage**: Every advanced feature of Penpot, Style Dictionary, Qwik City, Storybook 8.5, Tauri 2, and related tools is documented with actionable examples.
+1. **Complete Tooling Coverage**: Every advanced feature of Penpot, Style Dictionary, Qwik City, Storybook 9.1, Tauri 2, and related tools is documented with actionable examples.
 
 2. **Workflow Documentation**: All design-to-code workflows are captured with step-by-step instructions, configuration examples, and troubleshooting guides.
 

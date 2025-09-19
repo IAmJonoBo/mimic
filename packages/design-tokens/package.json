@@ -40,7 +40,7 @@
     "test": "vitest",
     "test:tokens": "node -e \"const tokens = require('./dist/json/tokens.json'); console.log('Tokens loaded successfully:', Object.keys(tokens).length, 'categories');\"",
     "validate": "node -e \"const { validateTokens } = require('./dist/index.js'); const tokens = require('./tokens/base.json'); const result = validateTokens(tokens); console.log('Validation result:', result);\"",
-    "tokens:export": "cd ../../tools/penpot-export && docker-compose up --build && cd ../../packages/design-tokens && pnpm run postexport:clean",
+    "tokens:export": "docker compose -f ../../infra/containers/devcontainer/docker-compose.yml --profile penpot-sync up penpot-export && pnpm run postexport:clean",
     "tokens:sync": "pnpm run tokens:export && pnpm run build:tokens && pnpm run postbuild:clean",
     "postexport:clean": "../../scripts/postbuild-chain.sh tokens --validate",
     "tokens:watch": "pnpm run tokens:sync && pnpm run watch",
@@ -48,12 +48,12 @@
     "prepublishOnly": "pnpm run build"
   },
   "dependencies": {
-    "style-dictionary": "^5.0.0"
+    "style-dictionary": "^5.0.4"
   },
   "devDependencies": {
-    "@types/node": "^24.0.7",
-    "concurrently": "^9.2.0",
-    "typescript": "^5.8.3",
+    "@types/node": "^24.5.2",
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
   "keywords": [
