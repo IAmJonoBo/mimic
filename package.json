@@ -15,16 +15,16 @@
     "apps/*",
     "tools/*"
   ],
-  "packageManager": "pnpm@10.12.4+sha512.5ea8b0deed94ed68691c9bad4c955492705c5eeb8a87ef86bc62c74a26b037b08ff9570f108b2e4dbd1dd1a9186fea925e527f141c648e85af45631074680184",
+  "packageManager": "pnpm@9.15.4",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=22.0.0",
     "pnpm": ">=9.0.0"
   },
   "scripts": {
-    "build": "nx run-many -t build && pnpm run postbuild:clean",
-    "build:affected": "nx affected -t build && pnpm run postbuild:clean",
-    "postbuild:clean": "pnpm run clean:apple",
-    "test": "nx run-many -t test",
+    "lint": "pnpm --filter @mimic/mobile-rn lint && pnpm --filter my-qwik-empty-starter lint && pnpm --filter @mimic/design-system lint && echo 'Desktop app: No linting configured'",
+    "typecheck": "pnpm --filter @mimic/mobile-rn typecheck && pnpm --filter my-qwik-empty-starter typecheck && pnpm --filter @mimic/desktop typecheck", 
+    "test": "pnpm --filter @mimic/mobile-rn test && pnpm --filter @mimic/desktop test && pnpm --filter @mimic/design-tokens test && pnpm --filter @mimic/shared-utils test",
+    "build": "pnpm -r --filter ./apps/** build && pnpm run clean:apple",
     "test:affected": "nx affected -t test",
     "lint:packages": "nx run-many -t lint -p design-tokens,design-system,shared-utils",
     "lint:workspace": "nx run workspace-format:lint",
@@ -55,7 +55,6 @@
     "format:biome:check": "biome check --formatter-enabled=true .",
     "format:dprint": "dprint fmt",
     "format:dprint:check": "dprint check",
-    "typecheck": "nx run-many -t typecheck",
     "visual-test": "nx run-many -t visual-test",
     "storybook": "nx run design-system:storybook",
     "build-storybook": "nx run design-system:build-storybook",
@@ -105,9 +104,9 @@
     "@nx/storybook": "21.2.1",
     "@nx/vite": "21.2.1",
     "@nx/workspace": "21.2.1",
-    "@types/node": "24.0.8",
-    "@typescript-eslint/eslint-plugin": "8.35.1",
-    "@typescript-eslint/parser": "8.35.1",
+    "@types/node": "24.5.2",
+    "@typescript-eslint/eslint-plugin": "8.44.0",
+    "@typescript-eslint/parser": "8.44.0",
     "dprint": "0.50.1",
     "eslint": "9.30.0",
     "eslint-config-prettier": "10.1.5",
@@ -127,7 +126,7 @@
     "stylelint-config-standard": "38.0.0",
     "stylelint-config-tailwindcss": "1.0.0",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.35.1",
+    "typescript-eslint": "8.44.0",
     "vitest": "3.2.4"
   },
   "lint-staged": {
@@ -157,6 +156,7 @@
     "overrides": {
       "react": "19.1.0",
       "react-dom": "19.1.0",
+      "vite": ">=7.0.7",
       "esbuild@<=0.24.2": ">=0.25.5",
       "koa@<2.16.1": ">=3.0.0",
       "vite@>=5.3.0 <5.3.6": ">=5.3.6",

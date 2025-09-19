@@ -91,8 +91,8 @@ gate every pull request. All components are MIT, Apache-2.0, or AGPL—enabling 
 
 ### Prerequisites
 
-- **Node.js**: 20.0.0 LTS or later with corepack enabled
-- **pnpm**: 8.0.0 or later (install via `corepack enable`)
+- **Node.js**: 22.11.0 LTS or later with corepack enabled  
+- **pnpm**: 9.0.0 or later (install via `corepack enable`)
 - **Git**: For version control
 - **Docker**: For Penpot export automation (optional)
 - **Rust & Cargo**: For Tauri desktop builds (optional)
