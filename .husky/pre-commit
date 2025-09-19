@@ -1,5 +1,6 @@
-# Clean Apple junk before committing
-npx pnpm run precommit:clean
+#!/usr/bin/env sh
+# Clean Apple junk before committing (comprehensive)
+pnpm run clean:apple
 
-# Run linting and tests
-npx pnpm exec lint-staged
+# Run staged linters/formatters
+pnpm exec lint-staged

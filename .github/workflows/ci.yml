@@ -17,6 +17,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Cleanup Apple metadata (pre-install)
+        run: node tools/apple-cleaner.js .
+
+      - name: Fail if Apple metadata files are tracked
+        run: |
+          echo "🔍 Checking for tracked Apple metadata files (.DS_Store, ._* )"
+          if git ls-files -z | tr '\0' '\n' | grep -E '(^|/)\._|(^|/)\.DS_Store$' ; then
+            echo "❌ Apple metadata files are tracked in git. Please remove them from the repository."
+            exit 1
+          fi
+          echo "✅ No tracked Apple metadata files found"
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
