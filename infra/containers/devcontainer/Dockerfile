@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/typescript-node:22
+FROM mcr.microsoft.com/devcontainers/typescript-node:24
 
 # Create a non-root user and switch to it
 RUN useradd -m appuser && chown -R appuser /workspace
