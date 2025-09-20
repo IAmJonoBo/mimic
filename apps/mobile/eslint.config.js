@@ -1,9 +1,8 @@
-const js = require('@eslint/js');
-const tseslint = require('typescript-eslint');
-const react = require('eslint-plugin-react');
+import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import react from 'eslint-plugin-react';
 
-module.exports = [
-  // Apply to TypeScript and JavaScript files
+export default [
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
@@ -20,18 +19,12 @@ module.exports = [
       },
     },
   },
-
-  // Base configs
   js.configs.recommended,
   react.configs.flat.recommended,
-
-  // TypeScript configuration
   ...tseslint.configs.recommended.map(config => ({
     ...config,
     files: ['**/*.{ts,tsx}'],
   })),
-
-  // React Native specific configuration
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     settings: {
@@ -40,12 +33,9 @@ module.exports = [
       },
     },
     rules: {
-      // React settings
-      'react/react-in-jsx-scope': 'off', // Not needed in React Native
-      'react/prop-types': 'off', // Using TypeScript
-      'react/display-name': 'off', // Not needed for React Native components
-
-      // TypeScript
+      'react/react-in-jsx-scope': 'off',
+      'react/prop-types': 'off',
+      'react/display-name': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {
@@ -56,16 +46,12 @@ module.exports = [
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-require-imports': 'off', // Common in React Native setup files
-
-      // General
-      'no-console': ['warn', { allow: ['warn', 'error'] }], // Allow console.warn and console.error
+      '@typescript-eslint/no-require-imports': 'off',
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
       'prefer-const': 'error',
       'no-var': 'error',
     },
   },
-
-  // Test file configuration
   {
     files: ['**/*.test.{js,jsx,ts,tsx}', '**/__tests__/**/*.{js,jsx,ts,tsx}'],
     rules: {
@@ -73,8 +59,6 @@ module.exports = [
       'no-console': 'off',
     },
   },
-
-  // Ignore patterns
   {
     ignores: [
       'node_modules/**',

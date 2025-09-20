@@ -1,0 +1,8 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-kernel",
+  "projectType": "library",
+  "sourceRoot": "packages/ui-kernel/src",
+  "tags": ["scope:ui", "type:lib"],
+  "targets": {}
+}

@@ -1,218 +1,79 @@
-# 📚 Documentation Creation Summary
+# Documentation Summary (Mimic 2.0)
 
-This document summarizes all the comprehensive documentation created for the Mimic design system project.
+Use this file to understand the current documentation landscape during the Mimic 2.0 rewrite. Each
+entry links to a living document; consult [`docs/README.md`](./README.md) for the canonical index.
 
-## 📋 Created Documentation Files
+## Start Here
 
-### Core Documentation
+| Document | Purpose |
+| --- | --- |
+| [`README.md`](../README.md) | Project overview, architecture snapshot, and repo layout |
+| [`docs/README.md`](./README.md) | Documentation hub with curated sections and legacy tracking |
+| [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md) | Phase-by-phase implementation roadmap |
+| [`docs/SPRINT_PLAN.md`](./SPRINT_PLAN.md) | Sequenced two-week sprint objectives and outcomes |
+| [`docs/REPO_STRUCTURE.md`](./REPO_STRUCTURE.md) | Canonical Mimic 2.0 directory tree and migration reference |
+| [`CONTRIBUTING.md`](../CONTRIBUTING.md) | Contribution workflow, quality expectations, PR checklist |
+| [`DEVELOPMENT.md`](../DEVELOPMENT.md) | Environment setup, daily workflow, troubleshooting quick links |
 
-1. **[docs/README.md](./README.md)** - Documentation index and navigation
-2. **[docs/API.md](./API.md)** - Complete API reference for all packages
-3. **[docs/ADR.md](./ADR.md)** - Architecture Decision Records
-4. **[docs/TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Comprehensive troubleshooting guide
-5. **[docs/DEPLOYMENT.md](./DEPLOYMENT.md)** - Production deployment procedures
+## Architecture & Governance
 
-### Package-Level Documentation
+| Document | Purpose |
+| --- | --- |
+| [`docs/ADR.md`](./ADR.md) | Formal architecture decisions and rationale |
+| [`docs/TOKEN_CONTRACT_SPECIFICATION.md`](./TOKEN_CONTRACT_SPECIFICATION.md) | Token schema, naming rules, and validation requirements |
+| [`docs/IMPLEMENTATION_GUIDE.md`](./IMPLEMENTATION_GUIDE.md) | Step-by-step pipeline execution guide |
+| [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md#engineering-metrics--observability-pillars) | Engineering metrics, observability pillars, and telemetry requirements |
 
-6. **[packages/design-tokens/README.md](../packages/design-tokens/README.md)** - Design tokens package documentation
-7. **[packages/design-system/README.md](../packages/design-system/README.md)** - Component library documentation
-8. **[packages/shared-utils/README.md](../packages/shared-utils/README.md)** - Utilities package documentation
+## Tokens & Penpot Workflow
 
-### Enhanced Existing Documentation
+| Document | Purpose |
+| --- | --- |
+| [`docs/DESIGN_TOKENS.md`](./DESIGN_TOKENS.md) | Token pipeline reference (Penpot → outputs) |
+| [`docs/PENPOT_WORKFLOW_GUIDE.md`](./PENPOT_WORKFLOW_GUIDE.md) | Penpot usage, export automation, governance |
+| [`packages/design-tokens/README.md`](../packages/design-tokens/README.md) | Current (1.x) Style Dictionary implementation details |
+| Legacy: [`docs/DESIGN_TOKENS_MIGRATION.md`](./DESIGN_TOKENS_MIGRATION.md) | Historical migration notes pending consolidation |
 
-9. **[README.md](../README.md)** - Updated main README with comprehensive documentation links
-10. **[CONTRIBUTING.md](../CONTRIBUTING.md)** - Already existing, referenced throughout
+## UI Kernel, Storybook & Components
 
-## 📖 Documentation Coverage
+| Document | Purpose |
+| --- | --- |
+| [`packages/design-system/README.md`](../packages/design-system/README.md) | Component library overview and testing guidance |
+| [`docs/platforms/storybook.md`](./platforms/storybook.md) | Storybook configuration, testing, and CI integration |
+| [`docs/testing/comprehensive-testing.md`](./testing/comprehensive-testing.md) | Visual, interaction, and accessibility testing strategy |
 
-### API Reference (docs/API.md)
+## Platform Guides
 
-- **@mimic/design-tokens API**: Complete token system interface
-- **@mimic/design-system API**: All component props and exports
-- **@mimic/shared-utils API**: Utility functions and types
-- **Type Definitions**: Global types and interfaces
-- **Integration Examples**: Real-world usage patterns
+| Area | Document |
+| --- | --- |
+| Web / Qwik | [`docs/web/qwik-performance.md`](./web/qwik-performance.md) |
+| Mobile / React Native | [`docs/mobile/rn-new-arch.md`](./mobile/rn-new-arch.md) |
+| Mobile / Compose | [`docs/mobile/compose-theme.md`](./mobile/compose-theme.md) |
+| Desktop / Tauri | [`docs/desktop/tauri-security.md`](./desktop/tauri-security.md) |
 
-### Architecture Decisions (docs/ADR.md)
+## Automation, Quality & Operations
 
-- ADR-001: Monorepo Structure with Nx
-- ADR-002: Design Token Management with Style Dictionary
-- ADR-003: Qwik for Component Library
-- ADR-004: pnpm as Package Manager
-- ADR-005: Vanilla Extract for Styling
-- ADR-006: Storybook for Documentation
-- ADR-007: TypeScript as Primary Language
-- ADR-008: Vitest for Testing
-- ADR-009: Husky for Git Hooks
-- ADR-010: W3C DTCG Token Standard
+| Document | Purpose |
+| --- | --- |
+| [`docs/devops/ci-overview.md`](./devops/ci-overview.md) | CI/CD topology, caches, and pipelines |
+| [`docs/cicd/advanced-pipeline-automation.md`](./cicd/advanced-pipeline-automation.md) | Release orchestration & token sync automation |
+| [`docs/cicd/token-drift-check.md`](./cicd/token-drift-check.md) | Token drift detection and remediation practices |
+| [`docs/CODE_QUALITY_PROTOCOL.md`](./CODE_QUALITY_PROTOCOL.md) | Linting, formatting, and quality gate configuration |
+| [`docs/DEPLOYMENT.md`](./DEPLOYMENT.md) | Manual + automated deployment procedures |
+| [`docs/TROUBLESHOOTING.md`](./TROUBLESHOOTING.md) | Common issues and resolutions |
 
-### Troubleshooting Guide (docs/TROUBLESHOOTING.md)
+## Legacy / Pending Migration
 
-- Installation Issues
-- Build Problems
-- Development Server Issues
-- Design Token Problems
-- Storybook Issues
-- Testing Problems
-- Git and Version Control
-- Performance Issues
-- TypeScript Errors
-- macOS Specific Issues
+The following documents stem from Mimic 1.x. Keep them for reference while their contents are folded
+into the 2.0 set. Do not treat them as authoritative.
 
-### Deployment Guide (docs/DEPLOYMENT.md)
+- [`docs/CONTROL_DOCUMENT.md`](./CONTROL_DOCUMENT.md)
+- [`docs/ADVANCED_DOCUMENTATION_SUMMARY.md`](./ADVANCED_DOCUMENTATION_SUMMARY.md)
+- [`docs/DOCUMENTATION_COMPLETION_SUMMARY.md`](./DOCUMENTATION_COMPLETION_SUMMARY.md)
+- [`docs/COLLISION_PREVENTION.md`](./COLLISION_PREVENTION.md) & [`docs/COLLISION_PREVENTION_EXAMPLES.md`](./COLLISION_PREVENTION_EXAMPLES.md)
+- [`docs/development/advanced-workflows.md`](./development/advanced-workflows.md)
+- [`docs/onboarding/advanced-contributor-guide.md`](./onboarding/advanced-contributor-guide.md)
+- The `quality/`, `security/`, and `testing/` subtrees contain 1.x material to be refactored as the
+  2.0 quality strategy solidifies.
 
-- Package Publishing to NPM
-- Storybook Deployment (GitHub Pages, Netlify, Vercel)
-- Documentation Sites
-- CI/CD Pipeline Configuration
-- Environment Configuration
-- Container Deployment (Docker, Kubernetes)
-- Monitoring and Maintenance
-- Rollback Procedures
-
-### Package Documentation
-
-#### Design Tokens (packages/design-tokens/README.md)
-
-- W3C DTCG compliant token system
-- Style Dictionary integration
-- Multi-platform token output
-- Token categories and usage
-- Development workflow
-- Integration with Penpot
-
-#### Design System (packages/design-system/README.md)
-
-- Qwik component library
-- Storybook integration
-- Component API documentation
-- Styling with Vanilla Extract
-- Testing strategies
-- Performance optimization
-
-#### Shared Utils (packages/shared-utils/README.md)
-
-- Cross-platform utilities
-- Type-safe helper functions
-- String, object, array, and date utilities
-- Validation and ID generation
-- Platform detection
-- Testing and development guidelines
-
-## 🎯 Documentation Features
-
-### Comprehensive Coverage
-
-- **Complete API Reference**: Every exported function, component, and type
-- **Architecture Rationale**: Decision records with context and consequences
-- **Troubleshooting**: Common issues and step-by-step solutions
-- **Deployment**: Production-ready deployment procedures
-
-### Developer Experience
-
-- **Quick Start Guides**: Get up and running quickly
-- **Code Examples**: Real-world usage patterns
-- **Type Safety**: Full TypeScript integration
-- **Best Practices**: Guidelines for quality code
-
-### Operational Excellence
-
-- **CI/CD Integration**: Automated testing and deployment
-- **Monitoring**: Health checks and performance monitoring
-- **Rollback Procedures**: Emergency response protocols
-- **Maintenance**: Ongoing care and updates
-
-## 🔗 Documentation Navigation
-
-### For New Contributors
-
-1. Start with [README.md](../README.md) for project overview
-2. Follow [CONTRIBUTING.md](../CONTRIBUTING.md) for contribution guidelines
-3. Use [DEVELOPMENT.md](../DEVELOPMENT.md) for local setup
-4. Reference [docs/TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for issues
-
-### For Users
-
-1. Begin with [README.md](../README.md) for project introduction
-2. Explore [docs/API.md](./API.md) for complete API reference
-3. Check package-specific READMEs for detailed usage
-4. Visit Storybook for interactive component exploration
-
-### For Maintainers
-
-1. Review [docs/ADR.md](./ADR.md) for architectural context
-2. Follow [docs/DEPLOYMENT.md](./DEPLOYMENT.md) for releases
-3. Use [docs/TROUBLESHOOTING.md](./TROUBLESHOOTING.md) for support
-4. Update documentation as needed
-
-## ✅ Documentation Quality Standards
-
-### Content Standards
-
-- **Accuracy**: All code examples are tested and working
-- **Completeness**: Every public API is documented
-- **Clarity**: Clear explanations with minimal jargon
-- **Examples**: Practical code samples for all features
-
-### Technical Standards
-
-- **Markdown Compliance**: Follows markdown best practices
-- **Link Validation**: All internal and external links work
-- **Accessibility**: Readable and well-structured
-- **Versioning**: Updated with each release
-
-### Maintenance Standards
-
-- **Regular Updates**: Documentation stays current with code
-- **User Feedback**: Incorporates community suggestions
-- **Testing**: Documentation examples are validated
-- **Review Process**: Changes follow contribution guidelines
-
-## 🚀 Next Steps
-
-### Immediate Actions
-
-1. **Review**: Team review of all documentation
-2. **Testing**: Validate all code examples and links
-3. **Publishing**: Deploy documentation to appropriate channels
-4. **Announcement**: Inform team and community of new documentation
-
-### Ongoing Maintenance
-
-1. **Regular Reviews**: Monthly documentation audits
-2. **User Feedback**: Collect and incorporate feedback
-3. **Updates**: Keep documentation current with releases
-4. **Metrics**: Track documentation usage and effectiveness
-
-### Future Enhancements
-
-1. **Interactive Tutorials**: Step-by-step guided tutorials
-2. **Video Content**: Screencast tutorials for complex workflows
-3. **API Playground**: Interactive API testing environment
-4. **Community Wiki**: User-contributed documentation
-
-## 📊 Documentation Metrics
-
-### Coverage
-
-- **Total Files**: 10 major documentation files
-- **API Coverage**: 100% of public APIs documented
-- **Code Examples**: 50+ working code samples
-- **Architecture Decisions**: 10 documented ADRs
-
-### Quality
-
-- **Markdown Lint**: All files pass markdown linting
-- **Link Validation**: All links verified and working
-- **Code Testing**: All examples tested and functional
-- **Accessibility**: WCAG 2.1 AA compliant structure
-
-### Maintenance
-
-- **Last Updated**: June 2025
-- **Review Frequency**: Monthly
-- **Update Process**: Integrated with release workflow
-- **Feedback Channel**: GitHub issues and discussions
-
-This comprehensive documentation set ensures that the Mimic design system is well-documented, easy to use, and
-maintainable for both current and future team members.
+Log a `documentation` issue when you migrate or retire any of the legacy documents above so this
+summary stays honest.

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "docs-site",
+  "projectType": "application",
+  "sourceRoot": "apps/docs",
+  "tags": ["scope:docs", "type:app"],
+  "targets": {}
+}

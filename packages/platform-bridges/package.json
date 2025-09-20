@@ -1,0 +1,10 @@
+{
+  "name": "@mimic/platform-bridges",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Native bridges (Compose, SwiftUI, Flutter) for Mimic tokens (placeholder)",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

@@ -33,7 +33,7 @@ The design token system implements a fully automated pipeline from Penpot design
 ### Implementation Architecture
 
 1. **Design Phase**: Tokens created in Penpot's design token panel using W3C DTCG standards
-2. **Export Phase**: Automated headless export via `tools/penpot-export` dev-container service
+2. **Export Phase**: Automated headless export via the penpot-export service defined in `infra/containers/devcontainer/docker-compose.yml` (mounting `tools/penpot-export/`)
 3. **Transform Phase**: Style Dictionary generates platform-specific outputs with custom formats
 4. **Integration Phase**: Applications consume tokens through type-safe APIs and CSS variables
 5. **Development**: Watch mode enables real-time updates from design to code
@@ -500,8 +500,8 @@ This package is central to our design-to-code workflow using Penpot v2.8:
 # Manual export for development
 pnpm run tokens:export
 
-# Automated via tools/penpot-export
-docker-compose -f infra/containers/devcontainer/docker-compose.yml up penpot-export
+# Automated via the penpot-export service (infra/containers/devcontainer/docker-compose.yml, workspace mount `tools/penpot-export/`)
+pnpm run tokens:sync
 ```
 
 **The export process:**

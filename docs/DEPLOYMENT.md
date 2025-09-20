@@ -2,6 +2,10 @@
 
 Complete guide for deploying Mimic design system components to various platforms and environments.
 
+> This guide is being updated for the 2.0 release. Where 1.x instructions remain, they are marked as
+> legacy. Follow the release checklist in [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md)
+> for current milestones.
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)

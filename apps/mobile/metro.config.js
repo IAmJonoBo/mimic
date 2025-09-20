@@ -1,3 +1,5 @@
+/* eslint-env node */
+/* eslint-disable @typescript-eslint/no-require-imports, no-undef */
 /**
  * @format
  */

@@ -1,264 +1,131 @@
-# Mimic Development Guide
+# Mimic 2.0 Development Guide
 
-## Quick Start
+Use this guide when working on Mimic 2.0. For big-picture context check
+[`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md) and the documentation hub at
+[`docs/README.md`](docs/README.md).
 
-### Option 1: Dev Container (Recommended)
+## 1. Workspace Setup
+
+### Dev Container (recommended)
 
 ```bash
-# Open in VS Code with Dev Container extension
 code --folder-uri vscode-remote://dev-container+$(pwd)/infra/containers/devcontainer
 ```
 
-### Option 2: Local Development
+The container provisions Node 22.19, pnpm 10.17, Rust, Android/iOS toolchains, Playwright, and a local
+Penpot stack.
+
+### Local environment
 
 ```bash
-# Run setup script
-./setup.sh
-
-# Start development
-pnpm dev
+./setup.sh                # installs Node/pnpm via corepack and bootstrap dependencies
+pnpm install              # safe to re-run after dependency changes
+pnpm lint:workspace       # runs Biome (format + lint) and typed ESLint to verify the toolchain
 ```
 
-## Project Structure
+Ensure `nvm use` loads Node 22.19.0 before running scripts.
+
+## 2. Project Layout (2.0)
+
+```text
+apps/            Web, mobile, desktop reference shells + automation runners
+packages/        Token orchestrator, UI kernel, adapters, legacy 1.x packages
+infra/           Devcontainers, GitHub workflows, provisioning scripts
+scripts/         Helper scripts (Node/Bash)
+docs/            Living documentation (see docs/README.md)
+toolchains/      Shared config for TypeScript, ESLint, Biome, Vitest, Stylelint
+```
+
+Legacy folders from 1.x remain until their replacements land; prefer the 2.0 targets when adding code.
+
+## 3. Daily Workflow
+
+| Task                          | Command(s)                                                                            |
+| ----------------------------- | ------------------------------------------------------------------------------------- |
+| Sync tokens from Penpot       | `make tokens-sync` (requires `.env` with Penpot credentials)                          |
+| Build tokens                  | `pnpm nx run design-tokens:build` (legacy pipeline)                                  |
+| Start Storybook               | `pnpm nx run design-system:storybook`                                                |
+| Start full dev stack          | `pnpm dev:full-stack` (watches tokens + Storybook)                                   |
+| Run unit tests                | `pnpm nx run-many -t test`                                                           |
+| Run visual + interaction tests| `pnpm nx run design-system:visual-test && pnpm nx run design-system:test-storybook`  |
+| Lint + typecheck              | `pnpm lint:workspace && pnpm nx run-many -t typecheck`                               |
+| Build affected projects       | `pnpm nx affected -t build`                                                          |
+| Generate dependency graph     | `pnpm nx graph --watch`                                                              |
+
+> Fast path: `pnpm lint:base` runs only the Biome formatter/linter. Use `pnpm lint:typed` when you need the slower
+> type-aware ESLint rules without the formatter.
+
+### Platform launchers
 
 ```bash
-mimic/
-├── packages/
-│   ├── design-tokens/     # Style Dictionary + W3C tokens
-│   ├── design-system/     # Qwik components + Storybook
-│   └── shared-utils/      # Cross-platform utilities
-├── apps/
-│   ├── web/              # Qwik City application
-│   ├── mobile/           # React Native + Compose MP
-│   └── desktop/          # Tauri desktop shell
-├── tools/
-│   ├── apple-cleaner.js  # macOS metadata removal
-│   └── dev-runner.js     # Workspace utility runner
-└── infra/
-    └── containers/
-        └── devcontainer/ # Docker dev environment
+# Web (Qwik)
+pnpm --filter apps/web dev
+
+# Mobile (React Native)
+pnpm --filter @mimic/mobile-rn start
+
+# Desktop (Tauri)
+pnpm --filter @mimic/desktop tauri dev
 ```
 
-## Development Workflow
+## 4. Tokens During the Transition
 
-### 1. Design Token Updates
+- **Current state**: `packages/design-tokens` still relies on Style Dictionary. New work should keep
+  the JSON sources clean and avoid editing generated outputs.
+- **Rewriting**: Phase 2 introduces `packages/token-orchestrator`, `tokens-core`, and `tokens-outputs`.
+  When adding token features, coordinate with the token squad to ensure the new pipeline requirements
+  are captured.
+- **Validation**: `pnpm nx run design-tokens:validate` enforces current naming/namespace rules. Update
+  the rule set if you introduce new token categories.
 
-```bash
-# Export tokens from Penpot (manual or automated)
-pnpm nx run tools/penpot-export:extract
+## 5. Component & Storybook Development
 
-# Build tokens for all platforms
-pnpm nx run design-tokens:build
+1. Create or update tokens first.
+2. Consume tokens through the adapter (avoid hard-coded CSS values).
+3. Add/extend Storybook stories in `packages/design-system/src/**/*.stories.tsx`.
+4. Run `pnpm nx run design-system:visual-test` and review diffs.
+5. Document component behaviour in MDX or package README.
 
-# Watch for token changes
-pnpm nx run design-tokens:build --watch
-```
+Storybook 10 migration is tracked in Phase 3—file issues under the `storybook-10` label for blockers.
 
-### 2. Component Development
+## 6. Quality Gates Checklist
 
-```bash
-# Start Storybook
-pnpm nx run design-system:storybook
+Before pushing:
 
-# Run component tests
-pnpm nx run design-system:test
+- `pnpm lint:workspace`
+- `pnpm nx run-many -t typecheck`
+- `pnpm nx run-many -t test`
+- `pnpm nx run design-system:visual-test`
+- `pnpm nx run design-system:test-storybook`
 
-# Visual regression testing
-pnpm nx run design-system:visual-test
-```
+CI repeats these checks plus Playwright journeys, package builds, and deployment dry runs.
 
-### 3. Multi-Platform Building
+## 7. Troubleshooting Quick Links
 
-```bash
-# Build affected packages only
-pnpm nx affected -t build
+| Symptom                             | Try this                                                                 |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| Node version mismatch               | `nvm use` then re-run `./setup.sh`                                       |
+| Token drift or collisions           | `pnpm nx run design-tokens:build` and inspect `libs/tokens/*`            |
+| Storybook cache oddities            | `rm -rf packages/design-system/storybook-static* && pnpm nx run design-system:storybook` |
+| React Native Metro duplication      | Clear Metro cache: `pnpm --filter @mimic/mobile-rn start -- --reset-cache` |
+| Dev container not starting          | `docker compose -f infra/containers/devcontainer/docker-compose.yml logs` |
 
-# Build specific platform
-pnpm nx run web:build
-pnpm nx run mobile:build
-pnpm nx run desktop:build
-```
+See [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) for the full catalogue.
 
-### 6. Quality Gates
+## 8. Automation & CI
 
-```bash
-# Lint all code
-pnpm nx run-many -t lint
+- GitHub Actions run on pushes and PRs to `main` / `develop`.
+- Workflows live under `.github/workflows/`; reusable pieces live in `infra/workflows/`.
+- Token sync jobs rely on `.env` secrets (`PENPOT_FILE_ID`, `PENPOT_ACCESS_TOKEN`).
+- Use `make docker-dev` to bring up the local Penpot + Ollama stack for end-to-end testing.
 
-# Type checking
-pnpm nx run-many -t typecheck
+## 9. Useful Links
 
-# Full test suite
-pnpm nx run-many -t test
+- Architecture plan — [`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md)
+- Documentation hub — [`docs/README.md`](docs/README.md)
+- Contribution guide — [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- CI overview — [`docs/devops/ci-overview.md`](docs/devops/ci-overview.md)
+- Storybook — <https://iamjonobo.github.io/mimic/storybook/>
 
-# E2E tests
-pnpm nx run-many -t e2e
-```
-
-### 4. Platform-Specific Development
-
-```bash
-# Run Storybook for specific platforms
-pnpm nx run design-system:storybook          # Web components
-pnpm nx run design-system:storybook:mobile   # Mobile components
-pnpm nx run design-system:storybook:desktop  # Desktop components
-
-# Test module boundaries
-pnpm nx run-many -t lint --parallel           # Check all boundaries
-pnpm nx lint design-system                    # Check specific package
-
-# Validate token compliance
-pnpm nx run design-tokens:build-all           # Rebuild and validate tokens
-pnpm nx run design-tokens:validate            # Check token integrity
-```
-
-### 5. Debugging Common Issues
-
-**Module Boundary Violations:**
-
-```bash
-# Error: "Projects cannot depend on..."
-# Solution: Check project tags in project.json and ESLint rules
-pnpm nx show projects --with-deps design-system
-```
-
-**Token Collision Warnings:**
-
-```bash
-# Check for namespace conflicts
-pnpm nx run design-tokens:collision-check
-```
-
-**Storybook Platform Issues:**
-
-```bash
-# Clear Storybook cache
-rm -rf packages/design-system/storybook-static*
-pnpm nx run design-system:build-storybook
-```
-
-## AI-Assisted Development
-
-### Local Llama 3 Setup
-
-```bash
-# Install Ollama
-curl -fsSL https://ollama.ai/install.sh | sh
-
-# Pull Llama 3 8B model
-ollama pull llama3:8b
-
-# Generate component scaffolding
-ollama run llama3:8b "Generate a Qwik button component using @mimic/design-tokens"
-```
-
-## Penpot Integration
-
-### Self-Hosted Instance
-
-- **URL**: <http://localhost:9001> (Dev Container)
-- **Credentials**: Create during first setup
-- **Token Export**: Manual via UI or automated CI job
-
-### Token Workflow
-
-1. Design in Penpot with token annotations
-2. Export W3C JSON tokens
-3. Style Dictionary transforms to CSS/TS/Kotlin
-4. Nx rebuilds affected components automatically
-
-## Performance Optimization
-
-### Build Caching
-
-```bash
-# Enable Nx Cloud (optional)
-npx nx connect
-
-# Local cache optimization
-export NX_CACHE_DIRECTORY=~/.nx-cache
-```
-
-### Bundle Analysis
-
-```bash
-# Web bundle analysis
-pnpm nx run web:build:analyze
-
-# Mobile APK analysis
-pnpm nx run mobile:build:analyze
-```
-
-## Deployment
-
-### CI/CD Pipeline
-
-- **Trigger**: Push to main or PR
-- **Steps**: Lint → Test → Build → Visual Test → Deploy
-- **Artifacts**: Storybook static, mobile APKs, desktop binaries
-
-### Manual Deployment
-
-```bash
-# Build for production
-pnpm nx run-many -t build --configuration=production
-
-# Deploy Storybook
-pnpm nx run design-system:deploy-storybook
-
-# Release desktop app
-pnpm nx run desktop:build --release
-```
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Token build fails**
-
-   ```bash
-   # Clear Style Dictionary cache
-   rm -rf packages/design-tokens/dist
-   pnpm nx run design-tokens:build
-   ```
-
-2. **Storybook tests timeout**
-
-   ```bash
-   # Increase timeout in .storybook/test-runner.js
-   export STORYBOOK_TEST_TIMEOUT=60000
-   ```
-
-3. **Mobile builds fail**
-
-   ```bash
-   # Ensure Android SDK is configured
-   export ANDROID_SDK_ROOT=/usr/lib/android-sdk
-   ```
-
-### Debug Mode
-
-```bash
-# Enable Nx debug logging
-export NX_VERBOSE_LOGGING=true
-
-# Enable verbose pnpm output
-pnpm --reporter=verbose [command]
-```
-
-## Contributing
-
-1. Create feature branch from `main`
-2. Implement changes with tests
-3. Ensure all quality gates pass
-4. Submit PR with visual diffs
-5. Automated review + manual review
-6. Merge after approval
-
-## Architecture Decisions
-
-- **Monorepo**: Nx + pnpm for optimal caching and workspace management
-- **Design Tokens**: Single source of truth, multi-platform output
-- **Testing**: Storybook + Loki for visual regression, Vitest for unit tests
-- **Performance**: Qwik's resumability + Hermes IPO for minimal bundle sizes
-- **AI Integration**: Local-first with Ollama, no cloud dependencies
+Keep this guide up to date as the 2.0 milestones land. If something changed, edit this file in the
+same pull request.

@@ -59,6 +59,10 @@
     "lint": {
       "cache": true
     },
+    "lint:base": {
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json"]
+    },
     "format": {
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/biome.json"]

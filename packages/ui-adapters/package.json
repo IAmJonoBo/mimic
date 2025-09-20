@@ -1,0 +1,10 @@
+{
+  "name": "@mimic/ui-adapters",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Framework adapters wrapping the Mimic UI kernel (placeholder)",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

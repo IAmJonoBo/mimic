@@ -27,7 +27,7 @@
     "tokens:export": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cd ../../tools/penpot-export && docker-compose up --build",
+        "command": "pnpm run tokens:export",
         "cwd": "packages/design-tokens"
       }
     },

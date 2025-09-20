@@ -1,3 +1,6 @@
+/* eslint-env jest */
+/* global jest */
+
 // React Native Jest setup file
 // Handles Flow type issues and React Native compatibility
 

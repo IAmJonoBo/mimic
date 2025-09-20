@@ -1,0 +1,8 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "ui-adapters",
+  "projectType": "library",
+  "sourceRoot": "packages/ui-adapters/src",
+  "tags": ["scope:ui", "type:lib"],
+  "targets": {}
+}

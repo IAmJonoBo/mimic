@@ -1,695 +1,89 @@
-# 🤝 Contributing to Mimic
+# Contributing to Mimic 2.0
 
-Thank you for your interest in contributing to Mimic! We welcome contributions from developers of all skill levels.
+Thanks for helping shape the next generation of Mimic. The 2.0 rewrite is underway and every
+contribution should move us closer to the architecture described in
+[`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md).
 
-## 📋 Table of Contents
+## Code of Conduct
 
-- [Code of Conduct](#-code-of-conduct)
-- [Getting Started](#-getting-started)
-- [Development Workflow](#-development-workflow)
-- [Architecture Guidelines](#architecture-guidelines)
-- [Code Style Guidelines](#-code-style-guidelines)
-- [Testing Requirements](#-testing-requirements)
-- [Submitting Changes](#-submitting-changes)
-- [Review Process](#-review-process)
+We follow the [Contributor Covenant](CODE_OF_CONDUCT.md). Be kind, inclusive, and respectful.
 
-## 📜 Code of Conduct
+## Before You Start
 
-By participating in this project, you agree to abide by our [Code of Conduct](CODE_OF_CONDUCT.md). We
-are committed to creating a welcoming and inclusive environment for everyone.
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- **Node.js**: 18.0.0 or later
-- **pnpm**: 9.0.0 or later
-- **Git**: Latest stable version
-
-### Fork and Clone
-
-1. **Fork** the repository on GitHub
-2. **Clone** your fork locally:
-
+1. **Pick an issue** — Prioritise items labelled `mimic-2.0` on the “Mimic 2.0 Delivery” project board.
+2. **Declare the phase** — Mention the implementation plan phase your change targets (e.g. Phase 2 –
+   Token Orchestrator).
+3. **Fork and clone** —
    ```bash
    git clone https://github.com/YOUR_USERNAME/mimic.git
    cd mimic
-   ```
-
-3. **Add upstream** remote:
-
-   ```bash
    git remote add upstream https://github.com/IAmJonoBo/mimic.git
    ```
+4. **Bootstrap once** — `./setup.sh` installs Node 22.19, pnpm 10.17, Husky hooks, and workspace deps.
 
-### Setup Development Environment
+## Local Development
 
-```bash
-# Install dependencies
-pnpm install
+- Keep `main` clean: `git checkout main && git pull upstream main`.
+- Create focussed branches: `git checkout -b phase-2/token-schema-normaliser`.
+- Use [Conventional Commit](https://www.conventionalcommits.org/) prefixes (`feat`, `fix`, `docs`,
+  `refactor`, `test`, `chore`).
+- Sync frequently: `git fetch upstream && git rebase upstream/main`.
 
-# Build all packages
-pnpm build
+## Quality Expectations
 
-# Run tests to verify setup
-pnpm test
-
-# Start development servers
-pnpm dev
-```
-
-## 🔄 Development Workflow
-
-### 1. Create a Feature Branch
+Run these before opening a pull request:
 
 ```bash
-# Sync with upstream
-git checkout main
-git pull upstream main
-
-# Create feature branch
-git checkout -b feature/your-feature-name
+pnpm lint:workspace          # Biome (format + lint) followed by typed ESLint
+pnpm nx run-many -t typecheck
+pnpm nx run-many -t test     # Vitest unit suites
+pnpm nx run design-system:visual-test
+pnpm nx run design-system:test-storybook
 ```
 
-### 2. Make Your Changes
+> Use `pnpm nx run-many -t lint,test --affected` if your change is scoped and you understand the impact.
 
-- Keep changes **focused** and **atomic**
-- Write **clear commit messages**
-- Follow **coding standards** (see below)
-- Add **tests** for new functionality
-- Update **documentation** as needed
+### Coding Standards
 
-### 3. Commit Your Changes
+- **TypeScript everywhere**. Enable strict types and prefer interfaces for public APIs.
+- **Token-first mindset**. UI contributions must consume generated tokens/adapters instead of hard-coded
+  values.
+- **Accessibility**. Components must satisfy Axe checks and pass Storybook interaction tests.
+- **Composable architecture**. Additions to the UI kernel or adapters must be framework agnostic and
+  respect the existing theme contracts.
+- **Formatting**. Biome formats JS/TS/JSON; Prettier is reserved for HTML/Astro docs. `pnpm format:check` should pass without manual edits.
 
-We use [Conventional Commits](https://www.conventionalcommits.org/):
+### Documentation
 
-```bash
-# Examples of good commit messages
-git commit -m "feat(design-tokens): add color palette tokens"
-git commit -m "fix(design-system): resolve button accessibility issue"
-git commit -m "docs(readme): update installation instructions"
-git commit -m "test(shared-utils): add unit tests for utility functions"
-```
+Every change must keep documentation current:
 
-**Commit Types:**
+- Update the relevant section under [`docs/README.md`](docs/README.md).
+- Note new behaviours in package READMEs.
+- For architectural decisions, open or update an ADR.
+- Mention documentation updates in the PR description.
 
-- `feat`: New features
-- `fix`: Bug fixes
-- `docs`: Documentation changes
-- `test`: Adding or updating tests
-- `refactor`: Code refactoring
-- `style`: Code style changes (formatting)
-- `chore`: Maintenance tasks
+## Pull Request Checklist
 
-### 4. Keep Your Branch Updated
-
-```bash
-# Regularly sync with upstream
-git fetch upstream
-git rebase upstream/main
-```
-
-## 🎨 Code Style Guidelines
-
-### TypeScript Standards
-
-- Use **TypeScript** for all new code
-- Enable **strict mode** settings
-- Provide **explicit types** for public APIs
-- Use **interfaces** over type aliases for object shapes
-
-```typescript
-// ✅ Good
-interface ButtonProps {
-  variant: 'primary' | 'secondary';
-  size: 'small' | 'medium' | 'large';
-  children: React.ReactNode;
-}
-
-// ❌ Avoid
-type ButtonProps = {
-  variant: any;
-  size: string;
-  children: any;
-};
-```
-
-### React Component Guidelines
-
-- Use **functional components** with hooks
-- Keep components **small** and **focused**
-- Extract **custom hooks** for reusable logic
-- Use **forwardRef** for ref forwarding
-
-```tsx
-// ✅ Good
-interface ButtonProps {
-  variant?: 'primary' | 'secondary';
-  children: React.ReactNode;
-}
-
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ variant = 'primary', children, ...props }, ref) => {
-    return (
-      <button ref={ref} className={`btn btn--${variant}`} {...props}>
-        {children}
-      </button>
-    );
-  }
-);
-
-Button.displayName = 'Button';
-```
-
-### File Organization
-
-```bash
-packages/design-system/src/
-├── components/
-│   ├── Button/
-│   │   ├── Button.tsx
-│   │   ├── Button.test.tsx
-│   │   ├── Button.stories.tsx
-│   │   └── index.ts
-│   └── index.ts
-├── hooks/
-├── utils/
-└── types/
-```
-
-### Import/Export Standards
-
-```typescript
-// ✅ Use named exports
-export const Button = () => {
-  /* */
-};
-export const Icon = () => {
-  /* */
-};
-
-// ✅ Use barrel exports
-export { Button } from './Button';
-export { Icon } from './Icon';
-
-// ✅ Group imports
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-
-import { Button } from '../Button';
-import { mockProps } from '../../test-utils';
-```
-
-## 🧪 Testing Requirements
-
-### Unit Tests
-
-- **Required** for all new features
-- **Minimum 80%** code coverage
-- Use **Vitest** for testing framework
-- Follow **Arrange-Act-Assert** pattern
-
-```typescript
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import { Button } from './Button';
-
-describe('Button', () => {
-  it('renders with correct variant class', () => {
-    // Arrange
-    const props = { variant: 'primary' as const, children: 'Click me' };
-
-    // Act
-    render(<Button {...props} />);
-
-    // Assert
-    expect(screen.getByRole('button')).toHaveClass('btn--primary');
-  });
-});
-```
-
-### Integration Tests
-
-- **Required** for complex components
-- Test **user interactions**
-- Test **accessibility** features
-
-### Visual Tests
-
-- **Required** for UI components
-- Create **Storybook stories**
-- Include **multiple variants**
-
-```tsx
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
-
-const meta: Meta<typeof Button> = {
-  title: 'Components/Button',
-  component: Button,
-  parameters: {
-    docs: {
-      description: {
-        component: 'A versatile button component with multiple variants.',
-      },
-    },
-  },
-};
-
-export default meta;
-type Story = StoryObj<typeof meta>;
-
-export const Primary: Story = {
-  args: {
-    variant: 'primary',
-    children: 'Primary Button',
-  },
-};
-
-export const Secondary: Story = {
-  args: {
-    variant: 'secondary',
-    children: 'Secondary Button',
-  },
-};
-```
-
-### Running Tests
-
-```bash
-# Run all tests
-pnpm test
-
-# Run tests in watch mode
-pnpm test --watch
-
-# Run tests with coverage
-pnpm test --coverage
-
-# Run specific package tests
-pnpm nx test design-system
-
-# Run visual tests
-pnpm visual-test
-```
-
-## 📝 Submitting Changes
-
-### 1. Pre-submission Checklist
-
-- [ ] **Tests pass**: `pnpm test`
-- [ ] **Linting passes**: `pnpm lint`
-- [ ] **Types check**: `pnpm typecheck`
-- [ ] **Build succeeds**: `pnpm build`
-- [ ] **Visual tests pass**: `pnpm visual-test`
-
-### 2. Create Pull Request
-
-1. **Push** your branch to your fork:
-
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-
-2. **Create Pull Request** on GitHub with:
-   - **Clear title** describing the change
-   - **Detailed description** explaining what and why
-   - **Screenshots** for UI changes
-   - **Breaking changes** clearly marked
-
-### 3. Pull Request Template
-
-```markdown
-## Description
-
-Brief description of changes made.
-
-## Type of Change
-
-- [ ] Bug fix (non-breaking change)
-- [ ] New feature (non-breaking change)
-- [ ] Breaking change (fix/feature causing existing functionality to break)
-- [ ] Documentation update
-
-## Testing
-
-- [ ] Added unit tests
-- [ ] Added integration tests
-- [ ] Added visual tests
-- [ ] Manual testing completed
-
-## Screenshots (if applicable)
-
-Include screenshots for UI changes.
-
-## Checklist
-
-- [ ] Code follows project style guidelines
-- [ ] Self-review completed
-- [ ] Tests added for new functionality
+- [ ] Linked issue and phase reference
+- [ ] Tests, lint, typecheck, and visual tests pass locally
 - [ ] Documentation updated
-```
+- [ ] Screenshots or recordings supplied for UI changes
+- [ ] Added or updated Storybook stories when touching components
+- [ ] Added migration notes if the change affects public APIs or tokens
 
-## 🔍 Review Process
+CI will re-run the quality gates; address any failures promptly. Maintainers may request design
+reviews, additional tests, or documentation clarifications before merging.
 
-### What We Look For
+## Release Notes & Changelog
 
-1. **Code Quality**
-   - Clean, readable code
-   - Proper error handling
-   - Performance considerations
+We use Changesets for versioned packages. If your change affects published artefacts (design tokens,
+UI kernel, adapters, CLI), run `pnpm changeset` and describe the impact succinctly.
 
-2. **Testing**
-   - Adequate test coverage
-   - Edge cases covered
-   - Tests are maintainable
+## Need Help?
 
-3. **Documentation**
-   - Code is self-documenting
-   - Complex logic is commented
-   - Public APIs are documented
+- Create a discussion in [GitHub Discussions](https://github.com/IAmJonoBo/mimic/discussions).
+- Tag maintainers in the issue if you’re blocked.
+- For docs gaps, file an issue with the `documentation` label—keeping references fresh is part of the
+  2.0 push.
 
-4. **Design System Consistency**
-   - Follows design token patterns
-   - Maintains visual consistency
-   - Accessible by default
-
-### Review Timeline
-
-- **Initial review**: Within 2-3 business days
-- **Follow-up reviews**: Within 1-2 business days
-- **Merge**: After all checks pass and approval
-
-### Addressing Feedback
-
-- **Be responsive** to reviewer comments
-- **Ask questions** if feedback is unclear
-- **Make changes** in separate commits
-- **Update tests** if implementation changes
-
-## Architecture Guidelines
-
-Mimic implements a comprehensive collision-prevention architecture with strict module boundaries to ensure
-system integrity and prevent conflicts across platforms.
-
-### Module Boundaries
-
-The project enforces strict architectural boundaries via ESLint rules to prevent cross-platform contamination:
-
-**Boundary Rules:**
-
-- `scope:tokens` → Can only depend on `scope:shared`
-- `scope:design-system` → Can depend on `scope:shared`, `scope:tokens`
-- `scope:web` → Can depend on `scope:shared`, `scope:tokens`, `scope:design-system`
-- `scope:mobile` → Can only depend on `scope:shared`, `scope:tokens`
-- `scope:desktop` → Can depend on `scope:shared`, `scope:tokens`, `scope:design-system`
-
-**What This Means:**
-
-```typescript
-// ✅ Good - Allowed dependencies
-import { dsColors } from '@mimic/design-tokens'; // tokens → shared
-import { Button } from '@mimic/design-system'; // web → design-system
-import { validateToken } from '@mimic/shared-utils'; // any → shared
-
-// ❌ Bad - Boundary violations
-import { MobileComponent } from '../mobile/Component'; // web → mobile (forbidden)
-import { WebUtils } from '../web/utils'; // mobile → web (forbidden)
-import { DesktopHelper } from '../desktop/helper'; // mobile → desktop (forbidden)
-```
-
-**Debugging Boundary Violations:**
-
-```bash
-# Check your package's dependencies
-pnpm nx show projects --with-deps your-package-name
-
-# Run boundary checks
-pnpm nx run-many -t lint --parallel
-
-# Check specific package
-pnpm nx lint your-package-name
-```
-
-### Design Token Guidelines
-
-All design tokens use strict namespacing to prevent collisions with third-party libraries per industry\
-best practices documented by Specify (Tailwind conflicts), Locofy FAQ (Metro duplication), and\
-Supernova (Storybook port conflicts):
-
-**CSS Tokens (Specify-Compliant):**
-
-```css
-/* ✅ Good - All CSS tokens use --ds-* prefix to prevent Specify/Tailwind conflicts */
---ds-color-primary: #007bff;
---ds-spacing-md: 1rem;
---ds-typography-heading-size: 2rem;
-
-/* ❌ Bad - Missing ds- prefix (will fail CI and cause Tailwind conflicts) */
---color-primary: #007bff; /* Will fail CI */
---spacing-md: 1rem; /* Will fail CI */
-```
-
-**JavaScript/TypeScript Tokens:**
-
-```typescript
-// ✅ Good - All exports use ds namespace
-export const dsColors = { primary: '#007bff' };
-export const dsSpacing = { md: '1rem' };
-
-// ❌ Bad - Missing ds prefix (will fail CI and cause import conflicts)
-export const colors = { primary: '#007bff' }; // Will fail CI
-export const spacing = { md: '1rem' }; // Will fail CI
-```
-
-**Platform-Specific Namespacing:**
-
-- **CSS/Web**: `--ds-*` (kebab-case)
-- **JavaScript/TypeScript**: `ds*` (camelCase)
-- **Dart**: `DsTokens.*` (PascalCase)
-- **Kotlin**: `ds.theme.*` (object notation)
-
-**Metro Package Naming (Locofy FAQ Compliance):**
-
-```json
-// ✅ Good - Scoped package name prevents Metro duplication per Locofy FAQ
-{
-  "name": "@mimic/design-tokens"  // Prevents Metro bundle conflicts
-}
-
-// ❌ Bad - Unscoped name causes Metro duplication
-{
-  "name": "design-tokens"         // Will fail CI, causes Metro issues
-}
-```
-
-**Storybook Port Assignment (Supernova Best Practice):**
-
-```bash
-# Fixed port assignments prevent Supernova-documented conflicts
-pnpm nx run design-system:storybook          # Port 6006 (Web/Vite default)
-pnpm nx run design-system:storybook:mobile   # Port 7007 (React Native default)
-pnpm nx run design-system:storybook:desktop  # Port 6008 (Custom, no conflicts)
-```
-
-**Important Rules:**
-
-- ❌ **Never manually edit** files in `packages/design-tokens/libs/tokens/`
-- ✅ **All token changes** must originate from Penpot or base definitions
-- ✅ **Use the ds- prefix** for all custom CSS variables (prevents Specify/Tailwind conflicts)
-- ✅ **Use scoped package names** like `@mimic/package-name` (prevents Metro duplication per Locofy FAQ)
-- ✅ **Use fixed Storybook ports** as documented (prevents Supernova-documented port conflicts)
-- ✅ **Import tokens** from the appropriate platform path
-
-### Storybook Platform Isolation
-
-Storybook uses composition architecture to prevent cross-platform conflicts:
-
-**Platform-Specific Commands:**
-
-```bash
-# Web components (default)
-pnpm nx run design-system:storybook
-
-# Mobile-focused components
-pnpm nx run design-system:storybook:mobile
-
-# Desktop-focused components
-pnpm nx run design-system:storybook:desktop
-```
-
-**Story File Patterns:**
-
-```bash
-# Platform-specific stories
-Button.web.stories.tsx        # Web-only stories
-Button.mobile.stories.tsx     # Mobile-only stories
-Button.desktop.stories.tsx    # Desktop-only stories
-Button.stories.tsx            # Shared/universal stories
-```
-
-**Story Configuration:**
-
-```typescript
-// ✅ Good - Platform-specific story
-import type { Meta, StoryObj } from '@storybook/react';
-import { Button } from './Button';
-
-const meta: Meta<typeof Button> = {
-  title: 'Mobile/Button', // Platform prefix
-  component: Button,
-  parameters: {
-    viewport: { defaultViewport: 'mobile1' }, // Mobile viewport
-  },
-};
-```
-
-### CI Validation Pipeline
-
-Your pull requests will be automatically validated for:
-
-#### 1. Module Boundary Compliance
-
-```bash
-# What runs in CI
-pnpm nx run-many -t lint --parallel --maxParallel=4
-```
-
-#### 2. Token Namespace Validation
-
-```bash
-# CSS token validation
-grep -r "^[[:space:]]*--[^d][^s]-" packages/design-tokens/libs/tokens/css/
-
-# JavaScript token validation
-grep -r "^[[:space:]]*export.*[^d][^s][A-Z]" packages/design-tokens/libs/tokens/js/
-```
-
-#### 3. Build Integrity
-
-```bash
-# All platforms must build successfully
-pnpm nx run design-tokens:build-all
-pnpm nx run-many -t build --parallel
-```
-
-#### 4. Import Path Integrity
-
-```bash
-# Validates no cross-platform imports
-pnpm nx run-many -t typecheck --parallel
-```
-
-### Common Issues and Solutions
-
-**Module Boundary Violation:**
-
-```bash
-# Error: "Projects cannot depend on libraries that have not been declared"
-# Solution: Check your imports and project tags
-
-# Debug command
-pnpm nx show projects --with-deps design-system
-```
-
-**Token Collision Warning:**
-
-```bash
-# Error: "Found CSS tokens without ds- prefix"
-# Solution: Use proper namespacing per Specify documentation
-
-# Before (bad - causes Specify/Tailwind conflicts)
-.my-component {
-  color: var(--primary-color);
-}
-
-# After (good - Specify-compliant)
-.my-component {
-  color: var(--ds-color-primary);
-}
-```
-
-**Metro Bundle Duplication (Locofy FAQ Issue):**
-
-```bash
-# Error: "Metro bundling duplicate packages"
-# Solution: Use scoped package names per Locofy FAQ guidance
-
-# Check package.json uses proper scoped naming
-grep -q '"name": "@mimic/design-tokens"' packages/design-tokens/package.json
-```
-
-**Storybook Port Conflicts (Supernova Issue):**
-
-```bash
-# Error: "Port already in use" / "Cannot start Storybook"
-# Solution: Use fixed port assignments per Supernova documentation
-
-# Web Storybook: Port 6006 (Vite builder default)
-# Mobile Storybook: Port 7007 (React Native builder default)
-# Desktop Storybook: Port 6008 (custom to prevent conflicts)
-```
-
-**Storybook Build Failure:**
-
-```bash
-# Error: "Cannot resolve module '@mimic/design-tokens/mobile'"
-# Solution: Use correct platform imports
-
-# Platform-specific imports
-import '@mimic/design-tokens/css';      # Web
-import '@mimic/design-tokens/js';       # Universal JS
-import '@mimic/design-tokens/ts';       # TypeScript definitions
-```
-
-**Token Build Failure:**
-
-```bash
-# Error: "Style Dictionary build failed"
-# Solution: Check token definitions and run validation
-
-pnpm nx run design-tokens:validate
-pnpm nx run design-tokens:build-all
-```
-
-### Development Commands
-
-**Module Boundary Testing:**
-
-```bash
-# Test all boundaries
-pnpm nx run-many -t lint --parallel
-
-# Test specific package
-pnpm nx lint design-system
-
-# Show dependency graph
-pnpm nx graph
-```
-
-**Token Development:**
-
-```bash
-# Rebuild tokens after changes
-pnpm nx run design-tokens:build-all
-
-# Watch for token changes
-pnpm nx run design-tokens:build --watch
-
-# Validate token integrity
-pnpm nx run design-tokens:validate
-```
-
-**Storybook Development:**
-
-```bash
-# Start all Storybook instances
-pnpm nx run design-system:storybook          # Web
-pnpm nx run design-system:storybook:mobile   # Mobile
-pnpm nx run design-system:storybook:desktop  # Desktop
-
-# Build for production
-pnpm nx run design-system:build-storybook
-pnpm nx run design-system:build-storybook:mobile
-pnpm nx run design-system:build-storybook:desktop
-```
+Thanks for contributing!

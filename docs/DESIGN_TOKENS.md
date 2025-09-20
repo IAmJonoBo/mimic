@@ -33,14 +33,15 @@ Designers create and manage tokens directly in Penpot v2.8 using the built-in de
 
 ### 2. Automated Export
 
-Our `tools/penpot-export` service automatically pulls the latest tokens:
+The `penpot-export` service defined in `infra/containers/devcontainer/docker-compose.yml` (mounting
+`tools/penpot-export/` as its workspace) automatically pulls the latest tokens:
 
 ```bash
-# Manual export for development
+# Manual export for development (requires .env)
 pnpm run tokens:export
 
-# Automated nightly sync in CI
-# Runs via dev-container with penpot-export CLI
+# Automated sync (CI workflow)
+pnpm run tokens:sync
 ```
 
 ### 3. Style Dictionary Transform with Collision Prevention
@@ -111,8 +112,8 @@ import { getToken, getTokensByPattern } from '@mimic/design-tokens';
 @import '@mimic/design-tokens/css';
 
 .component {
-  color: var(--color-primary-500);
-  margin: var(--spacing-md);
+  color: var(--ds-color-primary-500);
+  margin: var(--ds-spacing-md);
 }
 ```
 

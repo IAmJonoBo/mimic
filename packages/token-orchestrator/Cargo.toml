@@ -1,0 +1,11 @@
+[package]
+name = "mimic-token-orchestrator"
+version = "0.0.0"
+edition = "2021"
+description = "Rust CLI for Mimic token orchestration (placeholder)"
+
+[lib]
+name = "mimic_token_orchestrator"
+path = "src/lib.rs"
+
+[dependencies]

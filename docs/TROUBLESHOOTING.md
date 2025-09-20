@@ -2,6 +2,9 @@
 
 Common issues and solutions for the Mimic design system monorepo.
 
+> Applies to the Mimic 2.0 toolchain (Node 22.19 / pnpm 10.17). If you are working from older
+> instructions, cross-check the latest references in [`docs/README.md`](./README.md).
+
 ## 📋 Table of Contents
 
 - [Installation Issues](#installation-issues)

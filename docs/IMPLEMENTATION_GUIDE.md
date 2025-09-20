@@ -1,7 +1,14 @@
 # Complete Implementation Guide: Penpot to Production
 
-This guide provides step-by-step instructions to implement the full design token pipeline from
-Penpot design files to production applications across web, mobile, and desktop platforms.
+This guide provides step-by-step instructions to implement the design token pipeline from Penpot
+design files to production applications across web, mobile, and desktop platforms. Refer to
+[docs/IMPLEMENTATION_PLAN_2.0.md](./IMPLEMENTATION_PLAN_2.0.md) for the high-level roadmap and
+phase-by-phase delivery status.
+
+> **Status**: Sections 1–2 cover the living 2.0 setup (Node/pnpm baseline, Penpot export wiring).
+> Sections 3–6 describe the legacy Style Dictionary pipeline and component workflows that remain
+> in place until the token orchestrator + UI kernel land (Phases 2–4). Keep following this document
+> for day-to-day work, but favour the new architecture as the sprints deliver it.
 
 ## 📋 Table of Contents
 
@@ -28,6 +35,9 @@ Penpot design files to production applications across web, mobile, and desktop p
 | Xcode       | Latest        | iOS React Native development (macOS only)                    |
 | Android SDK | Latest        | Android development                                          |
 | Nx CLI      | Latest        | `pnpm dlx @nx/cli@latest`                                    |
+
+> Optional: Configure OpenAI (via environment variables) or GitHub Copilot CLI if you want cloud-backed
+> AI assistance in addition to the local Ollama-powered `mimic assist` experience.
 
 ### Bootstrap Existing Workspace
 

@@ -1,28 +1,22 @@
 {
-  "compilerOptions": {
-    "target": "ES2024",
-    "lib": ["ES2024", "DOM", "DOM.Iterable"],
-    "types": ["node"],
-    "module": "NodeNext",
-    "skipLibCheck": true,
-    "moduleResolution": "NodeNext",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "preserve",
-    "jsxImportSource": "@builder.io/qwik",
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
-    "baseUrl": ".",
-    "paths": {
-      "@mimic/design-system": ["./packages/design-system/src"],
-      "@mimic/design-tokens": ["./packages/design-tokens/src"],
-      "@mimic/shared-utils": ["./packages/shared-utils/src"]
-    }
-  },
-  "include": ["packages/*/src/**/*", "apps/*/src/**/*", "tools/*/src/**/*"],
-  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/build"]
+  "extends": "./toolchains/tsconfig.base.json",
+  "include": [
+    "packages/*/src/**/*",
+    "packages/*/**/src/**/*",
+    "apps/*/src/**/*",
+    "apps/*/**/src/**/*",
+    "apps/*/**/*.ts",
+    "apps/*/**/*.tsx",
+    "apps/*/**/*.js",
+    "apps/*/**/*.jsx",
+    "tools/*/src/**/*",
+    "mimic-token-cli/src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules",
+    "**/dist",
+    "**/build",
+    "toolchains/**"
+  ]
 }

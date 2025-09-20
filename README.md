@@ -1,441 +1,185 @@
-# 🎨 Mimic: Design-Token-Driven Development Pipeline
+# Mimic 2.0 (Preview)
 
 [![CI](https://github.com/IAmJonoBo/mimic/workflows/CI/badge.svg)](https://github.com/IAmJonoBo/mimic/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Nx](https://img.shields.io/badge/built%20with-Nx-blue)](https://nx.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue)](https://www.typescriptlang.org/)
+[![Nx](https://img.shields.io/badge/built%20with-Nx-21.5-blue)](https://nx.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
 
-> A modern, collision-free design token management platform using 100% libre tooling for building scalable\
-> design systems and multi-platform applications with comprehensive collision prevention architecture.
+> Penpot-first, multi-runtime design systems powered by open tooling. Mimic 2.0 is an in-progress
+> rewrite that introduces a token orchestrator, framework-agnostic UI kernel, and automated quality
+> gates spanning web, native, and desktop surfaces.
 
-## 🌟 Overview
+⚠️ **Status**: The 2.0 architecture is actively under development. Track progress in
+[`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md) and use the documentation hub at
+[`docs/README.md`](docs/README.md) for the most current references.
 
-Mimic is a comprehensive monorepo that demonstrates how to build a complete design system pipeline using only
-open-source tools. It provides a seamless workflow from design tokens to production-ready components across multiple
-platforms.
+## Why Mimic
 
-### ✨ Key Features
+- **Penpot as the source of truth** — DTCG-compliant exports flow through a Rust-based orchestrator to
+  generate SDKs for every surface.
+- **Single UI kernel** — Lit + vanilla-extract primitives drive adapters for React, Vue, Svelte, Solid,
+  Compose, SwiftUI, Flutter, and Tauri.
+- **Frontier quality gates** — Storybook 10-ready docs, Loki visual diffs, Playwright interaction tests,
+  and accessibility checks block regressions before they ship.
+- **All open-source** — Built entirely on permissive tooling (Nx, pnpm, Qwik, React Native, Tauri,
+  Starlight, Loki, Biome) so teams can operate fully on-premises.
 
-- 🎯 **Single Source of Truth**: Design tokens managed with W3C-DTCG standards
-- 🚀 **Multi-Platform**: Web, mobile, and desktop from one codebase
-- 🔧 **Modern Tooling**: Nx 21.5, TypeScript 5.9, Vite 7, Storybook 9
-- 🧹 **Zero Lock-in**: 100% open-source, self-hostable
-- ⚡ **Developer Experience**: Hot reload, visual testing, automated workflows
-- 🔒 **Enterprise Ready**: Type-safe, tested, documented
-- 🛡️ **Collision-Free Architecture**: Comprehensive namespace strategy prevents all conflicts
-
-## 🏗️ Architecture
+## 2.0 Architecture Snapshot
 
 ```mermaid
-graph TB
-    A[Design Tokens] --> B[Style Dictionary]
-    B --> C[CSS Variables]
-    B --> D[TypeScript Types]
-    B --> E[Mobile Tokens]
-
-    C --> F[Design System Components]
-    D --> F
-    F --> G[Storybook Documentation]
-    F --> H[Web Applications]
-
-    E --> I[Mobile Applications]
-
-    J[Visual Tests] --> F
-    K[Unit Tests] --> F
-    L[E2E Tests] --> H
+flowchart LR
+  Penpot[(Penpot 2.8)] -->|DTCG export| Orchestrator
+  Orchestrator[[Token Orchestrator (Rust/WASM)]] --> Outputs{{Token Outputs}}
+  Outputs -->|CSS / TS / JSON / Compose / Swift| Kernel
+  Kernel[[UI Kernel (Lit + vanilla-extract)]] --> Adapters[/Framework Adapters/]
+  Adapters --> Apps((Applications))
+  Apps --> Storybook
+  Storybook --> Quality[[Visual + A11y Gates]]
+  Apps --> CI[[CI / CD]]
+  Quality --> CI
 ```
 
-## Executive Summary
+- **Token Orchestrator** (Phase 2): Normalises Penpot exports, enforces governance rules, and writes
+  multi-language outputs to `packages/tokens-outputs`.
+- **UI Kernel** (Phase 3): Platform-neutral primitives with strict accessibility guarantees.
+- **Adapters** (Phase 3/4): Thin wrappers for Qwik, React, Vue, Svelte, Solid, Compose, SwiftUI, Flutter,
+  and Tauri webviews.
+- **Quality Gates** (Phase 6): Storybook interactions, Loki visual diffs, Playwright journeys, and a11y
+  scans wired into GitHub Actions.
 
-Mimic provides a comprehensive, collision-free design token management platform using 100% open-source tools.
-We self-host Penpot v2.8 for design, export W3C-DTCG compliant JSON tokens, transform them with Style Dictionary using
-our industry-leading collision-prevention architecture, and deploy to multiple platforms: Qwik City (web),
-React Native (mobile), Tauri (desktop), and Compose Multiplatform. Automated visual, unit, and interaction tests
-gate every pull request. All components are MIT, Apache-2.0, or AGPL—enabling fully on-premises deployment.
+Refer to [`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md) for timelines and owners.
 
-## Project Objectives
-
-1. **Single source of visual truth:** Design tokens mastered in Penpot and version-controlled.
-2. **Write once, run everywhere:** The same primitives render on web, iOS, Android, desktop, and WebAssembly.
-3. **No vendor lock-in:** Only FOSS licenses; everything can be air-gapped.
-4. **Shift-left quality:** Visual/interaction tests break builds, not production.
-5. **AI-assisted velocity:** Deterministic scaffolding that never violates the design system.
-
-## Technical Stack
-
-### Design & Token Pipeline
-
-| Element         | Tool                  | Rationale                                                   |
-| --------------- | --------------------- | ----------------------------------------------------------- |
-| Design canvas   | Penpot v2.8           | Self-hosted, collaborative, AGPL, native design-token panel |
-| Format spec     | W3C-DTCG JSON         | Inter-tool standard for tokens                              |
-| Token transform | Style Dictionary v5.x | Multi-platform token generation with collision prevention   |
-
-### Web & Documentation
-
-| Concern    | Tool              | Notes                                  |
-| ---------- | ----------------- | -------------------------------------- |
-| Framework  | Qwik City 1.16    | <1 kB hydration, resumability          |
-| Styling    | vanilla-extract   | Zero-runtime CSS, type-safe            |
-| Docs/tests | Storybook 9.1+    | Built-in axe checks, visual regression |
-
-### Multi-Platform Runtimes
-
-| Target                   | Framework                   | Token Integration                   |
-| ------------------------ | --------------------------- | ----------------------------------- |
-| Android/iOS/Desktop/Wasm | Compose Multiplatform 1.7   | Theme.kt auto-generated from tokens |
-| Mobile JS reuse          | React Native 0.81 + Hermes  | tokens.ts; New Architecture + IPO   |
-| Desktop                  | Tauri 2.8                   | Web tokens + native performance     |
-
-## 🚀 Quick Start
+## Getting Started
 
 ### Prerequisites
 
-- **Node.js**: 22.19.0 LTS or later with corepack enabled
-- **pnpm**: 10.17.0 or later (install via `corepack enable`)
-- **Git**: For version control
-- **Docker**: For Penpot export automation (optional)
-- **Rust & Cargo**: For Tauri desktop builds (optional)
-- **JDK 17 / Android SDK / Xcode**: For native mobile builds (optional)
+- Node.js 22.19.0 (run `nvm use` after `./setup.sh`)
+- pnpm 10.17 (`corepack enable && corepack prepare pnpm@10.17.0 --activate`)
+- Rust (toolchains for the token orchestrator and Tauri)
+- Docker (Penpot + automation stack)
+- Platform SDKs as needed: Android Studio, Xcode, or Tauri dependencies
 
-### Installation & Bootstrap
+### Bootstrap the Workspace
 
 ```bash
-# Clone the repository
 git clone https://github.com/IAmJonoBo/mimic.git
 cd mimic
 
-# Install dependencies
-pnpm install
+# One-time setup
+./setup.sh
 
-# Set up environment (optional - for Penpot integration)
-cp .env.example .env
-# Edit .env with your Penpot credentials
+# Start token build + Storybook in watch mode
+pnpm dev:full-stack
 
-# Build design tokens and all packages
-make tokens-build  # or: pnpm nx run tokens:build-all
+# Export tokens from Penpot (requires .env)
+make tokens-sync
 
-# Start full development environment
-make dev          # or: pnpm nx run dev:full-stack
+# Run the full quality suite
+pnpm nx run-many -t lint,test,visual-test
 ```
 
-### Essential Commands
+### Frequently Used Commands
 
-#### Design Token Workflow
+| Goal                    | Command                                         |
+| ----------------------- | ------------------------------------------------ |
+| Sync tokens from Penpot | `make tokens-sync`                               |
+| Build everything        | `pnpm nx run-many -t build`                      |
+| Launch Storybook        | `pnpm nx run design-system:storybook`            |
+| Mobile dev server       | `pnpm --filter @mimic/mobile-rn start`           |
+| Desktop dev server      | `pnpm --filter @mimic/desktop tauri dev`         |
+| Format & lint           | `pnpm lint:workspace` (Biome + typed ESLint) / `pnpm format:check` |
+| Visual regression       | `pnpm nx run design-system:visual-test`          |
 
-```bash
-# � Export tokens from Penpot and build all outputs
-make tokens-sync    # Requires .env configuration
-
-# 👀 Watch tokens and rebuild on changes
-make tokens-watch
-
-# � Build design tokens only
-make tokens-build
-```
-
-#### Development Environment
-
-```bash
-# 🚀 Start complete development environment (tokens + Storybook)
-make dev
-
-# 📚 Start Storybook component workshop
-make storybook
-
-# � Start web application development (when implemented)
-make web-dev
-```
-
-#### Testing & Quality
-
-````bash
-# 🧪 Run all tests and linting
-make test
-
-# 👀 Run visual regression tests
-make visual-test
-
-# 🔍 Run tests for affected projects only
-make test-affected
-
-# 🧹 Clean workspace
-pnpm clean:all
-
-# 📊 View dependency graph
-pnpm graph
-```bash
-
-## 📦 Package Structure
-
-This monorepo contains the following packages:
-
-### 🎨 [`packages/design-tokens`](./packages/design-tokens)
-
-W3C-compliant design tokens with Style Dictionary transformation
-
-- Token definitions in JSON format
-- CSS variables generation
-- TypeScript type definitions
-- Multi-platform token exports
-
-### 🧩 [`packages/design-system`](./packages/design-system)
-
-React component library with Storybook documentation
-
-- Reusable UI components
-- Storybook stories and documentation
-- Visual regression testing
-- Accessibility testing
-
-### 🔧 [`packages/shared-utils`](./packages/shared-utils)
-
-Shared utilities and helper functions
-
-- Cross-platform utilities
-- Common TypeScript types
-- Helper functions
-
-### 🧱 [`infra/containers/devcontainer`](./infra/containers/devcontainer)
-
-Dev-container and Docker orchestration assets for local Penpot and workspace automation
-
-- Docker Compose stack for Penpot, Redis, Postgres, and Ollama
-- VS Code devcontainer definition targeting Node 22 + Rust toolchain
-- Volume mappings preconfigured for the flattened monorepo structure
-
-## 🛠️ Technology Stack
-
-### Core Technologies
-
-| Category            | Technology                               | Version | Purpose                                       |
-| ------------------- | ---------------------------------------- | ------- | --------------------------------------------- |
-| **Monorepo**        | [Nx](https://nx.dev)                     | 21.5.3  | Task orchestration, caching, code generation  |
-| **Package Manager** | [pnpm](https://pnpm.io)                  | 10.17.0 | Fast, disk-space efficient package management |
-| **Language**        | [TypeScript](https://typescriptlang.org) | 5.9.2   | Type-safe JavaScript development              |
-| **Build Tool**      | [Vite](https://vitejs.dev)               | 7.1     | Fast builds and hot module replacement        |
-
-### Design System
-
-| Tool                 | Purpose                             |
-| -------------------- | ----------------------------------- |
-| **Style Dictionary** | Design token transformation         |
-| **Storybook**        | Component documentation and testing |
-| **React**            | Component library framework         |
-
-### Quality Assurance
-
-| Tool         | Purpose                     |
-| ------------ | --------------------------- |
-| **Vitest**   | Unit testing framework      |
-| **ESLint**   | Code linting and formatting |
-| **Prettier** | Code formatting             |
-| **Husky**    | Git hooks for quality gates |
-
-## 🎯 Project Goals
-
-### Primary Objectives
-
-1. **🎨 Single Source of Truth**: Design tokens managed with W3C DTCG standards
-2. **🚀 Multi-Platform Compatibility**: Write once, deploy everywhere
-3. **🔒 Zero Vendor Lock-in**: 100% open-source, self-hostable
-4. **⚡ Developer Experience**: Modern tooling with hot reload and automation
-5. **🛡️ Quality First**: Automated testing and visual regression detection
-
-### Technical Vision
-
-- **Token-Driven Development**: All visual properties derived from centralized tokens
-- **Component Reusability**: Shared components across web, mobile, and desktop
-- **Automated Quality Gates**: No manual testing bottlenecks
-- **Developer Productivity**: Fast builds, intelligent caching, and helpful tooling
-- **Collision-Free Architecture**: Comprehensive namespace strategy prevents all conflicts
-
-## 🎯 Performance Targets
-
-### Quality Metrics
-
-- **Build Time**: < 5 minutes for full pipeline
-- **Bundle Size**: Within defined budgets per platform
-- **Load Time**: < 3 seconds for all applications
-- **Test Coverage**: > 80% across all platforms
-- **Zero Critical Vulnerabilities**: Automated security scanning
-
-### User Experience Metrics
-
-- **Token Update Speed**: < 5 minutes from design to development
-- **Developer Onboarding**: < 30 minutes to first contribution
-- **Build Success Rate**: > 95% successful builds
-- **Core Web Vitals**: LCP < 2s on 3G, CLS < 0.1
-
-## 📚 Documentation
-
-## 📚 Documentation
-
-### Core Documentation
-
-- **[📋 User Guide](./docs/USER_GUIDE.md)** - Complete step-by-step guide for designers, developers, and DevOps
-- **[🎛️ Control Document](./docs/CONTROL_DOCUMENT.md)** - Master technical reference and operational procedures
-- **[� Documentation Index](./docs/README.md)** - Complete documentation overview
-
-### Quick References
-
-- **[🚀 Quick Start Guide](#-quick-start)** - Get up and running in minutes
-- **[🤝 Contributing Guide](./CONTRIBUTING.md)** - How to contribute to the project
-- **[🛠️ Development Guide](./DEVELOPMENT.md)** - Local development workflows
-- **[📖 API Reference](./docs/API.md)** - Complete API documentation
-- **[🏗️ Architecture Decisions](./docs/ADR.md)** - Technical decision records
-- **[🔧 Troubleshooting](./docs/TROUBLESHOOTING.md)** - Common issues and solutions
-
-### Package Documentation
-
-- **[🎨 Design Tokens](./packages/design-tokens/README.md)** - W3C-compliant design tokens
-- **[🧩 Design System](./packages/design-system/README.md)** - Qwik component library
-- **[🔧 Shared Utilities](./packages/shared-utils/README.md)** - Common helper functions
-
-### Live Documentation
-
-- **[📚 Storybook](https://iamjonobo.github.io/mimic/storybook/)** - Interactive component playground
-- **[📊 Dependency Graph](https://nx.dev/packages/nx/documents/dep-graph)** - Project dependency visualization
-
-## 🛡️ Collision Prevention Architecture
-
-Mimic implements a comprehensive collision-prevention strategy that eliminates all four types of conflicts:
-naming collisions, file-path collisions, module boundary violations, and runtime global conflicts.
-
-### Core Principles
-
-1. **Universal Namespace Strategy**: All tokens use the `ds-` prefix across all platforms
-2. **Platform-Rooted Build Paths**: Each platform outputs to isolated directories
-3. **Module Boundary Enforcement**: Nx rules prevent illegal cross-platform imports
-4. **Runtime Isolation**: Platform-specific global scoping prevents conflicts
-5. **Tailwind CSS Compatibility**: `ds-` prefix prevents utility class conflicts per Specify/Locofy warnings
-6. **Metro Deduplication**: Scoped package names (`@mimic/design-tokens`) prevent React Native bundle duplication per
-Locofy FAQ
-7. **Storybook Port Management**: Fixed ports (Web:6006, Mobile:7007, Desktop:6008) prevent dev-machine conflicts per
-Supernova docs
-
-### Token Namespace Strategy
-
-| Platform                  | Prefix Format      | Example Output               |
-| ------------------------- | ------------------ | ---------------------------- |
-| **CSS/SCSS**              | `ds-` (kebab-case) | `--ds-color-primary-500`     |
-| **JavaScript/TypeScript** | `ds` (camelCase)   | `dsColorPrimary500`          |
-| **Kotlin/Compose**        | `Ds` (PascalCase)  | `DsTokens.Color.PRIMARY_500` |
-| **React Native**          | `ds` (camelCase)   | `dsColorPrimary500`          |
-
-### Platform-Rooted Build Paths
+## Repository Layout
 
 ```text
-packages/design-tokens/libs/tokens/
-├── css/tokens.css           # Web CSS variables
-├── js/tokens.js             # Web JavaScript constants
-├── ts/tokens.ts             # Web TypeScript types
-├── compose/Theme.kt         # Compose Multiplatform objects
-└── react-native/theme.ts    # React Native StyleSheet
+apps/
+  web/          # Qwik City reference app
+  mobile/       # React Native reference app
+  desktop/      # Tauri reference shell
+  docs/         # Starlight docs site (2.0)
+  workflows/    # Automation entrypoints (CI runners, token cron)
+
+packages/
+  token-orchestrator/  # Rust CLI (Phase 2)
+  tokens-core/         # Canonical token schema + history (Phase 2)
+  tokens-outputs/      # Generated outputs (gitignored)
+  ui-kernel/           # Lit primitives (Phase 3)
+  ui-adapters/         # Framework adapters (Phase 3/4)
+  platform-bridges/    # Compose / SwiftUI / Flutter bridges (Phase 4)
+  design-system/       # Current component library (1.x → 2.0)
+  design-tokens/       # Legacy Style Dictionary build (1.x)
+  shared-utils/        # Shared TypeScript utilities
+
+infra/
+  containers/          # Devcontainer + Penpot stack
+  workflows/           # GitHub reusable workflows
+  provisioning/        # Terraform / infra-as-code (planned)
+
+docs/                  # Documentation hub (see docs/README.md)
+scripts/               # Automation scripts (bash/node)
+toolchains/            # Centralised config (tsconfig, eslint, biome, etc.)
 ```
 
-### Critical Collision Prevention Details
+## Documentation Map
 
-**1. Token-Name Clashes (Specify/Tailwind Warning)**
-Mimic's `ds-` prefix strategy completely prevents Specify-documented collisions with Tailwind classes:
-- `--ds-color-primary` ≠ `.text-primary` (no conflict)
-- `--ds-spacing-md` ≠ `.p-4` or `.m-4` (no conflict)
-- `dsColorPrimary` ≠ Tailwind utility functions (no conflict)
+- **Start here** — [`docs/README.md`](docs/README.md)
+- **Implementation roadmap** — [`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md)
+- **Token system** — [`docs/DESIGN_TOKENS.md`](docs/DESIGN_TOKENS.md)
+- **Storybook workflows** — [`docs/platforms/storybook.md`](docs/platforms/storybook.md)
+- **CI / DevOps** — [`docs/devops/ci-overview.md`](docs/devops/ci-overview.md)
+- **Troubleshooting** — [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md)
 
-**2. Storybook Port Conflicts (Supernova Issue)**
-Fixed port assignment prevents Supernova-documented development machine conflicts:
-- **Web Storybook**: Port 6006 (Vite builder default)
-- **Mobile Storybook**: Port 7007 (React Native builder default)
-- **Desktop Storybook**: Port 6008 (Vite builder custom)
+Legacy Mimic 1.x documentation is being archived; check the “Legacy / Pending Review” section of
+[`docs/README.md`](docs/README.md) if you need something that has not yet been migrated.
 
-**3. Metro Bundle Duplication (Locofy FAQ)**
-Scoped package naming prevents Locofy-documented Metro workspace lib collisions:
-- Package name: `"@mimic/design-tokens"` (scoped, not `design-tokens`)
-- Metro recognizes scoped names and deduplicates correctly
-- Workspace lib names cannot conflict with external package names
+## Engineering Metrics & Observability
 
-📖 **Further reading**: [User Guide](./docs/USER_GUIDE.md#collision-prevention-architecture) • [Control Document](./docs/CONTROL_DOCUMENT.md#collision-prevention-architecture)
+- Target SLOs: full build ≤ 5 minutes, token drift MTTR ≤ 24 hours, Storybook visual escape rate < 2 %,
+  documentation freshness updates each sprint.
+- Structured logging (pino/tracing in TypeScript, tracing in Rust) and OpenTelemetry spans across the
+  orchestrator, Storybook pipelines, and reference apps feed Grafana/Loki dashboards.
+- Flake tracking and error budgets managed via Nx analytics; CI auto-quarantines flaky tests and opens
+  follow-up issues.
+- Security scanning (Scorecard, Trivy, Cargo Audit, dependency review) runs as part of the release
+  gates.
 
-## 🤝 Contributing
+## AI & Developer Intelligence
 
-We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+- `mimic assist` CLI offers local Ollama workflows with optional OpenAI and GitHub Copilot integration for
+  accessibility in connected environments.
+- CI posts AI-generated summaries for token diffs, visual regressions, and failing pipelines to speed up
+  triage.
+- Storybook gains an intelligence addon (token inspector, contrast checks, design checklist) with
+  AI-suggested remediation.
+- `just` commands and CLI wizards (`mimic init feature`, `mimic token create`) provide guided flows with
+  inline AI help.
 
-### Development Workflow
+## Contributing
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/amazing-feature`)
-3. **Commit** your changes (`git commit -m 'Add amazing feature'`)
-4. **Push** to the branch (`git push origin feature/amazing-feature`)
-5. **Open** a Pull Request
+We welcome feedback and contributions while 2.0 takes shape:
 
-### Code Quality
+1. Review [`CONTRIBUTING.md`](CONTRIBUTING.md) and adopt the coding standards.
+2. Look for `mimic-2.0` issues in GitHub Projects → “Mimic 2.0 Delivery”.
+3. Keep pull requests focused, with docs and tests covering new behaviour.
+4. Mention which phase (from the implementation plan) your work targets.
 
-All contributions must pass:
+Automated checks enforce formatting (Biome), linting (ESLint), type safety, Vitest suites, Storybook
+interaction tests, and Loki visual baselines. Run `pnpm nx run-many -t lint,test,visual-test` before
+requesting review.
 
-- ✅ Type checking with TypeScript
-- ✅ Linting with ESLint
-- ✅ Unit tests with Vitest
-- ✅ Visual regression tests
-- ✅ Build verification
+## Community & Support
 
-## 📄 License
+- **Issues** — [github.com/IAmJonoBo/mimic/issues](https://github.com/IAmJonoBo/mimic/issues)
+- **Discussions** — [github.com/IAmJonoBo/mimic/discussions](https://github.com/IAmJonoBo/mimic/discussions)
+- **Storybook (public)** — <https://iamjonobo.github.io/mimic/storybook/>
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## License
 
-## 🔗 Links
-
-- **Repository**: [https://github.com/IAmJonoBo/mimic](https://github.com/IAmJonoBo/mimic)
-- **Issues**: [Report bugs or request features](https://github.com/IAmJonoBo/mimic/issues)
-- **Discussions**: [Join the conversation](https://github.com/IAmJonoBo/mimic/discussions)
-
----
-
-Built with ❤️ using 100% open-source tools
-
-[Nx](https://nx.dev) • [TypeScript](https://typescriptlang.org) • [Vite](https://vitejs.dev) • [Storybook](https://storybook.js.org)
-| Platform | Nx/Turborepo config, Docker dev-containers |
-| Dev Rel | Docs site, public Storybook, community contrib |
-
-## Quality Metrics
-
-- Core Web Vitals: LCP < 2s on 3G, CLS < 0.1
-- Binary size: Tauri ≤ 5 MB zipped; RN APK ≤ 30 MB
-- Visual diff budget: 0 px delta acceptance; approved golden updates via PR
-- Test coverage: ≥ 90% lines in shared libraries
-
-## Risk & Mitigation
-
-| Risk               | Mitigation                                  |
-| ------------------ | ------------------------------------------- |
-| Framework churn    | Lock semver ranges; monthly review          |
-| Penpot API changes | Pin to stable Docker tag; integration tests |
-| LLM hallucination  | Token constants enforce compile-time checks |
-| Build time creep   | Nx remote cache + turborepo incremental     |
-
-## Acceptance Criteria
-
-- Single command `pnpm nx affected -t=build` recompiles only touched packages.
-- Any token change propagates automatically to Qwik, RN, Compose builds.
-- CI must fail if Storybook test-runner or Loki reports errors.
-- Desktop app build (`cargo tauri build --release`) ≤ 5 MB zip.
-- Developer onboarding < 30 minutes with Dev Container.
-
-## Key Advantages
-
-1. Licence-free: Penpot AGPL; all runtime code MIT/Apache.
-2. Token-first: one JSON drives every renderer.
-3. Performance: Qwik’s <1 kB hydration and Hermes IPO keep bundles lean.
-4. Quality gates: Playwright, Loki, Vitest stop regressions pre-merge.
-5. Local AI: Llama 3 improves velocity without sending IP to the cloud.
+Mimic is released under the [MIT License](LICENSE). Penpot assets, Compose bindings, and other
+downstream artefacts retain their upstream licences as noted in the respective directories.
 
 ---
 
-## 📚 Documentation Roadmap
-
-| Document | Purpose | Audience |
-|----------|---------|----------|
-| **[README](./README.md)** | Project overview, quick start, architecture summary | All stakeholders |
-| **[User Guide](./docs/USER_GUIDE.md)** | Step-by-step tutorials and workflows | Designers, Developers, DevOps |
-| **[Control Document](./docs/CONTROL_DOCUMENT.md)** | Technical reference and operational procedures | Technical Teams, DevOps |
-| **[Contributing Guide](./CONTRIBUTING.md)** | Development workflows and coding standards | Contributors |
-````
+Built with ❤️ using 100% open-source tooling: Penpot · Nx · pnpm · TypeScript · Qwik · React Native ·
+Tauri · Storybook · Vitest · Loki · Biome

@@ -4,52 +4,48 @@
     "format": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "trunk fmt --fix",
+        "command": "biome format --write .",
         "parallel": false
       },
       "configurations": {
         "check": {
-          "command": "trunk fmt --no-fix --print-failures"
+          "command": "biome format --check ."
         },
         "affected": {
-          "command": "trunk fmt --fix --files {files}"
+          "command": "biome format --write --files {files}"
         }
       }
     },
-    "format:biome": {
+    "lint:base": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "biome format --write {files}",
+        "command": "biome lint .",
         "parallel": false
       },
       "configurations": {
-        "check": {
-          "command": "biome check --formatter-enabled=true {files}"
+        "apply": {
+          "command": "biome lint --write ."
+        },
+        "affected": {
+          "command": "biome lint --files {files}"
         }
-      }
+      },
+      "cache": true,
+      "inputs": ["default", "{workspaceRoot}/biome.json"]
     },
-    "format:dprint": {
-      "executor": "nx:run-commands",
+    "lint": {
+      "executor": "@nx/eslint:lint",
       "options": {
-        "command": "dprint fmt",
-        "parallel": false
-      },
-      "configurations": {
-        "check": {
-          "command": "dprint check"
-        }
-      }
-    },
-    "format:prettier": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "prettier --write {files}",
-        "parallel": false
-      },
-      "configurations": {
-        "check": {
-          "command": "prettier --check {files}"
-        }
+        "lintFilePatterns": [
+          "apps/docs/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "apps/workflows/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "apps/examples/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "packages/token-*/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "packages/tokens-*/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "packages/ui-*/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "packages/platform-bridges/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}",
+          "tools/**/*.{js,jsx,ts,tsx,mjs,cjs,cts,mts}"
+        ]
       }
     },
     "lint:md": {
@@ -68,12 +64,6 @@
       },
       "cache": true,
       "inputs": ["default", "{workspaceRoot}/.markdownlint-cli2.yaml"]
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["*.{js,ts,mjs,cjs}", "tools/**/*.{js,ts,mjs,cjs}", "scripts/**/*.{js,ts,mjs,cjs}", "apps/**/*.{js,ts,tsx,jsx}", "!packages/**/*"]
-      }
     }
   },
   "tags": ["format", "tooling", "dx"]

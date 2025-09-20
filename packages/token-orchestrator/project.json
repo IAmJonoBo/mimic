@@ -1,0 +1,8 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "token-orchestrator",
+  "projectType": "library",
+  "sourceRoot": "packages/token-orchestrator/src",
+  "tags": ["scope:tokens", "type:rust"],
+  "targets": {}
+}

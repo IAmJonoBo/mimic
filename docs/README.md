@@ -1,163 +1,78 @@
-# 📚 Documentation Index
+# Mimic 2.0 Documentation Hub
 
-Welcome to the comprehensive documentation for the Mimic design system monorepo.
+This hub curates the documentation that matters for the Mimic 2.0 rewrite. Start with the links in
+“Begin Here”, then use the thematic sections to dive deeper into architecture, development, and
+operations. Anything marked **Legacy** is retained temporarily for reference and will be migrated or
+retired during the roll-out.
 
-## 🎯 Master Control Document
+## Begin Here
 
-📖 **[Master Control Document](./CONTROL_DOCUMENT.md)** - The canonical reference and control
-handbook for the complete Mimic design token pipeline, orchestrating all components, workflows,
-and integrations across the entire ecosystem.
+- **Project Overview** — [`README.md`](../README.md)
+- **Delivery Roadmap** — [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md)
+- **Sprint Roadmap** — [`docs/SPRINT_PLAN.md`](./SPRINT_PLAN.md)
+- **Repository Structure** — [`docs/REPO_STRUCTURE.md`](./REPO_STRUCTURE.md)
+- **Hands-on Guide** — [`docs/IMPLEMENTATION_GUIDE.md`](./IMPLEMENTATION_GUIDE.md)
+- **Contribution Guide** — [`CONTRIBUTING.md`](../CONTRIBUTING.md)
+- **Local Development** — [`DEVELOPMENT.md`](../DEVELOPMENT.md)
 
-## 🚀 Quick Start
+## Architecture & Governance
 
-- **[README](../README.md)** - Project overview and quick start guide
-- **[CONTRIBUTING](../CONTRIBUTING.md)** - How to contribute to the project
-- **[DEVELOPMENT](../DEVELOPMENT.md)** - Local development setup and workflows
+- **Core Principles & Decisions** — [`docs/ADR.md`](./ADR.md)
+- **Token Contract Specification** — [`docs/TOKEN_CONTRACT_SPECIFICATION.md`](./TOKEN_CONTRACT_SPECIFICATION.md)
+- **System Control Document (Legacy overview, to be merged into 2.0)** — [`docs/CONTROL_DOCUMENT.md`](./CONTROL_DOCUMENT.md)
+- **Metrics & SLO Charter** — See [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md#engineering-metrics--observability-pillars) for targets and dashboards
 
-## 📦 Package Documentation
+## Design Tokens & Penpot Workflow
 
-### Design Tokens
+- **Token Pipeline Guide** — [`docs/DESIGN_TOKENS.md`](./DESIGN_TOKENS.md)
+- **Penpot Workflow** — [`docs/PENPOT_WORKFLOW_GUIDE.md`](./PENPOT_WORKFLOW_GUIDE.md)
+- **Token Orchestrator Reference** — *(coming in 2.0, see Implementation Plan Phase 2)*
+- **Historical Migration Notes (Legacy)** — [`docs/DESIGN_TOKENS_MIGRATION.md`](./DESIGN_TOKENS_MIGRATION.md)
 
-- **[Design Tokens README](../packages/design-tokens/README.md)** - W3C-compliant design tokens with Style Dictionary
+## Component System & Storybook
 
-### Design System
+- **Design System Package** — [`packages/design-system/README.md`](../packages/design-system/README.md)
+- **Storybook & Workflows** — [`docs/platforms/storybook.md`](./platforms/storybook.md)
+- **UI Kernel & Adapters (2.0 targets)** — track progress in [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md)
 
-- **[Design System README](../packages/design-system/README.md)** - Qwik-based component library with Storybook
+## Platform Guides
 
-### Shared Utilities
+- **Web (Qwik)** — [`docs/web/qwik-performance.md`](./web/qwik-performance.md)
+- **Mobile (React Native, Compose)** — [`docs/mobile/rn-new-arch.md`](./mobile/rn-new-arch.md), [`docs/mobile/compose-theme.md`](./mobile/compose-theme.md)
+- **Desktop (Tauri)** — [`docs/desktop/tauri-security.md`](./desktop/tauri-security.md)
 
-- **[Shared Utils README](../packages/shared-utils/README.md)** - Common utilities and helper functions
+## Development Workflow & Tooling
 
-## 🔧 Technical Documentation
+- **Code Quality & Toolchain** — [`docs/CODE_QUALITY_PROTOCOL.md`](./CODE_QUALITY_PROTOCOL.md)
+- **Automation & CI/CD** — [`docs/devops/ci-overview.md`](./devops/ci-overview.md)
+- **Autofix & Linting** — [`docs/AUTOFIX_SYSTEM.md`](./AUTOFIX_SYSTEM.md), [`docs/IGNORE_PATTERNS_GUIDE.md`](./IGNORE_PATTERNS_GUIDE.md)
+- **Testing Strategy** — [`docs/testing/comprehensive-testing.md`](./testing/comprehensive-testing.md)
 
-### Implementation Guides
+## Operations & Deployment
 
-- **[Complete Implementation Guide](./IMPLEMENTATION_GUIDE.md)** - Step-by-step Penpot to production workflow
-- **[Design Token Implementation](./DESIGN_TOKENS.md)** - End-to-end design token usage and integration
-- **[Design Token Migration Guide](./DESIGN_TOKENS_MIGRATION.md)** - Migration strategies for existing projects
+- **Deployment Playbook** — [`docs/DEPLOYMENT.md`](./DEPLOYMENT.md)
+- **Release Automation** — [`docs/cicd/advanced-pipeline-automation.md`](./cicd/advanced-pipeline-automation.md)
+- **Token Drift Detection** — [`docs/cicd/token-drift-check.md`](./cicd/token-drift-check.md)
 
-### API Reference
+## Support & Troubleshooting
 
-- **[API Documentation](./API.md)** - Complete API reference for all packages
-- **[Type Definitions](./API.md#type-definitions)** - TypeScript types and interfaces
+- **Troubleshooting Guide** — [`docs/TROUBLESHOOTING.md`](./TROUBLESHOOTING.md)
+- **Quality Checklist** — [`docs/DOCUMENTATION_PARITY_COMPLETE.md`](./DOCUMENTATION_PARITY_COMPLETE.md)
 
-### Architecture
+## Legacy / Pending Review
 
-- **[Architecture Decision Records (ADRs)](./ADR.md)** - Key architectural decisions and rationale
-- **[Troubleshooting Guide](./TROUBLESHOOTING.md)** - Common issues and solutions
+The following documents are from Mimic 1.x. Keep them handy while rewriting, but prefer the 2.0
+sources above. Anything not referenced here is slated for archival.
 
-### Operations
+- [`docs/ADVANCED_DOCUMENTATION_SUMMARY.md`](./ADVANCED_DOCUMENTATION_SUMMARY.md)
+- [`docs/DOCUMENTATION_COMPLETION_SUMMARY.md`](./DOCUMENTATION_COMPLETION_SUMMARY.md)
+- [`docs/COLLISION_PREVENTION.md`](./COLLISION_PREVENTION.md) & [`docs/COLLISION_PREVENTION_EXAMPLES.md`](./COLLISION_PREVENTION_EXAMPLES.md)
+- [`docs/QUALITY`](./quality) subtree (to merge into the new quality chapter)
+- [`docs/development/advanced-workflows.md`](./development/advanced-workflows.md)
+- [`docs/onboarding/advanced-contributor-guide.md`](./onboarding/advanced-contributor-guide.md)
 
-- **[Deployment Guide](./DEPLOYMENT.md)** - Production deployment procedures
-- **[Apple Cleaning Guide](../APPLE_CLEANING.md)** - macOS development setup
-
-## 🚀 Advanced Documentation
-
-- **[Advanced Documentation Summary](./ADVANCED_DOCUMENTATION_SUMMARY.md)** - Complete overview of advanced workflows
-
-### Design and Token Management
-
-- **[Penpot Schema and Integration](./design/penpot-schema.md)** - Penpot token JSON schema, CLI config, and governance
-- **[Token Diff Strategy](./design/diff-strategy.md)** - Token change detection and review workflow
-
-### Build Pipeline
-
-- **[Style Dictionary Advanced](./build/style-dictionary.md)** - Advanced Style Dictionary config and custom transforms
-
-### Platform Integration
-
-- **[Qwik Integration](./platforms/qwik.md)** - Qwik City integration, image optimization, prefetch, service worker
-- **[Storybook Advanced](./platforms/storybook.md)** - Storybook 9.1 integration, interaction/visual testing, test-runner
-- **[Compose Multiplatform](./platforms/compose.md)** - Compose theme injection, iOS/Wasm quirks, React Native
-- **[Tauri Integration](./platforms/tauri.md)** - Tauri security checklist, auto-updater, token integration
-
-### Mobile Development
-
-- **[Compose Theme Integration](./mobile/compose-theme.md)** - Complete guide to integrating design tokens
-  with Compose Multiplatform, including runtime theme switching and platform-specific optimizations
-- **[React Native New Architecture](./mobile/rn-new-arch.md)** - React Native New Architecture integration
-  with Hermes IPO optimizations and feature flags for gradual migration
-
-### Desktop Development
-
-- **[Tauri Security Framework](./desktop/tauri-security.md)** - Complete security implementation for
-  Tauri desktop application, including CSP configuration, auto-updater security, and code signing
-
-### Web Development
-
-- **[Qwik Performance Optimization](./web/qwik-performance.md)** - Advanced Qwik performance features
-  including image optimization, prefetch strategies, and performance flags
-
-### Quality Assurance
-
-- **[Token Governance](./quality/token-governance.md)** - Token governance, validation, review, and compliance
-- **[Code Quality Tools](./quality/biome-dprint.md)** - Biome/dprint config, linting, formatting standards
-
-### CI/CD and DevOps
-
-- **[CI/CD Pipeline Overview](./devops/ci-overview.md)** - Comprehensive overview of the complete CI/CD
-  pipeline, including pipeline diagrams, performance budgets, and integration workflows
-- **[Advanced Pipeline Automation](./cicd/advanced-pipeline-automation.md)** - Multi-stage CI/CD pipeline and release orchestration
-- **[Token Drift Detection](./cicd/token-drift-check.md)** - Token drift detection, sync, and alerting in CI/CD
-- **[Nx Boundaries and Optimization](./devops/nx-boundaries.md)** - Nx module boundaries, remote cache, release workflow
-
-### Build System
-
-- **[Style Dictionary Advanced](./build/style-dictionary-advanced.md)** - Custom platforms, transforms,
-  and watch mode configuration for comprehensive token transformation
-
-### Design Integration
-
-- **[Penpot Token Schema](./design/penpot-token-schema.md)** - Penpot JSON anatomy, export procedures,
-  and mapping to Style Dictionary paths
-
-### Security and Compliance
-
-- **[Security Compliance Framework](./security/security-compliance-framework.md)** - Enterprise security and compliance automation
-
-### Testing and QA
-
-- **[Comprehensive Testing Strategy](./testing/comprehensive-testing.md)** - Visual regression, interaction, accessibility
-
-### Mobile Development
-
-- **[React Native New Architecture](./mobile/rn-new-arch.md)** - RN Fabric + TurboModules integration with design tokens
-
-### Development Workflows
-
-- **[Advanced Development Workflows](./development/advanced-workflows.md)** - Hot reload, debugging, contributor onboarding
-- **[Advanced Contributor Guide](./onboarding/advanced-contributor-guide.md)** - Comprehensive onboarding and setup automation
-
-## 🎨 Design System Resources
-
-### Component Library
-
-- **[Storybook](https://iamjonobo.github.io/mimic/storybook/)** - Interactive component documentation
-- **[Component Guidelines](../CONTRIBUTING.md#component-guidelines)** - Best practices for component development
-
-### Design Tokens Usage
-
-- **[Design Tokens Guide](./DESIGN_TOKENS.md)** - Complete guide to token usage, patterns, and best practices
-- **[Design Tokens Migration](./DESIGN_TOKENS_MIGRATION.md)** - Step-by-step migration guide for existing projects
-- **[Token Categories](../packages/design-tokens/README.md#token-categories)** - Available design tokens
-- **[Token Usage](../packages/design-tokens/README.md#usage)** - How to use tokens in your applications
-
-## 🧪 Testing and Quality
-
-### Testing Strategy
-
-- **[Comprehensive Testing Strategy](./testing/comprehensive-testing.md)** - Visual regression, interaction, accessibility
-- **[Storybook CI Integration](./testing/storybook-ci.md)** - Complete CI/CD integration for Storybook
-  testing, including test-runner automation, visual regression testing with Loki, and GitHub Actions
-- **[Testing Guidelines](../CONTRIBUTING.md#testing-requirements)** - Unit, integration, and visual testing
-- **[Visual Regression Testing](../packages/design-system/README.md#visual-regression-testing)** - Automated visual testing
-
-### Code Quality
-
-- **[Code Style Guidelines](../CONTRIBUTING.md#code-style-guidelines)** - Formatting and linting standards
-- **[Git Hooks](../APPLE_CLEANING.md#git-hooks)** - Automated quality checks
-
-## 🚀 Release and Deployment
+Please open an issue for any missing or outdated documentation so we can prune this section as the
+2.0 rewrite progresses.
 
 ### Release Process
 

@@ -1,0 +1,8 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "platform-bridges",
+  "projectType": "library",
+  "sourceRoot": "packages/platform-bridges/src",
+  "tags": ["scope:platform", "type:lib"],
+  "targets": {}
+}
