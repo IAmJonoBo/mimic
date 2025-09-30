@@ -2,8 +2,11 @@
 
 [![CI](https://github.com/IAmJonoBo/mimic/workflows/CI/badge.svg)](https://github.com/IAmJonoBo/mimic/actions)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Nx](https://img.shields.io/badge/built%20with-Nx-21.5-blue)](https://nx.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
+[![Nx](https://img.shields.io/badge/built%20with-Nx-21.6-blue)](https://nx.dev)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9.3-blue)](https://www.typescriptlang.org/)
+[![Node](https://img.shields.io/badge/Node-22.20.0-green)](https://nodejs.org/)
+[![pnpm](https://img.shields.io/badge/pnpm-10.17.1-orange)](https://pnpm.io/)
+[![Storybook](https://img.shields.io/badge/Storybook-9.1.9-ff4785)](https://storybook.js.org/)
 
 > Penpot-first, multi-runtime design systems powered by open tooling. Mimic 2.0 is an in-progress
 > rewrite that introduces a token orchestrator, framework-agnostic UI kernel, and automated quality
