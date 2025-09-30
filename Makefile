@@ -104,11 +104,7 @@ docs-validate: ## Validate documentation links and structure
 
 docs-lint: ## Lint documentation markdown files
 	@echo "📝 Linting documentation..."
-	@if command -v markdownlint-cli2 >/dev/null 2>&1; then \
-		markdownlint-cli2 "docs/**/*.md" || echo "⚠️  Markdown linting found issues"; \
-	else \
-		echo "⚠️  markdownlint-cli2 not installed, skipping..."; \
-	fi
+	@pnpm exec markdownlint-cli2 --config config.markdownlint-cli2.jsonc "docs/**/*.md" "packages/*/README.md" || echo "⚠️  Markdown linting found issues"
 
 docs-coverage: ## Check documentation coverage against codebase
 	@echo "📊 Checking documentation coverage..."

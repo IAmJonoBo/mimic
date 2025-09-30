@@ -25,9 +25,9 @@ This workflow enables designers and developers to:
          ▼                       ▼                       ▼                       ▼
    🎨 Design Token         📄 base.json            🔄 Multi-Platform         💻 Live Apps
    Definitions           (W3C DTCG Format)         Output Generation       (Type-Safe APIs)
-                                                                                     
+
    • Colors                • Semantic tokens        • CSS Variables          • Web (Qwik)
-   • Spacing               • Component tokens       • TypeScript types       • Mobile (RN)  
+   • Spacing               • Component tokens       • TypeScript types       • Mobile (RN)
    • Typography            • Alias references       • React Native theme     • Desktop (Tauri)
    • Shadows               • Descriptions           • Compose objects        • Storybook
 ```
@@ -52,7 +52,7 @@ mimic-tokens init
 The CLI will prompt you for:
 
 - **Penpot File ID**: Found in your Penpot file URL
-- **Access Token**: Generated in Penpot Profile → Access Tokens  
+- **Access Token**: Generated in Penpot Profile → Access Tokens
 - **Team ID**: Found in workspace settings (optional)
 - **Base URL**: Usually `https://design.penpot.app`
 
@@ -178,7 +178,7 @@ jobs:
       - name: Export & Build Tokens
         run: |
           mimic-tokens sync
-          
+
       - name: Create PR if changes
         # Auto-creates PR with token updates
 ```
@@ -194,7 +194,7 @@ packages/design-tokens/libs/tokens/
 ├── css/
 │   ├── tokens.css           # CSS custom properties
 │   └── theme.css           # CSS theme utilities
-├── ts/  
+├── ts/
 │   ├── tokens.ts           # TypeScript definitions
 │   └── types.d.ts          # Type declarations
 ├── react-native/
@@ -268,9 +268,7 @@ const Button = () => (
       borderRadius: theme.borderRadius.md,
     }}
   >
-    <Text style={{ color: theme.color.text.primary }}>
-      Click me
-    </Text>
+    <Text style={{ color: theme.color.text.primary }}>Click me</Text>
   </TouchableOpacity>
 );
 ```
@@ -366,7 +364,7 @@ mimic-tokens build --platform ts --watch
 
    ```typescript
    // Now available in all platforms
-   tokens.newCategory.newToken
+   tokens.newCategory.newToken;
    ```
 
 ### Scenario 3: Breaking Change Prevention
@@ -424,19 +422,45 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-      
+
       - name: Install dependencies
         run: pnpm install
-      
+
       - name: Validate tokens
         run: mimic-tokens validate
-      
+
       - name: Build all platforms
         run: mimic-tokens build
-      
+
       - name: Run visual regression tests
         run: pnpm test:visual
 ```
+
+### Automated Penpot Image Upgrades
+
+To keep the local Penpot stack aligned with upstream releases, the repository includes a scheduled automation:
+
+- **Workflow:** `.github/workflows/penpot-upgrade.yml` (runs every Monday at 07:00 UTC or on demand)
+- **Script:** `scripts/update-penpot-images.mjs` fetches the latest shared version available for the
+  `penpotapp/backend`, `penpotapp/frontend`, and `penpotapp/exporter` images.
+- **Behaviour:** When a newer coordinated version exists, the workflow updates
+  `infra/containers/devcontainer/docker-compose.yml` and opens a PR with the change. If the images are already
+  current, the job exits without modifications.
+
+You can trigger the same update locally:
+
+```bash
+node scripts/update-penpot-images.mjs
+```
+
+Pass `--output <file>` to write CI-friendly outputs (`current_version`, `latest_version`, `updated`) when scripting:
+
+```bash
+node scripts/update-penpot-images.mjs --output /tmp/penpot.out
+cat /tmp/penpot.out
+```
+
+> ℹ️ The updater only promotes versions that exist across all three Penpot images to keep the stack consistent.
 
 ## 🎯 Best Practices
 

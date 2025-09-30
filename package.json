@@ -32,7 +32,7 @@
     "lint:workspace": "pnpm run lint:base && pnpm run lint:typed",
     "lint:affected": "nx affected -t lint",
     "lint:css": "stylelint 'packages/**/*.{css,scss,sass}' --fix",
-    "lint:md": "markdownlint-cli2 --config config.markdownlint-cli2.jsonc --fix '**/*.md'",
+    "lint:md": "markdownlint-cli2 --config config.markdownlint-cli2.jsonc --fix \"docs/**/*.md\" \"packages/*/README.md\"",
     "lint:md:fix": "node scripts/fix-markdown-line-length.js && pnpm lint:md",
     "lint:md:fix-line-length": "node scripts/fix-markdown-line-length.js",
     "lint:commits": "commitlint --from=HEAD~1 --to=HEAD",

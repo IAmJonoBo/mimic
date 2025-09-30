@@ -42,12 +42,7 @@ jobs:
         run: ./scripts/validate-docs.sh
 
       - name: Check markdown linting
-        run: |
-          if command -v markdownlint-cli2 >/dev/null 2>&1; then
-            markdownlint-cli2 "docs/**/*.md" "packages/*/README.md"
-          else
-            echo "⚠️ markdownlint-cli2 not installed, skipping lint check"
-          fi
+        run: pnpm exec markdownlint-cli2 --config config.markdownlint-cli2.jsonc "docs/**/*.md" "packages/*/README.md"
 
       - name: Validate documentation links
         run: |

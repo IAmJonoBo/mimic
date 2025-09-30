@@ -1,0 +1,70 @@
+name: Penpot Image Upgrade
+
+on:
+  schedule:
+    - cron: 0 7 * * 1 # Mondays at 07:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  upgrade:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: '22.20.0'
+
+      - name: Update Penpot images
+        id: penpot
+        run: node scripts/update-penpot-images.mjs --output "$GITHUB_OUTPUT"
+
+      - name: Show diff
+        if: steps.penpot.outputs.updated == 'true'
+        run: |
+          git status --short
+          git diff
+
+      - name: Create Pull Request
+        if: steps.penpot.outputs.updated == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore(penpot): bump images to v${{ steps.penpot.outputs.latest_version }}'
+          title: 'chore: update Penpot images to v${{ steps.penpot.outputs.latest_version }}'
+          body: |
+            ## 🤖 Penpot Image Upgrade
+
+            Automated update to align Penpot images with the latest release.
+
+            - Current version: `${{ steps.penpot.outputs.current_version }}`
+            - Updated version: `${{ steps.penpot.outputs.latest_version }}`
+
+            ### Validation
+            - [x] docker-compose definition updated
+            - [ ] Manual smoke test (`docker compose up`) if desired
+
+            Merge after verifying the exporter workflow if needed.
+          branch: chore/penpot-images-${{ steps.penpot.outputs.latest_version }}
+          base: main
+          delete-branch: true
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.penpot.outputs.updated }}" = "true" ]; then
+            echo "## ✅ Penpot images updated" >> "$GITHUB_STEP_SUMMARY"
+            echo "Updated to version ${{ steps.penpot.outputs.latest_version }}." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "## ✅ Penpot images already current" >> "$GITHUB_STEP_SUMMARY"
+            echo "Running version ${{ steps.penpot.outputs.current_version }} is the latest available." >> "$GITHUB_STEP_SUMMARY"
+          fi
