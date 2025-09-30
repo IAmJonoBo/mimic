@@ -43,7 +43,7 @@ services:
       - mimic-dev
 
   penpot-backend:
-    image: penpotapp/backend:2.8.1
+    image: penpotapp/backend:2.10.0
     restart: always
     volumes:
       - penpot_assets:/opt/data/assets
