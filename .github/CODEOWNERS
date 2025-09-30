@@ -1,0 +1,11 @@
+# Code owners govern review requirements. Adjust as the team grows.
+# Learn more: https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+*       @IAmJonoBo
+
+# Optional granular ownership (kept same owner for now for clarity)
+docs/**                 @IAmJonoBo
+packages/**             @IAmJonoBo
+apps/**                 @IAmJonoBo
+.github/**              @IAmJonoBo

@@ -1,12 +1,15 @@
 # Mimic 2.0 – Implementation Plan
 
-> Living roadmap for reimagining Mimic into a Penpot-first, multi-runtime design system platform. Update status checkboxes (`[ ]` → `[x]`) and owners as milestones complete.
+> Living roadmap for reimagining Mimic into a Penpot-first, multi-runtime design system
+> platform.
+> Update status checkboxes (`[ ]` → `[x]`) and owners as milestones complete.
 
 ## Guiding Principles
 
 - **Single Source of Truth**: Penpot 2.8 exports drive every downstream artifact. No manual token edits.
 - **Composable Architecture**: Shared `ui-kernel` primitives power adapters across web, mobile, desktop, and embedded surfaces.
-- **Deterministic Automation**: Every pipeline step (token sync, builds, tests, docs) is reproducible via CLI, CI, or GitHub Actions.
+- **Deterministic Automation**: Every pipeline step (token sync, builds, tests, docs) is
+  reproducible via CLI, CI, or GitHub Actions.
 - **Accessible by Default**: A11y checks block merges across Storybook, Playwright, and native snapshots.
 - **All-FOSS Stack**: Node, Rust, Qwik, React Native, Tauri, Starlight, Nx, Loki—no proprietary lock-in.
 
@@ -90,8 +93,8 @@ mimic/
   orchestration, scaffolding, and documentation queries.
 - Storybook 10 readiness plan with 8.6 compatibility branch until addon parity, including custom
   addons for token inspection and accessibility.
-- Husky pre-commit pipeline: Biome format/lint fast path, typed ESLint overlay, Stylelint, Markdownlint, targeted Vitest via
-  `turbo run lint --filter` to keep hooks fast.
+- Husky pre-commit pipeline: Biome format/lint fast path, typed ESLint overlay, Stylelint,
+  Markdownlint, targeted Vitest via `turbo run lint --filter` to keep hooks fast.
 - CODEOWNERS per domain (tokens, kernel, adapters, workflows) and PR templates linking to success
   metrics.
 

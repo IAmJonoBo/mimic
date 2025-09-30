@@ -7,18 +7,23 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 0 – Discovery & Alignment (Week 0)
 
 **Focus**
+
 - Finalise architecture decisions and prepare the workspace for execution.
 
 **Key Outcomes**
+
 - Architecture blueprint endorsed (token orchestrator, UI kernel, repo layout).
-- ADRs drafted for Rust CLI, Lit kernel, repository structure, Storybook 10 track, AI accessibility approach (Ollama/OpenAI/Copilot).
+- ADRs drafted for Rust CLI, Lit kernel, repository structure, Storybook 10 track, AI accessibility
+  approach (Ollama/OpenAI/Copilot).
 - Migration impact of Mimic 1.x consumers documented.
 - Target SLOs and engineering metrics agreed (build time, drift MTTR, visual escape rate, documentation freshness).
 
 **Entry Criteria**
+
 - Vision statement approved.
 
 **Exit Criteria**
+
 - ADR PRs merged.
 - `docs/MIGRATION_SUMMARY.md` captures current adopters and risks.
 - Metrics charter published (SLO dashboard skeleton).
@@ -28,22 +33,27 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 1 – Repository Foundations (Weeks 1–2)
 
 **Focus**
+
 - Create the workspace scaffolding and shared tooling for 2.0 development.
 
 **Key Outcomes**
+
 - New directory layout (`apps/`, `packages/`, `infra/`, `toolchains/`) in place with CODEOWNERS + PR templates.
 - Shared toolchain presets (tsconfig, ESLint flat config, Biome, Stylelint, Vitest) published.
-- Devcontainer refreshed with Node 22.19, pnpm 10.17, Rust, Android/iOS SDKs, Playwright, Penpot stack, OpenAI & Copilot CLI tooling.
+- Devcontainer refreshed with Node 22.19, pnpm 10.17, Rust, Android/iOS SDKs, Playwright, Penpot
+  stack, OpenAI & Copilot CLI tooling.
 - SLO dashboards (stub) and telemetry hooks scaffolded.
 - Contributor playbook (`CONTRIBUTING.md`, `DEVELOPMENT.md`) reflects new workflows and AI usage.
 
 **Deliverables**
+
 - `toolchains/` presets.
 - `.devcontainer` thin wrapper pointing to `infra/containers/devcontainer`.
 - `justfile` with core commands and AI helper aliases.
 - CODEOWNERS + SLO/metrics documentation.
 
 **Exit Criteria**
+
 - CI running on upgraded Node/pnpm versions with baseline telemetry flowing.
 - Covering documentation updated (setup, metrics, AI accessibility).
 
@@ -52,9 +62,11 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 2 – Token Orchestrator Skeleton (Weeks 3–4)
 
 **Focus**
+
 - Build the first iteration of the Rust-based token orchestrator and schema contracts.
 
 **Key Outcomes**
+
 - `packages/token-orchestrator` CLI scaffolding (Rust + wasm bindings).
 - Penpot DTCG ingest + JSON schema validation pipeline with error envelopes.
 - `packages/tokens-core` canonical schema and history versioning structure.
@@ -62,6 +74,7 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 - Initial ADR capturing orchestration rules and SLO impact.
 
 **Exit Criteria**
+
 - CLI can parse Penpot export and output normalised JSON to `packages/tokens-core/history`.
 - Unit tests cover schema validation and rule enforcement.
 - Observatory dashboard shows orchestrator latency/error metrics.
@@ -71,9 +84,11 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 3 – Token Outputs & Automation (Weeks 5–6)
 
 **Focus**
+
 - Produce multi-platform token outputs and automate drift detection.
 
 **Key Outcomes**
+
 - Generated outputs (CSS, TS, JSON Schema, Compose, Swift, Kotlin, Flutter) written to
   `packages/tokens-outputs` (gitignored).
 - `apps/workflows/token-sync` job exporting from Penpot, diffing, and creating PRs with AI summaries.
@@ -82,6 +97,7 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 - Documentation for consuming generated tokens and interpreting SLO dashboards.
 
 **Exit Criteria**
+
 - CI pipeline produces token outputs on demand.
 - Drift detection opens annotated PR when Penpot snapshot changes, including AI-generated change notes.
 - Security scans and telemetry reports are green.
@@ -91,9 +107,11 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 4 – UI Kernel & Adapters MVP (Weeks 7–8)
 
 **Focus**
+
 - Establish the shared UI kernel and first wave of framework adapters.
 
 **Key Outcomes**
+
 - `packages/ui-kernel` implemented with Lit + vanilla-extract theming and accessibility primitives.
 - React adapter (`packages/ui-adapters/react`) wrapping kernel components.
 - Storybook integration consuming kernel + tokens with automated docs tables and token intelligence addon.
@@ -101,6 +119,7 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 - AI remediation prompts available inside Storybook for accessibility and design checklist results.
 
 **Exit Criteria**
+
 - Storybook stories demonstrate new kernel components using generated tokens with token inspector addon active.
 - Visual/a11y tests pass against the new kernel with results recorded in telemetry dashboards.
 
@@ -109,15 +128,19 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 5 – Platform Integrations (Weeks 9–10)
 
 **Focus**
+
 - Wire the kernel into the reference applications and supply example integrations.
 
 **Key Outcomes**
+
 - Web app upgraded to Qwik City 2 using kernel + tokens with instrumentation hooks.
-- React Native app using Expo Router + new tokens; Compose Multiplatform/Tauri shells bound to generated outputs and emitting OpenTelemetry data.
+- React Native app using Expo Router + new tokens; Compose Multiplatform/Tauri shells bound to
+  generated outputs and emitting OpenTelemetry data.
 - Example integrations for Astro/Remix/Next in `examples/` with AI-assisted setup scripts.
 - Compose/SwiftUI snapshot tests running in CI.
 
 **Exit Criteria**
+
 - All reference apps compile with the new kernel and tokens, with telemetry dashboards showing baseline UX metrics.
 - Example projects documented, buildable, and include AI-assisted onboarding scripts.
 
@@ -126,15 +149,18 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 6 – Docs, DX & AI Assistance (Weeks 11–12)
 
 **Focus**
+
 - Launch the new documentation experience and polish developer tooling.
 
 **Key Outcomes**
+
 - Starlight-based docs app with MDX, Storybook embeds, interactive API tables, and telemetry dashboards.
 - Token governance, release process, migration guides authored with SLO references.
 - `mimic assist` CLI documented with Ollama + OpenAI + Copilot flows and AI-powered command wrappers.
 - CODEOWNERS, automation, and `just` task UX refined with AI hints.
 
 **Exit Criteria**
+
 - Docs site deployed (preview and local instructions) with AI-enhanced search and live Storybook embeds.
 - CLI helper usable for scaffolding, Q&A, and AI-orchestrated workflows.
 
@@ -143,15 +169,19 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 ## Sprint 7 – Quality Gates & GA Readiness (Weeks 13–14)
 
 **Focus**
+
 - Harden CI/CD, run beta testing, and prepare GA release assets.
 
 **Key Outcomes**
+
 - Enhanced CI matrix (a11y, Playwright journeys, Loki diffs, Compose/SwiftUI snapshots) with flake tracking and alerting.
 - Beta programme feedback incorporated and success metrics reviewed against SLOs.
 - Changesets-based release notes, migration toolkit, and communication plan ready (AI-generated summaries).
-- Token analytics dashboard prototype and QA bot hooks (Slack/Matrix) operating on telemetry streams.
+- Token analytics dashboard prototype and QA bot hooks (Slack/Matrix) operating on telemetry
+  streams.
 
 **Exit Criteria**
+
 - CI green across the matrix for multiple consecutive runs within agreed SLO budget.
 - GA announcement copy, migration guides, release artefacts staged, and analytics dashboard live.
 

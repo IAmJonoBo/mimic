@@ -766,6 +766,12 @@ pnpm nx run design-tokens:build  # Includes token output cleanup
 # Clean entire workspace
 pnpm run clean:apple
 
+# Clean only staged paths (used by pre-commit)
+pnpm run clean:apple:staged
+
+# Verify no Apple metadata is tracked in git
+pnpm run check:apple
+
 # Clean specific directory
 node tools/apple-cleaner.js path/to/directory
 
@@ -875,7 +881,8 @@ tools (Biome, dprint) provide faster execution than Node.js alternatives.
 5. **Test** → `nx affected` runs ESLint, unit, interaction & visual tests
 6. **Commit** → Pre-commit hooks automatically format, lint, clean Apple junk, and validate token drift
 7. **CI** → Style Dictionary drift check, Storybook test-runner, Loki visual diff, size budgets
-8. **Release** → `nx release`, `pnpm deploy` (Cloudflare Pages, auto-cleaned), Tauri updater manifest, mobile store uploads
+8. **Release** → `nx release`, `pnpm deploy` (Cloudflare Pages, auto-cleaned), Tauri updater manifest, mobile store
+uploads
 
 ### 10.2 Live Development Setup
 

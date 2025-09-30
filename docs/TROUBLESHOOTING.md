@@ -901,10 +901,16 @@ pnpm build:tokens
 
    ```bash
    # Use built-in cleaner
-   pnpm clean:apple
+   pnpm run clean:apple
+
+   # Fast path for staged files only
+   pnpm run clean:apple:staged
+
+   # Verify nothing slipped into git
+   pnpm run check:apple
 
    # Or run manually
-   node tools/apple-cleaner.js
+   node tools/apple-cleaner.js --mode=full
    ```
 
 2. **Check gitignore:**

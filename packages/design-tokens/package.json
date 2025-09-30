@@ -14,6 +14,10 @@
       "types": "./libs/tokens/ts/tokens.ts",
       "import": "./libs/tokens/js/tokens.js"
     },
+    "./sdk": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    },
     "./css": "./libs/tokens/css/tokens.css",
     "./scss": "./libs/tokens/scss/tokens.scss",
     "./json": "./libs/tokens/json/tokens.json",

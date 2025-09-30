@@ -308,6 +308,9 @@ importers:
       '@mimic/design-tokens':
         specifier: workspace:*
         version: link:../design-tokens
+      '@mimic/tokens-core':
+        specifier: workspace:*
+        version: link:../tokens-core
       '@vanilla-extract/css':
         specifier: ^1.17.4
         version: 1.17.4(babel-plugin-macros@3.1.0)
@@ -408,7 +411,14 @@ importers:
 
   packages/token-orchestrator: {}
 
-  packages/tokens-core: {}
+  packages/tokens-core:
+    dependencies:
+      '@mimic/design-tokens':
+        specifier: workspace:*
+        version: link:../design-tokens
+      '@mimic/shared-utils':
+        specifier: workspace:*
+        version: link:../shared-utils
 
   packages/ui-adapters: {}
 

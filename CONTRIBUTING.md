@@ -14,11 +14,13 @@ We follow the [Contributor Covenant](CODE_OF_CONDUCT.md). Be kind, inclusive, an
 2. **Declare the phase** — Mention the implementation plan phase your change targets (e.g. Phase 2 –
    Token Orchestrator).
 3. **Fork and clone** —
-   ```bash
+
+  ```bash
    git clone https://github.com/YOUR_USERNAME/mimic.git
    cd mimic
    git remote add upstream https://github.com/IAmJonoBo/mimic.git
    ```
+
 4. **Bootstrap once** — `./setup.sh` installs Node 22.19, pnpm 10.17, Husky hooks, and workspace deps.
 
 ## Local Development
@@ -43,6 +45,18 @@ pnpm nx run design-system:test-storybook
 
 > Use `pnpm nx run-many -t lint,test --affected` if your change is scoped and you understand the impact.
 
+## Pull Request Process
+
+- Use the structured [pull request template](.github/pull_request_template.md) and complete every relevant checkbox before
+  requesting review. The template mirrors our regression gates, so unchecked items will block approval.
+- Confirm your work is mapped to an implementation plan phase and call it out in the template.
+- If any checkbox cannot be satisfied, replace it with a short justification that explains the risk and a mitigation plan.
+- Highlight breaking changes clearly and add migration notes in both the template and the relevant documentation file.
+- When updating design tokens or UI, attach screenshots or Loki diffs so reviewers can validate the visual impact quickly.
+- Branch protection is automated; if you need to adjust required checks or review counts, update
+  [`infra/branch-protection/main.json`](infra/branch-protection/main.json) and see
+  [`docs/branch-protection.md`](docs/branch-protection.md) for details.
+
 ### Coding Standards
 
 - **TypeScript everywhere**. Enable strict types and prefer interfaces for public APIs.
@@ -51,7 +65,8 @@ pnpm nx run design-system:test-storybook
 - **Accessibility**. Components must satisfy Axe checks and pass Storybook interaction tests.
 - **Composable architecture**. Additions to the UI kernel or adapters must be framework agnostic and
   respect the existing theme contracts.
-- **Formatting**. Biome formats JS/TS/JSON; Prettier is reserved for HTML/Astro docs. `pnpm format:check` should pass without manual edits.
+- **Formatting**. Biome formats JS/TS/JSON; Prettier is reserved for HTML/Astro docs.
+  `pnpm format:check` should pass without manual edits.
 
 ### Documentation
 

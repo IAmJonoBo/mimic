@@ -53,7 +53,8 @@ This document outlines the migration from deprecated packages in the React Nativ
 
 ### ⚠️ Remaining Issues (Transitive Dependencies)
 
-The following deprecated packages are **subdependencies** (transitive) and will be resolved automatically as upstream packages update:
+The following deprecated packages are **subdependencies** (transitive) and will be resolved
+automatically as upstream packages update:
 
 #### Babel Plugin-Proposal Packages (Integrated into ES Standard)
 
@@ -62,7 +63,8 @@ The following deprecated packages are **subdependencies** (transitive) and will 
 - `@babel/plugin-proposal-object-rest-spread@7.20.7`
 - `@babel/plugin-proposal-optional-chaining@7.21.0`
 
-**Resolution**: These are from React Native's Babel preset. The proposals have been merged into ECMAScript standard. React Native 0.77+ will resolve these.
+**Resolution**: These are from React Native's Babel preset. The proposals have been merged into
+ECMAScript standard. React Native 0.77+ will resolve these.
 
 #### Legacy Utility Packages
 

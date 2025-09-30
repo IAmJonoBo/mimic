@@ -95,6 +95,11 @@ lint:
         - docs/ADR.md
         - '**/ADR*.md'
 
+    # Branch protection workflow requires admin secret that actionlint can't validate
+    - linters: [actionlint]
+      paths:
+        - .github/workflows/enforce-branch-protection.yml
+
 actions:
   enabled:
     - trunk-announce

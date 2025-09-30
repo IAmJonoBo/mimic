@@ -1,6 +1,7 @@
 # 🧹 Apple Junk Cleaning Setup
 
-This workspace includes comprehensive Apple/macOS junk cleaning hooks and utilities to keep your development environment clean and performant.
+This workspace includes comprehensive Apple/macOS junk cleaning hooks and utilities to keep your development
+environment clean and performant.
 
 ## 🎯 What Gets Cleaned
 
@@ -27,27 +28,33 @@ This workspace includes comprehensive Apple/macOS junk cleaning hooks and utilit
 
 ```bash
 # Clean all Apple junk using the comprehensive cleaner
-npm run clean:apple
+pnpm run clean:apple
+
+# Clean only staged paths (fast path for pre-commit workflows)
+pnpm run clean:apple:staged
+
+# Validate that no Apple metadata is tracked in git
+pnpm run check:apple
 
 # Clean specific types of files
-npm run clean:ds-store      # Remove .DS_Store files only
-npm run clean:xcode        # Remove Xcode user data
-npm run clean:apple-logs   # Remove crash logs
-npm run clean:spotlight    # Remove Spotlight metadata
-npm run clean:temp         # Remove temporary files
+pnpm run clean:ds-store     # Remove .DS_Store files only
+pnpm run clean:xcode        # Remove Xcode user data
+pnpm run clean:apple-logs   # Remove crash logs
+pnpm run clean:spotlight    # Remove Spotlight metadata
+pnpm run clean:temp         # Remove temporary files
 
 # Complete cleanup (Apple junk + build artifacts + reinstall)
-npm run clean:all
+pnpm run clean:all
 ```
 
 ### Nx Integration
 
 ```bash
 # Clean all projects using Nx
-npm run clean:workspace
+pnpm run clean:workspace
 
 # Clean Apple junk in all projects
-npm run clean:apple:workspace
+pnpm run clean:apple:workspace
 
 # Clean specific project
 nx run design-system:clean
@@ -62,30 +69,30 @@ nx run design-system:clean:apple
 
 ### Pre-commit Hook
 
-Automatically runs before each commit:
+Runs before each commit and will fail the commit if violations are detected:
 
-- Removes `.DS_Store` files
-- Runs lint-staged for code quality
+- Cleans only the staged paths for speed (`pnpm run clean:apple:staged`)
+- Verifies that no Apple metadata is tracked (`pnpm run check:apple`)
+- Runs `lint-staged` for code quality
 
 ### Post-checkout Hook
 
-Runs after checking out branches:
+Runs after checking out branches (best effort, non-blocking):
 
-- Cleans `.DS_Store` files
-- Removes temporary files
+- Executes the full Apple cleaner via `pnpm run clean:apple`
+- Silently ignores failures (for example if pnpm is unavailable)
 
 ### Post-merge Hook
 
-Runs after merging branches:
+Runs after merging branches (best effort, non-blocking):
 
-- Cleans `.DS_Store` files
-- Removes temporary files
+- Executes the full Apple cleaner via `pnpm run clean:apple`
 
 ### Post-rewrite Hook
 
-Runs after rebase/amend operations:
+Runs after rewrite/rebase operations (best effort, non-blocking):
 
-- Cleans `.DS_Store` files
+- Executes the full Apple cleaner via `pnpm run clean:apple`
 
 ## 📁 Files and Structure
 
@@ -114,11 +121,11 @@ Each project (`design-system`, `design-tokens`, `shared-utils`) has:
 The cleaning system is automatically active. To manually set up git hooks:
 
 ```bash
-# Initialize husky (done automatically during npm install)
+# Initialize husky (done automatically during pnpm install)
 pnpm exec husky init
 
 # Test the cleaner
-npm run clean:apple
+pnpm run clean:apple
 ```
 
 ## 🎨 Customization
@@ -165,10 +172,10 @@ The cleaner provides detailed logging:
 
 ## 📋 Best Practices
 
-1. **Run cleaning regularly**: Use `npm run clean:apple` periodically
+1. **Run cleaning regularly**: Use `pnpm run clean:apple` periodically
 2. **Before committing**: Cleaning happens automatically, but you can run manually
 3. **After switching branches**: Post-checkout hook handles this automatically
-4. **When workspace feels sluggish**: Run `npm run clean:all`
+4. **When workspace feels sluggish**: Run `pnpm run clean:all`
 
 ## 🆘 Troubleshooting
 

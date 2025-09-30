@@ -1,0 +1,23 @@
+# Automatically label PRs based on changed files
+# Docs: https://github.com/actions/labeler
+
+area:docs:
+  - docs/**
+
+area:tokens:
+  - packages/design-tokens/**
+
+area:design-system:
+  - packages/design-system/**
+
+area:ci:
+  - .github/workflows/**
+
+area:mobile:
+  - apps/mobile/**
+
+area:web:
+  - apps/web/**
+
+area:desktop:
+  - apps/desktop/**

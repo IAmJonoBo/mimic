@@ -20,7 +20,9 @@ retired during the roll-out.
 - **Core Principles & Decisions** — [`docs/ADR.md`](./ADR.md)
 - **Token Contract Specification** — [`docs/TOKEN_CONTRACT_SPECIFICATION.md`](./TOKEN_CONTRACT_SPECIFICATION.md)
 - **System Control Document (Legacy overview, to be merged into 2.0)** — [`docs/CONTROL_DOCUMENT.md`](./CONTROL_DOCUMENT.md)
-- **Metrics & SLO Charter** — See [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md#engineering-metrics--observability-pillars) for targets and dashboards
+- **Metrics & SLO Charter** — See
+  [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md#engineering-metrics--observability-pillars)
+  for targets and dashboards
 
 ## Design Tokens & Penpot Workflow
 

@@ -1,10 +1,12 @@
 # Penpot to Mimic Design Token Workflow
 
-Complete user-friendly guide for exporting, processing, and re-exporting design tokens from Penpot to the Mimic monorepo applications.
+Complete user-friendly guide for exporting, processing, and re-exporting design tokens from Penpot to the Mimic monorepo
+applications.
 
 ## 🎯 Overview
 
 This workflow enables designers and developers to:
+
 1. **Design** tokens in Penpot with full visual context
 2. **Export** tokens in W3C DTCG format automatically
 3. **Transform** tokens into platform-specific formats (CSS, TypeScript, React Native, Compose)
@@ -48,6 +50,7 @@ mimic-tokens init
 ```
 
 The CLI will prompt you for:
+
 - **Penpot File ID**: Found in your Penpot file URL
 - **Access Token**: Generated in Penpot Profile → Access Tokens  
 - **Team ID**: Found in workspace settings (optional)
@@ -61,6 +64,7 @@ mimic-tokens status
 ```
 
 This will verify:
+
 - ✅ Penpot API connectivity
 - ✅ File structure integrity
 - ✅ Generated output status
@@ -131,6 +135,7 @@ In your Penpot file, organize tokens using this hierarchy:
 #### Using Aliases (References)
 
 Create semantic meaning with aliases:
+
 ```text
 color.text.primary → {color.neutral.900}
 color.surface.primary → {color.neutral.50}
@@ -333,13 +338,17 @@ mimic-tokens build --platform ts --watch
 
 1. **Designer** opens Penpot, modifies `color.primary.500`
 2. **System** auto-exports every 6 hours OR manual trigger:
+
    ```bash
    mimic-tokens export
    ```
+
 3. **Build** updated platform outputs:
+
    ```bash
    mimic-tokens build
    ```
+
 4. **Developers** see changes in their apps automatically
 5. **CI/CD** creates PR with visual regression tests
 
@@ -348,10 +357,13 @@ mimic-tokens build --platform ts --watch
 1. **Request** new token from designer via Penpot comments
 2. **Designer** adds token in Penpot token panel
 3. **Export** new tokens:
+
    ```bash
    mimic-tokens sync
    ```
+
 4. **Integration** in code:
+
    ```typescript
    // Now available in all platforms
    tokens.newCategory.newToken
@@ -360,13 +372,17 @@ mimic-tokens build --platform ts --watch
 ### Scenario 3: Breaking Change Prevention
 
 1. **Validation** before every build:
+
    ```bash
    mimic-tokens validate
    ```
+
 2. **Diff checking** in PR workflow:
+
    ```bash
    mimic-tokens diff --base main --output pr-changes.md
    ```
+
 3. **Visual regression** tests run automatically
 4. **Manual review** for breaking changes
 
@@ -425,24 +441,28 @@ jobs:
 ## 🎯 Best Practices
 
 ### 1. Token Organization
+
 - ✅ Use semantic layers (primitive → semantic → component)
 - ✅ Consistent naming convention
 - ✅ Document token purposes
 - ❌ Avoid deeply nested hierarchies
 
 ### 2. Workflow Management
+
 - ✅ Single source of truth (Penpot)
 - ✅ Regular automated syncs
 - ✅ PR review for all changes
 - ❌ Manual JSON edits
 
 ### 3. Performance Optimization
+
 - ✅ Import only needed tokens
 - ✅ Use tree-shaking builds
 - ✅ Cache Style Dictionary outputs
 - ❌ Import entire token object in components
 
 ### 4. Team Collaboration
+
 - ✅ Clear change communication
 - ✅ Visual regression testing
 - ✅ Documentation updates
@@ -453,6 +473,7 @@ jobs:
 ### Common Issues
 
 #### Export Fails
+
 ```bash
 # Check credentials
 mimic-tokens status
@@ -462,6 +483,7 @@ mimic-tokens export --file-id your-file-id --force
 ```
 
 #### Build Errors
+
 ```bash
 # Clean and rebuild
 rm -rf packages/design-tokens/libs
@@ -472,6 +494,7 @@ mimic-tokens validate --tokens packages/design-tokens/style-dictionary.config.js
 ```
 
 #### Watch Mode Not Working
+
 ```bash
 # Use polling mode for network drives
 CHOKIDAR_USEPOLLING=true mimic-tokens watch
@@ -490,4 +513,5 @@ ls -la packages/design-tokens/tokens/
 
 ---
 
-This workflow ensures a seamless, automated design-to-code pipeline that scales with your team and maintains consistency across all platforms.
+This workflow ensures a seamless, automated design-to-code pipeline that scales with your team and maintains consistency
+across all platforms.

@@ -388,6 +388,11 @@ pnpm test --watch
 pnpm test --coverage
 ```
 
+The Vitest suite now includes integration coverage that exercises the `@mimic/tokens-core`
+bridge. The `token-integration.test.ts` spec ensures our design-system utilities resolve
+tokens through the shared helpers and continue to produce the expected CSS variable
+contracts when design tokens or validation guards change.
+
 ### Accessibility Testing
 
 Accessibility tests run automatically in Storybook:

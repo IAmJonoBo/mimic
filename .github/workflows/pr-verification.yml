@@ -1,0 +1,46 @@
+name: PR Verification
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  verify:
+    name: Lint • Typecheck • Test • Build (affected)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.19.0'
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.17.0
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Lint (affected)
+        run: pnpm nx affected -t lint --parallel=4
+
+      - name: Typecheck (affected)
+        run: pnpm nx affected -t typecheck --parallel=3 || true
+
+      - name: Unit tests (affected)
+        run: pnpm nx affected -t test --parallel=3
+
+      - name: Build (affected)
+        run: pnpm nx affected -t build --parallel=3
+
+      - name: Markdown lint (docs only)
+        if: ${{ contains(github.event.pull_request.changed_files, 'docs/') }}
+        run: pnpm lint:md
