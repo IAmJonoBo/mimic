@@ -1,6 +1,7 @@
 # Mimic Desktop App (Tauri)
 
-Desktop application for the Mimic design token system built with Tauri 2.0, demonstrating collision-prevention architecture with web technologies and native performance.
+Desktop application for the Mimic design token system built with Tauri 2.0, demonstrating
+collision-prevention architecture with web technologies and native performance.
 
 ## Features
 
