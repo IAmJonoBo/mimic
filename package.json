@@ -92,9 +92,9 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.4",
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
-    "@commitlint/config-nx-scopes": "19.8.1",
+    "@commitlint/cli": "20.1.0",
+    "@commitlint/config-conventional": "20.0.0",
+    "@commitlint/config-nx-scopes": "20.0.0",
     "@eslint/js": "9.36.0",
     "@nx/eslint": "21.5.3",
     "@nx/eslint-plugin": "21.5.3",
