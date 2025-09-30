@@ -23,7 +23,7 @@ services:
 
   # Penpot self-hosted setup
   penpot-db:
-    image: postgres:17
+    image: postgres:18
     restart: always
     stop_signal: SIGINT
     environment:
