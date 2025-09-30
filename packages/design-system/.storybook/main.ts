@@ -2,7 +2,7 @@ import type { StorybookConfig } from '@storybook/html-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-a11y', '@storybook/addon-links', '@storybook/addon-docs'],
+  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-a11y', '@storybook/addon-links', '@storybook/addon-docs', '@storybook/addon-measure', '@storybook/addon-outline'],
   framework: {
     name: '@storybook/html-vite',
     options: {
