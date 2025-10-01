@@ -49,17 +49,17 @@
     },
     {
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@nx/", "^nx$", "^@nrwl/"],
       "groupName": "Nx toolchain",
-      "separateMajorMinor": true
+      "separateMajorMinor": true,
+      "matchPackageNames": ["/^@nx//", "/^nx$/", "/^@nrwl//"]
     },
     {
       "matchManagers": ["npm"],
-      "matchPackagePatterns": ["^@nx/", "^nx$", "^@nrwl/"],
       "matchUpdateTypes": ["minor", "patch", "pin"],
       "groupName": "Nx toolchain",
       "automerge": true,
-      "automergeType": "pr"
+      "automergeType": "pr",
+      "matchPackageNames": ["/^@nx//", "/^nx$/", "/^@nrwl//"]
     },
     {
       "matchManagers": ["github-actions"],
