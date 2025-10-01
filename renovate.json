@@ -1,4 +1,100 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"]
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":semanticCommitTypeAll(chore)"
+  ],
+  "rangeStrategy": "replace",
+  "timezone": "UTC",
+  "schedule": ["after 02:00 on monday"],
+  "prHourlyLimit": 2,
+  "prConcurrentLimit": 8,
+  "labels": ["dependencies", "renovate"],
+  "enabledManagers": [
+    "npm",
+    "github-actions",
+    "dockerfile",
+    "docker-compose",
+    "devcontainer",
+    "cargo"
+  ],
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": ["before 03:00 on monday"],
+    "automerge": true,
+    "automergeType": "branch"
+  },
+  "packageRules": [
+    {
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "matchDepTypes": ["devDependencies"],
+      "groupName": "devDependencies (minor+patch)",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchDepTypes": [
+        "dependencies",
+        "optionalDependencies",
+        "peerDependencies"
+      ],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "groupName": "Runtime dependencies (minor+patch)",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@nx/", "^nx$", "^@nrwl/"],
+      "groupName": "Nx toolchain",
+      "separateMajorMinor": true
+    },
+    {
+      "matchManagers": ["npm"],
+      "matchPackagePatterns": ["^@nx/", "^nx$", "^@nrwl/"],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "groupName": "Nx toolchain",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["github-actions"],
+      "groupName": "GitHub Actions",
+      "labels": ["ci", "dependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "groupName": "Container images",
+      "separateMinorPatch": true
+    },
+    {
+      "matchManagers": ["dockerfile", "docker-compose"],
+      "matchUpdateTypes": ["patch", "pin", "digest"],
+      "groupName": "Container images",
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["devcontainer"],
+      "groupName": "Devcontainer templates",
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "automerge": true,
+      "automergeType": "pr"
+    },
+    {
+      "matchManagers": ["cargo"],
+      "groupName": "Rust crates",
+      "labels": ["rust", "dependencies"],
+      "matchUpdateTypes": ["minor", "patch", "pin"],
+      "automerge": true,
+      "automergeType": "pr"
+    }
+  ]
 }
