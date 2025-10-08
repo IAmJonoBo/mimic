@@ -15,8 +15,8 @@
     "@mimic/design-tokens": "workspace:*",
     "@mimic/shared-utils": "workspace:*",
     "@react-native-async-storage/async-storage": "^2.2.0",
-    "react": "19.1.1",
-    "react-native": "0.81.4"
+    "react": "19.2.0",
+    "react-native": "0.82.0"
   },
   "devDependencies": {
     "@babel/core": "^7.28.4",
