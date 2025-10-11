@@ -9,7 +9,7 @@
 import * as tokens from '@mimic/design-tokens/react-native';
 import type { FC, PropsWithChildren } from 'react';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Appearance, useColorScheme } from 'react-native';
+import { Appearance, type ColorSchemeName, useColorScheme } from 'react-native';
 
 interface ThemeContextType {
   theme: 'light' | 'dark';
@@ -21,11 +21,19 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 type ThemeProviderProps = PropsWithChildren;
 
+const resolveSystemTheme = (scheme: ColorSchemeName | null | undefined): 'light' | 'dark' => {
+  if (scheme === 'dark') {
+    return 'dark';
+  }
+
+  return 'light';
+};
+
 export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
   const systemColorScheme = useColorScheme();
   const [userTheme, setUserTheme] = useState<'light' | 'dark' | 'system'>('system');
 
-  const theme = userTheme === 'system' ? systemColorScheme || 'light' : userTheme;
+  const theme: 'light' | 'dark' = userTheme === 'system' ? resolveSystemTheme(systemColorScheme) : userTheme;
 
   // Listen for system theme changes
   useEffect(() => {

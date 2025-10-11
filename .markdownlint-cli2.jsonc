@@ -1,26 +1,11 @@
 {
-  "globs": [
-    "docs/**/*.md",
-    "packages/*/README.md",
-    "!docs/**/examples/**",
-    "!docs/**/samples/**",
-    "!docs/**/templates/**",
-    "!docs/**/vendor/**",
-    "!docs/**/vendors/**",
-    "!packages/**/examples/**",
-    "!packages/**/templates/**",
-    "!node_modules/**",
-    "!**/node_modules/**",
-    "!.git/**",
-    "!.trunk/**",
-    "!.nx/**",
-  ],
+  "globs": ["docs/**/*.md", "packages/*/README.md", "!docs/**/examples/**", "!docs/**/samples/**", "!docs/**/templates/**", "!docs/**/vendor/**", "!docs/**/vendors/**", "!packages/**/examples/**", "!packages/**/templates/**", "!node_modules/**", "!**/node_modules/**", "!.git/**", "!.trunk/**", "!.nx/**"],
   "config": {
     "MD013": {
       "line_length": 120,
       "headings": false,
       "code_blocks": false,
-      "tables": false,
+      "tables": false
     },
     "MD024": false,
     "MD033": false,
@@ -29,11 +14,11 @@
     "MD026": false,
     "MD037": false,
     "MD007": {
-      "indent": 2,
+      "indent": 2
     },
     "MD029": false,
     "MD010": {
-      "code_blocks": false,
-    },
-  },
+      "code_blocks": false
+    }
+  }
 }

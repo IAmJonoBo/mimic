@@ -6,7 +6,7 @@ This project uses PR gates to reduce regressions. Follow this checklist when ope
 
 - Run locally:
   - `pnpm lint:workspace`
-  - `pnpm nx run-many -t typecheck`
+  - `pnpm typecheck`
   - `pnpm nx run-many -t test`
   - If UI changed: `pnpm nx run design-system:visual-test`
 - Ensure tokens comply with prefixes and import rules.
