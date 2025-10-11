@@ -13,6 +13,8 @@ onboarding:
         node_version="$(cat .nvmrc 2>/dev/null || echo 22.20.0)"
         nvm install "$node_version" >/dev/null
         nvm use "$node_version"
+        nvm install 22.20.0 >/dev/null
+        nvm use 22.20.0
         corepack enable
         corepack prepare pnpm@10.17.1 --activate
     - name: Use shared pnpm wheelhouse
