@@ -10,6 +10,9 @@ onboarding:
       run: |
         export NVM_DIR="/usr/local/share/nvm"
         if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        node_version="$(cat .nvmrc 2>/dev/null || echo 22.20.0)"
+        nvm install "$node_version" >/dev/null
+        nvm use "$node_version"
         nvm install 22.20.0 >/dev/null
         nvm use 22.20.0
         corepack enable
@@ -27,6 +30,8 @@ onboarding:
         export NX_NO_CLOUD=true
         export NX_DAEMON=false
         export NX_NATIVE_ENABLE=false
+        export NX_NATIVE_COMMAND_RUNNER=false
+        export NX_ADD_PLUGINS=false
         run_cmd() {
           log="/tmp/$(printf '%s' "$*" | tr ' /:' '__').log"
           echo "→ Running $*"
@@ -47,9 +52,4 @@ onboarding:
         run_cmd pnpm nx run-many -t typecheck --nx-bail
         run_cmd pnpm nx run-many -t test --nx-bail
         run_cmd pnpm build
-        export NX_NO_CLOUD=true
-        pnpm lint:workspace
-        pnpm nx run-many -t typecheck --nx-bail
-        pnpm nx run-many -t test --nx-bail
-        pnpm build
         pnpm audit --audit-level=high

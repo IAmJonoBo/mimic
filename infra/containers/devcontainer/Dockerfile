@@ -7,6 +7,8 @@ ENV PATH="${NVM_DIR}/versions/node/v${NODE_VERSION}/bin:${PATH}"
 ENV NX_NO_CLOUD=true
 ENV NX_DAEMON=false
 ENV NX_NATIVE_ENABLE=false
+ENV NX_NATIVE_COMMAND_RUNNER=false
+ENV NX_ADD_PLUGINS=false
 
 # Install OS-level dependencies for mobile development prior to dropping root
 RUN apt-get update && apt-get install -y \

@@ -13,9 +13,9 @@ pre-loads a pnpm "wheelhouse" so automation runs can install dependencies offlin
   reaching the public registry.
 - **Rust toolchain** — installed for Tauri and token orchestrator builds.
 - **Android SDK + OpenJDK 17** — supports React Native Android and mobile automation tasks.
-- **Nx native fallback disabled** — environment defaults set `NX_NATIVE_ENABLE=false`, `NX_DAEMON=false`,
-  and `NX_NO_CLOUD=true` to force the JavaScript implementation and avoid the native binary crash logged
-  on 2025-10-11.
+- **Nx native fallback disabled** — environment defaults set `NX_NATIVE_ENABLE=false`, `NX_NATIVE_COMMAND_RUNNER=false`,
+  `NX_ADD_PLUGINS=false`, `NX_DAEMON=false`, and `NX_NO_CLOUD=true` to force the JavaScript implementation
+  and avoid the native binary crash logged on 2025-10-11.
 
 ## Updating the Wheelhouse
 

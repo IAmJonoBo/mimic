@@ -45,6 +45,18 @@
   - 2025-10-12: Confirmed `pnpm lint:workspace` succeeds with the fallback path, but `pnpm nx run-many -t
     typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at ~12m). Capture logs,
     triage the hang, and rerun once formatting diffs are resolved.
+  - 2025-10-13: Installing Node.js 22.20.0 via `.nvmrc` and exporting `NX_NATIVE_COMMAND_RUNNER=false`
+    plus `NX_ADD_PLUGINS=false` lets `pnpm format:check` reach the Biome runner without crashing; the
+    command now lists outstanding formatting updates across docs/apps while `pnpm lint:workspace`
+    completes successfully under the same environment overrides. Investigate whether typecheck/test
+    targets also require the plugin disablement and capture timings once formatting drift is cleared.
+  - 2025-10-13: Redirected `pnpm format*` scripts to direct Biome invocations and pointed `pnpm lint:base`
+    plus `pnpm lint:typed` at Biome/ESLint CLIs so workspace format/lint gates no longer depend on the
+    crashing Nx target. Confirm downstream CI workflows are aligned before retiring the `workspace-format`
+    helper project.
+  - 2025-10-13: `pnpm typecheck` still aborts while Nx builds the project graph even with the new
+    environment overrides; capture the failing spinner/logs and explore `NX_NATIVE_COMMAND_RUNNER=false`
+    patches or alternate orchestration for type safety gates.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
   each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
@@ -100,6 +112,9 @@
   be relied on for enforcement. `NX_DAEMON=false` with Node 22.20.0 still aborts via the Nx native
   binary (exit code 134); investigate forcing the JS fallback or updating the binary in coordination
   with DevOps.
+- Running Nx with `NX_NATIVE_COMMAND_RUNNER=false` and `NX_ADD_PLUGINS=false` bypasses the native graph
+  builder crash, but it may reduce inference coverage/performance. Track upstream fixes so the native
+  path can be restored once stable.
 - Maintain the pnpm wheelhouse (`/opt/pnpm-store`) whenever the lockfile changes so offline installs
   and Copilot workflows remain valid; rebuild the devcontainer after dependency updates.
 - Running Nx in JavaScript mode carries a performance penalty; track the upstream native fix so we can

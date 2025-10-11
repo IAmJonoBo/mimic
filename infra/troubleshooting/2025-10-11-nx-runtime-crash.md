@@ -41,15 +41,22 @@ Aborted
 
 ## Mitigation status — 2025-10-12
 
-- Setting `NX_NATIVE_ENABLE=false` (and keeping `NX_DAEMON=false`) allows the CLI to fall back to the
-  JavaScript implementation. With the native module bypassed, `pnpm format:check` now surfaces
-  formatter diffs instead of aborting with exit 134.
-- Devcontainer defaults and Copilot instructions were updated to export `NX_NATIVE_ENABLE=false`
-  so that humans and agents consistently avoid the unstable native binary while the upstream issue is
+- Setting `NX_NATIVE_ENABLE=false`, `NX_NATIVE_COMMAND_RUNNER=false`, and `NX_ADD_PLUGINS=false`
+  (alongside `NX_DAEMON=false`) forces the CLI to build the project graph with the JavaScript
+  implementation. With the native module and plugin auto-registration bypassed, `pnpm format:check`
+  now surfaces formatter diffs instead of aborting with exit 134.
+- Devcontainer defaults and Copilot instructions were updated to export the same variables so that
+  humans and agents consistently avoid the unstable native binary while the upstream issue is
   investigated.
 - Subsequent runs show `pnpm lint:workspace` succeeding, while `pnpm nx run-many -t typecheck --nx-bail`
   currently stalls after the first wave of projects; further investigation is required to determine if
-  the hang is related to the fallback mode or outstanding formatting drift.
+  the hang is related to the fallback mode, outstanding formatting drift, or additional Nx inference
+  plugins.
+- Workspace scripts now invoke Biome and ESLint CLIs directly (`pnpm exec biome ...`, `pnpm exec eslint ...`)
+  without routing through the `workspace-format` Nx target, sidestepping the crash for format/lint gates
+  while preserving consistent tooling output.
+- `pnpm typecheck` continues to abort while Nx constructs the project graph, so further mitigation is
+  required for type safety gates before CI can rely on them.
 
 ## Next actions
 
