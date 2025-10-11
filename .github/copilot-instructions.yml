@@ -1,0 +1,49 @@
+version: 1
+name: Mimic workspace bootstrap
+onboarding:
+  summary: >-
+    Ensure GitHub Copilot agents and other automation runners hydrate the pnpm wheelhouse
+    before executing quality gates so that lint, test, and build targets do not fail due to
+    missing dependencies or the Node 22.20.0 toolchain.
+  steps:
+    - name: Align Node & pnpm toolchain
+      run: |
+        export NVM_DIR="/usr/local/share/nvm"
+        if [ -s "$NVM_DIR/nvm.sh" ]; then . "$NVM_DIR/nvm.sh"; fi
+        nvm install 22.20.0 >/dev/null
+        nvm use 22.20.0
+        corepack enable
+        corepack prepare pnpm@10.17.1 --activate
+    - name: Use shared pnpm wheelhouse
+      run: |
+        pnpm config set store-dir /opt/pnpm-store --global
+        pnpm fetch --workspace-root
+    - name: Install workspace from wheelhouse
+      run: |
+        pnpm install --frozen-lockfile --prefer-offline
+    - name: Baseline quality verification
+      run: |
+        set -euo pipefail
+        export NX_NO_CLOUD=true
+        export NX_DAEMON=false
+        run_cmd() {
+          log="/tmp/$(printf '%s' "$*" | tr ' /:' '__').log"
+          echo "→ Running $*"
+          if "$@" >"$log" 2>&1; then
+            echo "✔ $*"
+          else
+            status=$?
+            echo "✖ $* (exit $status)"
+            tail -n 200 "$log" || true
+            if [ "$status" -eq 134 ]; then
+              echo "Nx native binary aborted; see infra/troubleshooting/2025-10-11-nx-runtime-crash.md for guidance."
+            fi
+            return $status
+          fi
+        }
+        run_cmd pnpm format:check
+        run_cmd pnpm lint:workspace
+        run_cmd pnpm nx run-many -t typecheck --nx-bail
+        run_cmd pnpm nx run-many -t test --nx-bail
+        run_cmd pnpm build
+        pnpm audit --audit-level=high
