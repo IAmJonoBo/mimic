@@ -63,8 +63,11 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
     adapter packages. Command now completes sequentially via `pnpm -r --workspace-root=false --if-present`
     so the type gate can run without triggering the Nx project graph crash. Keep `pnpm typecheck:nx`
     available as a diagnostic path while upstream fixes incubate.
-- [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
-      each phase.
+  - 2025-10-15: `pnpm typecheck` currently fails under Node 22.19.0 because `packages/shared-utils/tsconfig.json`
+    still sets `"ignoreDeprecations"`, which TypeScript 5.5 rejects. Investigate aligning the compiler version
+    or flag usage so the sequential type gate returns to green.
+- [ ] Coordinate PR template update broadcast with Docs & Release leads so contributor education stays consistent.
+- [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
 - [ ] Update status, owners, and due dates during each planning PR so this file remains authoritative.
 - [ ] Coordinate container runtime upgrade to Node 22.20.0 (DevOps Guild — Week 0) to align with the
