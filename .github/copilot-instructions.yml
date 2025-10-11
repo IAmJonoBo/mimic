@@ -23,6 +23,29 @@ onboarding:
         pnpm install --frozen-lockfile --prefer-offline
     - name: Baseline quality verification
       run: |
+        set -euo pipefail
+        export NX_NO_CLOUD=true
+        export NX_DAEMON=false
+        run_cmd() {
+          log="/tmp/$(printf '%s' "$*" | tr ' /:' '__').log"
+          echo "→ Running $*"
+          if "$@" >"$log" 2>&1; then
+            echo "✔ $*"
+          else
+            status=$?
+            echo "✖ $* (exit $status)"
+            tail -n 200 "$log" || true
+            if [ "$status" -eq 134 ]; then
+              echo "Nx native binary aborted; see infra/troubleshooting/2025-10-11-nx-runtime-crash.md for guidance."
+            fi
+            return $status
+          fi
+        }
+        run_cmd pnpm format:check
+        run_cmd pnpm lint:workspace
+        run_cmd pnpm nx run-many -t typecheck --nx-bail
+        run_cmd pnpm nx run-many -t test --nx-bail
+        run_cmd pnpm build
         export NX_NO_CLOUD=true
         pnpm lint:workspace
         pnpm nx run-many -t typecheck --nx-bail

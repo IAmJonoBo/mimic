@@ -34,6 +34,10 @@
   - 2025-10-12: Provisioned a pnpm wheelhouse via the devcontainer build (`/opt/pnpm-store`) and added
     Copilot onboarding instructions so automation can hydrate dependencies offline before rerunning the
     gates once the Node 22.20.0 image lands.
+  - 2025-10-11: Re-tested `pnpm format:check`, `pnpm lint:workspace`, and `pnpm nx run-many -t typecheck`
+    under `nvm use 22.20.0` (`NX_DAEMON=false`)—all abort as the Nx native binary initialises the project
+    graph (exit code 134 / SIGABRT). Captured logs in `infra/troubleshooting/2025-10-11-nx-runtime-crash.md`
+    for DevOps triage and flagged the need to validate Nx without the native binary.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
   each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
@@ -74,6 +78,7 @@
 - [Development Guide](DEVELOPMENT.md)
 - [Devcontainer Runtime & Wheelhouse](infra/containers/devcontainer/README.md)
 - [Copilot Wheelhouse Instructions](.github/copilot-instructions.yml)
+- [Nx Runtime Crash Log](infra/troubleshooting/2025-10-11-nx-runtime-crash.md)
 
 ## Risks / Notes
 
@@ -85,7 +90,9 @@
 - `pnpm nx run-many -t test` and workspace-level lint/format commands triggered shell crashes during
   baseline verification while Nx built the project graph on Node 22.19.0; capture logs under
   `infra/` troubleshooting and stabilise the command path once the runtime upgrade lands so gates can
-  be relied on for enforcement.
+  be relied on for enforcement. `NX_DAEMON=false` with Node 22.20.0 still aborts via the Nx native
+  binary (exit code 134); investigate forcing the JS fallback or updating the binary in coordination
+  with DevOps.
 - Maintain the pnpm wheelhouse (`/opt/pnpm-store`) whenever the lockfile changes so offline installs
   and Copilot workflows remain valid; rebuild the devcontainer after dependency updates.
 - Maintain this ledger in every planning PR to preserve alignment across squads and keep downstream templates accurate.
