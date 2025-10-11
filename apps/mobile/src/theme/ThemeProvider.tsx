@@ -5,11 +5,11 @@
  * with collision-prevention architecture and proper namespace prefixing.
  */
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { Appearance, useColorScheme } from 'react-native';
-
 // Import design tokens with collision-safe paths
 import * as tokens from '@mimic/design-tokens/react-native';
+import type { FC, PropsWithChildren } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Appearance, useColorScheme } from 'react-native';
 
 interface ThemeContextType {
   theme: 'light' | 'dark';
@@ -19,26 +19,21 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const systemColorScheme = useColorScheme();
-  const [userTheme, setUserTheme] = useState<'light' | 'dark' | 'system'>(
-    'system'
-  );
+type ThemeProviderProps = PropsWithChildren;
 
-  const theme =
-    userTheme === 'system' ? systemColorScheme || 'light' : userTheme;
+export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
+  const systemColorScheme = useColorScheme();
+  const [userTheme, setUserTheme] = useState<'light' | 'dark' | 'system'>('system');
+
+  const theme = userTheme === 'system' ? systemColorScheme || 'light' : userTheme;
 
   // Listen for system theme changes
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(
-      ({ colorScheme: _colorScheme }) => {
-        if (userTheme === 'system') {
-          // Theme will update automatically via systemColorScheme
-        }
+    const subscription = Appearance.addChangeListener(({ colorScheme: _colorScheme }) => {
+      if (userTheme === 'system') {
+        // Theme will update automatically via systemColorScheme
       }
-    );
+    });
 
     return () => subscription?.remove();
   }, [userTheme]);
@@ -49,11 +44,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     setTheme: setUserTheme,
   };
 
-  return (
-    <ThemeContext.Provider value={contextValue}>
-      {children}
-    </ThemeContext.Provider>
-  );
+  return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
 };
 
 export const useTheme = (): ThemeContextType => {
@@ -71,23 +62,23 @@ export const useTheme = (): ThemeContextType => {
 export const useTokens = () => {
   const { tokens } = useTheme();
 
-  const getToken = (
-    tokenPath: string,
-    fallback?: string | number
-  ): string | number | undefined => {
+  const getToken = (tokenPath: string, fallback?: string | number): string | number | undefined => {
     const keys = tokenPath.split('.');
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    let value: any = tokens;
+    let value: unknown = tokens;
 
     for (const key of keys) {
-      if (value && typeof value === 'object' && key in value) {
-        value = value[key];
+      if (value !== null && typeof value === 'object' && key in (value as Record<string, unknown>)) {
+        value = (value as Record<string, unknown>)[key];
       } else {
         return fallback;
       }
     }
 
-    return value ?? fallback;
+    if (typeof value === 'string' || typeof value === 'number') {
+      return value;
+    }
+
+    return fallback;
   };
 
   return {

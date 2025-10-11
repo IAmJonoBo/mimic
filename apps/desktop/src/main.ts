@@ -10,7 +10,13 @@ import '@mimic/design-tokens/css';
 import './style.css';
 
 // Initialize the desktop app
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
+const appRoot = document.querySelector<HTMLDivElement>('#app');
+
+if (!appRoot) {
+  throw new Error('Desktop shell failed to locate #app root element');
+}
+
+appRoot.innerHTML = `
   <div class="container">
     <header class="header">
       <h1 class="title">Mimic Design Tokens</h1>
@@ -70,7 +76,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `;
 
 // Add interaction handlers
-document.querySelectorAll('.btn').forEach(button => {
+document.querySelectorAll('.btn').forEach((button) => {
   button.addEventListener('click', () => {
     console.log(`Button clicked: ${button.textContent}`);
   });

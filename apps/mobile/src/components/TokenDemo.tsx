@@ -5,12 +5,12 @@
  * architecture showing ds- prefixed tokens working correctly.
  */
 
-import React from 'react';
-import { StyleSheet,Text, View } from 'react-native';
+import type { FC } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { useTokens } from '../theme/ThemeProvider';
 
-export const TokenDemo: React.FC = () => {
+export const TokenDemo: FC = () => {
   const { getToken } = useTokens();
 
   return (
@@ -22,10 +22,7 @@ export const TokenDemo: React.FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: getToken(
-                'color.primary_500',
-                '#3b82f6'
-              ) as string,
+              backgroundColor: getToken('color.primary_500', '#3b82f6') as string,
             },
           ]}
         />
@@ -37,10 +34,7 @@ export const TokenDemo: React.FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: getToken(
-                'color.secondary_500',
-                '#22c55e'
-              ) as string,
+              backgroundColor: getToken('color.secondary_500', '#22c55e') as string,
             },
           ]}
         />
@@ -59,12 +53,8 @@ export const TokenDemo: React.FC = () => {
           style={[
             styles.typographyText,
             {
-              fontSize:
-                (getToken('typography.fontSize_lg', 1.125) as number) * 16,
-              fontWeight: getToken(
-                'typography.fontWeight_medium',
-                '500'
-              ) as string,
+              fontSize: (getToken('typography.fontSize_lg', 1.125) as number) * 16,
+              fontWeight: getToken('typography.fontWeight_medium', '500') as string,
             },
           ]}
         >
