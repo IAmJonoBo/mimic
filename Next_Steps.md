@@ -31,12 +31,17 @@
   - 2025-10-11: Initial audit attempt on Node 22.19.0 saw `pnpm format:check` and `pnpm lint:workspace`
     crash the terminal while Nx constructed the project graph after emitting engine mismatch warnings;
     rerun once the container runtime upgrades to Node 22.20.0 and capture full logs for the ledger.
+  - 2025-10-12: Provisioned a pnpm wheelhouse via the devcontainer build (`/opt/pnpm-store`) and added
+    Copilot onboarding instructions so automation can hydrate dependencies offline before rerunning the
+    gates once the Node 22.20.0 image lands.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
   each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
 - [ ] Update status, owners, and due dates during each planning PR so this file remains authoritative.
 - [ ] Coordinate container runtime upgrade to Node 22.20.0 (DevOps Guild — Week 0) to align with the
   repository engine requirement and unblock baseline automation verification.
+- [ ] Ensure Copilot workspace instructions stay in sync with toolchain changes (DevOps Guild — Ongoing)
+  so AI agents continue to run installs from the shared wheelhouse before executing gates.
 
 ## Deliverables
 
@@ -67,6 +72,8 @@
 - [Sprint Roadmap](docs/SPRINT_PLAN.md)
 - [CI Overview](docs/devops/ci-overview.md)
 - [Development Guide](DEVELOPMENT.md)
+- [Devcontainer Runtime & Wheelhouse](infra/containers/devcontainer/README.md)
+- [Copilot Wheelhouse Instructions](.github/copilot-instructions.yml)
 
 ## Risks / Notes
 
@@ -79,4 +86,6 @@
   baseline verification while Nx built the project graph on Node 22.19.0; capture logs under
   `infra/` troubleshooting and stabilise the command path once the runtime upgrade lands so gates can
   be relied on for enforcement.
+- Maintain the pnpm wheelhouse (`/opt/pnpm-store`) whenever the lockfile changes so offline installs
+  and Copilot workflows remain valid; rebuild the devcontainer after dependency updates.
 - Maintain this ledger in every planning PR to preserve alignment across squads and keep downstream templates accurate.
