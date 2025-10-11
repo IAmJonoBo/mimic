@@ -17,7 +17,7 @@ onboarding:
     - name: Use shared pnpm wheelhouse
       run: |
         pnpm config set store-dir /opt/pnpm-store --global
-        pnpm fetch --workspace-root
+        pnpm fetch --workspace-root --prod --dev
     - name: Install workspace from wheelhouse
       run: |
         pnpm install --frozen-lockfile --prefer-offline
@@ -26,6 +26,7 @@ onboarding:
         set -euo pipefail
         export NX_NO_CLOUD=true
         export NX_DAEMON=false
+        export NX_NATIVE_ENABLE=false
         run_cmd() {
           log="/tmp/$(printf '%s' "$*" | tr ' /:' '__').log"
           echo "→ Running $*"

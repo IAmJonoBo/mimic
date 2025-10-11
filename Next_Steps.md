@@ -31,13 +31,20 @@
   - 2025-10-11: Initial audit attempt on Node 22.19.0 saw `pnpm format:check` and `pnpm lint:workspace`
     crash the terminal while Nx constructed the project graph after emitting engine mismatch warnings;
     rerun once the container runtime upgrades to Node 22.20.0 and capture full logs for the ledger.
-  - 2025-10-12: Provisioned a pnpm wheelhouse via the devcontainer build (`/opt/pnpm-store`) and added
-    Copilot onboarding instructions so automation can hydrate dependencies offline before rerunning the
-    gates once the Node 22.20.0 image lands.
+  - 2025-10-12: Provisioned a pnpm wheelhouse via the devcontainer build (`/opt/pnpm-store`) with
+    `pnpm fetch --prod --dev` and added Copilot onboarding instructions so automation can hydrate
+    dependencies offline before rerunning the gates once the Node 22.20.0 image lands.
   - 2025-10-11: Re-tested `pnpm format:check`, `pnpm lint:workspace`, and `pnpm nx run-many -t typecheck`
     under `nvm use 22.20.0` (`NX_DAEMON=false`)—all abort as the Nx native binary initialises the project
     graph (exit code 134 / SIGABRT). Captured logs in `infra/troubleshooting/2025-10-11-nx-runtime-crash.md`
     for DevOps triage and flagged the need to validate Nx without the native binary.
+  - 2025-10-12: Forced Nx to use the JavaScript implementation by exporting `NX_NATIVE_ENABLE=false` in the
+    devcontainer and Copilot bootstrap. `pnpm format:check` now exits cleanly and reports 21 Biome
+    formatting/import-order violations across apps/web/mobile/desktop instead of crashing; next rerun
+    needs those fixes so lint/type/test gates can proceed.
+  - 2025-10-12: Confirmed `pnpm lint:workspace` succeeds with the fallback path, but `pnpm nx run-many -t
+    typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at ~12m). Capture logs,
+    triage the hang, and rerun once formatting diffs are resolved.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
   each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
@@ -95,4 +102,8 @@
   with DevOps.
 - Maintain the pnpm wheelhouse (`/opt/pnpm-store`) whenever the lockfile changes so offline installs
   and Copilot workflows remain valid; rebuild the devcontainer after dependency updates.
+- Running Nx in JavaScript mode carries a performance penalty; track the upstream native fix so we can
+  restore the faster path once available and update automation guidance accordingly.
+- Typecheck target currently stalls under the JavaScript fallback after the initial batch of projects;
+  monitor reruns and capture profiling data if the hang persists beyond formatting cleanup.
 - Maintain this ledger in every planning PR to preserve alignment across squads and keep downstream templates accurate.

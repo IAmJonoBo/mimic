@@ -8,11 +8,14 @@ pre-loads a pnpm "wheelhouse" so automation runs can install dependencies offlin
 - **Node.js 22.20.0 via nvm** — matches the `engines` field declared in `package.json` and the CI
   runners.
 - **pnpm 10.17.1** — activated through Corepack for deterministic installs.
-- **Shared pnpm store (`/opt/pnpm-store`)** — populated at build time with `pnpm fetch` so that
-  containers, GitHub Codespaces, and Copilot agents can run `pnpm install --prefer-offline` without
+- **Shared pnpm store (`/opt/pnpm-store`)** — populated at build time with `pnpm fetch --prod --dev`
+  so that containers, GitHub Codespaces, and Copilot agents can run `pnpm install --prefer-offline` without
   reaching the public registry.
 - **Rust toolchain** — installed for Tauri and token orchestrator builds.
 - **Android SDK + OpenJDK 17** — supports React Native Android and mobile automation tasks.
+- **Nx native fallback disabled** — environment defaults set `NX_NATIVE_ENABLE=false`, `NX_DAEMON=false`,
+  and `NX_NO_CLOUD=true` to force the JavaScript implementation and avoid the native binary crash logged
+  on 2025-10-11.
 
 ## Updating the Wheelhouse
 

@@ -39,9 +39,23 @@ Aborted
 
 `pnpm lint:workspace` exhibits the same failure while Nx is constructing the project graph for `workspace-format:lint:base`.
 
+## Mitigation status — 2025-10-12
+
+- Setting `NX_NATIVE_ENABLE=false` (and keeping `NX_DAEMON=false`) allows the CLI to fall back to the
+  JavaScript implementation. With the native module bypassed, `pnpm format:check` now surfaces
+  formatter diffs instead of aborting with exit 134.
+- Devcontainer defaults and Copilot instructions were updated to export `NX_NATIVE_ENABLE=false`
+  so that humans and agents consistently avoid the unstable native binary while the upstream issue is
+  investigated.
+- Subsequent runs show `pnpm lint:workspace` succeeding, while `pnpm nx run-many -t typecheck --nx-bail`
+  currently stalls after the first wave of projects; further investigation is required to determine if
+  the hang is related to the fallback mode or outstanding formatting drift.
+
 ## Next actions
 
-- [ ] Investigate Nx native binary compatibility with the Debian Bookworm base image and Node.js 22.20.0.
-- [ ] Try forcing the JavaScript implementation by setting `NX_SKIP_NX_CACHE=true` and
-      `NX_NATIVE_LOGGING=false`, or pinning Nx to a patched release if available.
-- [ ] Escalate to the DevOps Guild once repro steps and logs are attached to a tracking issue.
+- [ ] Verify all Nx-based quality gates (format, lint, typecheck, test, build) complete successfully
+      with the JavaScript fallback and capture their timings for regression tracking.
+- [ ] Engage the Nx maintainers with the captured native crash logs to determine whether a patched
+      release or alternative configuration can restore native performance on Debian Bookworm.
+- [ ] Remove the forced fallback once an upstream fix is confirmed, updating devcontainer and Copilot
+      guidance accordingly.
