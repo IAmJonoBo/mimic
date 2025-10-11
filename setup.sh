@@ -15,7 +15,7 @@ if command -v nvm >/dev/null 2>&1; then
 		nvm use
 	fi
 else
-	echo "ℹ️ nvm not found; ensure your Node version matches $(cat .nvmrc 2>/dev/null || echo '22.19.0')"
+        echo "ℹ️ nvm not found; ensure your Node version matches $(cat .nvmrc 2>/dev/null || echo '22.20.0')"
 fi
 
 # Enable corepack and prepare pnpm

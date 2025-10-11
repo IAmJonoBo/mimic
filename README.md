@@ -56,8 +56,8 @@ Refer to [`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md) fo
 
 ### Prerequisites
 
-- Node.js 22.19.0 (run `nvm use` after `./setup.sh`)
-- pnpm 10.17 (`corepack enable && corepack prepare pnpm@10.17.0 --activate`)
+- Node.js 22.20.0 (run `nvm use` after `./setup.sh`)
+- pnpm 10.17.1 (`corepack enable && corepack prepare pnpm@10.17.1 --activate`)
 - Rust (toolchains for the token orchestrator and Tauri)
 - Docker (Penpot + automation stack)
 - Platform SDKs as needed: Android Studio, Xcode, or Tauri dependencies

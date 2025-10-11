@@ -21,7 +21,7 @@ We follow the [Contributor Covenant](CODE_OF_CONDUCT.md). Be kind, inclusive, an
    git remote add upstream https://github.com/IAmJonoBo/mimic.git
    ```
 
-4. **Bootstrap once** — `./setup.sh` installs Node 22.19, pnpm 10.17, Husky hooks, and workspace deps.
+4. **Bootstrap once** — `./setup.sh` installs Node 22.20, pnpm 10.17.1, Husky hooks, and workspace deps.
 
 ## Local Development
 

@@ -200,7 +200,7 @@ mimic/
 | [ ] | Finalise new workspace layout (`apps/`, `packages/`, `infra/`, `toolchains/`) | Platform | Phase 0 |
 | [ ] | Establish SLO baseline (build <=5 min, drift MTTR, visual escape rate, doc freshness) | Platform/QA | Phase 0 |
 | [ ] | Stand up shared config presets (TS, ESLint, Biome, Stylelint, Vitest) in `toolchains/` | Platform | |
-| [ ] | Configure Nx 22 + pnpm 10.17 + Node 22.19 baselines across CI/devcontainers | DevOps | |
+| [ ] | Configure Nx 22 + pnpm 10.17.1 + Node 22.20 baselines across CI/devcontainers | DevOps | |
 | [ ] | Introduce CODEOWNERS + `just` command catalogue + PR templates referencing metrics | DevRel | |
 | [ ] | Publish contributor playbook updates (setup, scripts, justfile) | DevRel | |
 
