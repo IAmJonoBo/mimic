@@ -60,16 +60,16 @@ font-size: var(--ds-typography-fontSize-lg, 1.125rem);
 ```markdown
 apps/desktop/
 ├── src/
-│   ├── main.ts            # Frontend entry point
-│   └── style.css          # Design token styles
+│ ├── main.ts # Frontend entry point
+│ └── style.css # Design token styles
 ├── src-tauri/
-│   ├── src/
-│   │   ├── main.rs        # Rust main entry
-│   │   └── lib.rs         # Tauri app logic
-│   ├── Cargo.toml         # Rust dependencies
-│   └── tauri.conf.json    # Tauri configuration
-├── index.html             # HTML entry point
-└── package.json           # Node.js dependencies
+│ ├── src/
+│ │ ├── main.rs # Rust main entry
+│ │ └── lib.rs # Tauri app logic
+│ ├── Cargo.toml # Rust dependencies
+│ └── tauri.conf.json # Tauri configuration
+├── index.html # HTML entry point
+└── package.json # Node.js dependencies
 ```
 
 ## Design Token Demo

@@ -28,11 +28,11 @@ echo "📋 Checking advanced documentation files..."
 missing_files=()
 
 for doc in "${ADVANCED_DOCS[@]}"; do
-  if [[ -f "$doc" ]]; then
-    echo "✅ $doc"
+  if [[ -f "${doc}" ]]; then
+    echo "✅ ${doc}"
   else
-    echo "❌ $doc (missing)"
-    missing_files+=("$doc")
+    echo "❌ ${doc} (missing)"
+    missing_files+=("${doc}")
   fi
 done
 
@@ -52,9 +52,9 @@ missing_links=()
 
 for doc in "${ADVANCED_DOCS[@]}"; do
   # Extract filename for link checking
-  filename=$(basename "$doc")
-  if ! grep -q "$filename" "$MAIN_README"; then
-    missing_links+=("$doc")
+  filename=$(basename "${doc}")
+  if ! grep -q "${filename}" "${MAIN_README}"; then
+    missing_links+=("${doc}")
   fi
 done
 
@@ -76,14 +76,14 @@ PACKAGE_READMES=(
 )
 
 for readme in "${PACKAGE_READMES[@]}"; do
-  if [[ -f "$readme" ]]; then
-    if grep -q "Advanced Documentation" "$readme"; then
-      echo "✅ $readme has advanced documentation section"
+  if [[ -f "${readme}" ]]; then
+    if grep -q "Advanced Documentation" "${readme}"; then
+      echo "✅ ${readme} has advanced documentation section"
     else
-      echo "⚠️  $readme missing advanced documentation section"
+      echo "⚠️  ${readme} missing advanced documentation section"
     fi
   else
-    echo "❌ $readme not found"
+    echo "❌ ${readme} not found"
   fi
 done
 
@@ -93,7 +93,7 @@ echo "🎯 Checking for TODO items in documentation..."
 # Check for remaining TODO items
 todo_files=$(find docs -name "*.md" -exec grep -l "TODO\|FIXME\|XXX" {} \; 2>/dev/null || true)
 
-if [[ -n "$todo_files" ]]; then
+if [[ -n $todo_files ]]; then
   echo "📝 Files with TODO items:"
   echo "$todo_files"
   echo ""
@@ -106,7 +106,8 @@ fi
 echo ""
 echo "📊 Documentation statistics:"
 echo "   Advanced docs: ${#ADVANCED_DOCS[@]}"
-echo "   Total docs: $(find docs -name "*.md" | wc -l | tr -d ' ')"
+total_docs=$(find docs -name "*.md" | wc -l | tr -d ' ' || true)
+echo "   Total docs: ${total_docs}"
 echo "   Package READMEs: ${#PACKAGE_READMES[@]}"
 
 echo ""

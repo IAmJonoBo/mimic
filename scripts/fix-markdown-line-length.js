@@ -114,9 +114,27 @@ async function main() {
   console.log('🔧 Automated Markdown Line Length Fixer\n');
 
   // Get all markdown files (excluding node_modules, etc.)
-  const files = await glob(['README.md', 'CONTRIBUTING.md', 'DEVELOPMENT.md', 'docs/**/*.md', 'packages/**/*.md', '.github/**/*.md'], {
-    ignore: ['**/node_modules/**', '**/dist/**', '**/build/**', '**/.nx/**', '**/CHANGELOG*.md', '**/*_COMPLETE.md', '**/*_SUMMARY.md'],
-  });
+  const files = await glob(
+    [
+      'README.md',
+      'CONTRIBUTING.md',
+      'DEVELOPMENT.md',
+      'docs/**/*.md',
+      'packages/**/*.md',
+      '.github/**/*.md',
+    ],
+    {
+      ignore: [
+        '**/node_modules/**',
+        '**/dist/**',
+        '**/build/**',
+        '**/.nx/**',
+        '**/CHANGELOG*.md',
+        '**/*_COMPLETE.md',
+        '**/*_SUMMARY.md',
+      ],
+    }
+  );
 
   console.log(`Found ${files.length} markdown files to process\n`);
 

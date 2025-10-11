@@ -26,9 +26,9 @@
 2. **Apply**: Let Renovate or humans update dependencies. Post-upgrade hooks automatically execute `pnpm run
 upgrade:verify` to build, lint, and test the workspace under the new toolchain.
 3. **Observe**: Failures are surfaced in Renovate PRs and in local runs; `Next_Steps.md` tracks outstanding remediation
-items for visibility.
+   items for visibility.
 4. **Stabilise**: Successful verifications keep the lockfile and workspace in a releasable state, enabling automated
-merges for minor and patch updates.
+   merges for minor and patch updates.
 
 > 📌 **Note**: Nx Cloud is disabled via `neverConnectToCloud` in `nx.json` and script-level `NX_NO_CLOUD=true` so
-automation works reliably in air-gapped or proxied environments.
+> automation works reliably in air-gapped or proxied environments.

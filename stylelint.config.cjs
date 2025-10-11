@@ -6,7 +6,15 @@ module.exports = {
     'at-rule-no-unknown': [
       true,
       {
-        ignoreAtRules: ['tailwind', 'apply', 'variants', 'responsive', 'screen', 'layer', 'config'],
+        ignoreAtRules: [
+          'tailwind',
+          'apply',
+          'variants',
+          'responsive',
+          'screen',
+          'layer',
+          'config',
+        ],
       },
     ],
     // Allow custom properties for design tokens
@@ -27,7 +35,13 @@ module.exports = {
     'function-no-unknown': [
       true,
       {
-        ignoreFunctions: ['theme', 'screen', 'oklch', 'color-mix', 'light-dark'],
+        ignoreFunctions: [
+          'theme',
+          'screen',
+          'oklch',
+          'color-mix',
+          'light-dark',
+        ],
       },
     ],
     // Allow CSS nesting

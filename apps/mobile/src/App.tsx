@@ -6,7 +6,14 @@
  */
 
 import type { FC } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import {
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 
 import { ButtonDemo } from './components/ButtonDemo';
 import { TokenDemo } from './components/TokenDemo';
@@ -17,10 +24,15 @@ const App: FC = () => {
     <ThemeProvider>
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor="#fafafa" />
-        <ScrollView contentInsetAdjustmentBehavior="automatic" style={styles.scrollView}>
+        <ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          style={styles.scrollView}
+        >
           <View style={styles.content}>
             <Text style={styles.title}>Mimic Design Tokens</Text>
-            <Text style={styles.subtitle}>React Native with Collision-Prevention Architecture</Text>
+            <Text style={styles.subtitle}>
+              React Native with Collision-Prevention Architecture
+            </Text>
 
             <TokenDemo />
             <ButtonDemo />

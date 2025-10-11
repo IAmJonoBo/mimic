@@ -12,7 +12,7 @@ you need to create professional, accessible designs.
 
 ### 1. [Design Principles Guide](./DESIGN_PRINCIPLES.md)
 
-**Essential foundations for professional design**
+### Essential foundations for professional design
 
 Learn the core principles that make designs effective:
 
@@ -33,7 +33,7 @@ Learn the core principles that make designs effective:
 
 ### 2. [Typography System](./TYPOGRAPHY_SYSTEM.md)
 
-**Master the art of type**
+#### Master the art of type
 
 Everything you need to know about typography:
 
@@ -46,13 +46,13 @@ Everything you need to know about typography:
 - Responsive typography
 - Accessibility considerations
 
-**65+ code examples with design tokens**
+### 65+ code examples with design tokens
 
 ---
 
 ### 3. [Color Theory Guide](./COLOR_THEORY.md)
 
-**Create stunning, accessible color palettes**
+### Create stunning, accessible color palettes
 
 Comprehensive color theory and application:
 
@@ -65,13 +65,13 @@ Comprehensive color theory and application:
 - Semantic token mapping
 - Color blindness considerations
 
-**Build palettes that work for everyone**
+### Build palettes that work for everyone
 
 ---
 
 ### 4. [Layout Systems Guide](./LAYOUT_SYSTEMS.md)
 
-**Structure interfaces with proven patterns**
+### Structure interfaces with proven patterns
 
 Master layout principles and systems:
 
@@ -84,13 +84,13 @@ Master layout principles and systems:
 - Flexbox vs Grid guidance
 - Container queries
 
-**Create balanced, professional layouts**
+### Create balanced, professional layouts
 
 ---
 
 ### 5. [Accessibility Guidelines](./ACCESSIBILITY_GUIDE.md)
 
-**Build inclusive interfaces for everyone**
+### Build inclusive interfaces for everyone
 
 Make your designs accessible to all users:
 
@@ -111,7 +111,7 @@ Make your designs accessible to all users:
 
 ### 6. [AI Design Assistant](./AI_DESIGN_ASSISTANT.md)
 
-**Leverage AI to enhance your workflow**
+### Leverage AI to enhance your workflow
 
 Use AI to accelerate design decisions:
 
@@ -123,7 +123,7 @@ Use AI to accelerate design decisions:
 - Design critique and feedback
 - Typography pairing suggestions
 
-**Local AI (Ollama) or cloud (OpenAI, Copilot)**
+### Local AI (Ollama) or cloud (OpenAI, Copilot)
 
 ---
 
@@ -131,7 +131,7 @@ Use AI to accelerate design decisions:
 
 ### 7. [Wireframing & Prototyping](./WIREFRAMING_PROTOTYPING.md)
 
-**From concept to interactive prototype**
+### From concept to interactive prototype
 
 Create wireframes and prototypes efficiently:
 
@@ -144,13 +144,13 @@ Create wireframes and prototypes efficiently:
 - User testing tools
 - Export to production code
 
-**20,000+ words covering the complete workflow**
+### 20,000+ words covering the complete workflow
 
 ---
 
 ### 8. [Component Patterns](./COMPONENT_PATTERNS.md)
 
-**Proven patterns for common UI challenges**
+### Proven patterns for common UI challenges
 
 Master component architecture patterns:
 
@@ -164,7 +164,7 @@ Master component architecture patterns:
 - Modal and overlay patterns
 - Navigation patterns
 
-**18,000+ words of implementation examples**
+### 18,000+ words of implementation examples
 
 ---
 
@@ -392,6 +392,6 @@ All documentation is licensed under MIT License.
 
 ---
 
-**Built with ❤️ by the Mimic community**
+### Built with ❤️ by the Mimic community
 
-*Last updated: 2025-10-11*
+#### Last updated: 2025-10-11

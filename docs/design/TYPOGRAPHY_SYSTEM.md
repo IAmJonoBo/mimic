@@ -199,36 +199,36 @@ A type scale is a progression of font sizes that creates visual harmony. Common 
 
 Based on mathematical ratios:
 
-**Golden Ratio (1.618)**
+#### Golden Ratio (1.618)
 
 ```typescript
 // Perfect Fifth scale
 const goldenScale = {
-  xs: '0.75rem',    // 12px
-  sm: '0.875rem',   // 14px
-  base: '1rem',     // 16px
-  lg: '1.125rem',   // 18px
-  xl: '1.25rem',    // 20px
-  '2xl': '1.5rem',  // 24px
-  '3xl': '1.875rem',// 30px
+  xs: '0.75rem', // 12px
+  sm: '0.875rem', // 14px
+  base: '1rem', // 16px
+  lg: '1.125rem', // 18px
+  xl: '1.25rem', // 20px
+  '2xl': '1.5rem', // 24px
+  '3xl': '1.875rem', // 30px
   '4xl': '2.25rem', // 36px
-  '5xl': '3rem',    // 48px
+  '5xl': '3rem', // 48px
 };
 ```
 
-**Major Third (1.25)**
+#### Major Third (1.25)
 
 ```typescript
 // More subtle progression
 const majorThird = {
-  xs: '0.8rem',     // 12.8px
-  sm: '0.9rem',     // 14.4px
-  base: '1rem',     // 16px
-  lg: '1.125rem',   // 18px
-  xl: '1.25rem',    // 20px
-  '2xl': '1.563rem',// 25px
-  '3xl': '1.953rem',// 31.2px
-  '4xl': '2.441rem',// 39px
+  xs: '0.8rem', // 12.8px
+  sm: '0.9rem', // 14.4px
+  base: '1rem', // 16px
+  lg: '1.125rem', // 18px
+  xl: '1.25rem', // 20px
+  '2xl': '1.563rem', // 25px
+  '3xl': '1.953rem', // 31.2px
+  '4xl': '2.441rem', // 39px
 };
 ```
 
@@ -246,7 +246,7 @@ const typeSystem = {
     lineHeight: '1.1',
     letterSpacing: '-0.02em',
   },
-  
+
   // Headings
   h1: {
     fontSize: getToken('font.size.4xl'),
@@ -274,7 +274,7 @@ const typeSystem = {
     fontWeight: getToken('font.weight.semibold'),
     lineHeight: '1.5',
   },
-  
+
   // Body text
   bodyLarge: {
     fontSize: getToken('font.size.lg'),
@@ -291,7 +291,7 @@ const typeSystem = {
     fontWeight: getToken('font.weight.normal'),
     lineHeight: '1.5',
   },
-  
+
   // UI text
   caption: {
     fontSize: getToken('font.size.xs'),
@@ -305,7 +305,7 @@ const typeSystem = {
     letterSpacing: '0.1em',
     lineHeight: '1.4',
   },
-  
+
   // Code
   code: {
     fontFamily: getToken('font.family.mono'),
@@ -339,9 +339,9 @@ const typeSystem = {
 
 ```typescript
 const lineHeights = {
-  tight: '1.2',   // Headings
-  normal: '1.5',  // Body
-  relaxed: '1.75',// Large text blocks
+  tight: '1.2', // Headings
+  normal: '1.5', // Body
+  relaxed: '1.75', // Large text blocks
 };
 ```
 
@@ -354,10 +354,10 @@ const lineHeights = {
 
 ```typescript
 const letterSpacing = {
-  tight: '-0.02em',   // Large headings
-  normal: '0',        // Body text
-  wide: '0.05em',     // All caps, small text
-  wider: '0.1em',     // Overline, labels
+  tight: '-0.02em', // Large headings
+  normal: '0', // Body text
+  wide: '0.05em', // All caps, small text
+  wider: '0.1em', // Overline, labels
 };
 ```
 
@@ -368,9 +368,9 @@ const letterSpacing = {
 ```typescript
 // High contrast for body text
 const textColors = {
-  primary: getToken('color.text.primary'),     // 900 on 50 (16.7:1)
+  primary: getToken('color.text.primary'), // 900 on 50 (16.7:1)
   secondary: getToken('color.text.secondary'), // 700 on 50 (8.2:1)
-  disabled: getToken('color.text.disabled'),   // 400 on 50 (4.6:1)
+  disabled: getToken('color.text.disabled'), // 400 on 50 (4.6:1)
 };
 
 // Size matters: smaller text needs higher contrast
@@ -389,10 +389,10 @@ const largeText = {
 
 #### Minimum Contrast Ratios (WCAG)
 
-| Text Size | AA | AAA |
-|-----------|-----|-----|
-| Small text (<18px normal, <14px bold) | 4.5:1 | 7:1 |
-| Large text (≥18px normal, ≥14px bold) | 3:1 | 4.5:1 |
+| Text Size                             | AA    | AAA   |
+| ------------------------------------- | ----- | ----- |
+| Small text (<18px normal, <14px bold) | 4.5:1 | 7:1   |
+| Large text (≥18px normal, ≥14px bold) | 3:1   | 4.5:1 |
 
 ## Responsive Typography
 
@@ -404,17 +404,17 @@ Scale typography smoothly across screen sizes:
 /* Fluid type scale using clamp() */
 .heading-1 {
   font-size: clamp(
-    2rem,          /* Min: 32px on mobile */
-    5vw + 1rem,    /* Scales with viewport */
-    3.5rem         /* Max: 56px on desktop */
+    2rem,
+    /* Min: 32px on mobile */ 5vw + 1rem,
+    /* Scales with viewport */ 3.5rem /* Max: 56px on desktop */
   );
 }
 
 .body-text {
   font-size: clamp(
-    1rem,          /* Min: 16px */
-    2vw + 0.5rem,  /* Scales */
-    1.125rem       /* Max: 18px */
+    1rem,
+    /* Min: 16px */ 2vw + 0.5rem,
+    /* Scales */ 1.125rem /* Max: 18px */
   );
 }
 ```
@@ -428,24 +428,24 @@ const responsiveType = {
     // Mobile
     fontSize: getToken('font.size.2xl'),
     lineHeight: '1.2',
-    
+
     // Tablet
     '@media (min-width: 768px)': {
       fontSize: getToken('font.size.3xl'),
     },
-    
+
     // Desktop
     '@media (min-width: 1024px)': {
       fontSize: getToken('font.size.4xl'),
       lineHeight: '1.1',
     },
   },
-  
+
   body: {
     // Mobile
     fontSize: getToken('font.size.base'),
     lineHeight: '1.6',
-    
+
     // Desktop - slightly larger
     '@media (min-width: 1024px)': {
       fontSize: getToken('font.size.lg'),
@@ -500,7 +500,7 @@ const Body = styled.p`
   --font-sans: var(--ds-font-family-sans);
   --font-serif: var(--ds-font-family-serif);
   --font-mono: var(--ds-font-family-mono);
-  
+
   /* Font sizes */
   --text-xs: var(--ds-font-size-xs);
   --text-sm: var(--ds-font-size-sm);
@@ -510,7 +510,7 @@ const Body = styled.p`
   --text-2xl: var(--ds-font-size-2xl);
   --text-3xl: var(--ds-font-size-3xl);
   --text-4xl: var(--ds-font-size-4xl);
-  
+
   /* Font weights */
   --font-normal: var(--ds-font-weight-normal);
   --font-medium: var(--ds-font-weight-medium);
@@ -605,10 +605,10 @@ Modern browsers support variable fonts with adjustable weight, width, and slant:
 const fontLoadStrategy = {
   // Preload critical fonts
   critical: ['font-sans-regular', 'font-sans-bold'],
-  
+
   // Lazy load decorative fonts
   deferred: ['font-serif', 'font-display'],
-  
+
   // System font fallbacks
   fallback: {
     sans: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto',

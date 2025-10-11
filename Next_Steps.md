@@ -25,10 +25,10 @@
 ## Steps
 
 - [ ] Validate baseline automation commands (DevOps Guild — Week 0) to confirm `pnpm lint:workspace`,
-  `pnpm typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
-  `pnpm nx run-many -t typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
-  `pnpm nx run design-system:test-storybook`, `pnpm build`, and `pnpm audit` all run cleanly in the
-  container and CI. Document exit codes, coverage deltas, and remediation owners.
+      `pnpm typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
+      `pnpm nx run-many -t typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
+      `pnpm nx run design-system:test-storybook`, `pnpm build`, and `pnpm audit` all run cleanly in the
+      container and CI. Document exit codes, coverage deltas, and remediation owners.
   - 2025-10-11: Initial audit attempt on Node 22.19.0 saw `pnpm format:check` and `pnpm lint:workspace`
     crash the terminal while Nx constructed the project graph after emitting engine mismatch warnings;
     rerun once the container runtime upgrades to Node 22.20.0 and capture full logs for the ledger.
@@ -44,7 +44,7 @@
     formatting/import-order violations across apps/web/mobile/desktop instead of crashing; next rerun
     needs those fixes so lint/type/test gates can proceed.
   - 2025-10-12: Confirmed `pnpm lint:workspace` succeeds with the fallback path, but `pnpm nx run-many -t
-    typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at ~12m). Capture logs,
+typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at ~12m). Capture logs,
     triage the hang, and rerun once formatting diffs are resolved.
   - 2025-10-13: Installing Node.js 22.20.0 via `.nvmrc` and exporting `NX_NATIVE_COMMAND_RUNNER=false`
     plus `NX_ADD_PLUGINS=false` lets `pnpm format:check` reach the Biome runner without crashing; the
@@ -64,13 +64,13 @@
     so the type gate can run without triggering the Nx project graph crash. Keep `pnpm typecheck:nx`
     available as a diagnostic path while upstream fixes incubate.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
-  each phase.
+      each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
 - [ ] Update status, owners, and due dates during each planning PR so this file remains authoritative.
 - [ ] Coordinate container runtime upgrade to Node 22.20.0 (DevOps Guild — Week 0) to align with the
-  repository engine requirement and unblock baseline automation verification.
+      repository engine requirement and unblock baseline automation verification.
 - [ ] Ensure Copilot workspace instructions stay in sync with toolchain changes (DevOps Guild — Ongoing)
-  so AI agents continue to run installs from the shared wheelhouse before executing gates.
+      so AI agents continue to run installs from the shared wheelhouse before executing gates.
 
 ## Deliverables
 

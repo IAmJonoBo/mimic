@@ -7,6 +7,7 @@ The Mimic token CLI has been successfully moved to its own standalone repository
 ### 📂 Project Structure
 
 **Before:**
+
 ```
 Mimic/
 ├── tools/
@@ -17,6 +18,7 @@ Mimic/
 ```
 
 **After:**
+
 ```
 mimic-token-cli/                # Standalone CLI project
 ├── src/
@@ -61,6 +63,7 @@ mimic-tokens watch     # Auto-rebuild on changes
 ### 🔗 Integration Updates
 
 #### Monorepo Changes
+
 - ✅ Removed `tools/penpot-export/` directory
 - ✅ Updated `package.json` scripts to reference global CLI:
   ```json
@@ -73,6 +76,7 @@ mimic-tokens watch     # Auto-rebuild on changes
   ```
 
 #### Documentation Updates
+
 - ✅ Updated `PENPOT_WORKFLOW_GUIDE.md` to reference standalone CLI
 - ✅ Enhanced `PENPOT_PIPELINE_COMPLETE.md` with standalone project details
 - ✅ Created comprehensive CLI README with installation and usage examples
@@ -80,12 +84,14 @@ mimic-tokens watch     # Auto-rebuild on changes
 ### 🎉 Next Steps (Optional)
 
 1. **🌐 Publish to npm**: Make the CLI publicly available
+
    ```bash
    cd mimic-token-cli
    npm publish
    ```
 
 2. **🔗 Set up GitHub repo**: Create a dedicated repository for the CLI
+
    ```bash
    # Create repo on GitHub, then:
    git remote add origin https://github.com/your-org/mimic-token-cli.git
@@ -101,5 +107,6 @@ mimic-tokens watch     # Auto-rebuild on changes
 The Penpot design token pipeline is now implemented as a professional, standalone CLI tool that can be independently versioned, distributed, and maintained while providing all the functionality needed for the Mimic design system workflow.
 
 **Repositories:**
+
 - **Monorepo**: `/Volumes/MagicBag/GitHub/Mimic` (CLI removed, references updated)
 - **Standalone CLI**: `/Volumes/MagicBag/GitHub/Mimic/mimic-token-cli` (ready for distribution)

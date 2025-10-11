@@ -22,7 +22,7 @@ Visual hierarchy guides users through your interface by organizing information i
 - **Typography**: Weight and style indicate importance
 - **Position**: Top and left elements are seen first (in LTR languages)
 
-#### Best Practices
+#### Visual Hierarchy Best Practices
 
 ```typescript
 // Example: Creating clear hierarchy with design tokens
@@ -30,10 +30,10 @@ import { getToken } from '@mimic/design-tokens';
 
 const styles = {
   heading: {
-    fontSize: getToken('font.size.2xl'),      // Largest
+    fontSize: getToken('font.size.2xl'), // Largest
     fontWeight: getToken('font.weight.bold'), // Heaviest
-    color: getToken('color.text.primary'),    // Highest contrast
-    marginBottom: getToken('spacing.lg'),     // Clear separation
+    color: getToken('color.text.primary'), // Highest contrast
+    marginBottom: getToken('spacing.lg'), // Clear separation
   },
   subheading: {
     fontSize: getToken('font.size.lg'),
@@ -72,11 +72,11 @@ Alignment creates visual order and helps users scan and understand content quick
 ```typescript
 // Using the 8-point spacing system
 const spacing = {
-  xs: getToken('spacing.xs'),   // 0.5rem (8px)
-  sm: getToken('spacing.sm'),   // 0.75rem (12px)
-  md: getToken('spacing.md'),   // 1rem (16px)
-  lg: getToken('spacing.lg'),   // 1.5rem (24px)
-  xl: getToken('spacing.xl'),   // 2rem (32px)
+  xs: getToken('spacing.xs'), // 0.5rem (8px)
+  sm: getToken('spacing.sm'), // 0.75rem (12px)
+  md: getToken('spacing.md'), // 1rem (16px)
+  lg: getToken('spacing.lg'), // 1.5rem (24px)
+  xl: getToken('spacing.xl'), // 2rem (32px)
   '2xl': getToken('spacing.2xl'), // 3rem (48px)
   '3xl': getToken('spacing.3xl'), // 4rem (64px)
 };
@@ -110,7 +110,7 @@ const semanticColors = {
   success: getToken('color.success.500'),
   warning: getToken('color.warning.500'),
   danger: getToken('color.danger.500'),
-  
+
   // Text colors with clear hierarchy
   textPrimary: getToken('color.text.primary'),
   textSecondary: getToken('color.text.secondary'),
@@ -134,7 +134,7 @@ Good contrast ensures content is readable for all users, including those with vi
 const accessiblePairs = {
   // Text on backgrounds
   darkOnLight: {
-    text: getToken('color.neutral.900'),      // #1a1a1a
+    text: getToken('color.neutral.900'), // #1a1a1a
     background: getToken('color.neutral.50'), // #f9fafb
     // Contrast ratio: 16.7:1 (AAA)
   },
@@ -143,7 +143,7 @@ const accessiblePairs = {
     background: getToken('color.neutral.900'),
     // Contrast ratio: 16.7:1 (AAA)
   },
-  
+
   // Interactive elements
   primaryButton: {
     text: getToken('color.neutral.50'),
@@ -200,11 +200,11 @@ Proper scale creates harmony and rhythm in your designs.
 ```typescript
 // Golden ratio-based type scale (1.618)
 const typeScale = {
-  xs: getToken('font.size.xs'),     // 0.75rem (12px)
-  sm: getToken('font.size.sm'),     // 0.875rem (14px)
+  xs: getToken('font.size.xs'), // 0.75rem (12px)
+  sm: getToken('font.size.sm'), // 0.875rem (14px)
   base: getToken('font.size.base'), // 1rem (16px)
-  lg: getToken('font.size.lg'),     // 1.125rem (18px)
-  xl: getToken('font.size.xl'),     // 1.25rem (20px)
+  lg: getToken('font.size.lg'), // 1.125rem (18px)
+  xl: getToken('font.size.xl'), // 1.25rem (20px)
   '2xl': getToken('font.size.2xl'), // 1.5rem (24px)
   '3xl': getToken('font.size.3xl'), // 1.875rem (30px)
   '4xl': getToken('font.size.4xl'), // 2.25rem (36px)
@@ -235,7 +235,7 @@ Colors evoke emotions and communicate meaning. Understanding color theory helps 
 
 #### Color Harmony
 
-**Monochromatic**
+#### Monochromatic
 
 ```typescript
 // Shades of a single color
@@ -248,19 +248,19 @@ const monochromatic = {
 };
 ```
 
-**Complementary**
+#### Complementary
 
 - Colors opposite on the color wheel
 - High contrast, vibrant
 - Use sparingly for accent
 
-**Analogous**
+#### Analogous
 
 - Adjacent colors on the wheel
 - Harmonious, low contrast
 - Create cohesive palettes
 
-**Triadic**
+#### Triadic
 
 - Three evenly spaced colors
 - Balanced, vibrant
@@ -274,13 +274,13 @@ const colorSystem = {
   // Brand
   primary: getToken('color.primary.500'),
   secondary: getToken('color.secondary.500'),
-  
+
   // Feedback
-  success: getToken('color.success.500'),   // Green
-  warning: getToken('color.warning.500'),   // Yellow/Orange
-  danger: getToken('color.danger.500'),     // Red
-  info: getToken('color.info.500'),         // Blue
-  
+  success: getToken('color.success.500'), // Green
+  warning: getToken('color.warning.500'), // Yellow/Orange
+  danger: getToken('color.danger.500'), // Red
+  info: getToken('color.info.500'), // Blue
+
   // Neutral foundation
   background: getToken('color.background.primary'),
   surface: getToken('color.background.secondary'),
@@ -308,7 +308,7 @@ const fontSystem = {
   heading: getToken('font.family.sans'),
   body: getToken('font.family.sans'),
   code: getToken('font.family.mono'),
-  
+
   // Option 2: Serif for headings, sans for body
   heading: getToken('font.family.serif'),
   body: getToken('font.family.sans'),
@@ -369,11 +369,11 @@ Design for all screen sizes from the start.
 
 ```typescript
 const breakpoints = {
-  xs: '0px',      // Mobile portrait
-  sm: '640px',    // Mobile landscape
-  md: '768px',    // Tablet
-  lg: '1024px',   // Desktop
-  xl: '1280px',   // Large desktop
+  xs: '0px', // Mobile portrait
+  sm: '640px', // Mobile landscape
+  md: '768px', // Tablet
+  lg: '1024px', // Desktop
+  xl: '1280px', // Large desktop
   '2xl': '1536px', // Extra large
 };
 ```

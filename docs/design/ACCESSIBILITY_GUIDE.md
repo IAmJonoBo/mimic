@@ -53,8 +53,8 @@ Information must be presentable to users in ways they can perceive.
 
 ```typescript
 // ✅ Good: Meaningful alt text
-<img 
-  src="chart.png" 
+<img
+  src="chart.png"
   alt="Bar chart showing 40% increase in sales from Q1 to Q2"
 />
 
@@ -76,7 +76,7 @@ Interface components and navigation must be operable.
 
 ```typescript
 // ✅ Good: Keyboard accessible button
-<button 
+<button
   onClick={handleClick}
   onKeyPress={handleKeyPress}
 >
@@ -100,7 +100,7 @@ Information and operation of the interface must be understandable.
 ```typescript
 // ✅ Good: Clear error messages with recovery
 <form>
-  <input 
+  <input
     type="email"
     aria-describedby="email-error"
     aria-invalid={hasError}
@@ -150,11 +150,11 @@ Sufficient contrast ensures text is readable for users with low vision or color 
 
 #### WCAG Contrast Requirements
 
-| Content Type | Level AA | Level AAA |
-|--------------|----------|-----------|
-| Normal text (<18px or <14px bold) | 4.5:1 | 7:1 |
-| Large text (≥18px or ≥14px bold) | 3:1 | 4.5:1 |
-| UI components | 3:1 | - |
+| Content Type                      | Level AA | Level AAA |
+| --------------------------------- | -------- | --------- |
+| Normal text (<18px or <14px bold) | 4.5:1    | 7:1       |
+| Large text (≥18px or ≥14px bold)  | 3:1      | 4.5:1     |
+| UI components                     | 3:1      | -         |
 
 ```typescript
 import { getToken } from '@mimic/design-tokens';
@@ -163,16 +163,16 @@ import { getToken } from '@mimic/design-tokens';
 const accessibleColors = {
   // Text on background (16.7:1 - AAA)
   highContrast: {
-    text: getToken('color.neutral.900'),      // #1a1a1a
+    text: getToken('color.neutral.900'), // #1a1a1a
     background: getToken('color.neutral.50'), // #f9fafb
   },
-  
+
   // Medium contrast for secondary text (8.2:1 - AA)
   mediumContrast: {
     text: getToken('color.neutral.700'),
     background: getToken('color.neutral.50'),
   },
-  
+
   // Button contrast (4.8:1 - AA)
   buttonContrast: {
     text: getToken('color.neutral.50'),
@@ -182,7 +182,7 @@ const accessibleColors = {
 
 // ❌ Bad: Insufficient contrast (2.5:1 - Fails)
 const poorContrast = {
-  text: getToken('color.neutral.400'),        // Too light
+  text: getToken('color.neutral.400'), // Too light
   background: getToken('color.neutral.50'),
 };
 ```
@@ -195,7 +195,7 @@ function getContrastRatio(foreground: string, background: string): number {
   const getLuminance = (color: string): number => {
     // Convert color to RGB
     const rgb = hexToRgb(color);
-    
+
     // Calculate relative luminance
     const [r, g, b] = rgb.map(val => {
       const normalized = val / 255;
@@ -203,16 +203,16 @@ function getContrastRatio(foreground: string, background: string): number {
         ? normalized / 12.92
         : Math.pow((normalized + 0.055) / 1.055, 2.4);
     });
-    
+
     return 0.2126 * r + 0.7152 * g + 0.0722 * b;
   };
-  
+
   const l1 = getLuminance(foreground);
   const l2 = getLuminance(background);
-  
+
   const lighter = Math.max(l1, l2);
   const darker = Math.min(l1, l2);
-  
+
   return (lighter + 0.05) / (darker + 0.05);
 }
 
@@ -236,9 +236,9 @@ const StatusIndicator = component$<{ status: 'success' | 'error' | 'warning' }>(
     error: { icon: '✗', label: 'Error', color: getToken('color.danger.600') },
     warning: { icon: '⚠', label: 'Warning', color: getToken('color.warning.600') },
   }[props.status];
-  
+
   return (
-    <div 
+    <div
       style={{ color: config.color }}
       role="status"
       aria-label={config.label}
@@ -258,15 +258,15 @@ const StatusIndicator = component$<{ status: 'success' | 'error' | 'warning' }>(
 ```typescript
 // ✅ Good: Readable text sizes
 const textSizes = {
-  body: getToken('font.size.base'),      // 1rem (16px) - minimum
-  small: getToken('font.size.sm'),       // 0.875rem (14px)
-  caption: getToken('font.size.xs'),     // 0.75rem (12px) - use sparingly
+  body: getToken('font.size.base'), // 1rem (16px) - minimum
+  small: getToken('font.size.sm'), // 0.875rem (14px)
+  caption: getToken('font.size.xs'), // 0.75rem (12px) - use sparingly
 };
 
 // Line height for readability
 const lineHeights = {
-  body: '1.6',      // 1.5-1.6 for body text
-  heading: '1.2',   // 1.1-1.3 for headings
+  body: '1.6', // 1.5-1.6 for body text
+  heading: '1.2', // 1.1-1.3 for headings
 };
 
 // Maximum line length
@@ -290,14 +290,14 @@ const Button = styled.button`
   border: 2px solid transparent;
   border-radius: ${getToken('border.radius.md')};
   cursor: pointer;
-  
+
   /* Clear focus indicator */
   &:focus {
     outline: none; /* Remove default */
     border-color: ${getToken('color.primary.700')};
     box-shadow: 0 0 0 3px ${getToken('color.primary.200')};
   }
-  
+
   &:focus-visible {
     /* Only show for keyboard focus */
     outline: 3px solid ${getToken('color.primary.500')};
@@ -326,7 +326,7 @@ const keyboardPatterns = {
     Escape: 'Close dialog, cancel action',
     ArrowKeys: 'Navigate between options',
   },
-  
+
   forms: {
     'Arrow Up/Down': 'Navigate select options',
     Home: 'First option',
@@ -365,7 +365,7 @@ const CustomSelect = component$(() => {
         break;
     }
   };
-  
+
   return (
     <div
       role="combobox"
@@ -441,7 +441,7 @@ Use appropriate HTML elements for their intended purpose.
     <h1>Article Title</h1>
     <p>Article content...</p>
   </article>
-  
+
   <aside aria-label="Related articles">
     {/* Related content */}
   </aside>
@@ -539,21 +539,21 @@ const ariaStates = {
 
 ```typescript
 // ✅ Good: Descriptive alt text
-<img 
-  src="graph.png" 
+<img
+  src="graph.png"
   alt="Line graph showing temperature increase from 60°F to 85°F between 8am and 2pm"
 />
 
 // ✅ Good: Decorative image (hide from screen readers)
-<img 
-  src="decoration.png" 
+<img
+  src="decoration.png"
   alt=""
   role="presentation"
 />
 
 // ✅ Good: Complex image with long description
-<img 
-  src="complex-chart.png" 
+<img
+  src="complex-chart.png"
   alt="Sales data visualization"
   aria-describedby="chart-description"
 />
@@ -608,7 +608,7 @@ const ariaStates = {
   <div id="name-hint">
     Enter your first and last name
   </div>
-  
+
   {/* Group related fields */}
   <fieldset>
     <legend>Contact Preference</legend>
@@ -621,14 +621,14 @@ const ariaStates = {
       Phone
     </label>
   </fieldset>
-  
+
   {/* Clear error messages */}
   {errors.name && (
     <div role="alert" id="name-error">
       {errors.name}
     </div>
   )}
-  
+
   <button type="submit">
     Submit
   </button>
@@ -640,27 +640,27 @@ const ariaStates = {
 ```typescript
 const Modal = component$<{ isOpen: boolean; onClose: () => void }>((props) => {
   const dialogRef = useSignal<HTMLElement>();
-  
+
   // Trap focus in modal
   useVisibleTask$(({ track }) => {
     track(() => props.isOpen);
-    
+
     if (props.isOpen) {
       // Save previous focus
       const previousFocus = document.activeElement;
-      
+
       // Focus first focusable element
       dialogRef.value?.focus();
-      
+
       // Return focus on close
       return () => {
         (previousFocus as HTMLElement)?.focus();
       };
     }
   });
-  
+
   if (!props.isOpen) return null;
-  
+
   return (
     <div
       role="dialog"
@@ -673,14 +673,14 @@ const Modal = component$<{ isOpen: boolean; onClose: () => void }>((props) => {
       <div role="document">
         <h2 id="dialog-title">Dialog Title</h2>
         <p id="dialog-description">Dialog content</p>
-        
+
         <button onClick={props.onClose}>
           Close
         </button>
       </div>
-      
+
       {/* Backdrop */}
-      <div 
+      <div
         onClick={props.onClose}
         aria-hidden="true"
       />
@@ -717,7 +717,7 @@ describe('Accessibility tests', () => {
     render(<button aria-label="Close">×</button>);
     expect(screen.getByRole('button', { name: 'Close' })).toBeInTheDocument();
   });
-  
+
   it('form fields have labels', () => {
     render(
       <>
@@ -765,25 +765,17 @@ describe('Accessibility tests', () => {
 ```typescript
 // Recommended testing tools
 const a11yTools = {
-  automated: [
-    'axe DevTools',
-    'WAVE',
-    'Lighthouse',
-    'IBM Equal Access',
-  ],
-  
-  contrast: [
-    'WebAIM Contrast Checker',
-    'Colour Contrast Analyser',
-  ],
-  
+  automated: ['axe DevTools', 'WAVE', 'Lighthouse', 'IBM Equal Access'],
+
+  contrast: ['WebAIM Contrast Checker', 'Colour Contrast Analyser'],
+
   screenReaders: [
     'NVDA (Windows)',
     'JAWS (Windows)',
     'VoiceOver (Mac/iOS)',
     'TalkBack (Android)',
   ],
-  
+
   simulation: [
     'NoCoffee (vision impairment)',
     'Color Oracle (color blindness)',
@@ -810,12 +802,12 @@ export const AccessibleInput = component$<{
   const hintId = `${inputId}-hint`;
   const errorId = `${inputId}-error`;
   const hasError = !!props.error;
-  
+
   const describedBy = [
     props.hint && hintId,
     hasError && errorId,
   ].filter(Boolean).join(' ');
-  
+
   return (
     <div>
       <label htmlFor={inputId}>
@@ -824,13 +816,13 @@ export const AccessibleInput = component$<{
           <span aria-label="required">*</span>
         )}
       </label>
-      
+
       {props.hint && (
         <div id={hintId}>
           {props.hint}
         </div>
       )}
-      
+
       <input
         id={inputId}
         type={props.type || 'text'}
@@ -839,14 +831,14 @@ export const AccessibleInput = component$<{
         aria-invalid={hasError}
         aria-describedby={describedBy || undefined}
         style={{
-          borderColor: hasError 
+          borderColor: hasError
             ? getToken('color.danger.500')
             : getToken('color.border.default'),
         }}
       />
-      
+
       {hasError && (
-        <div 
+        <div
           id={errorId}
           role="alert"
           style={{ color: getToken('color.danger.600') }}

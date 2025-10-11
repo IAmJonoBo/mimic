@@ -38,9 +38,9 @@ const rgb = {
 
 ```typescript
 const hex = {
-  primary: '#3b82f6',    // Blue
-  success: '#10b981',    // Green
-  danger: '#ef4444',     // Red
+  primary: '#3b82f6', // Blue
+  success: '#10b981', // Green
+  danger: '#ef4444', // Red
 };
 ```
 
@@ -51,10 +51,10 @@ const hex = {
 ```typescript
 // HSL makes it easy to create variations
 const hsl = {
-  base: 'hsl(217, 91%, 60%)',      // Primary blue
-  lighter: 'hsl(217, 91%, 70%)',   // Lighter (+10% lightness)
-  darker: 'hsl(217, 91%, 50%)',    // Darker (-10% lightness)
-  desaturated: 'hsl(217, 50%, 60%)',// Less vibrant
+  base: 'hsl(217, 91%, 60%)', // Primary blue
+  lighter: 'hsl(217, 91%, 70%)', // Lighter (+10% lightness)
+  darker: 'hsl(217, 91%, 50%)', // Darker (-10% lightness)
+  desaturated: 'hsl(217, 50%, 60%)', // Less vibrant
 };
 ```
 
@@ -96,9 +96,9 @@ How intense or pure the color is
 
 ```typescript
 const saturationScale = {
-  gray: 'hsl(217, 0%, 50%)',    // No saturation
-  muted: 'hsl(217, 30%, 50%)',  // Low saturation
-  balanced: 'hsl(217, 60%, 50%)',// Medium saturation
+  gray: 'hsl(217, 0%, 50%)', // No saturation
+  muted: 'hsl(217, 30%, 50%)', // Low saturation
+  balanced: 'hsl(217, 60%, 50%)', // Medium saturation
   vibrant: 'hsl(217, 90%, 50%)', // High saturation
 };
 ```
@@ -250,13 +250,13 @@ Color harmony creates pleasing combinations based on color wheel relationships.
 import { getToken } from '@mimic/design-tokens';
 
 const monochromaticPalette = {
-  lightest: getToken('color.primary.50'),   // Tint (add white)
+  lightest: getToken('color.primary.50'), // Tint (add white)
   lighter: getToken('color.primary.100'),
   light: getToken('color.primary.200'),
-  base: getToken('color.primary.500'),      // Base hue
+  base: getToken('color.primary.500'), // Base hue
   dark: getToken('color.primary.700'),
   darker: getToken('color.primary.800'),
-  darkest: getToken('color.primary.900'),   // Shade (add black)
+  darkest: getToken('color.primary.900'), // Shade (add black)
 };
 
 // Use case: Subtle UI with depth
@@ -277,16 +277,16 @@ const buttonStates = {
 ```typescript
 // Blue-based analogous (Blue, Blue-Green, Green)
 const analogousPalette = {
-  primary: 'hsl(240, 70%, 50%)',    // Blue
-  secondary: 'hsl(210, 70%, 50%)',   // Blue-Cyan
-  tertiary: 'hsl(180, 70%, 50%)',    // Cyan
+  primary: 'hsl(240, 70%, 50%)', // Blue
+  secondary: 'hsl(210, 70%, 50%)', // Blue-Cyan
+  tertiary: 'hsl(180, 70%, 50%)', // Cyan
 };
 
 // Use case: Nature, calm interfaces
 const natureTheme = {
-  primary: getToken('color.primary.500'),    // Blue
-  accent1: getToken('color.info.500'),       // Cyan
-  accent2: getToken('color.success.500'),    // Green
+  primary: getToken('color.primary.500'), // Blue
+  accent1: getToken('color.info.500'), // Cyan
+  accent2: getToken('color.success.500'), // Green
 };
 ```
 
@@ -299,14 +299,14 @@ const natureTheme = {
 ```typescript
 // Blue and Orange
 const complementaryPalette = {
-  primary: 'hsl(240, 70%, 50%)',    // Blue
-  accent: 'hsl(60, 70%, 50%)',      // Orange (opposite)
+  primary: 'hsl(240, 70%, 50%)', // Blue
+  accent: 'hsl(60, 70%, 50%)', // Orange (opposite)
 };
 
 // Use case: Call-to-action with high contrast
 const ctaDesign = {
-  background: getToken('color.primary.600'),   // Blue
-  button: getToken('color.warning.500'),       // Orange
+  background: getToken('color.primary.600'), // Blue
+  button: getToken('color.warning.500'), // Orange
   buttonHover: getToken('color.warning.600'),
 };
 ```
@@ -320,9 +320,9 @@ const ctaDesign = {
 ```typescript
 // Blue, Yellow-Orange, Red-Orange
 const splitComplementary = {
-  primary: 'hsl(240, 70%, 50%)',    // Blue
-  accent1: 'hsl(30, 70%, 50%)',     // Yellow-Orange
-  accent2: 'hsl(0, 70%, 50%)',      // Red-Orange
+  primary: 'hsl(240, 70%, 50%)', // Blue
+  accent1: 'hsl(30, 70%, 50%)', // Yellow-Orange
+  accent2: 'hsl(0, 70%, 50%)', // Red-Orange
 };
 ```
 
@@ -335,9 +335,9 @@ const splitComplementary = {
 ```typescript
 // Red, Yellow, Blue (primary colors)
 const triadicPalette = {
-  primary: 'hsl(0, 70%, 50%)',      // Red
-  secondary: 'hsl(120, 70%, 50%)',  // Yellow
-  tertiary: 'hsl(240, 70%, 50%)',   // Blue
+  primary: 'hsl(0, 70%, 50%)', // Red
+  secondary: 'hsl(120, 70%, 50%)', // Yellow
+  tertiary: 'hsl(240, 70%, 50%)', // Blue
 };
 
 // Use case: Colorful, playful interfaces
@@ -357,10 +357,10 @@ const playfulTheme = {
 ```typescript
 // Blue + Orange, Red + Green
 const tetradicPalette = {
-  primary: 'hsl(240, 70%, 50%)',    // Blue
-  complement: 'hsl(60, 70%, 50%)',  // Orange
-  secondary: 'hsl(0, 70%, 50%)',    // Red
-  accent: 'hsl(120, 70%, 50%)',     // Green
+  primary: 'hsl(240, 70%, 50%)', // Blue
+  complement: 'hsl(60, 70%, 50%)', // Orange
+  secondary: 'hsl(0, 70%, 50%)', // Red
+  accent: 'hsl(120, 70%, 50%)', // Green
 };
 ```
 
@@ -372,11 +372,11 @@ Ensuring sufficient contrast is critical for accessibility and usability.
 
 #### Contrast Ratio Requirements
 
-| Content Type | AA (Minimum) | AAA (Enhanced) |
-|--------------|--------------|----------------|
-| Normal text (<18px) | 4.5:1 | 7:1 |
-| Large text (≥18px or ≥14px bold) | 3:1 | 4.5:1 |
-| UI components & graphics | 3:1 | - |
+| Content Type                     | AA (Minimum) | AAA (Enhanced) |
+| -------------------------------- | ------------ | -------------- |
+| Normal text (<18px)              | 4.5:1        | 7:1            |
+| Large text (≥18px or ≥14px bold) | 3:1          | 4.5:1          |
+| UI components & graphics         | 3:1          | -              |
 
 ### Checking Contrast
 
@@ -385,25 +385,25 @@ Ensuring sufficient contrast is critical for accessibility and usability.
 const accessiblePairs = {
   // Black on white (highest contrast)
   maxContrast: {
-    text: getToken('color.neutral.900'),      // #1a1a1a
+    text: getToken('color.neutral.900'), // #1a1a1a
     background: getToken('color.neutral.50'), // #f9fafb
     ratio: '16.7:1', // AAA for all sizes
   },
-  
+
   // Dark gray on white
   highContrast: {
     text: getToken('color.neutral.700'),
     background: getToken('color.neutral.50'),
     ratio: '8.2:1', // AAA for normal, AA for large
   },
-  
+
   // Primary blue on white
   brandContrast: {
     text: getToken('color.primary.600'),
     background: getToken('color.neutral.50'),
     ratio: '4.8:1', // AA for normal text
   },
-  
+
   // White on primary
   inverseContrast: {
     text: getToken('color.neutral.50'),
@@ -424,13 +424,13 @@ function getContrastRatio(foreground: string, background: string): number {
     // (Implementation simplified for example)
     return 0.5; // Placeholder
   };
-  
+
   const l1 = getLuminance(foreground);
   const l2 = getLuminance(background);
-  
+
   const lighter = Math.max(l1, l2);
   const darker = Math.min(l1, l2);
-  
+
   return (lighter + 0.05) / (darker + 0.05);
 }
 
@@ -490,25 +490,25 @@ A complete color scale provides flexibility while maintaining consistency.
 ```typescript
 // Generate a scale from a base color
 const generateColorScale = (baseHue: number) => ({
-  50: `hsl(${baseHue}, 90%, 95%)`,   // Lightest
+  50: `hsl(${baseHue}, 90%, 95%)`, // Lightest
   100: `hsl(${baseHue}, 90%, 90%)`,
   200: `hsl(${baseHue}, 90%, 80%)`,
   300: `hsl(${baseHue}, 90%, 70%)`,
   400: `hsl(${baseHue}, 90%, 60%)`,
-  500: `hsl(${baseHue}, 90%, 50%)`,  // Base
+  500: `hsl(${baseHue}, 90%, 50%)`, // Base
   600: `hsl(${baseHue}, 90%, 40%)`,
   700: `hsl(${baseHue}, 90%, 30%)`,
   800: `hsl(${baseHue}, 90%, 20%)`,
-  900: `hsl(${baseHue}, 90%, 10%)`,  // Darkest
+  900: `hsl(${baseHue}, 90%, 10%)`, // Darkest
 });
 
 // Apply to color system
 const colorSystem = {
-  primary: generateColorScale(217),   // Blue
-  success: generateColorScale(142),   // Green
-  warning: generateColorScale(38),    // Orange
-  danger: generateColorScale(0),      // Red
-  neutral: generateColorScale(217),   // Gray (low saturation)
+  primary: generateColorScale(217), // Blue
+  success: generateColorScale(142), // Green
+  warning: generateColorScale(38), // Orange
+  danger: generateColorScale(0), // Red
+  neutral: generateColorScale(217), // Gray (low saturation)
 };
 ```
 
@@ -525,7 +525,7 @@ const semanticColors = {
     primary: getToken('color.primary.500'),
     secondary: getToken('color.secondary.500'),
   },
-  
+
   // Feedback
   feedback: {
     success: getToken('color.success.500'),
@@ -533,23 +533,23 @@ const semanticColors = {
     danger: getToken('color.danger.500'),
     info: getToken('color.info.500'),
   },
-  
+
   // Text
   text: {
-    primary: getToken('color.text.primary'),     // Highest contrast
+    primary: getToken('color.text.primary'), // Highest contrast
     secondary: getToken('color.text.secondary'), // Medium contrast
-    disabled: getToken('color.text.disabled'),   // Low contrast
-    inverse: getToken('color.text.inverse'),     // For dark backgrounds
+    disabled: getToken('color.text.disabled'), // Low contrast
+    inverse: getToken('color.text.inverse'), // For dark backgrounds
   },
-  
+
   // Backgrounds
   background: {
-    primary: getToken('color.background.primary'),     // Main background
+    primary: getToken('color.background.primary'), // Main background
     secondary: getToken('color.background.secondary'), // Cards, panels
-    tertiary: getToken('color.background.tertiary'),   // Subtle highlights
-    inverse: getToken('color.background.inverse'),     // Dark mode
+    tertiary: getToken('color.background.tertiary'), // Subtle highlights
+    inverse: getToken('color.background.inverse'), // Dark mode
   },
-  
+
   // Borders
   border: {
     default: getToken('color.border.default'),
@@ -557,7 +557,7 @@ const semanticColors = {
     focus: getToken('color.border.focus'),
     error: getToken('color.border.error'),
   },
-  
+
   // Interactive
   interactive: {
     default: getToken('color.interactive.default'),
@@ -592,7 +592,7 @@ const componentColors = {
       text: getToken('color.neutral.50'),
     },
   },
-  
+
   input: {
     background: getToken('color.background.primary'),
     border: getToken('color.border.default'),
@@ -663,7 +663,7 @@ export const Button = component$((props) => {
   --color-primary-50: var(--ds-color-primary-50);
   --color-primary-500: var(--ds-color-primary-500);
   --color-primary-900: var(--ds-color-primary-900);
-  
+
   /* Semantic colors */
   --color-text-primary: var(--ds-color-text-primary);
   --color-background: var(--ds-color-background-primary);

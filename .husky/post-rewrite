@@ -2,7 +2,7 @@
 
 # Clean Apple junk after rewrite/rebase (best effort, non-blocking)
 if command -v pnpm >/dev/null 2>&1; then
-	pnpm run clean:apple >/dev/null 2>&1 || true
+  pnpm run clean:apple >/dev/null 2>&1 || true
 else
-	node tools/apple-cleaner.js >/dev/null 2>&1 || true
+  node tools/apple-cleaner.js >/dev/null 2>&1 || true
 fi

@@ -40,23 +40,23 @@ Legacy folders from 1.x remain until their replacements land; prefer the 2.0 tar
 
 ## 3. Daily Workflow
 
-| Task                          | Command(s)                                                                            |
-| ----------------------------- | ------------------------------------------------------------------------------------- |
-| Sync tokens from Penpot       | `make tokens-sync` (requires `.env` with Penpot credentials)                          |
-| Build tokens                  | `pnpm tokens:build` (legacy pipeline)                                                |
-| Full workspace build          | `pnpm build` (skips Nx Cloud, tolerates missing Tauri CLI)                           |
-| Start Storybook               | `pnpm nx run design-system:storybook`                                                |
-| Start full dev stack          | `pnpm dev:full-stack` (watches tokens + Storybook)                                   |
-| Run unit tests                | `pnpm nx run-many -t test`                                                           |
-| Run visual + interaction tests| `pnpm nx run design-system:visual-test && pnpm nx run design-system:test-storybook`  |
-| Lint + typecheck              | `pnpm lint:workspace && pnpm typecheck`                                              |
-| Build affected projects       | `pnpm run build:affected`                                                            |
-| Generate dependency graph     | `pnpm nx graph --watch`                                                              |
+| Task                           | Command(s)                                                                          |
+| ------------------------------ | ----------------------------------------------------------------------------------- |
+| Sync tokens from Penpot        | `make tokens-sync` (requires `.env` with Penpot credentials)                        |
+| Build tokens                   | `pnpm tokens:build` (legacy pipeline)                                               |
+| Full workspace build           | `pnpm build` (skips Nx Cloud, tolerates missing Tauri CLI)                          |
+| Start Storybook                | `pnpm nx run design-system:storybook`                                               |
+| Start full dev stack           | `pnpm dev:full-stack` (watches tokens + Storybook)                                  |
+| Run unit tests                 | `pnpm nx run-many -t test`                                                          |
+| Run visual + interaction tests | `pnpm nx run design-system:visual-test && pnpm nx run design-system:test-storybook` |
+| Lint + typecheck               | `pnpm lint:workspace && pnpm typecheck`                                             |
+| Build affected projects        | `pnpm run build:affected`                                                           |
+| Generate dependency graph      | `pnpm nx graph --watch`                                                             |
 
 > Fast path: `pnpm lint:base` runs only the Biome formatter/linter (warnings currently tracked in Next_Steps). Use
 > `pnpm lint:typed` when you need the slower type-aware ESLint rules without the formatter.
 > **Offline builds**: `pnpm build` sets `NX_NO_CLOUD=true` and auto-skips Tauri packaging when the CLI is missing so the
-workspace
+> workspace
 > can still produce artifacts in headless environments.
 
 ### Platform launchers
@@ -106,13 +106,13 @@ CI repeats these checks plus Playwright journeys, package builds, and deployment
 
 ## 7. Troubleshooting Quick Links
 
-| Symptom                             | Try this                                                                 |
-| ----------------------------------- | ------------------------------------------------------------------------ |
-| Node version mismatch               | `nvm use` then re-run `./setup.sh`                                       |
-| Token drift or collisions           | `pnpm nx run design-tokens:build` and inspect `libs/tokens/*`            |
-| Storybook cache oddities            | `rm -rf packages/design-system/storybook-static* && pnpm nx run design-system:storybook` |
-| React Native Metro duplication      | Clear Metro cache: `pnpm --filter @mimic/mobile-rn start -- --reset-cache` |
-| Dev container not starting          | `docker compose -f infra/containers/devcontainer/docker-compose.yml logs` |
+| Symptom                        | Try this                                                                                 |
+| ------------------------------ | ---------------------------------------------------------------------------------------- |
+| Node version mismatch          | `nvm use` then re-run `./setup.sh`                                                       |
+| Token drift or collisions      | `pnpm nx run design-tokens:build` and inspect `libs/tokens/*`                            |
+| Storybook cache oddities       | `rm -rf packages/design-system/storybook-static* && pnpm nx run design-system:storybook` |
+| React Native Metro duplication | Clear Metro cache: `pnpm --filter @mimic/mobile-rn start -- --reset-cache`               |
+| Dev container not starting     | `docker compose -f infra/containers/devcontainer/docker-compose.yml logs`                |
 
 See [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) for the full catalogue.
 

@@ -100,8 +100,8 @@ export default [
       '**/*.bak',
       '**/*.backup',
       '**/*.old',
-      '**/*.orig'
-    ]
+      '**/*.orig',
+    ],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,
@@ -112,16 +112,16 @@ export default [
       globals: {
         browser: true,
         node: true,
-        es2024: true
-      }
-    }
+        es2024: true,
+      },
+    },
   },
   {
     files: ['**/*.{ts,tsx,js,jsx,mts,cts}'],
     plugins: {
       import: importPlugin,
       'simple-import-sort': simpleImportSort,
-      '@nx': nxEslintPlugin
+      '@nx': nxEslintPlugin,
     },
     rules: {
       'simple-import-sort/imports': 'warn',
@@ -137,17 +137,17 @@ export default [
             'external',
             'internal',
             ['parent', 'sibling', 'index'],
-            'unknown'
+            'unknown',
           ],
           pathGroupsExcludedImportTypes: ['builtin'],
           pathGroups: [
             {
               pattern: '@mimic/**',
               group: 'internal',
-              position: 'after'
-            }
-          ]
-        }
+              position: 'after',
+            },
+          ],
+        },
       ],
       '@nx/workspace-dependency-rules': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
@@ -157,12 +157,12 @@ export default [
         {
           argsIgnorePattern: '^_',
           varsIgnorePattern: '^_',
-          caughtErrorsIgnorePattern: '^_'
-        }
+          caughtErrorsIgnorePattern: '^_',
+        },
       ],
       '@typescript-eslint/no-non-null-assertion': 'warn',
       '@typescript-eslint/consistent-type-imports': 'warn',
-      'no-console': ['warn', { allow: ['warn', 'error'] }]
-    }
-  }
+      'no-console': ['warn', { allow: ['warn', 'error'] }],
+    },
+  },
 ];

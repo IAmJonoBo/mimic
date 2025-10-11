@@ -12,34 +12,38 @@ September 30, 2025
 
 ### Core Dependencies
 
-| Package | Before | After | Notes |
-|---------|--------|-------|-------|
-| Node.js | 22.19.0 | 22.20.0 | Latest LTS |
-| pnpm | 10.17.0 | 10.17.1 | Package manager |
-| TypeScript | 5.9.2 | 5.9.3 | Latest stable |
-| Nx | 21.6.2 | 21.6.2 | Already at latest |
-| Storybook | 9.1.9 | 9.1.9 | Already at latest |
-| React/React DOM | 19.1.1 | 19.1.1 | Already at latest |
+| Package         | Before  | After   | Notes             |
+| --------------- | ------- | ------- | ----------------- |
+| Node.js         | 22.19.0 | 22.20.0 | Latest LTS        |
+| pnpm            | 10.17.0 | 10.17.1 | Package manager   |
+| TypeScript      | 5.9.2   | 5.9.3   | Latest stable     |
+| Nx              | 21.6.2  | 21.6.2  | Already at latest |
+| Storybook       | 9.1.9   | 9.1.9   | Already at latest |
+| React/React DOM | 19.1.1  | 19.1.1  | Already at latest |
 
 ### New Tools Added
 
 #### Nx Build Plugins
+
 - `@nx/cypress@21.6.2` - E2E testing framework integration
 - `@nx/esbuild@21.6.2` - Fast JavaScript bundler
 - `@nx/webpack@21.6.2` - Module bundler integration
 
 #### Storybook Addons
+
 - `@storybook/addon-a11y@9.0.8` - Accessibility testing and reporting
 - `@storybook/addon-measure@9.0.8` - Element measurement and spacing tools
 - `@storybook/addon-outline@9.0.8` - Visual layout debugging
 
 #### Testing Tools
+
 - `cypress@13.17.0` - End-to-end testing framework
 - `chromatic@13.3.0` - Visual regression testing
 - `@types/jest@29.5.14` - Jest type definitions
 - `@types/testing-library__jest-dom@6.0.0` - Testing library types
 
 #### Development Utilities
+
 - `concurrently@9.1.2` - Run multiple commands concurrently
 - `npm-run-all@4.1.5` - Task orchestration
 - `wait-on@8.0.2` - Wait for resources to be available
@@ -49,43 +53,49 @@ September 30, 2025
 ## Updated Files
 
 ### Configuration Files
+
 - `/package.json` - Root package with all new dependencies
 - `/pnpm-lock.yaml` - Updated lockfile with new dependency tree
 - `/.nvmrc` - Already at 22.20.0
 - `/setup.sh` - Updated pnpm version to 10.17.1
 
 ### Application Packages
+
 - `/apps/web/package.json` - Updated TypeScript version
 - `/apps/mobile/package.json` - Updated TypeScript version
 - `/apps/desktop/package.json` - Updated TypeScript version
 
 ### Library Packages
+
 - `/packages/design-system/package.json` - Updated TypeScript version
 - `/packages/design-system/.storybook/main.ts` - Added new addons
 - `/packages/design-tokens/package.json` - Updated TypeScript version
 - `/packages/shared-utils/package.json` - Updated TypeScript version
 
 ### Documentation
+
 - `/README.md` - Updated version badges
 - `/CHANGELOG.md` - Created with comprehensive upgrade notes
 - `/docs/devops/TOOLCHAIN_UPGRADE_PLAYBOOK.md` - Updated pnpm version
 
 ## New npm Scripts
 
-| Script | Command | Description |
-|--------|---------|-------------|
-| `dev:all` | `concurrently -n tokens,storybook,web 'pnpm tokens:watch' 'pnpm storybook' 'nx run web:serve'` | Start all dev services |
-| `test:e2e` | `nx run-many -t e2e` | Run E2E tests |
-| `test:visual` | `chromatic --exit-zero-on-changes` | Run visual regression tests |
+| Script        | Command                                                                                        | Description                 |
+| ------------- | ---------------------------------------------------------------------------------------------- | --------------------------- |
+| `dev:all`     | `concurrently -n tokens,storybook,web 'pnpm tokens:watch' 'pnpm storybook' 'nx run web:serve'` | Start all dev services      |
+| `test:e2e`    | `nx run-many -t e2e`                                                                           | Run E2E tests               |
+| `test:visual` | `chromatic --exit-zero-on-changes`                                                             | Run visual regression tests |
 
 ## Enhanced Storybook Configuration
 
 The design-system package now includes:
+
 - Accessibility testing (`addon-a11y`)
 - Element measurement tools (`addon-measure`)
 - Layout debugging (`addon-outline`)
 
 These addons enhance the development experience by providing:
+
 - Real-time accessibility violations detection
 - Precise element dimension measurements
 - Visual grid overlay for layout debugging
@@ -102,17 +112,20 @@ All validation steps completed successfully:
 ## Benefits
 
 ### Developer Experience (DX)
+
 - **Faster builds**: esbuild integration for rapid bundling
 - **Better debugging**: Storybook measure and outline addons
 - **Concurrent development**: New `dev:all` script runs all services
 - **Modern tooling**: Latest TypeScript with improved type checking
 
 ### User Experience (UX)
+
 - **Accessibility**: Automated a11y testing in Storybook
 - **Visual quality**: Chromatic integration for regression testing
 - **Better documentation**: Enhanced Storybook with more addons
 
 ### Quality Control (QC)
+
 - **E2E testing**: Cypress integration ready to use
 - **Visual regression**: Chromatic for automated visual testing
 - **Type safety**: Latest TypeScript across all packages
@@ -121,29 +134,35 @@ All validation steps completed successfully:
 ## Known Issues
 
 ### Peer Dependency Warnings
+
 Some Storybook v8 addons show peer dependency warnings with Storybook v9. This is expected and doesn't affect functionality. The warnings are:
+
 - `@storybook/addon-essentials@8.6.14` expects `storybook@^8.6.14` but found `9.1.9`
 - Other v8 addons show similar warnings
 
 These can be safely ignored as Storybook v9 maintains backward compatibility with v8 addons.
 
 ### Node Version Warning
+
 The project requires Node.js 22.20.0, but the current environment has 20.19.5. This is expected in CI environments without Node version management. Developers should use nvm or similar tools to install the correct version locally.
 
 ## Next Steps
 
 ### Immediate
+
 1. ✅ Install dependencies: `pnpm install`
 2. ✅ Verify builds: `pnpm build`
 3. ✅ Run tests: `pnpm test`
 
 ### Short Term
+
 1. Configure Cypress E2E tests for critical user flows
 2. Set up Chromatic project for visual regression testing
 3. Create accessibility testing guidelines using addon-a11y
 4. Document new development workflows
 
 ### Long Term
+
 1. Explore Nx caching and distributed task execution
 2. Implement CI/CD pipeline improvements with new tools
 3. Add performance monitoring with esbuild metrics
@@ -152,6 +171,7 @@ The project requires Node.js 22.20.0, but the current environment has 20.19.5. T
 ## Migration Guide for Developers
 
 ### Setup
+
 ```bash
 # Install correct Node version
 nvm install 22.20.0
@@ -172,12 +192,14 @@ pnpm build
 ### New Workflows
 
 #### Development with All Services
+
 ```bash
 # Start tokens, storybook, and web app together
 pnpm dev:all
 ```
 
 #### Visual Testing
+
 ```bash
 # Build storybook and run visual tests
 pnpm build-storybook
@@ -185,6 +207,7 @@ pnpm test:visual
 ```
 
 #### E2E Testing
+
 ```bash
 # Run end-to-end tests (once configured)
 pnpm test:e2e
@@ -193,6 +216,7 @@ pnpm test:e2e
 ## Rollback Plan
 
 If issues arise, rollback is straightforward:
+
 ```bash
 git revert <commit-hash>
 pnpm install
@@ -213,6 +237,7 @@ The previous state is preserved in git history at the commit before this upgrade
 ## Support
 
 For questions or issues related to this upgrade:
+
 1. Check this document and CHANGELOG.md
 2. Review TOOLCHAIN_UPGRADE_PLAYBOOK.md
 3. Open an issue in the GitHub repository

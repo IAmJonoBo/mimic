@@ -77,9 +77,11 @@ assignees: ''
 ## Testing Strategy
 
 ### Manual Testing Performed
+
 <!-- Describe what manual testing was done -->
 
 ### Automated Testing
+
 <!-- List the specific tests that cover this change -->
 
 ### Regression Risk Assessment

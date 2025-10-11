@@ -18,12 +18,12 @@ Inside your project, you'll see the following directory structure:
 
 ```markdown
 ├── public/
-│   └── ...
+│ └── ...
 └── src/
-    ├── components/
-    │   └── ...
-    └── routes/
-        └── ...
+├── components/
+│ └── ...
+└── routes/
+└── ...
 ```
 
 - `src/routes`: Provides the directory-based routing, which can include a hierarchy of
@@ -116,19 +116,19 @@ auto-generate `dist/_routes.json` would be:
 
 ```markdown
 {
-  "include": [
-    "/*"
-  ],
-  "exclude": [
-    "/_headers",
-    "/_redirects",
-    "/build/*",
-    "/favicon.ico",
-    "/manifest.json",
-    "/service-worker.js",
-    "/about"
-  ],
-  "version": 1
+"include": [
+"/*"
+],
+"exclude": [
+"/_headers",
+"/_redirects",
+"/build/*",
+"/favicon.ico",
+"/manifest.json",
+"/service-worker.js",
+"/about"
+],
+"version": 1
 }
 ```
 

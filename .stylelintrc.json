@@ -1,6 +1,19 @@
 {
   "extends": ["stylelint-config-standard", "stylelint-config-tailwindcss"],
-  "ignoreFiles": ["**/node_modules/**", "**/dist/**", "**/build/**", "**/coverage/**", "**/.nx/**", "**/tmp/**", "**/storybook-static/**", "**/*.min.css", "**/*.min.scss", "**/libs/tokens/**/*.{css,scss,sass}", "**/tokens.{css,scss,sass}", "packages/design-tokens/libs/**/*.{css,scss,sass}"],
+  "ignoreFiles": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/.nx/**",
+    "**/tmp/**",
+    "**/storybook-static/**",
+    "**/*.min.css",
+    "**/*.min.scss",
+    "**/libs/tokens/**/*.{css,scss,sass}",
+    "**/tokens.{css,scss,sass}",
+    "packages/design-tokens/libs/**/*.{css,scss,sass}"
+  ],
   "rules": {
     "no-invalid-double-slash-comments": null,
     "order/properties-order": null,

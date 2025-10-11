@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+
 - Added Nx plugins for enhanced build capabilities:
   - `@nx/cypress` (21.6.2) - E2E testing support
   - `@nx/esbuild` (21.6.2) - Fast bundling
@@ -33,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `test:visual` - Run visual regression tests with Chromatic
 
 ### Changed
+
 - Updated Node.js requirement from `>=22.19.0` to `>=22.20.0`
 - Updated pnpm requirement from `>=10.17.0` to `>=10.17.1`
 - Updated TypeScript from `5.9.2` to `5.9.3`
@@ -45,6 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Enhanced Storybook configuration with new addons in design-system package
 
 ### Fixed
+
 - Improved DX with better tooling support
 - Enhanced QC capabilities with visual and E2E testing tools
 

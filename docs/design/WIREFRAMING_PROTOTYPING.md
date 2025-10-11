@@ -64,7 +64,7 @@ Mimic provides low-fidelity components optimized for rapid wireframing.
 ### Basic Wireframe Components
 
 ```typescript
-import { 
+import {
   WireBox,
   WireText,
   WireImage,
@@ -80,7 +80,7 @@ export const WireframePage = component$(() => {
     <>
       {/* Navigation */}
       <WireNav items={['Home', 'About', 'Products', 'Contact']} />
-      
+
       {/* Hero section */}
       <WireBox padding="3xl" textAlign="center">
         <WireText size="4xl" weight="bold">
@@ -91,7 +91,7 @@ export const WireframePage = component$(() => {
         </WireText>
         <WireButton size="lg">Primary Action</WireButton>
       </WireBox>
-      
+
       {/* Content grid */}
       <WireBox padding="xl">
         <Grid columns={3} gap="lg">
@@ -197,12 +197,12 @@ Card container with header and footer areas.
   <WireCardHeader>
     <WireText size="xl" weight="semibold">Card Title</WireText>
   </WireCardHeader>
-  
+
   <WireCardBody>
     <WireImage aspectRatio="16:9" />
     <WireText lines={3}>Card description</WireText>
   </WireCardBody>
-  
+
   <WireCardFooter>
     <WireButton variant="secondary">Action</WireButton>
   </WireCardFooter>
@@ -223,7 +223,7 @@ export const HomeWireframe = component$(() => {
         <WireNav items={['Features', 'Pricing', 'About', 'Contact']} />
         <WireButton variant="primary">Sign Up</WireButton>
       </WireHeader>
-      
+
       {/* Hero */}
       <WireSection padding="3xl" centered>
         <WireText size="5xl" weight="bold" width="3/4">
@@ -242,13 +242,13 @@ export const HomeWireframe = component$(() => {
         </WireBox>
         <WireImage aspectRatio="16:9" width="3/4" label="Hero image" />
       </WireSection>
-      
+
       {/* Features Grid */}
       <WireSection padding="2xl">
         <WireText size="3xl" weight="bold" centered>
           Features
         </WireText>
-        
+
         <Grid columns={3} gap="lg">
           {[1, 2, 3, 4, 5, 6].map((i) => (
             <WireCard key={i}>
@@ -263,7 +263,7 @@ export const HomeWireframe = component$(() => {
           ))}
         </Grid>
       </WireSection>
-      
+
       {/* CTA Section */}
       <WireSection padding="2xl" background="subtle" centered>
         <WireText size="3xl" weight="bold">
@@ -273,7 +273,7 @@ export const HomeWireframe = component$(() => {
           Sign Up Now
         </WireButton>
       </WireSection>
-      
+
       {/* Footer */}
       <WireFooter>
         <Grid columns={4} gap="lg">
@@ -312,7 +312,7 @@ export const CheckoutFormWireframe = component$(() => {
         <WireInput type="email" label="Email" required />
         <WireInput type="tel" label="Phone" />
       </WireFieldset>
-      
+
       {/* Shipping Address */}
       <WireFieldset legend="Shipping Address">
         <WireInput type="text" label="Street Address" required />
@@ -325,7 +325,7 @@ export const CheckoutFormWireframe = component$(() => {
           <WireInput type="select" label="Country" required />
         </Grid>
       </WireFieldset>
-      
+
       {/* Payment */}
       <WireFieldset legend="Payment Information">
         <WireInput type="text" label="Card Number" required />
@@ -334,7 +334,7 @@ export const CheckoutFormWireframe = component$(() => {
           <WireInput type="text" label="CVV" required />
         </Grid>
       </WireFieldset>
-      
+
       {/* Actions */}
       <WireBox direction="row" justify="space-between">
         <WireButton variant="secondary">Back</WireButton>
@@ -353,14 +353,14 @@ export const MobileAppWireframe = component$(() => {
     <WireMobileFrame device="iphone">
       {/* Status Bar */}
       <WireStatusBar />
-      
+
       {/* Navigation Bar */}
       <WireNavBar
         left={<WireIcon name="menu" />}
         title="App Title"
         right={<WireIcon name="notifications" />}
       />
-      
+
       {/* Content */}
       <WireScrollView>
         <WireBox padding="lg" gap="md">
@@ -372,7 +372,7 @@ export const MobileAppWireframe = component$(() => {
           {/* More content */}
         </WireBox>
       </WireScrollView>
-      
+
       {/* Tab Bar */}
       <WireTabBar items={[
         { icon: 'home', label: 'Home', active: true },
@@ -407,7 +407,7 @@ export const InteractivePrototype = component$(() => {
     drawerOpen: false,
     selectedItem: null,
   });
-  
+
   return (
     <>
       {/* Interactive elements */}
@@ -418,7 +418,7 @@ export const InteractivePrototype = component$(() => {
       >
         Open Modal
       </PrototypeButton>
-      
+
       {/* Modal with transitions */}
       <PrototypeModal
         isOpen={state.modalOpen}
@@ -432,7 +432,7 @@ export const InteractivePrototype = component$(() => {
           Close
         </PrototypeButton>
       </PrototypeModal>
-      
+
       {/* Interactive cards */}
       {items.map((item) => (
         <PrototypeCard
@@ -461,14 +461,14 @@ import { animate, stagger } from '@mimic/prototype-animations';
 export const AnimatedList = component$(() => {
   useVisibleTask$(({ cleanup }) => {
     const items = document.querySelectorAll('.list-item');
-    
+
     animate(
       items,
       { opacity: [0, 1], y: [20, 0] },
       { duration: 0.3, delay: stagger(0.1) }
     );
   });
-  
+
   return (
     <ul>
       {items.map((item) => (
@@ -482,14 +482,14 @@ export const AnimatedList = component$(() => {
 export const AnimatedButton = component$(() => {
   const handleClick = $(() => {
     const button = document.querySelector('.animated-button');
-    
+
     animate(
       button,
       { scale: [1, 0.95, 1.05, 1] },
       { duration: 0.3 }
     );
   });
-  
+
   return (
     <button class="animated-button" onClick$={handleClick}>
       Click Me
@@ -522,13 +522,13 @@ export const prototypeStore = usePrototypeStore({
 // Component using prototype state
 export const Header = component$(() => {
   const store = prototypeStore;
-  
+
   return (
     <header>
       <button onClick$={() => store.ui.sidebarOpen = !store.ui.sidebarOpen}>
         Menu
       </button>
-      
+
       {store.user.isAuthenticated ? (
         <span>Welcome, {store.user.name}</span>
       ) : (
@@ -536,7 +536,7 @@ export const Header = component$(() => {
           Sign In
         </button>
       )}
-      
+
       <span>Cart: {store.cart.items.length} items</span>
     </header>
   );
@@ -591,18 +591,18 @@ export const DragDropExample = component$(() => {
     id: 'item-1',
     data: { type: 'card' },
   });
-  
+
   const { dropProps, isOver } = useDropZone({
     onDrop: (data) => handleDrop(data),
     accept: ['card'],
   });
-  
+
   return (
     <>
       <div {...dragProps} class={isDragging ? 'dragging' : ''}>
         Drag me
       </div>
-      
+
       <div {...dropProps} class={isOver ? 'drop-target' : ''}>
         Drop zone
       </div>
@@ -631,7 +631,7 @@ export const PrototypeForm = component$(() => {
       },
     },
   });
-  
+
   return (
     <form onSubmit$={form.handleSubmit}>
       <input
@@ -643,7 +643,7 @@ export const PrototypeForm = component$(() => {
       {form.fields.email.error && (
         <span role="alert">{form.fields.email.error}</span>
       )}
-      
+
       <button type="submit" disabled={!form.isValid}>
         Submit
       </button>
@@ -666,14 +666,14 @@ export const PrototypeApp = component$(() => {
     ],
     transition: 'fade', // fade, slide, scale
   });
-  
+
   return (
     <>
       <nav>
         <a onClick$={() => router.navigate('/')}>Home</a>
         <a onClick$={() => router.navigate('/about')}>About</a>
       </nav>
-      
+
       <main>
         {router.currentComponent}
       </main>
@@ -733,7 +733,7 @@ export const ButtonTest = component$(() => {
     variants: ['control', 'large', 'animated'],
     weights: [0.33, 0.33, 0.34],
   });
-  
+
   return (
     <>
       {variant === 'control' && (

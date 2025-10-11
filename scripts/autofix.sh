@@ -9,20 +9,20 @@ echo "🔧 Running safe autofixes..."
 
 # Check if we're in a git repository
 if ! git rev-parse --git-dir >/dev/null 2>&1; then
-	echo "❌ Error: Not in a git repository"
-	exit 1
+  echo "❌ Error: Not in a git repository"
+  exit 1
 fi
 
 # Check for uncommitted changes
 uncommitted_changes=$(git status --porcelain || true)
 if [[ -n ${uncommitted_changes} ]]; then
-	echo "⚠️  Warning: You have uncommitted changes. Consider committing them first."
-	read -p "Continue anyway? (y/N) " -n 1 -r
-	echo
-	if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
-		echo "Aborted."
-		exit 1
-	fi
+  echo "⚠️  Warning: You have uncommitted changes. Consider committing them first."
+  read -p "Continue anyway? (y/N) " -n 1 -r
+  echo
+  if [[ ! ${REPLY} =~ ^[Yy]$ ]]; then
+    echo "Aborted."
+    exit 1
+  fi
 fi
 
 echo "📋 Starting autofix sequence..."
@@ -54,18 +54,18 @@ changed_files_count=$(git diff --name-only | wc -l || true)
 changed_files_count=$(echo "${changed_files_count}" | tr -d ' ')
 
 if [[ ${changed_files_count} -gt 0 ]]; then
-	echo ""
-	echo "✅ Autofix complete! Fixed ${changed_files_count} files:"
-	echo ""
-	git status --short
-	echo ""
-	echo "🔍 Review changes with: git diff"
-	echo '📦 Commit changes with: git add . && git commit -m "🔧 autofix: Apply safe code quality fixes"'
-	echo ""
+  echo ""
+  echo "✅ Autofix complete! Fixed ${changed_files_count} files:"
+  echo ""
+  git status --short
+  echo ""
+  echo "🔍 Review changes with: git diff"
+  echo '📦 Commit changes with: git add . && git commit -m "🔧 autofix: Apply safe code quality fixes"'
+  echo ""
 else
-	echo ""
-	echo "✨ No changes needed! Your code is already perfectly formatted."
-	echo ""
+  echo ""
+  echo "✨ No changes needed! Your code is already perfectly formatted."
+  echo ""
 fi
 
 echo "🎉 Safe autofix complete!"

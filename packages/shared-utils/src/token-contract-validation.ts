@@ -33,7 +33,10 @@ interface TokenData {
 /**
  * Recursively extracts all token paths from the token tree
  */
-function getAllTokenPaths(tokens: Record<string, unknown>, prefix = ''): string[] {
+function getAllTokenPaths(
+  tokens: Record<string, unknown>,
+  prefix = ''
+): string[] {
   const paths: string[] = [];
 
   for (const [key, value] of Object.entries(tokens)) {
@@ -45,7 +48,9 @@ function getAllTokenPaths(tokens: Record<string, unknown>, prefix = ''): string[
         paths.push(currentPath);
       } else {
         // This is a token group, recurse
-        paths.push(...getAllTokenPaths(value as Record<string, unknown>, currentPath));
+        paths.push(
+          ...getAllTokenPaths(value as Record<string, unknown>, currentPath)
+        );
       }
     }
   }
@@ -59,7 +64,13 @@ function getAllTokenPaths(tokens: Record<string, unknown>, prefix = ''): string[
 function hasValidDTCGStructure(tokens: Record<string, unknown>): boolean {
   // Check for required top-level structure
   const hasGlobal = 'global' in tokens || 'base' in tokens;
-  const hasSemanticTokens = Object.keys(tokens).some((key) => key.startsWith('ds-') || (tokens[key] && typeof tokens[key] === 'object' && '$value' in (tokens[key] as object)));
+  const hasSemanticTokens = Object.keys(tokens).some(
+    key =>
+      key.startsWith('ds-') ||
+      (tokens[key] &&
+        typeof tokens[key] === 'object' &&
+        '$value' in (tokens[key] as object))
+  );
 
   return hasGlobal || hasSemanticTokens;
 }
@@ -80,7 +91,9 @@ function validateTokenNode(node: TokenData, path: string): string[] {
     case 'color':
       // Must be 6-digit hex
       if (typeof $value === 'string' && !/^#[0-9A-Fa-f]{6}$/.test($value)) {
-        violations.push(`${path}: Color "${$value}" must be 6-digit hex format`);
+        violations.push(
+          `${path}: Color "${$value}" must be 6-digit hex format`
+        );
       }
       break;
 
@@ -90,17 +103,26 @@ function validateTokenNode(node: TokenData, path: string): string[] {
       // Must be unitless number or valid CSS unit
       if (typeof $value === 'string') {
         if (!/^\d+(\.\d+)?(px|rem|em)?$/.test($value)) {
-          violations.push(`${path}: Dimension "${$value}" should be unitless number or valid CSS unit`);
+          violations.push(
+            `${path}: Dimension "${$value}" should be unitless number or valid CSS unit`
+          );
         }
       } else if (typeof $value !== 'number') {
-        violations.push(`${path}: Dimension must be number or string, got ${typeof $value}`);
+        violations.push(
+          `${path}: Dimension must be number or string, got ${typeof $value}`
+        );
       }
       break;
 
     case 'fontWeight':
       // Must be number or valid keyword
-      if (typeof $value !== 'number' && !['normal', 'bold', 'bolder', 'lighter'].includes($value as string)) {
-        violations.push(`${path}: Font weight "${$value}" must be number or valid keyword`);
+      if (
+        typeof $value !== 'number' &&
+        !['normal', 'bold', 'bolder', 'lighter'].includes($value as string)
+      ) {
+        violations.push(
+          `${path}: Font weight "${$value}" must be number or valid keyword`
+        );
       }
       break;
   }
@@ -176,16 +198,27 @@ function validateStorybookPorts(workspaceRoot: string): {
   const violations: string[] = [];
 
   // Check for Qwik Storybook port 6006
-  const qwikStorybookConfig = resolve(workspaceRoot, 'packages/design-system/.storybook/main.ts');
+  const qwikStorybookConfig = resolve(
+    workspaceRoot,
+    'packages/design-system/.storybook/main.ts'
+  );
   if (existsSync(qwikStorybookConfig)) {
     const content = readFileSync(qwikStorybookConfig, 'utf-8');
-    if (!content.includes('6006') && !content.includes('framework: "@storybook/qwik"')) {
-      violations.push('Qwik Storybook must use port 6006 and framework "@storybook/qwik"');
+    if (
+      !content.includes('6006') &&
+      !content.includes('framework: "@storybook/qwik"')
+    ) {
+      violations.push(
+        'Qwik Storybook must use port 6006 and framework "@storybook/qwik"'
+      );
     }
   }
 
   // Check for React Native Storybook port 7007
-  const rnStorybookConfig = resolve(workspaceRoot, 'packages/design-system/.storybook/main.mobile.ts');
+  const rnStorybookConfig = resolve(
+    workspaceRoot,
+    'packages/design-system/.storybook/main.mobile.ts'
+  );
   if (existsSync(rnStorybookConfig)) {
     const content = readFileSync(rnStorybookConfig, 'utf-8');
     if (!content.includes('7007')) {
@@ -202,7 +235,10 @@ function validateStorybookPorts(workspaceRoot: string): {
 /**
  * Main validation function
  */
-export function validateTokenContract(tokensPath: string, workspaceRoot?: string): TokenContractValidation {
+export function validateTokenContract(
+  tokensPath: string,
+  workspaceRoot?: string
+): TokenContractValidation {
   const violations: string[] = [];
   const warnings: string[] = [];
 
@@ -227,18 +263,29 @@ export function validateTokenContract(tokensPath: string, workspaceRoot?: string
 
   // 1. Validate ds- prefix compliance
   const tokenPaths = getAllTokenPaths(tokens);
-  const semanticTokens = tokenPaths.filter((path) => !path.startsWith('global') && !path.startsWith('base') && !path.startsWith('alias'));
+  const semanticTokens = tokenPaths.filter(
+    path =>
+      !path.startsWith('global') &&
+      !path.startsWith('base') &&
+      !path.startsWith('alias')
+  );
 
-  const unprefixedTokens = semanticTokens.filter((path) => !path.startsWith('ds-'));
+  const unprefixedTokens = semanticTokens.filter(
+    path => !path.startsWith('ds-')
+  );
   const prefixCompliance = unprefixedTokens.length === 0;
 
   if (!prefixCompliance) {
-    violations.push(`Unprefixed semantic tokens found: ${unprefixedTokens.slice(0, 5).join(', ')}${unprefixedTokens.length > 5 ? '...' : ''}`);
-    violations.push('Solution: Prefix all semantic tokens with "ds-" in Penpot');
+    violations.push(
+      `Unprefixed semantic tokens found: ${unprefixedTokens.slice(0, 5).join(', ')}${unprefixedTokens.length > 5 ? '...' : ''}`
+    );
+    violations.push(
+      'Solution: Prefix all semantic tokens with "ds-" in Penpot'
+    );
   }
 
   // 2. Validate kebab-case naming compliance
-  const invalidNames = tokenPaths.filter((path) => {
+  const invalidNames = tokenPaths.filter(path => {
     // Check for uppercase letters, spaces, or forward slashes
     return /[A-Z]|\s|\//.test(path);
   });
@@ -246,16 +293,24 @@ export function validateTokenContract(tokensPath: string, workspaceRoot?: string
   const namingCompliance = invalidNames.length === 0;
 
   if (!namingCompliance) {
-    violations.push(`Invalid naming found: ${invalidNames.slice(0, 5).join(', ')}${invalidNames.length > 5 ? '...' : ''}`);
-    violations.push('Solution: Use kebab-case names (lowercase with hyphens) in Penpot');
+    violations.push(
+      `Invalid naming found: ${invalidNames.slice(0, 5).join(', ')}${invalidNames.length > 5 ? '...' : ''}`
+    );
+    violations.push(
+      'Solution: Use kebab-case names (lowercase with hyphens) in Penpot'
+    );
   }
 
   // 3. Validate DTCG structure compliance
   const structureCompliance = hasValidDTCGStructure(tokens);
 
   if (!structureCompliance) {
-    violations.push('Invalid DTCG structure: Missing global/base tokens or proper hierarchy');
-    violations.push('Solution: Organize tokens in global → alias → semantic hierarchy');
+    violations.push(
+      'Invalid DTCG structure: Missing global/base tokens or proper hierarchy'
+    );
+    violations.push(
+      'Solution: Organize tokens in global → alias → semantic hierarchy'
+    );
   }
 
   // 4. Validate types and units
@@ -265,7 +320,9 @@ export function validateTokenContract(tokensPath: string, workspaceRoot?: string
   violations.push(...typeViolations);
 
   if (!typeCompliance) {
-    violations.push('Solution: Use 6-digit hex for colors, unitless numbers for dimensions');
+    violations.push(
+      'Solution: Use 6-digit hex for colors, unitless numbers for dimensions'
+    );
   }
 
   // 5. Validate platform outputs (if workspace root provided)
@@ -275,8 +332,12 @@ export function validateTokenContract(tokensPath: string, workspaceRoot?: string
     platformOutputs = outputValidation.success;
 
     if (!platformOutputs) {
-      violations.push(`Missing platform outputs: ${outputValidation.missing.join(', ')}`);
-      violations.push('Solution: Run "pnpm build:tokens" to generate platform outputs');
+      violations.push(
+        `Missing platform outputs: ${outputValidation.missing.join(', ')}`
+      );
+      violations.push(
+        'Solution: Run "pnpm build:tokens" to generate platform outputs'
+      );
     }
   }
 
@@ -288,23 +349,31 @@ export function validateTokenContract(tokensPath: string, workspaceRoot?: string
 
     if (!storybookPorts) {
       violations.push(...storybookValidation.violations);
-      violations.push('Solution: Configure Qwik Storybook on port 6006, React Native on port 7007');
+      violations.push(
+        'Solution: Configure Qwik Storybook on port 6006, React Native on port 7007'
+      );
     }
   }
 
   // Generate warnings for best practices
   if (tokenPaths.length === 0) {
-    warnings.push('No tokens found in file - this may be intentional for testing');
+    warnings.push(
+      'No tokens found in file - this may be intentional for testing'
+    );
   }
 
-  const colorTokens = tokenPaths.filter((path) => path.includes('color'));
+  const colorTokens = tokenPaths.filter(path => path.includes('color'));
   if (colorTokens.length === 0) {
     warnings.push('No color tokens found - consider adding color definitions');
   }
 
-  const spacingTokens = tokenPaths.filter((path) => path.includes('spacing') || path.includes('space'));
+  const spacingTokens = tokenPaths.filter(
+    path => path.includes('spacing') || path.includes('space')
+  );
   if (spacingTokens.length === 0) {
-    warnings.push('No spacing tokens found - consider adding spacing definitions');
+    warnings.push(
+      'No spacing tokens found - consider adding spacing definitions'
+    );
   }
 
   return {
@@ -374,7 +443,7 @@ export function runTokenContractValidation(): void {
   if (validation.violations.length > 0) {
     // eslint-disable-next-line no-console
     console.log('❌ Contract Violations:');
-    validation.violations.forEach((violation) => {
+    validation.violations.forEach(violation => {
       // eslint-disable-next-line no-console
       console.log(`   • ${violation}`);
     });
@@ -386,7 +455,7 @@ export function runTokenContractValidation(): void {
   if (validation.warnings.length > 0) {
     // eslint-disable-next-line no-console
     console.log('⚠️  Warnings:');
-    validation.warnings.forEach((warning) => {
+    validation.warnings.forEach(warning => {
       // eslint-disable-next-line no-console
       console.log(`   • ${warning}`);
     });
@@ -395,13 +464,21 @@ export function runTokenContractValidation(): void {
   }
 
   // Overall status
-  const allPassed = validation.prefixCompliance && validation.namingCompliance && validation.structureCompliance && validation.typeCompliance && validation.platformOutputs && validation.storybookPorts;
+  const allPassed =
+    validation.prefixCompliance &&
+    validation.namingCompliance &&
+    validation.structureCompliance &&
+    validation.typeCompliance &&
+    validation.platformOutputs &&
+    validation.storybookPorts;
 
   if (allPassed) {
     // eslint-disable-next-line no-console
     console.log('🎉 Token Contract Validation: PASSED');
     // eslint-disable-next-line no-console
-    console.log('Your tokens are ready for collision-free consumption across all platforms!\n');
+    console.log(
+      'Your tokens are ready for collision-free consumption across all platforms!\n'
+    );
   } else {
     // eslint-disable-next-line no-console
     console.log('🚫 Token Contract Validation: FAILED');

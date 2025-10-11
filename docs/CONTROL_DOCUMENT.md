@@ -867,7 +867,7 @@ The cleanup chain is automatically invoked by:
 6. **Commit** → Pre-commit hooks automatically format, lint, clean Apple junk, and validate token drift
 7. **CI** → Style Dictionary drift check, Storybook test-runner, Loki visual diff, size budgets
 8. **Release** → `nx release`, `pnpm deploy` (Cloudflare Pages, auto-cleaned), Tauri updater manifest, mobile store
-uploads
+   uploads
 
 #### Live Development Setup
 

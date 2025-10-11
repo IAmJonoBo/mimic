@@ -6,11 +6,26 @@ export default defineConfig({
   resolve: {
     alias: {
       // Collision-safe token paths for Storybook
-      '@mimic/design-tokens/css': resolve(__dirname, '../../design-tokens/libs/tokens/css/tokens.css'),
-      '@mimic/design-tokens/scss': resolve(__dirname, '../../design-tokens/libs/tokens/scss/tokens.scss'),
-      '@mimic/design-tokens/js': resolve(__dirname, '../../design-tokens/libs/tokens/js/tokens.js'),
-      '@mimic/design-tokens/ts': resolve(__dirname, '../../design-tokens/libs/tokens/ts/tokens.ts'),
-      '@mimic/design-tokens': resolve(__dirname, '../../design-tokens/libs/tokens/ts/tokens.ts'),
+      '@mimic/design-tokens/css': resolve(
+        __dirname,
+        '../../design-tokens/libs/tokens/css/tokens.css'
+      ),
+      '@mimic/design-tokens/scss': resolve(
+        __dirname,
+        '../../design-tokens/libs/tokens/scss/tokens.scss'
+      ),
+      '@mimic/design-tokens/js': resolve(
+        __dirname,
+        '../../design-tokens/libs/tokens/js/tokens.js'
+      ),
+      '@mimic/design-tokens/ts': resolve(
+        __dirname,
+        '../../design-tokens/libs/tokens/ts/tokens.ts'
+      ),
+      '@mimic/design-tokens': resolve(
+        __dirname,
+        '../../design-tokens/libs/tokens/ts/tokens.ts'
+      ),
     },
   },
   css: {

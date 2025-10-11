@@ -139,7 +139,11 @@
     "clean": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["rm -rf dist", "rm -rf storybook-static", "node ../../tools/apple-cleaner.js ."],
+        "commands": [
+          "rm -rf dist",
+          "rm -rf storybook-static",
+          "node ../../tools/apple-cleaner.js ."
+        ],
         "cwd": "packages/design-system",
         "parallel": false
       }

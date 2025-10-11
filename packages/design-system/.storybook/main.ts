@@ -2,7 +2,15 @@ import type { StorybookConfig } from '@storybook/html-vite';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)'],
-  addons: ['@storybook/addon-essentials', '@storybook/addon-interactions', '@storybook/addon-a11y', '@storybook/addon-links', '@storybook/addon-docs', '@storybook/addon-measure', '@storybook/addon-outline'],
+  addons: [
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+    '@storybook/addon-a11y',
+    '@storybook/addon-links',
+    '@storybook/addon-docs',
+    '@storybook/addon-measure',
+    '@storybook/addon-outline',
+  ],
   framework: {
     name: '@storybook/html-vite',
     options: {
@@ -27,7 +35,7 @@ const config: StorybookConfig = {
       expanded: false,
     },
   },
-  viteFinal: async (config) => {
+  viteFinal: async config => {
     // Fixed port assignment to prevent Supernova-documented conflicts
     config.server = config.server || {};
     config.server.port = 6006; // Web Storybook: Port 6006 (Vite builder default)
@@ -36,9 +44,15 @@ const config: StorybookConfig = {
     config.resolve = config.resolve || {};
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@mimic/design-tokens/web': require.resolve('../../design-tokens/libs/tokens/css/tokens.css'),
-      '@mimic/design-tokens/js': require.resolve('../../design-tokens/libs/tokens/js/tokens.js'),
-      '@mimic/design-tokens/types': require.resolve('../../design-tokens/libs/tokens/ts/tokens.ts'),
+      '@mimic/design-tokens/web': require.resolve(
+        '../../design-tokens/libs/tokens/css/tokens.css'
+      ),
+      '@mimic/design-tokens/js': require.resolve(
+        '../../design-tokens/libs/tokens/js/tokens.js'
+      ),
+      '@mimic/design-tokens/types': require.resolve(
+        '../../design-tokens/libs/tokens/ts/tokens.ts'
+      ),
     };
 
     // Add CSS preprocessing for design tokens

@@ -10,21 +10,24 @@ const tasks = [
     id: 'build',
     label: '🏗️ build',
     aliases: ['build', '🏗️', 'build-all'],
-    command: 'cross-env NX_NO_CLOUD=true nx run-many -t build --exclude=workspace-format && pnpm run postbuild:clean',
+    command:
+      'cross-env NX_NO_CLOUD=true nx run-many -t build --exclude=workspace-format && pnpm run postbuild:clean',
     description: 'Build all packages (offline safe)',
   },
   {
     id: 'test',
     label: '🧪 test',
     aliases: ['test', '🧪'],
-    command: 'cross-env NX_NO_CLOUD=true pnpm nx run-many -t test --exclude=workspace-format',
+    command:
+      'cross-env NX_NO_CLOUD=true pnpm nx run-many -t test --exclude=workspace-format',
     description: 'Run all tests',
   },
   {
     id: 'lint',
     label: '🔍 lint',
     aliases: ['lint', '🔍'],
-    command: 'cross-env NX_NO_CLOUD=true pnpm nx run-many -t lint --exclude=workspace-format',
+    command:
+      'cross-env NX_NO_CLOUD=true pnpm nx run-many -t lint --exclude=workspace-format',
     description: 'Lint all packages',
   },
   {
@@ -59,7 +62,8 @@ const tasks = [
     id: 'affected',
     label: '⚡ affected',
     aliases: ['affected', 'affected:build'],
-    command: 'cross-env NX_NO_CLOUD=true pnpm nx affected -t build --exclude=workspace-format',
+    command:
+      'cross-env NX_NO_CLOUD=true pnpm nx affected -t build --exclude=workspace-format',
     description: 'Build only affected projects',
   },
   {
@@ -100,8 +104,12 @@ for (const task of tasks) {
 function showMenu() {
   console.log('\n🎨 Mimic Development Task Runner\n');
   for (const task of tasks) {
-    const aliasList = task.aliases?.filter((alias) => alias !== task.id && alias !== task.label);
-    const aliasDisplay = aliasList?.length ? ` (aliases: ${aliasList.join(', ')})` : '';
+    const aliasList = task.aliases?.filter(
+      alias => alias !== task.id && alias !== task.label
+    );
+    const aliasDisplay = aliasList?.length
+      ? ` (aliases: ${aliasList.join(', ')})`
+      : '';
     console.log(`${task.label.padEnd(15)} ${task.description}${aliasDisplay}`);
   }
   console.log('\n');
@@ -120,10 +128,16 @@ function runTask(taskKey) {
   console.log(`📝 Command: ${task.command}\n`);
 
   try {
-    execSync(task.command, { stdio: 'inherit', cwd: process.cwd(), env: process.env });
+    execSync(task.command, {
+      stdio: 'inherit',
+      cwd: process.cwd(),
+      env: process.env,
+    });
     console.log(`\n✅ Task "${taskKey}" completed successfully!`);
   } catch (error) {
-    console.error(`\n❌ Task "${taskKey}" failed with exit code ${error.status}`);
+    console.error(
+      `\n❌ Task "${taskKey}" failed with exit code ${error.status}`
+    );
     process.exit(error.status || 1);
   }
 }

@@ -15,11 +15,11 @@ We follow the [Contributor Covenant](CODE_OF_CONDUCT.md). Be kind, inclusive, an
    Token Orchestrator).
 3. **Fork and clone** —
 
-  ```bash
-   git clone https://github.com/YOUR_USERNAME/mimic.git
-   cd mimic
-   git remote add upstream https://github.com/IAmJonoBo/mimic.git
-   ```
+```bash
+ git clone https://github.com/YOUR_USERNAME/mimic.git
+ cd mimic
+ git remote add upstream https://github.com/IAmJonoBo/mimic.git
+```
 
 4. **Bootstrap once** — `./setup.sh` installs Node 22.20, pnpm 10.17.1, Husky hooks, and workspace deps.
 

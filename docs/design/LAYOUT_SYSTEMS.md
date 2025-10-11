@@ -30,20 +30,20 @@ The 12-column grid is the most flexible for responsive design.
 // Grid configuration
 const gridSystem = {
   columns: 12,
-  gutter: getToken('spacing.md'),  // 1rem (16px)
-  margin: getToken('spacing.lg'),   // 1.5rem (24px)
+  gutter: getToken('spacing.md'), // 1rem (16px)
+  margin: getToken('spacing.lg'), // 1.5rem (24px)
   maxWidth: '1280px',
 };
 
 // Common column spans
 const layouts = {
-  full: 12,        // Full width
-  half: 6,         // 50%
-  third: 4,        // 33.33%
-  quarter: 3,      // 25%
-  twoThirds: 8,    // 66.66%
-  sidebar: 3,      // 25% sidebar
-  main: 9,         // 75% main content
+  full: 12, // Full width
+  half: 6, // 50%
+  third: 4, // 33.33%
+  quarter: 3, // 25%
+  twoThirds: 8, // 66.66%
+  sidebar: 3, // 25% sidebar
+  main: 9, // 75% main content
 };
 ```
 
@@ -60,16 +60,30 @@ const layouts = {
   padding: 0 var(--ds-spacing-lg);
 }
 
-.col-12 { grid-column: span 12; }
-.col-9 { grid-column: span 9; }
-.col-6 { grid-column: span 6; }
-.col-4 { grid-column: span 4; }
-.col-3 { grid-column: span 3; }
+.col-12 {
+  grid-column: span 12;
+}
+.col-9 {
+  grid-column: span 9;
+}
+.col-6 {
+  grid-column: span 6;
+}
+.col-4 {
+  grid-column: span 4;
+}
+.col-3 {
+  grid-column: span 3;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
-  .col-md-12 { grid-column: span 12; }
-  .col-md-6 { grid-column: span 6; }
+  .col-md-12 {
+    grid-column: span 12;
+  }
+  .col-md-6 {
+    grid-column: span 6;
+  }
 }
 ```
 
@@ -118,21 +132,21 @@ All spacing uses multiples of 8px for consistency and alignment.
 import { getToken } from '@mimic/design-tokens';
 
 const spacing = {
-  xs: getToken('spacing.xs'),    // 0.5rem (8px)
-  sm: getToken('spacing.sm'),    // 0.75rem (12px)
-  md: getToken('spacing.md'),    // 1rem (16px)
-  lg: getToken('spacing.lg'),    // 1.5rem (24px)
-  xl: getToken('spacing.xl'),    // 2rem (32px)
+  xs: getToken('spacing.xs'), // 0.5rem (8px)
+  sm: getToken('spacing.sm'), // 0.75rem (12px)
+  md: getToken('spacing.md'), // 1rem (16px)
+  lg: getToken('spacing.lg'), // 1.5rem (24px)
+  xl: getToken('spacing.xl'), // 2rem (32px)
   '2xl': getToken('spacing.2xl'), // 3rem (48px)
   '3xl': getToken('spacing.3xl'), // 4rem (64px)
 };
 
 // Component spacing
 const component = {
-  padding: spacing.md,         // 16px
-  margin: spacing.lg,          // 24px
-  gap: spacing.sm,             // 12px (exception for tighter spacing)
-  iconSize: spacing.lg,        // 24px
+  padding: spacing.md, // 16px
+  margin: spacing.lg, // 24px
+  gap: spacing.sm, // 12px (exception for tighter spacing)
+  iconSize: spacing.lg, // 24px
 };
 ```
 
@@ -167,13 +181,13 @@ Aligns text to a vertical rhythm for visual harmony.
 /* All text aligns to 8px baseline */
 h1 {
   font-size: 2.25rem; /* 36px */
-  line-height: 1.333;  /* 48px (6 × 8px) */
+  line-height: 1.333; /* 48px (6 × 8px) */
   margin-bottom: 24px; /* 3 × 8px */
 }
 
 p {
-  font-size: 1rem;     /* 16px */
-  line-height: 1.5;    /* 24px (3 × 8px) */
+  font-size: 1rem; /* 16px */
+  line-height: 1.5; /* 24px (3 × 8px) */
   margin-bottom: 24px; /* 3 × 8px */
 }
 ```
@@ -187,13 +201,13 @@ Consistent spacing creates visual hierarchy and improves readability.
 ```typescript
 // T-shirt sizing scale
 const spacingScale = {
-  xs: '0.5rem',    // 8px  - Tight spacing
-  sm: '0.75rem',   // 12px - Related items
-  md: '1rem',      // 16px - Default
-  lg: '1.5rem',    // 24px - Section spacing
-  xl: '2rem',      // 32px - Major sections
-  '2xl': '3rem',   // 48px - Large gaps
-  '3xl': '4rem',   // 64px - Hero sections
+  xs: '0.5rem', // 8px  - Tight spacing
+  sm: '0.75rem', // 12px - Related items
+  md: '1rem', // 16px - Default
+  lg: '1.5rem', // 24px - Section spacing
+  xl: '2rem', // 32px - Major sections
+  '2xl': '3rem', // 48px - Large gaps
+  '3xl': '4rem', // 64px - Hero sections
 };
 ```
 
@@ -204,23 +218,23 @@ const spacingScale = {
 ```typescript
 // Button internal spacing
 const button = {
-  paddingX: getToken('spacing.md'),  // 16px horizontal
-  paddingY: getToken('spacing.sm'),  // 12px vertical
-  gap: getToken('spacing.xs'),       // 8px between icon and text
+  paddingX: getToken('spacing.md'), // 16px horizontal
+  paddingY: getToken('spacing.sm'), // 12px vertical
+  gap: getToken('spacing.xs'), // 8px between icon and text
 };
 
 // Card spacing
 const card = {
-  padding: getToken('spacing.lg'),           // 24px
-  gap: getToken('spacing.md'),               // 16px between elements
-  marginBottom: getToken('spacing.xl'),      // 32px from next card
+  padding: getToken('spacing.lg'), // 24px
+  gap: getToken('spacing.md'), // 16px between elements
+  marginBottom: getToken('spacing.xl'), // 32px from next card
 };
 
 // Form spacing
 const form = {
-  fieldGap: getToken('spacing.md'),          // 16px between fields
-  labelGap: getToken('spacing.xs'),          // 8px label to input
-  sectionGap: getToken('spacing.xl'),        // 32px between sections
+  fieldGap: getToken('spacing.md'), // 16px between fields
+  labelGap: getToken('spacing.xs'), // 8px label to input
+  sectionGap: getToken('spacing.xl'), // 32px between sections
 };
 ```
 
@@ -261,14 +275,14 @@ const hero = {
 
 // Moderate spacing for content
 const content = {
-  padding: getToken('spacing.xl'),  // 32px
-  gap: getToken('spacing.lg'),      // 24px
+  padding: getToken('spacing.xl'), // 32px
+  gap: getToken('spacing.lg'), // 24px
 };
 
 // Tight spacing for related items
 const menu = {
-  padding: getToken('spacing.sm'),  // 12px
-  gap: getToken('spacing.xs'),      // 8px
+  padding: getToken('spacing.sm'), // 12px
+  gap: getToken('spacing.xs'), // 8px
 };
 ```
 
@@ -385,19 +399,19 @@ Group related items close together.
 ```typescript
 // Related form fields
 const formGroup = {
-  marginBottom: getToken('spacing.xl'),  // 32px from other groups
+  marginBottom: getToken('spacing.xl'), // 32px from other groups
 };
 
 const formLabel = {
-  marginBottom: getToken('spacing.xs'),  // 8px from input (close)
+  marginBottom: getToken('spacing.xs'), // 8px from input (close)
 };
 
 const formInput = {
-  marginBottom: getToken('spacing.xs'),  // 8px from helper text (close)
+  marginBottom: getToken('spacing.xs'), // 8px from helper text (close)
 };
 
 const formHelper = {
-  marginBottom: 0,                       // No gap within group
+  marginBottom: 0, // No gap within group
 };
 ```
 
@@ -439,11 +453,11 @@ Start with mobile, progressively enhance for larger screens.
 
 ```typescript
 const breakpoints = {
-  xs: '0px',       // Mobile portrait
-  sm: '640px',     // Mobile landscape
-  md: '768px',     // Tablet
-  lg: '1024px',    // Desktop
-  xl: '1280px',    // Large desktop
+  xs: '0px', // Mobile portrait
+  sm: '640px', // Mobile landscape
+  md: '768px', // Tablet
+  lg: '1024px', // Desktop
+  xl: '1280px', // Large desktop
   '2xl': '1536px', // Extra large
 };
 
@@ -500,30 +514,40 @@ Header, footer, main content with sidebars.
 .holy-grail {
   display: grid;
   grid-template-areas:
-    "header header header"
-    "left main right"
-    "footer footer footer";
+    'header header header'
+    'left main right'
+    'footer footer footer';
   grid-template-columns: 1fr 3fr 1fr;
   grid-template-rows: auto 1fr auto;
   min-height: 100vh;
   gap: var(--ds-spacing-lg);
 }
 
-.header { grid-area: header; }
-.left-sidebar { grid-area: left; }
-.main-content { grid-area: main; }
-.right-sidebar { grid-area: right; }
-.footer { grid-area: footer; }
+.header {
+  grid-area: header;
+}
+.left-sidebar {
+  grid-area: left;
+}
+.main-content {
+  grid-area: main;
+}
+.right-sidebar {
+  grid-area: right;
+}
+.footer {
+  grid-area: footer;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
   .holy-grail {
     grid-template-areas:
-      "header"
-      "main"
-      "left"
-      "right"
-      "footer";
+      'header'
+      'main'
+      'left'
+      'right'
+      'footer';
     grid-template-columns: 1fr;
   }
 }
@@ -576,7 +600,7 @@ Header, footer, main content with sidebars.
   .sidebar-layout {
     grid-template-columns: 1fr;
   }
-  
+
   .sidebar {
     position: static;
     height: auto;
@@ -650,7 +674,7 @@ Header, footer, main content with sidebars.
 
 ### Flexbox vs Grid
 
-#### Use Flexbox When:
+#### Use Flexbox When
 
 - One-dimensional layouts (row or column)
 - Content size determines layout

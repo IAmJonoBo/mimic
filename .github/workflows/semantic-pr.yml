@@ -26,5 +26,5 @@ jobs:
             style
             test
           requireScope: false
-          subjectPattern: ".+"
+          subjectPattern: .+
           wip: true

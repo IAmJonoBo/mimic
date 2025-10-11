@@ -21,7 +21,9 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 type ThemeProviderProps = PropsWithChildren;
 
-const resolveSystemTheme = (scheme: ColorSchemeName | null | undefined): 'light' | 'dark' => {
+const resolveSystemTheme = (
+  scheme: ColorSchemeName | null | undefined
+): 'light' | 'dark' => {
   if (scheme === 'dark') {
     return 'dark';
   }
@@ -31,17 +33,22 @@ const resolveSystemTheme = (scheme: ColorSchemeName | null | undefined): 'light'
 
 export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
   const systemColorScheme = useColorScheme();
-  const [userTheme, setUserTheme] = useState<'light' | 'dark' | 'system'>('system');
+  const [userTheme, setUserTheme] = useState<'light' | 'dark' | 'system'>(
+    'system'
+  );
 
-  const theme: 'light' | 'dark' = userTheme === 'system' ? resolveSystemTheme(systemColorScheme) : userTheme;
+  const theme: 'light' | 'dark' =
+    userTheme === 'system' ? resolveSystemTheme(systemColorScheme) : userTheme;
 
   // Listen for system theme changes
   useEffect(() => {
-    const subscription = Appearance.addChangeListener(({ colorScheme: _colorScheme }) => {
-      if (userTheme === 'system') {
-        // Theme will update automatically via systemColorScheme
+    const subscription = Appearance.addChangeListener(
+      ({ colorScheme: _colorScheme }) => {
+        if (userTheme === 'system') {
+          // Theme will update automatically via systemColorScheme
+        }
       }
-    });
+    );
 
     return () => subscription?.remove();
   }, [userTheme]);
@@ -52,7 +59,11 @@ export const ThemeProvider: FC<ThemeProviderProps> = ({ children }) => {
     setTheme: setUserTheme,
   };
 
-  return <ThemeContext.Provider value={contextValue}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={contextValue}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 export const useTheme = (): ThemeContextType => {
@@ -70,12 +81,19 @@ export const useTheme = (): ThemeContextType => {
 export const useTokens = () => {
   const { tokens } = useTheme();
 
-  const getToken = (tokenPath: string, fallback?: string | number): string | number | undefined => {
+  const getToken = (
+    tokenPath: string,
+    fallback?: string | number
+  ): string | number | undefined => {
     const keys = tokenPath.split('.');
     let value: unknown = tokens;
 
     for (const key of keys) {
-      if (value !== null && typeof value === 'object' && key in (value as Record<string, unknown>)) {
+      if (
+        value !== null &&
+        typeof value === 'object' &&
+        key in (value as Record<string, unknown>)
+      ) {
         value = (value as Record<string, unknown>)[key];
       } else {
         return fallback;

@@ -53,7 +53,7 @@ export const Button = component$<{
 export const SubmitButtonContainer = component$(() => {
   const isLoading = useSignal(false);
   const isDisabled = useSignal(false);
-  
+
   const handleSubmit = $(async () => {
     isLoading.value = true;
     try {
@@ -62,7 +62,7 @@ export const SubmitButtonContainer = component$(() => {
       isLoading.value = false;
     }
   });
-  
+
   return (
     <Button
       variant="primary"
@@ -92,7 +92,7 @@ Components that work together to form a complete interface.
 // Tab component system
 export const Tabs = component$(() => {
   const activeTab = useSignal(0);
-  
+
   return (
     <div role="tablist">
       {props.children}
@@ -132,7 +132,7 @@ export const TabPanel = component$<{
   isActive?: boolean;
 }>((props) => {
   if (!props.isActive) return null;
-  
+
   return (
     <div role="tabpanel" class="tab-panel">
       {props.children}
@@ -147,7 +147,7 @@ export const TabPanel = component$<{
     <Tab>Settings</Tab>
     <Tab>Notifications</Tab>
   </TabList>
-  
+
   <TabPanels>
     <TabPanel>Profile content</TabPanel>
     <TabPanel>Settings content</TabPanel>
@@ -177,7 +177,7 @@ export const DataFetcher = component$<{
   const data = useSignal<any>(null);
   const loading = useSignal(true);
   const error = useSignal<Error | null>(null);
-  
+
   useTask$(async () => {
     try {
       const response = await fetch(props.url);
@@ -188,7 +188,7 @@ export const DataFetcher = component$<{
       loading.value = false;
     }
   });
-  
+
   return props.render(data.value, loading.value, error.value);
 });
 
@@ -198,7 +198,7 @@ export const DataFetcher = component$<{
   render={(users, loading, error) => {
     if (loading) return <Spinner />;
     if (error) return <Error message={error.message} />;
-    
+
     return (
       <ul>
         {users.map(user => (
@@ -240,11 +240,11 @@ export const Card = component$<{
           <Slot name="header" />
         </div>
       )}
-      
+
       <div class="card-body">
         <Slot /> {/* Default slot */}
       </div>
-      
+
       {props.footer && (
         <div class="card-footer">
           <Slot name="footer" />
@@ -259,9 +259,9 @@ export const Card = component$<{
   <div q:slot="header">
     <h2>Card Title</h2>
   </div>
-  
+
   <p>Card content goes here</p>
-  
+
   <div q:slot="footer">
     <button>Action</button>
   </div>
@@ -293,28 +293,28 @@ export const ThemeContext = createContextId<{
 // Provider component
 export const ThemeProvider = component$(() => {
   const theme = useSignal<'light' | 'dark'>('light');
-  
+
   const toggleTheme = $(() => {
     theme.value = theme.value === 'light' ? 'dark' : 'light';
   });
-  
+
   useContextProvider(ThemeContext, {
     theme: theme.value,
     toggleTheme,
   });
-  
+
   return <Slot />;
 });
 
 // Consumer component
 export const ThemedButton = component$(() => {
   const { theme, toggleTheme } = useContext(ThemeContext);
-  
+
   return (
     <button
       onClick$={toggleTheme}
       style={{
-        background: theme === 'light' 
+        background: theme === 'light'
           ? getToken('color.neutral.50')
           : getToken('color.neutral.900'),
         color: theme === 'light'
@@ -353,30 +353,30 @@ export const ControlledForm = component$(() => {
     password: '',
     rememberMe: false,
   });
-  
+
   const errors = useStore({
     email: '',
     password: '',
   });
-  
+
   const handleSubmit = $((e: Event) => {
     e.preventDefault();
-    
+
     // Validation
     if (!formData.email.includes('@')) {
       errors.email = 'Invalid email';
       return;
     }
-    
+
     if (formData.password.length < 8) {
       errors.password = 'Password must be at least 8 characters';
       return;
     }
-    
+
     // Submit
     console.log('Submitting:', formData);
   });
-  
+
   return (
     <form onSubmit$={handleSubmit}>
       <label htmlFor="email">Email</label>
@@ -393,7 +393,7 @@ export const ControlledForm = component$(() => {
           {errors.email}
         </div>
       )}
-      
+
       <label htmlFor="password">Password</label>
       <input
         id="password"
@@ -408,7 +408,7 @@ export const ControlledForm = component$(() => {
           {errors.password}
         </div>
       )}
-      
+
       <label>
         <input
           type="checkbox"
@@ -417,7 +417,7 @@ export const ControlledForm = component$(() => {
         />
         Remember me
       </label>
-      
+
       <button type="submit">Sign In</button>
     </form>
   );
@@ -440,20 +440,20 @@ export const FormField = component$<{
   const id = useId();
   const errorId = `${id}-error`;
   const helperId = `${id}-helper`;
-  
+
   return (
     <div class="form-field">
       <label htmlFor={id}>
         {props.label}
         {props.required && <span aria-label="required">*</span>}
       </label>
-      
+
       {props.helperText && (
         <div id={helperId} class="helper-text">
           {props.helperText}
         </div>
       )}
-      
+
       <input
         id={id}
         type={props.type || 'text'}
@@ -468,7 +468,7 @@ export const FormField = component$<{
         ].filter(Boolean).join(' ') || undefined}
         onInput$={(e) => props.onInput$?.(e.target.value)}
       />
-      
+
       {props.error && (
         <div id={errorId} role="alert" class="error-text">
           {props.error}
@@ -503,13 +503,13 @@ export const VirtualList = component$<{
   itemHeight: number;
 }>((props) => {
   const parentRef = useSignal<Element>();
-  
+
   const virtualizer = useVirtualizer({
     count: props.items.length,
     getScrollElement: () => parentRef.value,
     estimateSize: () => props.itemHeight,
   });
-  
+
   return (
     <div
       ref={parentRef}
@@ -559,7 +559,7 @@ export const DataTable = component$<{
 }>((props) => {
   const sortBy = useSignal<string | null>(null);
   const sortDir = useSignal<'asc' | 'desc'>('asc');
-  
+
   const handleSort = $((key: string) => {
     if (sortBy.value === key) {
       sortDir.value = sortDir.value === 'asc' ? 'desc' : 'asc';
@@ -568,20 +568,20 @@ export const DataTable = component$<{
       sortDir.value = 'asc';
     }
   });
-  
+
   const sortedData = [...props.data].sort((a, b) => {
     if (!sortBy.value) return 0;
-    
+
     const aVal = a[sortBy.value];
     const bVal = b[sortBy.value];
-    
+
     if (sortDir.value === 'asc') {
       return aVal > bVal ? 1 : -1;
     } else {
       return aVal < bVal ? 1 : -1;
     }
   });
-  
+
   return (
     <table role="table">
       <thead>
@@ -639,14 +639,14 @@ export const Modal = component$<{
   title: string;
 }>((props) => {
   const dialogRef = useSignal<HTMLElement>();
-  
+
   // Focus management
   useVisibleTask$(({ track }) => {
     track(() => props.isOpen);
-    
+
     if (props.isOpen) {
       const previousFocus = document.activeElement as HTMLElement;
-      
+
       // Focus first element in modal
       setTimeout(() => {
         const firstFocusable = dialogRef.value?.querySelector(
@@ -654,16 +654,16 @@ export const Modal = component$<{
         ) as HTMLElement;
         firstFocusable?.focus();
       }, 0);
-      
+
       // Trap focus
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape') {
           props.onClose$();
         }
       };
-      
+
       document.addEventListener('keydown', handleKeyDown);
-      
+
       // Restore focus on close
       return () => {
         document.removeEventListener('keydown', handleKeyDown);
@@ -671,9 +671,9 @@ export const Modal = component$<{
       };
     }
   });
-  
+
   if (!props.isOpen) return null;
-  
+
   return (
     <div
       class="modal-overlay"
@@ -703,11 +703,11 @@ export const Modal = component$<{
         }}
       >
         <h2 id="modal-title">{props.title}</h2>
-        
+
         <div class="modal-content">
           <Slot />
         </div>
-        
+
         <div class="modal-actions">
           <button onClick$={props.onClose$}>Close</button>
         </div>
@@ -725,25 +725,25 @@ export const Modal = component$<{
 export const Navigation = component$(() => {
   const isMobileMenuOpen = useSignal(false);
   const isMobile = useSignal(false);
-  
+
   useVisibleTask$(() => {
     const checkMobile = () => {
       isMobile.value = window.innerWidth < 768;
     };
-    
+
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => window.removeEventListener('resize', checkMobile);
   });
-  
+
   return (
     <nav aria-label="Main navigation">
       <div class="nav-container">
         <a href="/" class="logo">
           Logo
         </a>
-        
+
         {isMobile.value ? (
           <>
             <button
@@ -753,7 +753,7 @@ export const Navigation = component$(() => {
             >
               {isMobileMenuOpen.value ? '✕' : '☰'}
             </button>
-            
+
             {isMobileMenuOpen.value && (
               <div class="mobile-menu">
                 <a href="/">Home</a>

@@ -46,7 +46,7 @@ const aiProviders = {
     privacy: 'Fully local, no data sent externally',
     setup: 'Run `mimic ai setup --provider=ollama`',
   },
-  
+
   cloud: {
     openai: {
       models: ['gpt-4', 'gpt-3.5-turbo'],
@@ -219,9 +219,9 @@ a11yMonitor.watch({
     semanticHTML: true,
     aria: 'strict',
   },
-  onIssue: (issue) => {
+  onIssue: issue => {
     console.warn(`A11y issue detected: ${issue.message}`);
-    
+
     if (issue.autoFixable) {
       // Optionally auto-fix in development
       a11yMonitor.applyFix(issue);
@@ -551,20 +551,20 @@ export default {
   ai: {
     // Default provider
     provider: 'ollama', // or 'openai', 'copilot'
-    
+
     // Local AI settings
     ollama: {
       host: 'http://localhost:11434',
       model: 'llama2',
     },
-    
+
     // OpenAI settings
     openai: {
       apiKey: process.env.OPENAI_API_KEY,
       model: 'gpt-4',
       temperature: 0.7,
     },
-    
+
     // Feature flags
     features: {
       tokenSuggestions: true,
@@ -574,7 +574,7 @@ export default {
       componentGeneration: true,
       designCritique: true,
     },
-    
+
     // Privacy settings
     privacy: {
       sendTelemetry: false,
@@ -651,19 +651,19 @@ const config = {
   ai: {
     // Use local AI for sensitive projects
     provider: 'ollama',
-    
+
     // Don't send proprietary code to cloud
     features: {
       componentGeneration: false, // Disable if code is sensitive
     },
-    
+
     // Cache responses locally
     cache: {
       enabled: true,
       ttl: 86400, // 24 hours
       location: '.mimic/ai-cache',
     },
-    
+
     // Anonymize data
     anonymize: {
       tokens: true,

@@ -83,15 +83,15 @@ pnpm nx run-many -t lint,test,visual-test
 
 ### Frequently Used Commands
 
-| Goal                    | Command                                         |
-| ----------------------- | ------------------------------------------------ |
-| Sync tokens from Penpot | `make tokens-sync`                               |
-| Build everything        | `pnpm build`                                     |
-| Launch Storybook        | `pnpm nx run design-system:storybook`            |
-| Mobile dev server       | `pnpm --filter @mimic/mobile-rn start`           |
-| Desktop dev server      | `pnpm --filter @mimic/desktop tauri dev`         |
+| Goal                    | Command                                                            |
+| ----------------------- | ------------------------------------------------------------------ |
+| Sync tokens from Penpot | `make tokens-sync`                                                 |
+| Build everything        | `pnpm build`                                                       |
+| Launch Storybook        | `pnpm nx run design-system:storybook`                              |
+| Mobile dev server       | `pnpm --filter @mimic/mobile-rn start`                             |
+| Desktop dev server      | `pnpm --filter @mimic/desktop tauri dev`                           |
 | Format & lint           | `pnpm lint:workspace` (Biome + typed ESLint) / `pnpm format:check` |
-| Visual regression       | `pnpm nx run design-system:visual-test`          |
+| Visual regression       | `pnpm nx run design-system:visual-test`                            |
 
 ## Repository Layout
 

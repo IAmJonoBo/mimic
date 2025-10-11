@@ -38,13 +38,13 @@ retired during the roll-out.
 - **📐 Wireframing** — [`docs/design/WIREFRAMING_PROTOTYPING.md`](./design/WIREFRAMING_PROTOTYPING.md) — Prototype flow
 - **🧩 Component Patterns** — [`docs/design/COMPONENT_PATTERNS.md`](./design/COMPONENT_PATTERNS.md) — UI patterns
 
-**150,000+ words | 500+ code examples | 8 comprehensive guides**
+### 150,000+ words | 500+ code examples | 8 comprehensive guides
 
 ## Design Tokens & Penpot Workflow
 
 - **Token Pipeline Guide** — [`docs/DESIGN_TOKENS.md`](./DESIGN_TOKENS.md)
 - **Penpot Workflow** — [`docs/PENPOT_WORKFLOW_GUIDE.md`](./PENPOT_WORKFLOW_GUIDE.md)
-- **Token Orchestrator Reference** — *(coming in 2.0, see Implementation Plan Phase 2)*
+- **Token Orchestrator Reference** — _(coming in 2.0, see Implementation Plan Phase 2)_
 - **Historical Migration Notes (Legacy)** — [`docs/DESIGN_TOKENS_MIGRATION.md`](./DESIGN_TOKENS_MIGRATION.md)
 
 ## Component System & Storybook

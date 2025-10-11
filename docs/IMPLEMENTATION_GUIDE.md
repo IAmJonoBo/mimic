@@ -26,15 +26,15 @@ phase-by-phase delivery status.
 
 ### Required Tools
 
-| Tool        | Version       | Installation Notes                                           |
-| ----------- | ------------- | ------------------------------------------------------------ |
+| Tool        | Version                        | Installation Notes                                            |
+| ----------- | ------------------------------ | ------------------------------------------------------------- |
 | Node.js     | ≥ 22 LTS (22.20.0 recommended) | `corepack enable && corepack prepare pnpm@10.17.1 --activate` |
-| pnpm        | ≥ 10.17.1     | Included with Node corepack                                  |
-| Rust        | Latest stable | Required for Tauri desktop apps                              |
-| Java        | 17+           | For Compose Multiplatform development                        |
-| Xcode       | Latest        | iOS React Native development (macOS only)                    |
-| Android SDK | Latest        | Android development                                          |
-| Nx CLI      | Latest        | `pnpm dlx @nx/cli@latest`                                    |
+| pnpm        | ≥ 10.17.1                      | Included with Node corepack                                   |
+| Rust        | Latest stable                  | Required for Tauri desktop apps                               |
+| Java        | 17+                            | For Compose Multiplatform development                         |
+| Xcode       | Latest                         | iOS React Native development (macOS only)                     |
+| Android SDK | Latest                         | Android development                                           |
+| Nx CLI      | Latest                         | `pnpm dlx @nx/cli@latest`                                     |
 
 > Optional: Configure OpenAI (via environment variables) or GitHub Copilot CLI if you want cloud-backed
 > AI assistance in addition to the local Ollama-powered `mimic assist` experience.

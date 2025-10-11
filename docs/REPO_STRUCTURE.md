@@ -2,9 +2,9 @@
 
 This document captures the target directory layout for Mimic 2.0. Use it as the source of truth when
 migrating 1.x assets, scaffolding new packages, or evaluating placement for future workstreams. Paths
-marked *(planned)* will be created as their corresponding sprint delivers.
+marked _(planned)_ will be created as their corresponding sprint delivers.
 
-```
+``text
 mimic/
 ├── .github/
 │   ├── workflows/                 # CI/CD pipelines, lint/test gates, release automation
@@ -126,7 +126,6 @@ mimic/
 │       └── README.md
 ├── reports/                       # (planned) generated graphs, metrics snapshots
 └── tmp/                           # Nx cache, build artifacts (gitignored)
-```
 
 ## Notes
 

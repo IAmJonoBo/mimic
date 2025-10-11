@@ -12,7 +12,12 @@ import { resolve } from 'node:path';
 
 import { beforeEach, describe, expect, it } from 'vitest';
 
-import { validateCollisionPrevention, validateMetroDuplicationRisks, validateStorybookPortConflicts, validateTokenNameClashes } from '../collision-prevention.js';
+import {
+  validateCollisionPrevention,
+  validateMetroDuplicationRisks,
+  validateStorybookPortConflicts,
+  validateTokenNameClashes,
+} from '../collision-prevention.js';
 
 const TEMP_DIR = resolve(__dirname, '__temp__');
 
@@ -71,8 +76,12 @@ describe('Collision Prevention Guards', () => {
 
       const violations = validateTokenNameClashes(cssPath);
       expect(violations.length).toBeGreaterThan(0);
-      expect(violations.some((v: string) => v.includes('--color-primary-500'))).toBe(true);
-      expect(violations.some((v: string) => v.includes('--spacing-large'))).toBe(true);
+      expect(
+        violations.some((v: string) => v.includes('--color-primary-500'))
+      ).toBe(true);
+      expect(
+        violations.some((v: string) => v.includes('--spacing-large'))
+      ).toBe(true);
       expect(violations.some((v: string) => v.includes('.button'))).toBe(true);
     });
 
@@ -126,7 +135,11 @@ describe('Collision Prevention Guards', () => {
       writeFileSync(mobilePath, mobileConfig);
       writeFileSync(desktopPath, desktopConfig);
 
-      const violations = validateStorybookPortConflicts([webPath, mobilePath, desktopPath]);
+      const violations = validateStorybookPortConflicts([
+        webPath,
+        mobilePath,
+        desktopPath,
+      ]);
       expect(violations).toHaveLength(0);
     });
 
@@ -185,7 +198,9 @@ describe('Collision Prevention Guards', () => {
       writeFileSync(webPath, configWithInvalidRefs);
 
       const violations = validateStorybookPortConflicts([webPath]);
-      expect(violations.some((v: string) => v.includes('3001') || v.includes('4000'))).toBe(true);
+      expect(
+        violations.some((v: string) => v.includes('3001') || v.includes('4000'))
+      ).toBe(true);
     });
   });
 
@@ -221,7 +236,10 @@ describe('Collision Prevention Guards', () => {
       writeFileSync(pkg1Path, packageJson1);
       writeFileSync(pkg2Path, packageJson2);
 
-      const violations = validateMetroDuplicationRisks(metroPath, [pkg1Path, pkg2Path]);
+      const violations = validateMetroDuplicationRisks(metroPath, [
+        pkg1Path,
+        pkg2Path,
+      ]);
       expect(violations).toHaveLength(0);
     });
 
@@ -241,7 +259,9 @@ describe('Collision Prevention Guards', () => {
       expect(violations.length).toBeGreaterThan(0);
       expect(violations.some((v: string) => v.includes('dedupe'))).toBe(true);
       expect(violations.some((v: string) => v.includes('alias'))).toBe(true);
-      expect(violations.some((v: string) => v.includes('enableGlobalPackages'))).toBe(true);
+      expect(
+        violations.some((v: string) => v.includes('enableGlobalPackages'))
+      ).toBe(true);
     });
 
     it('should fail when packages use unscoped names', () => {

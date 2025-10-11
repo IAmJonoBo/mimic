@@ -100,21 +100,21 @@ mimic/
 
 ## Foundational Dependencies
 
-| Phase window | Dependency | Purpose | Runtime / licensing notes | CI coverage / follow-up |
-| --- | --- | --- | --- | --- |
-| Phases 0–6 | Node 22.20.0 + pnpm 10.17.1 | Primary execution environment for Nx targets, Storybook builds, and script automation. | MIT-licensed toolchain. Works offline once tarballs are cached; DevContainer pins versions via `setup.sh`. | `.github/workflows/ci.yml`, `visual-tests.yml`, and `pr-verification.yml` install pinned Node/pnpm via `actions/setup-node` + `pnpm/action-setup`. |
-| Phases 1–6 | Nx 21.6 plugin stack (`@nx/{js,react,storybook,vite,plugin}`) | Provides project graph, lint/test orchestration, Storybook build integration, and custom generators. | OSS licenses (MIT). Requires Node environment; offline usage supported via pnpm store. | Installed through workspace `pnpm install`. Ensure cache seeds via existing CI install steps. |
-| Phases 2–6 | Rust toolchain (stable 1.80+, `wasm32-unknown-unknown`, `cargo-generate`) | Builds the token orchestrator CLI, wasm bindings, and future Tauri shell automation. | Apache-2.0 / MIT dual license. Offline builds require pre-fetching `rustup` components. | **Follow-up:** add rustup provisioning to token orchestrator GitHub Actions (`token-sync.yml`/`token-export.yml`). Track in `Next_Steps.md`. |
-| Phases 2–6 | Storybook 9.1 + Loki + Playwright runners | Document kernel/adapters and power visual/a11y regression gates. | OSS license. Requires Node; offline builds rely on cached npm packages and Chromatic alternatives. | `visual-tests.yml` builds Storybook and runs Loki; ensure Chromatic optional path documented in Sprint 6. |
-| Phases 0–6 | AI CLIs: Ollama >=0.5 (`ollama run`), OpenAI CLI (`openai`), GitHub Copilot CLI (`github-copilot-cli`) | Powers `mimic assist` and AI-augmented `just` flows for scaffolding, Q&A, and review triage. | Ollama: AGPLv3, runs fully offline with local models. OpenAI/Copilot: proprietary APIs—requires network + billing; provide opt-in legal review. | Devcontainers install Ollama by default; remote runners skip AI setup. **Follow-up:** evaluate self-hosted runners for AI optionality (track in `Next_Steps.md`). |
+| Phase window | Dependency                                                                                             | Purpose                                                                                              | Runtime / licensing notes                                                                                                                       | CI coverage / follow-up                                                                                                                                           |
+| ------------ | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Phases 0–6   | Node 22.20.0 + pnpm 10.17.1                                                                            | Primary execution environment for Nx targets, Storybook builds, and script automation.               | MIT-licensed toolchain. Works offline once tarballs are cached; DevContainer pins versions via `setup.sh`.                                      | `.github/workflows/ci.yml`, `visual-tests.yml`, and `pr-verification.yml` install pinned Node/pnpm via `actions/setup-node` + `pnpm/action-setup`.                |
+| Phases 1–6   | Nx 21.6 plugin stack (`@nx/{js,react,storybook,vite,plugin}`)                                          | Provides project graph, lint/test orchestration, Storybook build integration, and custom generators. | OSS licenses (MIT). Requires Node environment; offline usage supported via pnpm store.                                                          | Installed through workspace `pnpm install`. Ensure cache seeds via existing CI install steps.                                                                     |
+| Phases 2–6   | Rust toolchain (stable 1.80+, `wasm32-unknown-unknown`, `cargo-generate`)                              | Builds the token orchestrator CLI, wasm bindings, and future Tauri shell automation.                 | Apache-2.0 / MIT dual license. Offline builds require pre-fetching `rustup` components.                                                         | **Follow-up:** add rustup provisioning to token orchestrator GitHub Actions (`token-sync.yml`/`token-export.yml`). Track in `Next_Steps.md`.                      |
+| Phases 2–6   | Storybook 9.1 + Loki + Playwright runners                                                              | Document kernel/adapters and power visual/a11y regression gates.                                     | OSS license. Requires Node; offline builds rely on cached npm packages and Chromatic alternatives.                                              | `visual-tests.yml` builds Storybook and runs Loki; ensure Chromatic optional path documented in Sprint 6.                                                         |
+| Phases 0–6   | AI CLIs: Ollama >=0.5 (`ollama run`), OpenAI CLI (`openai`), GitHub Copilot CLI (`github-copilot-cli`) | Powers `mimic assist` and AI-augmented `just` flows for scaffolding, Q&A, and review triage.         | Ollama: AGPLv3, runs fully offline with local models. OpenAI/Copilot: proprietary APIs—requires network + billing; provide opt-in legal review. | Devcontainers install Ollama by default; remote runners skip AI setup. **Follow-up:** evaluate self-hosted runners for AI optionality (track in `Next_Steps.md`). |
 
 ### CLI Deliverables & AI Runtime Expectations
 
-| CLI deliverable | Runtime dependency | AI / network requirements | Licensing & offline posture |
-| --- | --- | --- | --- |
-| `mimic assist` | Node 22 CLI wrapper invoking Ollama (default) with optional OpenAI/Copilot fallbacks. | Offline with local Ollama models; optional remote API keys enable GPT/Copilot flows. | Wrapper MIT-licensed. Ollama AGPLv3—ensure redistribution compliance. Document opt-in for proprietary APIs. |
-| `mimic init feature`, `mimic token create` wizards | Node 22 + Nx generators + Rust orchestrator bindings (Phase 2+). | AI prompts piggyback on `mimic assist`; runs offline when Ollama available. | Scripts MIT; respects same Ollama/OpenAI licensing constraints. |
-| `just` catalogue (`just lint-all`, `just ai-review`, `just penpot-up`) | Requires system `just` binary, pnpm workspace, Docker (for Penpot) | AI-enhanced recipes call `mimic assist`; offline usage supported when Ollama + Docker images pre-pulled. | `just` is MIT; Docker images for Penpot are AGPL-compatible. Provide legal review for enterprise redistribution. |
+| CLI deliverable                                                        | Runtime dependency                                                                    | AI / network requirements                                                                                | Licensing & offline posture                                                                                      |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `mimic assist`                                                         | Node 22 CLI wrapper invoking Ollama (default) with optional OpenAI/Copilot fallbacks. | Offline with local Ollama models; optional remote API keys enable GPT/Copilot flows.                     | Wrapper MIT-licensed. Ollama AGPLv3—ensure redistribution compliance. Document opt-in for proprietary APIs.      |
+| `mimic init feature`, `mimic token create` wizards                     | Node 22 + Nx generators + Rust orchestrator bindings (Phase 2+).                      | AI prompts piggyback on `mimic assist`; runs offline when Ollama available.                              | Scripts MIT; respects same Ollama/OpenAI licensing constraints.                                                  |
+| `just` catalogue (`just lint-all`, `just ai-review`, `just penpot-up`) | Requires system `just` binary, pnpm workspace, Docker (for Penpot)                    | AI-enhanced recipes call `mimic assist`; offline usage supported when Ollama + Docker images pre-pulled. | `just` is MIT; Docker images for Penpot are AGPL-compatible. Provide legal review for enterprise redistribution. |
 
 ## Engineering Metrics & Observability Pillars
 
@@ -203,87 +203,87 @@ mimic/
 
 ### Phase 0 – Discovery & Alignment (Week 0)
 
-| Status | Task | Owner | Notes |
-| --- | --- | --- | --- |
-| [ ] | Approve architecture blueprint (token orchestrator, Lit kernel, adapters) | Core WG | Reference `docs/IMPLEMENTATION_GUIDE.md` + this plan |
-| [ ] | Create ADRs for critical decisions (Rust CLI, repo layout, Storybook 10-track) | Core WG | ADR templates already live in `docs/ADR.md` |
-| [ ] | Inventory current 1.x consumers and migration risks | DevRel | Capture in `docs/MIGRATION_SUMMARY.md` |
+| Status | Task                                                                           | Owner   | Notes                                                |
+| ------ | ------------------------------------------------------------------------------ | ------- | ---------------------------------------------------- |
+| [ ]    | Approve architecture blueprint (token orchestrator, Lit kernel, adapters)      | Core WG | Reference `docs/IMPLEMENTATION_GUIDE.md` + this plan |
+| [ ]    | Create ADRs for critical decisions (Rust CLI, repo layout, Storybook 10-track) | Core WG | ADR templates already live in `docs/ADR.md`          |
+| [ ]    | Inventory current 1.x consumers and migration risks                            | DevRel  | Capture in `docs/MIGRATION_SUMMARY.md`               |
 
 **Exit Criteria**: Architecture signed off, ADRs drafted, migration impact analysis complete.
 
 ### Phase 1 – Repository Foundations (Weeks 1–2)
 
-| Status | Task | Owner | Dependencies |
-| --- | --- | --- | --- |
-| [ ] | Finalise new workspace layout (`apps/`, `packages/`, `infra/`, `toolchains/`) | Platform | Phase 0 |
-| [ ] | Establish SLO baseline (build <=5 min, drift MTTR, visual escape rate, doc freshness) | Platform/QA | Phase 0 |
-| [ ] | Stand up shared config presets (TS, ESLint, Biome, Stylelint, Vitest) in `toolchains/` | Platform | |
-| [ ] | Configure Nx 22 + pnpm 10.17.1 + Node 22.20 baselines across CI/devcontainers | DevOps | |
-| [ ] | Introduce CODEOWNERS + `just` command catalogue + PR templates referencing metrics | DevRel | |
-| [ ] | Publish contributor playbook updates (setup, scripts, justfile) | DevRel | |
+| Status | Task                                                                                   | Owner       | Dependencies |
+| ------ | -------------------------------------------------------------------------------------- | ----------- | ------------ |
+| [ ]    | Finalise new workspace layout (`apps/`, `packages/`, `infra/`, `toolchains/`)          | Platform    | Phase 0      |
+| [ ]    | Establish SLO baseline (build <=5 min, drift MTTR, visual escape rate, doc freshness)  | Platform/QA | Phase 0      |
+| [ ]    | Stand up shared config presets (TS, ESLint, Biome, Stylelint, Vitest) in `toolchains/` | Platform    |              |
+| [ ]    | Configure Nx 22 + pnpm 10.17.1 + Node 22.20 baselines across CI/devcontainers          | DevOps      |              |
+| [ ]    | Introduce CODEOWNERS + `just` command catalogue + PR templates referencing metrics     | DevRel      |              |
+| [ ]    | Publish contributor playbook updates (setup, scripts, justfile)                        | DevRel      |              |
 
 **Deliverables**: Clean repo scaffolding, DevContainer refresh, base `justfile`, updated contributor docs.
 
 ### Phase 2 – Token Orchestrator & Contract Layer (Weeks 2–4)
 
-| Status | Task | Owner | Dependencies |
-| --- | --- | --- | --- |
-| [ ] | Build `packages/token-orchestrator` Rust CLI (Penpot DTCG ingest, validation, JSON schema) | Platform | Phase 1 |
-| [ ] | Implement structured logging + error envelopes (Rust + Node bindings) | Platform | |
-| [ ] | Compile wasm bindings + Node wrapper for use in CI and apps | Platform | |
-| [ ] | Create `packages/tokens-core` canonical schema + history snapshots | DesignOps | |
-| [ ] | Generate multi-platform outputs to `packages/tokens-outputs` (css, ts, compose, swift, dart) | Platform | |
-| [ ] | Wire GitHub Actions for scheduled Penpot sync + diff PRs (token drift, contract tests) | DevOps | |
-| [ ] | Instrument orchestrator with OpenTelemetry spans + Grafana dashboards (latency, failures) | Platform/DevOps | |
+| Status | Task                                                                                         | Owner           | Dependencies |
+| ------ | -------------------------------------------------------------------------------------------- | --------------- | ------------ |
+| [ ]    | Build `packages/token-orchestrator` Rust CLI (Penpot DTCG ingest, validation, JSON schema)   | Platform        | Phase 1      |
+| [ ]    | Implement structured logging + error envelopes (Rust + Node bindings)                        | Platform        |              |
+| [ ]    | Compile wasm bindings + Node wrapper for use in CI and apps                                  | Platform        |              |
+| [ ]    | Create `packages/tokens-core` canonical schema + history snapshots                           | DesignOps       |              |
+| [ ]    | Generate multi-platform outputs to `packages/tokens-outputs` (css, ts, compose, swift, dart) | Platform        |              |
+| [ ]    | Wire GitHub Actions for scheduled Penpot sync + diff PRs (token drift, contract tests)       | DevOps          |              |
+| [ ]    | Instrument orchestrator with OpenTelemetry spans + Grafana dashboards (latency, failures)    | Platform/DevOps |              |
 
 **Deliverables**: Deterministic token pipeline, drift detection workflow, CLI usage docs.
 
 ### Phase 3 – UI Kernel & Adapters (Weeks 4–6)
 
-| Status | Task | Owner | Dependencies |
-| --- | --- | --- | --- |
-| [ ] | Scaffold `packages/ui-kernel` with Lit + vanilla-extract theming | Platform | Phase 2 |
-| [ ] | Implement accessibility primitives (focus management, motion, tokens) | Platform | |
-| [ ] | Build adapters: `ui-adapters/react`, `ui-adapters/vue`, `ui-adapters/svelte`, `ui-adapters/solid` | Experience Guild | |
-| [ ] | Create `platform-bridges/{compose,swiftui,flutter}` bridging layers | Native Guild | |
-| [ ] | Deliver Storybook intelligence addon (token inspector, contrast, design checklist) with AI remediation prompts | Platform/Docs | |
-| [ ] | Establish component contract tests (Storybook stories + Vitest DOM + Playwright) | QA Guild | |
+| Status | Task                                                                                                           | Owner            | Dependencies |
+| ------ | -------------------------------------------------------------------------------------------------------------- | ---------------- | ------------ |
+| [ ]    | Scaffold `packages/ui-kernel` with Lit + vanilla-extract theming                                               | Platform         | Phase 2      |
+| [ ]    | Implement accessibility primitives (focus management, motion, tokens)                                          | Platform         |              |
+| [ ]    | Build adapters: `ui-adapters/react`, `ui-adapters/vue`, `ui-adapters/svelte`, `ui-adapters/solid`              | Experience Guild |              |
+| [ ]    | Create `platform-bridges/{compose,swiftui,flutter}` bridging layers                                            | Native Guild     |              |
+| [ ]    | Deliver Storybook intelligence addon (token inspector, contrast, design checklist) with AI remediation prompts | Platform/Docs    |              |
+| [ ]    | Establish component contract tests (Storybook stories + Vitest DOM + Playwright)                               | QA Guild         |              |
 
 **Deliverables**: Shared component kernel, working adapters, baseline Storybook integration.
 
 ### Phase 4 – Application Integration (Weeks 6–8)
 
-| Status | Task | Owner | Dependencies |
-| --- | --- | --- | --- |
-| [ ] | Migrate web app to Qwik City 2 + new kernel | Web Guild | Phase 3 |
-| [ ] | Upgrade React Native app (Expo Router, Hermes, tokens) | Mobile Guild | |
-| [ ] | Wire Compose Multiplatform/Tauri shells with generated tokens | Native Guild | |
-| [ ] | Instrument apps with OpenTelemetry + structured logging (surface dashboards for perf/error rates) | Platform/DevOps | |
-| [ ] | Add sample integrations (Astro, Remix, Next) in `examples/` | DevRel | |
+| Status | Task                                                                                              | Owner           | Dependencies |
+| ------ | ------------------------------------------------------------------------------------------------- | --------------- | ------------ |
+| [ ]    | Migrate web app to Qwik City 2 + new kernel                                                       | Web Guild       | Phase 3      |
+| [ ]    | Upgrade React Native app (Expo Router, Hermes, tokens)                                            | Mobile Guild    |              |
+| [ ]    | Wire Compose Multiplatform/Tauri shells with generated tokens                                     | Native Guild    |              |
+| [ ]    | Instrument apps with OpenTelemetry + structured logging (surface dashboards for perf/error rates) | Platform/DevOps |              |
+| [ ]    | Add sample integrations (Astro, Remix, Next) in `examples/`                                       | DevRel          |              |
 
 **Deliverables**: Updated reference apps, example integrations, platform parity report.
 
 ### Phase 5 – Documentation & Developer Experience (Weeks 8–9)
 
-| Status | Task | Owner | Dependencies |
-| --- | --- | --- | --- |
-| [ ] | Launch Starlight docs app with MDX + Storybook embeds + live API tables | Docs Guild | Phase 3 |
-| [ ] | Document token governance, release process, migration guides (with SLO dashboards) | Docs Guild | |
-| [ ] | Ship AI assistant docs covering Ollama, OpenAI, and Copilot flows | AI Guild | |
-| [ ] | Publish upgrade playbooks (Penpot updates, toolchain bumps) | DevOps | |
-| [ ] | Add CLI wizards + AI usage guide (`mimic init`, `mimic token create`) | Platform | |
+| Status | Task                                                                               | Owner      | Dependencies |
+| ------ | ---------------------------------------------------------------------------------- | ---------- | ------------ |
+| [ ]    | Launch Starlight docs app with MDX + Storybook embeds + live API tables            | Docs Guild | Phase 3      |
+| [ ]    | Document token governance, release process, migration guides (with SLO dashboards) | Docs Guild |              |
+| [ ]    | Ship AI assistant docs covering Ollama, OpenAI, and Copilot flows                  | AI Guild   |              |
+| [ ]    | Publish upgrade playbooks (Penpot updates, toolchain bumps)                        | DevOps     |              |
+| [ ]    | Add CLI wizards + AI usage guide (`mimic init`, `mimic token create`)              | Platform   |              |
 
 **Deliverables**: docs site, governance guidelines, CLI handbooks, migration cookbook.
 
 ### Phase 6 – Quality Gates & Release (Weeks 9–10)
 
-| Status | Task | Owner | Dependencies |
-| --- | --- | --- | --- |
-| [ ] | Implement enhanced CI matrix (a11y, visual, E2E cross-runtime) + flake tracking | QA Guild | Phase 3 |
-| [ ] | Run beta program with selected adopters | DevRel | Phase 4 |
-| [ ] | Finalise semantic releases (Changesets, GitHub Releases) + automated release notes | DevOps | |
-| [ ] | Launch token analytics dashboard + QA notification bot | Platform/DevOps | |
-| [ ] | Ship Mimic 2.0 GA announcement + migration toolkit | Core WG | |
+| Status | Task                                                                               | Owner           | Dependencies |
+| ------ | ---------------------------------------------------------------------------------- | --------------- | ------------ |
+| [ ]    | Implement enhanced CI matrix (a11y, visual, E2E cross-runtime) + flake tracking    | QA Guild        | Phase 3      |
+| [ ]    | Run beta program with selected adopters                                            | DevRel          | Phase 4      |
+| [ ]    | Finalise semantic releases (Changesets, GitHub Releases) + automated release notes | DevOps          |              |
+| [ ]    | Launch token analytics dashboard + QA notification bot                             | Platform/DevOps |              |
+| [ ]    | Ship Mimic 2.0 GA announcement + migration toolkit                                 | Core WG         |              |
 
 **Exit Criteria**: All tests green, documentation complete, migration path validated, release artifacts published.
 

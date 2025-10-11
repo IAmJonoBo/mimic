@@ -15,10 +15,10 @@
     "apps/*",
     "tools/*"
   ],
-  "packageManager": "pnpm@10.17.1",
+  "packageManager": "pnpm@10.18.2",
   "engines": {
     "node": ">=22.20.0",
-    "pnpm": ">=10.17.1"
+    "pnpm": ">=10.18.2"
   },
   "scripts": {
     "build": "cross-env NX_NO_CLOUD=true nx run-many -t build --exclude=workspace-format && pnpm run postbuild:clean",
@@ -121,7 +121,7 @@
     "@storybook/addon-outline": "9.0.8",
     "@testing-library/jest-dom": "6.9.1",
     "@types/jest": "30.0.0",
-    "@types/node": "24.7.1",
+    "@types/node": "24.7.2",
     "@typescript-eslint/eslint-plugin": "8.46.0",
     "@typescript-eslint/parser": "8.46.0",
     "chromatic": "13.3.0",

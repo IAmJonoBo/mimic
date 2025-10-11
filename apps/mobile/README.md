@@ -62,13 +62,13 @@ const primaryColor = getToken('color.primary_500', '#3b82f6');
 
 ```markdown
 src/
-├── App.tsx                 # Main app component
-├── main.tsx               # Entry point
+├── App.tsx # Main app component
+├── main.tsx # Entry point
 ├── theme/
-│   └── ThemeProvider.tsx  # Theme context and token utilities
+│ └── ThemeProvider.tsx # Theme context and token utilities
 └── components/
-    ├── TokenDemo.tsx      # Design token demonstration
-    └── ButtonDemo.tsx     # Button component examples
+├── TokenDemo.tsx # Design token demonstration
+└── ButtonDemo.tsx # Button component examples
 ```
 
 ## Design Token Usage
