@@ -26,6 +26,7 @@
 
 - [ ] Validate baseline automation commands (DevOps Guild — Week 0) to confirm `pnpm lint:workspace`,
   `pnpm typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
+  `pnpm nx run-many -t typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
   `pnpm nx run design-system:test-storybook`, `pnpm build`, and `pnpm audit` all run cleanly in the
   container and CI. Document exit codes, coverage deltas, and remediation owners.
   - 2025-10-11: Initial audit attempt on Node 22.19.0 saw `pnpm format:check` and `pnpm lint:workspace`
