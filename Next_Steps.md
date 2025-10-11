@@ -28,10 +28,15 @@
   `pnpm nx run-many -t typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
   `pnpm nx run design-system:test-storybook`, `pnpm build`, and `pnpm audit` all run cleanly in the
   container and CI. Document exit codes, coverage deltas, and remediation owners.
+  - 2025-10-11: Initial audit attempt on Node 22.19.0 saw `pnpm format:check` and `pnpm lint:workspace`
+    crash the terminal while Nx constructed the project graph after emitting engine mismatch warnings;
+    rerun once the container runtime upgrades to Node 22.20.0 and capture full logs for the ledger.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
   each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
 - [ ] Update status, owners, and due dates during each planning PR so this file remains authoritative.
+- [ ] Coordinate container runtime upgrade to Node 22.20.0 (DevOps Guild — Week 0) to align with the
+  repository engine requirement and unblock baseline automation verification.
 
 ## Deliverables
 
@@ -70,6 +75,8 @@
   before gating can be fully enforced—track remediation as part of relevant sprints.
 - Local container image currently pins Node 22.19.0, triggering engine mismatch warnings versus the
   required Node 22.20.0 baseline; coordinate with DevOps to bump the runtime and re-verify Nx targets.
-- `pnpm nx run-many -t test` encountered shell instability during baseline verification; capture logs
-  under `infra/` troubleshooting and stabilise the command path so tests can be relied on for gating.
+- `pnpm nx run-many -t test` and workspace-level lint/format commands triggered shell crashes during
+  baseline verification while Nx built the project graph on Node 22.19.0; capture logs under
+  `infra/` troubleshooting and stabilise the command path once the runtime upgrade lands so gates can
+  be relied on for enforcement.
 - Maintain this ledger in every planning PR to preserve alignment across squads and keep downstream templates accurate.
