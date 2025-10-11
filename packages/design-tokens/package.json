@@ -36,6 +36,7 @@
     "build": "pnpm run build:tokens && pnpm run build:types && pnpm run postbuild:clean",
     "build:tokens": "style-dictionary build -c style-dictionary.config.js",
     "build:types": "tsc",
+    "typecheck": "tsc --noEmit",
     "build:watch": "concurrently \"pnpm run build:tokens --watch\" \"pnpm run build:types --watch\"",
     "postbuild:clean": "../../scripts/postbuild-chain.sh libs/tokens --validate",
     "clean": "rm -rf dist",

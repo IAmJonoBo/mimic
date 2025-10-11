@@ -1,0 +1,10 @@
+{
+  "extends": "@react-native/typescript-config/tsconfig.json",
+  "compilerOptions": {
+    "types": ["react", "react-native", "jest"],
+    "noEmit": true,
+    "skipLibCheck": true
+  },
+  "include": ["src", "jest-setup.ts"],
+  "exclude": ["node_modules", "dist"]
+}

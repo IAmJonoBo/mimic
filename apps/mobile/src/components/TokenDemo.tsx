@@ -6,9 +6,59 @@
  */
 
 import type { FC } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, type TextStyle, View } from 'react-native';
 
 import { useTokens } from '../theme/ThemeProvider';
+
+const FONT_WEIGHT_VALUES = ['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900', 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
+
+const FONT_WEIGHT_SET = new Set<TextStyle['fontWeight']>(FONT_WEIGHT_VALUES);
+
+const normalizeFontWeight = (value: string | number | undefined, fallback: TextStyle['fontWeight']): TextStyle['fontWeight'] => {
+  if (typeof value === 'number') {
+    const numeric = value as TextStyle['fontWeight'];
+    if (FONT_WEIGHT_SET.has(numeric)) {
+      return numeric;
+    }
+
+    const asString = String(value) as TextStyle['fontWeight'];
+    if (FONT_WEIGHT_SET.has(asString)) {
+      return asString;
+    }
+  }
+
+  if (typeof value === 'string') {
+    const candidate = value as TextStyle['fontWeight'];
+    if (FONT_WEIGHT_SET.has(candidate)) {
+      return candidate;
+    }
+  }
+
+  return fallback;
+};
+
+const resolveColor = (value: string | number | undefined, fallback: string): string => {
+  if (typeof value === 'string') {
+    return value;
+  }
+
+  return fallback;
+};
+
+const resolveNumber = (value: string | number | undefined, fallback: number): number => {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string') {
+    const parsed = Number(value);
+    if (Number.isFinite(parsed)) {
+      return parsed;
+    }
+  }
+
+  return fallback;
+};
 
 export const TokenDemo: FC = () => {
   const { getToken } = useTokens();
@@ -22,7 +72,7 @@ export const TokenDemo: FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: getToken('color.primary_500', '#3b82f6') as string,
+              backgroundColor: resolveColor(getToken('color.primary_500', '#3b82f6'), '#3b82f6'),
             },
           ]}
         />
@@ -34,7 +84,7 @@ export const TokenDemo: FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: getToken('color.secondary_500', '#22c55e') as string,
+              backgroundColor: resolveColor(getToken('color.secondary_500', '#22c55e'), '#22c55e'),
             },
           ]}
         />
@@ -53,8 +103,8 @@ export const TokenDemo: FC = () => {
           style={[
             styles.typographyText,
             {
-              fontSize: (getToken('typography.fontSize_lg', 1.125) as number) * 16,
-              fontWeight: getToken('typography.fontWeight_medium', '500') as string,
+              fontSize: resolveNumber(getToken('typography.fontSize_lg', 1.125), 1.125) * 16,
+              fontWeight: normalizeFontWeight(getToken('typography.fontWeight_medium', '500'), '500'),
             },
           ]}
         >

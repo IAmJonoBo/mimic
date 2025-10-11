@@ -57,6 +57,10 @@ Aborted
   while preserving consistent tooling output.
 - `pnpm typecheck` continues to abort while Nx constructs the project graph, so further mitigation is
   required for type safety gates before CI can rely on them.
+- 2025-10-14: Added per-project `typecheck` scripts and tsconfig baselines so `pnpm typecheck`
+  executes `tsc` sequentially via `pnpm -r --workspace-root=false --if-present`, bypassing Nx entirely
+  for the type gate. The native crash still blocks Nx-driven typecheck/test invocations, but the new
+  aggregator keeps type safety enforcement running until the upstream fix lands.
 
 ## Next actions
 

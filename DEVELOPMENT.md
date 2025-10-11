@@ -49,7 +49,7 @@ Legacy folders from 1.x remain until their replacements land; prefer the 2.0 tar
 | Start full dev stack          | `pnpm dev:full-stack` (watches tokens + Storybook)                                   |
 | Run unit tests                | `pnpm nx run-many -t test`                                                           |
 | Run visual + interaction tests| `pnpm nx run design-system:visual-test && pnpm nx run design-system:test-storybook`  |
-| Lint + typecheck              | `pnpm lint:workspace && pnpm nx run-many -t typecheck`                               |
+| Lint + typecheck              | `pnpm lint:workspace && pnpm typecheck`                                              |
 | Build affected projects       | `pnpm run build:affected`                                                            |
 | Generate dependency graph     | `pnpm nx graph --watch`                                                              |
 
@@ -97,7 +97,7 @@ Storybook 10 migration is tracked in Phase 3—file issues under the `storybook-
 Before pushing:
 
 - `pnpm lint:workspace`
-- `pnpm nx run-many -t typecheck`
+- `pnpm typecheck`
 - `pnpm nx run-many -t test`
 - `pnpm nx run design-system:visual-test`
 - `pnpm nx run design-system:test-storybook`

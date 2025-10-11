@@ -6,5 +6,8 @@
   "description": "Native bridges (Compose, SwiftUI, Flutter) for Mimic tokens (placeholder)",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   }
 }

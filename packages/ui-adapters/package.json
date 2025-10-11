@@ -6,5 +6,8 @@
   "description": "Framework adapters wrapping the Mimic UI kernel (placeholder)",
   "exports": {
     ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   }
 }

@@ -9,5 +9,8 @@
       "types": "./src/index.ts",
       "import": "./src/index.ts"
     }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   }
 }

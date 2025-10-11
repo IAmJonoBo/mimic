@@ -13,5 +13,8 @@
   "dependencies": {
     "@mimic/design-tokens": "workspace:*",
     "@mimic/shared-utils": "workspace:*"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit --project tsconfig.json"
   }
 }

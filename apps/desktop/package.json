@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "tauri dev",
     "build": "tauri build",
+    "typecheck": "tsc --noEmit --project tsconfig.json",
     "tauri": "tauri",
     "test": "vitest",
     "test:ui": "vitest --ui",

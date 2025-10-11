@@ -25,6 +25,7 @@
 ## Steps
 
 - [ ] Validate baseline automation commands (DevOps Guild — Week 0) to confirm `pnpm lint:workspace`,
+  `pnpm typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
   `pnpm nx run-many -t typecheck`, `pnpm nx run-many -t test`, `pnpm nx run design-system:visual-test`,
   `pnpm nx run design-system:test-storybook`, `pnpm build`, and `pnpm audit` all run cleanly in the
   container and CI. Document exit codes, coverage deltas, and remediation owners.
@@ -57,6 +58,11 @@
   - 2025-10-13: `pnpm typecheck` still aborts while Nx builds the project graph even with the new
     environment overrides; capture the failing spinner/logs and explore `NX_NATIVE_COMMAND_RUNNER=false`
     patches or alternate orchestration for type safety gates.
+  - 2025-10-14: Replaced the Nx-driven workspace typecheck with `pnpm typecheck` (tsc over every
+    package/app), adding per-project `typecheck` scripts and tsconfig baselines for mobile, desktop, and
+    adapter packages. Command now completes sequentially via `pnpm -r --workspace-root=false --if-present`
+    so the type gate can run without triggering the Nx project graph crash. Keep `pnpm typecheck:nx`
+    available as a diagnostic path while upstream fixes incubate.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin
   each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.
@@ -81,7 +87,8 @@
 
 - Formatting: `pnpm format:check` keeps Biome/Prettier alignment intact before linting.
 - Linting: `pnpm lint:workspace` (Biome format+lint, typed ESLint overlay) must pass.
-- Type Safety: `pnpm nx run-many -t typecheck` remains green across affected projects.
+- Type Safety: `pnpm typecheck` remains green across affected projects (Nx variant `pnpm typecheck:nx`
+  retained for diagnostics).
 - Testing: `pnpm nx run-many -t test` and targeted suites (e.g., Storybook/Vitest) succeed.
 - Visual Regression: `pnpm nx run design-system:visual-test` (Loki/Storybook) completes without diffs.
 - Storybook Interaction: `pnpm nx run design-system:test-storybook` verifies stories and accessibility
@@ -106,12 +113,12 @@
   before gating can be fully enforced—track remediation as part of relevant sprints.
 - Local container image currently pins Node 22.19.0, triggering engine mismatch warnings versus the
   required Node 22.20.0 baseline; coordinate with DevOps to bump the runtime and re-verify Nx targets.
-- `pnpm nx run-many -t test` and workspace-level lint/format commands triggered shell crashes during
+- `pnpm nx run-many -t test` and legacy Nx-driven typecheck commands triggered shell crashes during
   baseline verification while Nx built the project graph on Node 22.19.0; capture logs under
   `infra/` troubleshooting and stabilise the command path once the runtime upgrade lands so gates can
-  be relied on for enforcement. `NX_DAEMON=false` with Node 22.20.0 still aborts via the Nx native
-  binary (exit code 134); investigate forcing the JS fallback or updating the binary in coordination
-  with DevOps.
+  be relied on for enforcement. `pnpm typecheck` now runs via `tsc` without touching the Nx graph, but
+  the native runner crash still blocks any Nx-powered graph work (tests/build) until DevOps delivers a
+  patched binary or upgraded runtime.
 - Running Nx with `NX_NATIVE_COMMAND_RUNNER=false` and `NX_ADD_PLUGINS=false` bypasses the native graph
   builder crash, but it may reduce inference coverage/performance. Track upstream fixes so the native
   path can be restored once stable.
