@@ -5,12 +5,12 @@
  * architecture, showing proper ds- prefixed token integration.
  */
 
-import React from 'react';
-import { View, Text, Pressable, StyleSheet } from 'react-native';
+import type { FC } from 'react';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { useTokens } from '../theme/ThemeProvider';
 
-export const ButtonDemo: React.FC = () => {
+export const ButtonDemo: FC = () => {
   const { getToken } = useTokens();
 
   const primaryButtonStyle = {
@@ -41,10 +41,7 @@ export const ButtonDemo: React.FC = () => {
       <Text style={styles.sectionTitle}>Button Demo</Text>
 
       <Pressable
-        style={({ pressed }) => [
-          primaryButtonStyle,
-          pressed && { opacity: 0.8 },
-        ]}
+        style={({ pressed }) => [primaryButtonStyle, pressed && { opacity: 0.8 }]}
         onPress={() => {
           // Development demo only - replace with actual functionality
           if (__DEV__) {
@@ -56,10 +53,7 @@ export const ButtonDemo: React.FC = () => {
       </Pressable>
 
       <Pressable
-        style={({ pressed }) => [
-          secondaryButtonStyle,
-          pressed && { opacity: 0.8 },
-        ]}
+        style={({ pressed }) => [secondaryButtonStyle, pressed && { opacity: 0.8 }]}
         onPress={() => {
           // Development demo only - replace with actual functionality
           if (__DEV__) {
@@ -71,10 +65,7 @@ export const ButtonDemo: React.FC = () => {
       </Pressable>
 
       <Pressable
-        style={({ pressed }) => [
-          outlineButtonStyle,
-          pressed && { opacity: 0.8 },
-        ]}
+        style={({ pressed }) => [outlineButtonStyle, pressed && { opacity: 0.8 }]}
         onPress={() => {
           // Development demo only - replace with actual functionality
           if (__DEV__) {
@@ -82,14 +73,7 @@ export const ButtonDemo: React.FC = () => {
           }
         }}
       >
-        <Text
-          style={[
-            styles.outlineButtonText,
-            { color: getToken('color.primary_500', '#3b82f6') as string },
-          ]}
-        >
-          Outline Button
-        </Text>
+        <Text style={[styles.outlineButtonText, { color: getToken('color.primary_500', '#3b82f6') as string }]}>Outline Button</Text>
       </Pressable>
     </View>
   );

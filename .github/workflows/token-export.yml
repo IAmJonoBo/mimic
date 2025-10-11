@@ -26,6 +26,13 @@ jobs:
           node-version: '22.20.0'
           cache: 'pnpm'
 
+      - name: Setup Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: clippy,rustfmt
+          targets: wasm32-unknown-unknown
+
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:

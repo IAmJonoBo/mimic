@@ -194,8 +194,10 @@ export function runCollisionCheck(): void {
   if (report.tokenNameClashes.length > 0) {
     // eslint-disable-next-line no-console
     console.log('❌ Token Name Clashes (Specify Warning Prevention):');
-    // eslint-disable-next-line no-console
-    report.tokenNameClashes.forEach((clash) => console.log(`   • ${clash}`));
+     
+    report.tokenNameClashes.forEach((clash) => {
+      console.log(`   • ${clash}`);
+    });
     // eslint-disable-next-line no-console
     console.log('');
   } else {
@@ -207,8 +209,10 @@ export function runCollisionCheck(): void {
   if (report.storybookPortConflicts.length > 0) {
     // eslint-disable-next-line no-console
     console.log('❌ Storybook Port Conflicts (Supernova Docs Compliance):');
-    // eslint-disable-next-line no-console
-    report.storybookPortConflicts.forEach((conflict) => console.log(`   • ${conflict}`));
+     
+    report.storybookPortConflicts.forEach((conflict) => {
+      console.log(`   • ${conflict}`);
+    });
     // eslint-disable-next-line no-console
     console.log('');
   } else {
@@ -220,8 +224,10 @@ export function runCollisionCheck(): void {
   if (report.metroDuplicationRisks.length > 0) {
     // eslint-disable-next-line no-console
     console.log('❌ Metro Duplication Risks (Locofy FAQ Compliance):');
-    // eslint-disable-next-line no-console
-    report.metroDuplicationRisks.forEach((risk) => console.log(`   • ${risk}`));
+     
+    report.metroDuplicationRisks.forEach((risk) => {
+      console.log(`   • ${risk}`);
+    });
     // eslint-disable-next-line no-console
     console.log('');
   } else {
