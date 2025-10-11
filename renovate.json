@@ -1,30 +1,22 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended",
-    ":dependencyDashboard",
-    ":semanticCommits",
-    ":semanticCommitTypeAll(chore)"
-  ],
+  "extends": ["config:recommended", ":dependencyDashboard", ":semanticCommits", ":semanticCommitTypeAll(chore)"],
   "rangeStrategy": "replace",
   "timezone": "UTC",
   "schedule": ["after 02:00 on monday"],
   "prHourlyLimit": 2,
   "prConcurrentLimit": 8,
   "labels": ["dependencies", "renovate"],
-  "enabledManagers": [
-    "npm",
-    "github-actions",
-    "dockerfile",
-    "docker-compose",
-    "devcontainer",
-    "cargo"
-  ],
+  "enabledManagers": ["npm", "github-actions", "dockerfile", "docker-compose", "devcontainer", "cargo"],
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": ["before 03:00 on monday"],
     "automerge": true,
     "automergeType": "branch"
+  },
+  "postUpgradeTasks": {
+    "commands": ["pnpm install", "pnpm run upgrade:verify"],
+    "executionMode": "update"
   },
   "packageRules": [
     {
@@ -37,11 +29,7 @@
     },
     {
       "matchManagers": ["npm"],
-      "matchDepTypes": [
-        "dependencies",
-        "optionalDependencies",
-        "peerDependencies"
-      ],
+      "matchDepTypes": ["dependencies", "optionalDependencies", "peerDependencies"],
       "matchUpdateTypes": ["minor", "patch", "pin"],
       "groupName": "Runtime dependencies (minor+patch)",
       "automerge": true,

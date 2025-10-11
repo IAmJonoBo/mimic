@@ -56,8 +56,8 @@ Refer to [`docs/IMPLEMENTATION_PLAN_2.0.md`](docs/IMPLEMENTATION_PLAN_2.0.md) fo
 
 ### Prerequisites
 
-- Node.js 22.19.0 (run `nvm use` after `./setup.sh`)
-- pnpm 10.17 (`corepack enable && corepack prepare pnpm@10.17.0 --activate`)
+- Node.js 22.20.0 (run `nvm use` after `./setup.sh`)
+- pnpm 10.17.1 (`corepack enable && corepack prepare pnpm@10.17.1 --activate`)
 - Rust (toolchains for the token orchestrator and Tauri)
 - Docker (Penpot + automation stack)
 - Platform SDKs as needed: Android Studio, Xcode, or Tauri dependencies
@@ -86,7 +86,7 @@ pnpm nx run-many -t lint,test,visual-test
 | Goal                    | Command                                         |
 | ----------------------- | ------------------------------------------------ |
 | Sync tokens from Penpot | `make tokens-sync`                               |
-| Build everything        | `pnpm nx run-many -t build`                      |
+| Build everything        | `pnpm build`                                     |
 | Launch Storybook        | `pnpm nx run design-system:storybook`            |
 | Mobile dev server       | `pnpm --filter @mimic/mobile-rn start`           |
 | Desktop dev server      | `pnpm --filter @mimic/desktop tauri dev`         |
@@ -176,6 +176,7 @@ requesting review.
 - **Issues** — [github.com/IAmJonoBo/mimic/issues](https://github.com/IAmJonoBo/mimic/issues)
 - **Discussions** — [github.com/IAmJonoBo/mimic/discussions](https://github.com/IAmJonoBo/mimic/discussions)
 - **Storybook (public)** — <https://iamjonobo.github.io/mimic/storybook/>
+- **Dependency automation plan** — [`docs/DEPENDENCY_AUTOMATION_PLAN.md`](docs/DEPENDENCY_AUTOMATION_PLAN.md)
 
 ## License
 

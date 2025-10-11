@@ -311,7 +311,7 @@ plugins:
 runtimes:
   enabled:
     - go@1.21.0
-    - node@22.19.0
+    - node@22.20.0
     - python@3.10.8
 
 lint:

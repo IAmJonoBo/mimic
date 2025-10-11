@@ -5,7 +5,7 @@ RUN useradd -m appuser && chown -R appuser /workspace
 USER appuser
 
 # Install pnpm
-RUN npm install -g pnpm@10.17.0
+RUN npm install -g pnpm@10.17.1
 
 # Install Rust and Cargo (for Tauri)
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]

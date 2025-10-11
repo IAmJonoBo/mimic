@@ -28,8 +28,8 @@ phase-by-phase delivery status.
 
 | Tool        | Version       | Installation Notes                                           |
 | ----------- | ------------- | ------------------------------------------------------------ |
-| Node.js     | ≥ 22 LTS      | `corepack enable && corepack prepare pnpm@10.17.0 --activate` |
-| pnpm        | ≥ 10          | Included with Node corepack                                  |
+| Node.js     | ≥ 22 LTS (22.20.0 recommended) | `corepack enable && corepack prepare pnpm@10.17.1 --activate` |
+| pnpm        | ≥ 10.17.1     | Included with Node corepack                                  |
 | Rust        | Latest stable | Required for Tauri desktop apps                              |
 | Java        | 17+           | For Compose Multiplatform development                        |
 | Xcode       | Latest        | iOS React Native development (macOS only)                    |
@@ -423,11 +423,11 @@ Create workspace-level automation:
 ```bash
 # Add global targets for token management
 pnpm nx g @nx/workspace:run-commands tokens:build-all \
-  --command="pnpm nx run design-tokens:build && pnpm nx run-many -t build" \
+  --command="pnpm tokens:build && pnpm build" \
   --project=workspace-format
 
 pnpm nx g @nx/workspace:run-commands tokens:sync-all \
-  --command="pnpm nx run design-tokens:tokens:sync && pnpm nx run-many -t build --skip-nx-cache" \
+  --command="pnpm tokens:sync && pnpm build" \
   --project=workspace-format
 
 pnpm nx g @nx/workspace:run-commands dev:full-stack \
