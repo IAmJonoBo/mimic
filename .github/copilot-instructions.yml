@@ -47,4 +47,9 @@ onboarding:
         run_cmd pnpm nx run-many -t typecheck --nx-bail
         run_cmd pnpm nx run-many -t test --nx-bail
         run_cmd pnpm build
+        export NX_NO_CLOUD=true
+        pnpm lint:workspace
+        pnpm nx run-many -t typecheck --nx-bail
+        pnpm nx run-many -t test --nx-bail
+        pnpm build
         pnpm audit --audit-level=high
