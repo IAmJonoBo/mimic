@@ -24,6 +24,22 @@ retired during the roll-out.
   [`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md#engineering-metrics--observability-pillars)
   for targets and dashboards
 
+## 🎨 Design Education & Guidance (NEW!)
+
+**Complete professional design education** — Transform into a frontier-grade UI design expert
+
+- **📚 Design Guide Hub** — [`docs/design/README.md`](./design/README.md) — Start here for complete education
+- **📖 Design Principles** — [`docs/design/DESIGN_PRINCIPLES.md`](./design/DESIGN_PRINCIPLES.md) — 10 core principles
+- **📝 Typography System** — [`docs/design/TYPOGRAPHY_SYSTEM.md`](./design/TYPOGRAPHY_SYSTEM.md) — Fonts, pairing
+- **🎨 Color Theory** — [`docs/design/COLOR_THEORY.md`](./design/COLOR_THEORY.md) — Harmony, psychology
+- **📐 Layout Systems** — [`docs/design/LAYOUT_SYSTEMS.md`](./design/LAYOUT_SYSTEMS.md) — Grids, composition
+- **♿ Accessibility** — [`docs/design/ACCESSIBILITY_GUIDE.md`](./design/ACCESSIBILITY_GUIDE.md) — WCAG compliance
+- **🤖 AI Assistant** — [`docs/design/AI_DESIGN_ASSISTANT.md`](./design/AI_DESIGN_ASSISTANT.md) — AI-powered help
+- **📐 Wireframing** — [`docs/design/WIREFRAMING_PROTOTYPING.md`](./design/WIREFRAMING_PROTOTYPING.md) — Prototype flow
+- **🧩 Component Patterns** — [`docs/design/COMPONENT_PATTERNS.md`](./design/COMPONENT_PATTERNS.md) — UI patterns
+
+**150,000+ words | 500+ code examples | 8 comprehensive guides**
+
 ## Design Tokens & Penpot Workflow
 
 - **Token Pipeline Guide** — [`docs/DESIGN_TOKENS.md`](./DESIGN_TOKENS.md)
