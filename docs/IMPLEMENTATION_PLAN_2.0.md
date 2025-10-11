@@ -98,6 +98,24 @@ mimic/
 - CODEOWNERS per domain (tokens, kernel, adapters, workflows) and PR templates linking to success
   metrics.
 
+## Foundational Dependencies
+
+| Phase window | Dependency | Purpose | Runtime / licensing notes | CI coverage / follow-up |
+| --- | --- | --- | --- | --- |
+| Phases 0–6 | Node 22.20.0 + pnpm 10.17.1 | Primary execution environment for Nx targets, Storybook builds, and script automation. | MIT-licensed toolchain. Works offline once tarballs are cached; DevContainer pins versions via `setup.sh`. | `.github/workflows/ci.yml`, `visual-tests.yml`, and `pr-verification.yml` install pinned Node/pnpm via `actions/setup-node` + `pnpm/action-setup`. |
+| Phases 1–6 | Nx 21.6 plugin stack (`@nx/{js,react,storybook,vite,plugin}`) | Provides project graph, lint/test orchestration, Storybook build integration, and custom generators. | OSS licenses (MIT). Requires Node environment; offline usage supported via pnpm store. | Installed through workspace `pnpm install`. Ensure cache seeds via existing CI install steps. |
+| Phases 2–6 | Rust toolchain (stable 1.80+, `wasm32-unknown-unknown`, `cargo-generate`) | Builds the token orchestrator CLI, wasm bindings, and future Tauri shell automation. | Apache-2.0 / MIT dual license. Offline builds require pre-fetching `rustup` components. | **Follow-up:** add rustup provisioning to token orchestrator GitHub Actions (`token-sync.yml`/`token-export.yml`). Track in `Next_Steps.md`. |
+| Phases 2–6 | Storybook 9.1 + Loki + Playwright runners | Document kernel/adapters and power visual/a11y regression gates. | OSS license. Requires Node; offline builds rely on cached npm packages and Chromatic alternatives. | `visual-tests.yml` builds Storybook and runs Loki; ensure Chromatic optional path documented in Sprint 6. |
+| Phases 0–6 | AI CLIs: Ollama >=0.5 (`ollama run`), OpenAI CLI (`openai`), GitHub Copilot CLI (`github-copilot-cli`) | Powers `mimic assist` and AI-augmented `just` flows for scaffolding, Q&A, and review triage. | Ollama: AGPLv3, runs fully offline with local models. OpenAI/Copilot: proprietary APIs—requires network + billing; provide opt-in legal review. | Devcontainers install Ollama by default; remote runners skip AI setup. **Follow-up:** evaluate self-hosted runners for AI optionality (track in `Next_Steps.md`). |
+
+### CLI Deliverables & AI Runtime Expectations
+
+| CLI deliverable | Runtime dependency | AI / network requirements | Licensing & offline posture |
+| --- | --- | --- | --- |
+| `mimic assist` | Node 22 CLI wrapper invoking Ollama (default) with optional OpenAI/Copilot fallbacks. | Offline with local Ollama models; optional remote API keys enable GPT/Copilot flows. | Wrapper MIT-licensed. Ollama AGPLv3—ensure redistribution compliance. Document opt-in for proprietary APIs. |
+| `mimic init feature`, `mimic token create` wizards | Node 22 + Nx generators + Rust orchestrator bindings (Phase 2+). | AI prompts piggyback on `mimic assist`; runs offline when Ollama available. | Scripts MIT; respects same Ollama/OpenAI licensing constraints. |
+| `just` catalogue (`just lint-all`, `just ai-review`, `just penpot-up`) | Requires system `just` binary, pnpm workspace, Docker (for Penpot) | AI-enhanced recipes call `mimic assist`; offline usage supported when Ollama + Docker images pre-pulled. | `just` is MIT; Docker images for Penpot are AGPL-compatible. Provide legal review for enterprise redistribution. |
+
 ## Engineering Metrics & Observability Pillars
 
 - Define SLO-driven quality gates (build time, token drift MTTR, Storybook visual escape rate,

@@ -10,6 +10,13 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 
 - Finalise architecture decisions and prepare the workspace for execution.
 
+**Prerequisites**
+
+- Baseline Node 22.20.0 + pnpm 10.17.1 toolchain ready per
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies).
+- AI CLI approach (Ollama/OpenAI/Copilot) agreed so `mimic assist` planning aligns with licensing and
+  offline expectations from the dependency matrix.
+
 **Key Outcomes**
 
 - Architecture blueprint endorsed (token orchestrator, UI kernel, repo layout).
@@ -35,6 +42,13 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 **Focus**
 
 - Create the workspace scaffolding and shared tooling for 2.0 development.
+
+**Prerequisites**
+
+- Node/pnpm baseline validated in Sprint 0 and cached in CI runners (see
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
+- Nx plugin stack (`@nx/js`, `@nx/react`, `@nx/storybook`, `@nx/vite`) and `just` binary available for
+  scaffolding tasks called out in the matrix.
 
 **Key Outcomes**
 
@@ -65,6 +79,12 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 
 - Build the first iteration of the Rust-based token orchestrator and schema contracts.
 
+**Prerequisites**
+
+- Rust stable toolchain with `wasm32-unknown-unknown` target installed (see
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
+- Node/pnpm + Nx baseline from Sprint 1 remains green in CI for orchestrator bindings.
+
 **Key Outcomes**
 
 - `packages/token-orchestrator` CLI scaffolding (Rust + wasm bindings).
@@ -86,6 +106,12 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 **Focus**
 
 - Produce multi-platform token outputs and automate drift detection.
+
+**Prerequisites**
+
+- Storybook 9.1 + Loki runners provisioned as listed in the
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies).
+- Rust CLI toolchain from Sprint 2 available in CI to support orchestrator builds.
 
 **Key Outcomes**
 
@@ -110,6 +136,13 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 
 - Establish the shared UI kernel and first wave of framework adapters.
 
+**Prerequisites**
+
+- Storybook + Nx plugin stack validated in Sprint 3 (see
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
+- AI CLI baseline (`mimic assist` + `just` automations) configured so accessibility prompts work
+  during Storybook reviews.
+
 **Key Outcomes**
 
 - `packages/ui-kernel` implemented with Lit + vanilla-extract theming and accessibility primitives.
@@ -130,6 +163,12 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 **Focus**
 
 - Wire the kernel into the reference applications and supply example integrations.
+
+**Prerequisites**
+
+- Node/pnpm and Nx plugin stack ready for multi-app builds (see
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
+- Rust toolchain accessible for Compose/Tauri bridges referenced in the dependency matrix.
 
 **Key Outcomes**
 
@@ -152,6 +191,12 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 
 - Launch the new documentation experience and polish developer tooling.
 
+**Prerequisites**
+
+- Storybook + AI CLI stack healthy to power embedded docs previews and `mimic assist` flows (see
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
+- `just` catalogue and Nx generators from earlier sprints stable for CLI doc captures.
+
 **Key Outcomes**
 
 - Starlight-based docs app with MDX, Storybook embeds, interactive API tables, and telemetry dashboards.
@@ -171,6 +216,13 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 **Focus**
 
 - Harden CI/CD, run beta testing, and prepare GA release assets.
+
+**Prerequisites**
+
+- Full dependency matrix validated: Node/pnpm, Rust toolchain, Storybook runners, AI CLIs (see
+  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
+- Follow-ups from the matrix (Rust in GitHub Actions, AI optionality on runners) tracked and nearing
+  closure to unblock GA criteria.
 
 **Key Outcomes**
 

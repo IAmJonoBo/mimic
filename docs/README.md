@@ -61,6 +61,8 @@ retired during the roll-out.
 
 ## Development Workflow & Tooling
 
+- **Dependency Matrix** — [`Foundational Dependencies`](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)
+  for phase-by-phase tooling, CLI, and licensing requirements.
 - **Code Quality & Toolchain** — [`docs/CODE_QUALITY_PROTOCOL.md`](./CODE_QUALITY_PROTOCOL.md)
 - **Automation & CI/CD** — [`docs/devops/ci-overview.md`](./devops/ci-overview.md)
 - **Autofix & Linting** — [`docs/AUTOFIX_SYSTEM.md`](./AUTOFIX_SYSTEM.md), [`docs/IGNORE_PATTERNS_GUIDE.md`](./IGNORE_PATTERNS_GUIDE.md)
