@@ -43,17 +43,21 @@ Legacy folders from 1.x remain until their replacements land; prefer the 2.0 tar
 | Task                          | Command(s)                                                                            |
 | ----------------------------- | ------------------------------------------------------------------------------------- |
 | Sync tokens from Penpot       | `make tokens-sync` (requires `.env` with Penpot credentials)                          |
-| Build tokens                  | `pnpm nx run design-tokens:build` (legacy pipeline)                                  |
+| Build tokens                  | `pnpm tokens:build` (legacy pipeline)                                                |
+| Full workspace build          | `pnpm build` (skips Nx Cloud, tolerates missing Tauri CLI)                           |
 | Start Storybook               | `pnpm nx run design-system:storybook`                                                |
 | Start full dev stack          | `pnpm dev:full-stack` (watches tokens + Storybook)                                   |
 | Run unit tests                | `pnpm nx run-many -t test`                                                           |
 | Run visual + interaction tests| `pnpm nx run design-system:visual-test && pnpm nx run design-system:test-storybook`  |
 | Lint + typecheck              | `pnpm lint:workspace && pnpm nx run-many -t typecheck`                               |
-| Build affected projects       | `pnpm nx affected -t build`                                                          |
+| Build affected projects       | `pnpm run build:affected`                                                            |
 | Generate dependency graph     | `pnpm nx graph --watch`                                                              |
 
-> Fast path: `pnpm lint:base` runs only the Biome formatter/linter. Use `pnpm lint:typed` when you need the slower
-> type-aware ESLint rules without the formatter.
+> Fast path: `pnpm lint:base` runs only the Biome formatter/linter (warnings currently tracked in Next_Steps). Use
+> `pnpm lint:typed` when you need the slower type-aware ESLint rules without the formatter.
+> **Offline builds**: `pnpm build` sets `NX_NO_CLOUD=true` and auto-skips Tauri packaging when the CLI is missing so the
+workspace
+> can still produce artifacts in headless environments.
 
 ### Platform launchers
 

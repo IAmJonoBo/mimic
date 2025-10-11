@@ -18,7 +18,7 @@ pnpm add -D @nx/esbuild @nx/webpack
 # Add code quality tools
 echo "🔍 Adding advanced code quality tools..."
 pnpm add -D @commitlint/cli @commitlint/config-conventional
-pnpm add -D @types/jest @types/testing-library__jest-dom
+pnpm add -D @types/jest @testing-library/jest-dom
 pnpm add -D chromatic
 pnpm add -D concurrently
 pnpm add -D cross-env

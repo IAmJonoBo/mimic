@@ -154,7 +154,7 @@ Common issues and solutions for the Mimic design system monorepo.
 3. **Force rebuild without cache:**
 
    ```bash
-   pnpm nx run-many -t build --skip-nx-cache
+   pnpm build
    ```
 
 ### Style Dictionary Build Errors
@@ -785,7 +785,7 @@ pnpm build:tokens
 
    ```bash
    # Increase parallel processes
-   pnpm nx run-many -t build --parallel=4
+   pnpm build -- --parallel=4
    ```
 
 ### Large Bundle Sizes

@@ -21,8 +21,8 @@
     "pnpm": ">=10.17.1"
   },
   "scripts": {
-    "build": "nx run-many -t build && pnpm run postbuild:clean",
-    "build:affected": "nx affected -t build && pnpm run postbuild:clean",
+    "build": "cross-env NX_NO_CLOUD=true nx run-many -t build --exclude=workspace-format && pnpm run postbuild:clean",
+    "build:affected": "cross-env NX_NO_CLOUD=true nx affected -t build --exclude=workspace-format && pnpm run postbuild:clean",
     "postbuild:clean": "pnpm run clean:apple",
     "test": "nx run-many -t test",
     "test:affected": "nx affected -t test",
@@ -60,9 +60,9 @@
     "storybook": "nx run design-system:storybook",
     "build-storybook": "nx run design-system:build-storybook",
     "tokens:build": "nx run design-tokens:build",
-    "tokens:build-all": "nx run design-tokens:build && nx run-many -t build",
+    "tokens:build-all": "cross-env NX_NO_CLOUD=true nx run design-tokens:build && cross-env NX_NO_CLOUD=true nx run-many -t build --exclude=workspace-format",
     "tokens:sync": "nx run design-tokens:tokens:sync",
-    "tokens:sync-all": "nx run design-tokens:tokens:sync && nx run-many -t build --skip-nx-cache",
+    "tokens:sync-all": "cross-env NX_NO_CLOUD=true nx run design-tokens:tokens:sync && cross-env NX_NO_CLOUD=true nx run-many -t build --exclude=workspace-format --skip-nx-cache",
     "tokens:watch": "nx run design-tokens:watch",
     "tokens:validate": "node -e \"const { runTokenContractValidation } = require('./packages/shared-utils/dist/token-contract-validation.js'); runTokenContractValidation();\"",
     "tokens:check-drift": "echo '🔍 Checking for token drift...' && echo 'Drift check placeholder - would compare with Penpot'",
@@ -93,7 +93,7 @@
     "analyze": "pnpm build && pnpm workspace:info",
     "upgrade:plan": "nx migrate latest",
     "upgrade:latest": "pnpm up --latest --recursive --workspace-root",
-    "upgrade:verify": "pnpm install && pnpm nx run-many -t build,test,lint"
+    "upgrade:verify": "pnpm install && cross-env NX_NO_CLOUD=true pnpm nx run-many -t build,test,lint --exclude=workspace-format"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.5",
@@ -117,9 +117,9 @@
     "@storybook/addon-a11y": "9.1.10",
     "@storybook/addon-measure": "9.0.8",
     "@storybook/addon-outline": "9.0.8",
+    "@testing-library/jest-dom": "6.9.1",
     "@types/jest": "30.0.0",
     "@types/node": "24.7.1",
-    "@types/testing-library__jest-dom": "6.0.0",
     "@typescript-eslint/eslint-plugin": "8.46.0",
     "@typescript-eslint/parser": "8.46.0",
     "chromatic": "13.3.0",

@@ -86,7 +86,7 @@ pnpm nx run-many -t lint,test,visual-test
 | Goal                    | Command                                         |
 | ----------------------- | ------------------------------------------------ |
 | Sync tokens from Penpot | `make tokens-sync`                               |
-| Build everything        | `pnpm nx run-many -t build`                      |
+| Build everything        | `pnpm build`                                     |
 | Launch Storybook        | `pnpm nx run design-system:storybook`            |
 | Mobile dev server       | `pnpm --filter @mimic/mobile-rn start`           |
 | Desktop dev server      | `pnpm --filter @mimic/desktop tauri dev`         |
@@ -176,6 +176,7 @@ requesting review.
 - **Issues** — [github.com/IAmJonoBo/mimic/issues](https://github.com/IAmJonoBo/mimic/issues)
 - **Discussions** — [github.com/IAmJonoBo/mimic/discussions](https://github.com/IAmJonoBo/mimic/discussions)
 - **Storybook (public)** — <https://iamjonobo.github.io/mimic/storybook/>
+- **Dependency automation plan** — [`docs/DEPENDENCY_AUTOMATION_PLAN.md`](docs/DEPENDENCY_AUTOMATION_PLAN.md)
 
 ## License
 
