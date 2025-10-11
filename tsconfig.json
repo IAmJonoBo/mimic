@@ -1,25 +1,5 @@
 {
   "extends": "./toolchains/tsconfig.base.json",
-  "compilerOptions": {
-    "ignoreDeprecations": "6.0"
-  },
-  "include": [
-    "packages/*/src/**/*",
-    "packages/*/**/src/**/*",
-    "apps/*/src/**/*",
-    "apps/*/**/src/**/*",
-    "apps/*/**/*.ts",
-    "apps/*/**/*.tsx",
-    "apps/*/**/*.js",
-    "apps/*/**/*.jsx",
-    "tools/*/src/**/*",
-    "mimic-token-cli/src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/node_modules",
-    "**/dist",
-    "**/build",
-    "toolchains/**"
-  ]
+  "include": ["packages/*/src/**/*", "packages/*/**/src/**/*", "apps/*/src/**/*", "apps/*/**/src/**/*", "apps/*/**/*.ts", "apps/*/**/*.tsx", "apps/*/**/*.js", "apps/*/**/*.jsx", "tools/*/src/**/*", "mimic-token-cli/src/**/*"],
+  "exclude": ["node_modules", "**/node_modules", "**/dist", "**/build", "toolchains/**"]
 }
