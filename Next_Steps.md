@@ -66,6 +66,10 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   - 2025-10-15: `pnpm typecheck` currently fails under Node 22.19.0 because `packages/shared-utils/tsconfig.json`
     still sets `"ignoreDeprecations"`, which TypeScript 5.5 rejects. Investigate aligning the compiler version
     or flag usage so the sequential type gate returns to green.
+  - 2025-10-16: Fixed TypeScript configuration issue by removing invalid `"ignoreDeprecations": "6.0"` from root
+    `tsconfig.json` and `apps/desktop/tsconfig.json`. TypeScript 5.9.3 does not support version "6.0" for this
+    field. Removed the field entirely as no deprecation suppression is needed. `pnpm typecheck` now passes
+    successfully across all workspace projects.
 - [ ] Coordinate PR template update broadcast with Docs & Release leads so contributor education stays consistent.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.

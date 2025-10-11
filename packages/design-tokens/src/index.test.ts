@@ -1,14 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  baseTokens,
-  componentTokens,
-  getToken,
-  getTokensByPattern,
-  matchesPattern,
-  semanticTokens,
-  validateTokens,
-} from '../src/index.js';
+import { baseTokens, componentTokens, getToken, getTokensByPattern, matchesPattern, semanticTokens, validateTokens } from '../src/index.js';
 
 interface TokenWithValue {
   $value: string;
@@ -81,10 +73,7 @@ describe('Design Tokens', () => {
       const primaryTokens = getTokensByPattern('color.primary.*');
       expect(primaryTokens.length).toBeGreaterThan(0);
 
-      const primaryToken = primaryTokens.find(
-        (t: { path: string; value: string; type?: string }) =>
-          t.path === 'color.primary.500'
-      );
+      const primaryToken = primaryTokens.find((t: { path: string; value: string; type?: string }) => t.path === 'color.primary.500');
       expect(primaryToken).toBeDefined();
       expect(primaryToken?.value).toBe('#3b82f6');
       expect(primaryToken?.type).toBe('color');
@@ -106,26 +95,18 @@ describe('Design Tokens', () => {
 
   describe('Pattern Matching', () => {
     it('should match exact paths', () => {
-      expect(matchesPattern('color.primary.500', 'color.primary.500')).toBe(
-        true
-      );
-      expect(matchesPattern('color.primary.600', 'color.primary.500')).toBe(
-        false
-      );
+      expect(matchesPattern('color.primary.500', 'color.primary.500')).toBe(true);
+      expect(matchesPattern('color.primary.600', 'color.primary.500')).toBe(false);
     });
 
     it('should match wildcard patterns', () => {
       expect(matchesPattern('color.primary.500', 'color.primary.*')).toBe(true);
-      expect(matchesPattern('color.secondary.500', 'color.primary.*')).toBe(
-        false
-      );
+      expect(matchesPattern('color.secondary.500', 'color.primary.*')).toBe(false);
       expect(matchesPattern('color.primary.500', 'color.*.*')).toBe(true);
     });
 
     it('should match nested wildcard patterns', () => {
-      expect(matchesPattern('typography.fontSize.base', 'typography.*.*')).toBe(
-        true
-      );
+      expect(matchesPattern('typography.fontSize.base', 'typography.*.*')).toBe(true);
       expect(matchesPattern('spacing.md', 'spacing.*')).toBe(true);
     });
   });

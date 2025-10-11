@@ -8,10 +8,7 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, '..');
-const composePath = path.resolve(
-  repoRoot,
-  'infra/containers/devcontainer/docker-compose.yml'
-);
+const composePath = path.resolve(repoRoot, 'infra/containers/devcontainer/docker-compose.yml');
 
 const args = process.argv.slice(2);
 let outputFile;
@@ -31,15 +28,11 @@ const setOutput = (key, value) => {
 
 const composeContent = fs.readFileSync(composePath, 'utf8');
 
-const extractVersion = service => {
-  const pattern = new RegExp(
-    `image: penpotapp/${service}:(\\d+\\.\\d+\\.\\d+)`
-  );
+const extractVersion = (service) => {
+  const pattern = new RegExp(`image: penpotapp/${service}:(\\d+\\.\\d+\\.\\d+)`);
   const match = composeContent.match(pattern);
   if (!match) {
-    throw new Error(
-      `Unable to find current version for ${service} in docker-compose.yml`
-    );
+    throw new Error(`Unable to find current version for ${service} in docker-compose.yml`);
   }
   return match[1];
 };
@@ -52,9 +45,7 @@ const currentVersions = {
 
 const versionSet = new Set(Object.values(currentVersions));
 if (versionSet.size !== 1) {
-  console.warn(
-    '⚠️ Penpot services are not aligned to a single version. Automation will use backend version as source of truth.'
-  );
+  console.warn('⚠️ Penpot services are not aligned to a single version. Automation will use backend version as source of truth.');
 }
 const currentVersion = currentVersions.backend;
 
@@ -70,19 +61,15 @@ const compareSemver = (a, b) => {
   return pa - pb;
 };
 
-const fetchSemverTags = async repo => {
+const fetchSemverTags = async (repo) => {
   let page = 1;
   const tags = new Set();
   const maxPages = 5; // Avoid hammering the API
 
   while (page <= maxPages) {
-    const response = await fetch(
-      `https://registry.hub.docker.com/v2/repositories/${repo}/tags?page_size=100&page=${page}&ordering=last_updated`
-    );
+    const response = await fetch(`https://registry.hub.docker.com/v2/repositories/${repo}/tags?page_size=100&page=${page}&ordering=last_updated`);
     if (!response.ok) {
-      throw new Error(
-        `Failed to fetch tags for ${repo}: ${response.status} ${response.statusText}`
-      );
+      throw new Error(`Failed to fetch tags for ${repo}: ${response.status} ${response.statusText}`);
     }
     const data = await response.json();
     for (const result of data.results ?? []) {
@@ -103,12 +90,12 @@ const fetchSemverTags = async repo => {
   return Array.from(tags);
 };
 
-const intersectVersions = arrays => {
+const intersectVersions = (arrays) => {
   if (arrays.length === 0) return [];
   const [first, ...rest] = arrays;
   const baseSet = new Set(first);
   for (const value of baseSet) {
-    if (!rest.every(arr => arr.includes(value))) {
+    if (!rest.every((arr) => arr.includes(value))) {
       baseSet.delete(value);
     }
   }
@@ -116,20 +103,12 @@ const intersectVersions = arrays => {
 };
 
 const main = async () => {
-  const repositories = [
-    'penpotapp/backend',
-    'penpotapp/frontend',
-    'penpotapp/exporter',
-  ];
-  const tagLists = await Promise.all(
-    repositories.map(repo => fetchSemverTags(repo))
-  );
+  const repositories = ['penpotapp/backend', 'penpotapp/frontend', 'penpotapp/exporter'];
+  const tagLists = await Promise.all(repositories.map((repo) => fetchSemverTags(repo)));
   const commonTags = intersectVersions(tagLists);
 
   if (commonTags.length === 0) {
-    throw new Error(
-      'No common Penpot versions found across backend, frontend, and exporter images.'
-    );
+    throw new Error('No common Penpot versions found across backend, frontend, and exporter images.');
   }
 
   const sorted = commonTags.sort(compareSemver);
@@ -145,35 +124,22 @@ const main = async () => {
   }
 
   let updatedContent = composeContent;
-  updatedContent = updatedContent.replace(
-    /(image: penpotapp\/backend:)\d+\.\d+\.\d+/g,
-    `$1${latestVersion}`
-  );
-  updatedContent = updatedContent.replace(
-    /(image: penpotapp\/frontend:)\d+\.\d+\.\d+/g,
-    `$1${latestVersion}`
-  );
-  updatedContent = updatedContent.replace(
-    /(image: penpotapp\/exporter:)\d+\.\d+\.\d+/g,
-    `$1${latestVersion}`
-  );
+  updatedContent = updatedContent.replace(/(image: penpotapp\/backend:)\d+\.\d+\.\d+/g, `$1${latestVersion}`);
+  updatedContent = updatedContent.replace(/(image: penpotapp\/frontend:)\d+\.\d+\.\d+/g, `$1${latestVersion}`);
+  updatedContent = updatedContent.replace(/(image: penpotapp\/exporter:)\d+\.\d+\.\d+/g, `$1${latestVersion}`);
 
   if (updatedContent === composeContent) {
-    console.warn(
-      'No changes were made to docker-compose.yml even though a newer version was detected.'
-    );
+    console.warn('No changes were made to docker-compose.yml even though a newer version was detected.');
     setOutput('updated', 'false');
     return;
   }
 
   fs.writeFileSync(composePath, `${updatedContent.trimEnd()}\n`, 'utf8');
-  console.log(
-    `Updated Penpot images from ${currentVersion} to ${latestVersion}.`
-  );
+  console.log(`Updated Penpot images from ${currentVersion} to ${latestVersion}.`);
   setOutput('updated', 'true');
 };
 
-main().catch(error => {
+main().catch((error) => {
   console.error(error);
   process.exitCode = 1;
 });

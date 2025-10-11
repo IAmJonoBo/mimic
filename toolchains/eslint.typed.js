@@ -16,8 +16,8 @@ const typeCheckedFiles = [
   'tools/**/*.{ts,tsx,mts,cts}',
 ];
 
-const restrictToTypeScript = configs =>
-  configs.map(config => ({
+const restrictToTypeScript = (configs) =>
+  configs.map((config) => ({
     ...config,
     files: config.files ?? typeCheckedFiles,
   }));
@@ -34,10 +34,7 @@ const typedOnlyRules = [
       },
     },
     rules: {
-      '@typescript-eslint/no-floating-promises': [
-        'error',
-        { ignoreVoid: false },
-      ],
+      '@typescript-eslint/no-floating-promises': ['error', { ignoreVoid: false }],
       '@typescript-eslint/no-unnecessary-type-assertion': 'warn',
       '@typescript-eslint/unbound-method': 'error',
       '@typescript-eslint/no-unsafe-assignment': 'warn',
@@ -47,10 +44,7 @@ const typedOnlyRules = [
       '@typescript-eslint/no-empty-function': 'warn',
       '@typescript-eslint/array-type': ['warn', { default: 'array-simple' }],
       '@typescript-eslint/prefer-regexp-exec': 'warn',
-      '@typescript-eslint/restrict-template-expressions': [
-        'warn',
-        { allowNumber: true, allowBoolean: true, allowNullish: true },
-      ],
+      '@typescript-eslint/restrict-template-expressions': ['warn', { allowNumber: true, allowBoolean: true, allowNullish: true }],
       '@typescript-eslint/prefer-nullish-coalescing': 'warn',
     },
   },

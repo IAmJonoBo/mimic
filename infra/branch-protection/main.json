@@ -2,10 +2,7 @@
   "branch": "main",
   "required_status_checks": {
     "strict": true,
-    "contexts": [
-      "PR Verification / Lint • Typecheck • Test • Build (affected)",
-      "Comprehensive Collision Prevention & Quality Gates / Module Boundary Enforcement"
-    ]
+    "contexts": ["PR Verification / Lint • Typecheck • Test • Build (affected)", "Comprehensive Collision Prevention & Quality Gates / Module Boundary Enforcement"]
   },
   "enforce_admins": true,
   "required_pull_request_reviews": {

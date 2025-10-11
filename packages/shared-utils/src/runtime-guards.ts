@@ -61,11 +61,11 @@ class RuntimeGuards {
     const collisions: string[] = [];
 
     try {
-      styleSheets.forEach(sheet => {
+      styleSheets.forEach((sheet) => {
         if (!sheet.href || sheet.href.includes(window.location.origin)) {
           try {
             const rules = Array.from(sheet.cssRules || []);
-            rules.forEach(rule => {
+            rules.forEach((rule) => {
               if (rule.type === CSSRule.STYLE_RULE) {
                 const styleRule = rule as CSSStyleRule;
                 const text = styleRule.cssText;
@@ -73,7 +73,7 @@ class RuntimeGuards {
                 // Check for non-ds prefixed CSS variables
                 const variableMatches = text.match(/--([^d][^s]-[^:;]+)/g);
                 if (variableMatches) {
-                  variableMatches.forEach(variable => {
+                  variableMatches.forEach((variable) => {
                     if (cssVariables.has(variable)) {
                       collisions.push(variable);
                     } else {
@@ -94,22 +94,14 @@ class RuntimeGuards {
         this.reportCollision({
           type: 'css-variable',
           severity: 'warning',
-          message:
-            'Detected CSS variables without ds- prefix that may cause collisions',
+          message: 'Detected CSS variables without ds- prefix that may cause collisions',
           detected: collisions,
-          recommendations: [
-            'Ensure all design tokens use --ds-* prefix',
-            'Update CSS variables to follow collision-safe naming',
-            'Check for third-party CSS conflicts',
-          ],
+          recommendations: ['Ensure all design tokens use --ds-* prefix', 'Update CSS variables to follow collision-safe naming', 'Check for third-party CSS conflicts'],
         });
       }
     } catch (error) {
       // Development warning for debugging - using console.warn is acceptable here
-      console.warn(
-        '[RuntimeGuards] CSS variable collision detection failed:',
-        error
-      );
+      console.warn('[RuntimeGuards] CSS variable collision detection failed:', error);
     }
   }
 
@@ -120,7 +112,7 @@ class RuntimeGuards {
     const knownGlobals = ['dsTokens', 'dsTheme', 'dsColors', 'dsTypography'];
 
     // Check for global variables that might conflict with ds* namespace
-    Object.keys(window).forEach(key => {
+    Object.keys(window).forEach((key) => {
       if (key.startsWith('ds') && !knownGlobals.includes(key)) {
         potentialConflicts.push(key);
       }
@@ -130,14 +122,9 @@ class RuntimeGuards {
       this.reportCollision({
         type: 'js-global',
         severity: 'warning',
-        message:
-          'Detected global variables in ds* namespace that may cause conflicts',
+        message: 'Detected global variables in ds* namespace that may cause conflicts',
         detected: potentialConflicts,
-        recommendations: [
-          'Ensure only authorized design token globals use ds* prefix',
-          'Check for third-party library conflicts',
-          'Consider using module imports instead of globals',
-        ],
+        recommendations: ['Ensure only authorized design token globals use ds* prefix', 'Check for third-party library conflicts', 'Consider using module imports instead of globals'],
       });
     }
   }
@@ -153,7 +140,7 @@ class RuntimeGuards {
     ];
 
     // Check if any of these patterns exist in global scope or error messages
-    const violations = deprecatedPatterns.filter(pattern => {
+    const violations = deprecatedPatterns.filter((pattern) => {
       try {
         return document.documentElement.innerHTML.includes(pattern);
       } catch {
@@ -168,11 +155,7 @@ class RuntimeGuards {
         severity: 'error',
         message: 'Detected usage of deprecated token import patterns',
         detected: violations,
-        recommendations: [
-          'Update imports to use libs/tokens/ paths',
-          'Ensure all token references use ds- prefix',
-          'Review migration guide for breaking changes',
-        ],
+        recommendations: ['Update imports to use libs/tokens/ paths', 'Ensure all token references use ds- prefix', 'Review migration guide for breaking changes'],
       });
     }
   }
@@ -226,10 +209,8 @@ class RuntimeGuards {
 
     const deprecatedPatterns = ['dist/', 'build/'];
 
-    const isValid = validPatterns.some(pattern => importPath.includes(pattern));
-    const isDeprecated = deprecatedPatterns.some(pattern =>
-      importPath.includes(pattern)
-    );
+    const isValid = validPatterns.some((pattern) => importPath.includes(pattern));
+    const isDeprecated = deprecatedPatterns.some((pattern) => importPath.includes(pattern));
 
     if (isDeprecated) {
       this.reportCollision({
@@ -237,10 +218,7 @@ class RuntimeGuards {
         severity: 'error',
         message: 'Deprecated import path detected',
         detected: [importPath],
-        recommendations: [
-          'Update to use libs/tokens/ import path',
-          'Follow migration guide for proper imports',
-        ],
+        recommendations: ['Update to use libs/tokens/ import path', 'Follow migration guide for proper imports'],
       });
       return false;
     }

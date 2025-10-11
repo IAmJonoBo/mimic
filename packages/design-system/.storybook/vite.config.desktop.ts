@@ -6,22 +6,10 @@ export default defineConfig({
   resolve: {
     alias: {
       // Desktop-specific collision-safe token paths
-      '@mimic/design-tokens/desktop': resolve(
-        __dirname,
-        '../../design-tokens/libs/tokens/css/tokens.css'
-      ),
-      '@mimic/design-tokens/scss': resolve(
-        __dirname,
-        '../../design-tokens/libs/tokens/scss/tokens.scss'
-      ),
-      '@mimic/design-tokens/js': resolve(
-        __dirname,
-        '../../design-tokens/libs/tokens/js/tokens.js'
-      ),
-      '@mimic/design-tokens': resolve(
-        __dirname,
-        '../../design-tokens/libs/tokens/ts/tokens.ts'
-      ),
+      '@mimic/design-tokens/desktop': resolve(__dirname, '../../design-tokens/libs/tokens/css/tokens.css'),
+      '@mimic/design-tokens/scss': resolve(__dirname, '../../design-tokens/libs/tokens/scss/tokens.scss'),
+      '@mimic/design-tokens/js': resolve(__dirname, '../../design-tokens/libs/tokens/js/tokens.js'),
+      '@mimic/design-tokens': resolve(__dirname, '../../design-tokens/libs/tokens/ts/tokens.ts'),
     },
   },
   css: {

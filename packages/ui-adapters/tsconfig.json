@@ -4,12 +4,6 @@
     "noEmit": true,
     "rootDir": "."
   },
-  "include": [
-    "src/**/*.ts",
-    "react/src/**/*.ts",
-    "solid/src/**/*.ts",
-    "vue/src/**/*.ts",
-    "svelte/src/**/*.ts"
-  ],
+  "include": ["src/**/*.ts", "react/src/**/*.ts", "solid/src/**/*.ts", "vue/src/**/*.ts", "svelte/src/**/*.ts"],
   "exclude": ["dist", "node_modules"]
 }

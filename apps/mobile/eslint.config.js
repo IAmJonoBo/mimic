@@ -21,7 +21,7 @@ export default [
   },
   js.configs.recommended,
   react.configs.flat.recommended,
-  ...tseslint.configs.recommended.map(config => ({
+  ...tseslint.configs.recommended.map((config) => ({
     ...config,
     files: ['**/*.{ts,tsx}'],
   })),
@@ -60,17 +60,6 @@ export default [
     },
   },
   {
-    ignores: [
-      'node_modules/**',
-      'build/**',
-      'dist/**',
-      '.expo/**',
-      'android/**',
-      'ios/**',
-      'metro.config.js',
-      'babel.config.js',
-      '*.config.js',
-      'jest-setup-react-native.js',
-    ],
+    ignores: ['node_modules/**', 'build/**', 'dist/**', '.expo/**', 'android/**', 'ios/**', 'metro.config.js', 'babel.config.js', '*.config.js', 'jest-setup-react-native.js'],
   },
 ];

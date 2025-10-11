@@ -1,20 +1,5 @@
 {
-  "globs": [
-    "docs/**/*.md",
-    "packages/*/README.md",
-    "!docs/**/examples/**",
-    "!docs/**/samples/**",
-    "!docs/**/templates/**",
-    "!docs/**/vendor/**",
-    "!docs/**/vendors/**",
-    "!packages/**/examples/**",
-    "!packages/**/templates/**",
-    "!node_modules/**",
-    "!**/node_modules/**",
-    "!.git/**",
-    "!.trunk/**",
-    "!.nx/**"
-  ],
+  "globs": ["docs/**/*.md", "packages/*/README.md", "!docs/**/examples/**", "!docs/**/samples/**", "!docs/**/templates/**", "!docs/**/vendor/**", "!docs/**/vendors/**", "!packages/**/examples/**", "!packages/**/templates/**", "!node_modules/**", "!**/node_modules/**", "!.git/**", "!.trunk/**", "!.nx/**"],
   "config": {
     "MD013": {
       "line_length": 120,

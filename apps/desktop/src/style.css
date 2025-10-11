@@ -6,12 +6,7 @@
  */
 
 :root {
-  font-family: var(
-    --ds-typography-font-family-primary,
-    'Inter',
-    system-ui,
-    sans-serif
-  );
+  font-family: var(--ds-typography-font-family-primary, "Inter", system-ui, sans-serif);
   line-height: 1.5;
   font-weight: 400;
   color-scheme: light dark;

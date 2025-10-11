@@ -18,18 +18,7 @@
   },
   "customizations": {
     "vscode": {
-      "extensions": [
-        "ms-vscode.vscode-typescript-next",
-        "bradlc.vscode-tailwindcss",
-        "esbenp.prettier-vscode",
-        "ms-playwright.playwright",
-        "ms-vscode.vscode-json",
-        "redhat.vscode-yaml",
-        "ms-vscode.vscode-eslint",
-        "nrwl.angular-console",
-        "ms-vscode-remote.remote-containers",
-        "ms-azuretools.vscode-docker"
-      ],
+      "extensions": ["ms-vscode.vscode-typescript-next", "bradlc.vscode-tailwindcss", "esbenp.prettier-vscode", "ms-playwright.playwright", "ms-vscode.vscode-json", "redhat.vscode-yaml", "ms-vscode.vscode-eslint", "nrwl.angular-console", "ms-vscode-remote.remote-containers", "ms-azuretools.vscode-docker"],
       "settings": {
         "typescript.preferences.preferTypeOnlyAutoImports": true,
         "editor.formatOnSave": true,

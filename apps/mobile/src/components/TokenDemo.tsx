@@ -10,35 +10,11 @@ import { StyleSheet, Text, type TextStyle, View } from 'react-native';
 
 import { useTokens } from '../theme/ThemeProvider';
 
-const FONT_WEIGHT_VALUES = [
-  'normal',
-  'bold',
-  '100',
-  '200',
-  '300',
-  '400',
-  '500',
-  '600',
-  '700',
-  '800',
-  '900',
-  100,
-  200,
-  300,
-  400,
-  500,
-  600,
-  700,
-  800,
-  900,
-] as const;
+const FONT_WEIGHT_VALUES = ['normal', 'bold', '100', '200', '300', '400', '500', '600', '700', '800', '900', 100, 200, 300, 400, 500, 600, 700, 800, 900] as const;
 
 const FONT_WEIGHT_SET = new Set<TextStyle['fontWeight']>(FONT_WEIGHT_VALUES);
 
-const normalizeFontWeight = (
-  value: string | number | undefined,
-  fallback: TextStyle['fontWeight']
-): TextStyle['fontWeight'] => {
+const normalizeFontWeight = (value: string | number | undefined, fallback: TextStyle['fontWeight']): TextStyle['fontWeight'] => {
   if (typeof value === 'number') {
     const numeric = value as TextStyle['fontWeight'];
     if (FONT_WEIGHT_SET.has(numeric)) {
@@ -61,10 +37,7 @@ const normalizeFontWeight = (
   return fallback;
 };
 
-const resolveColor = (
-  value: string | number | undefined,
-  fallback: string
-): string => {
+const resolveColor = (value: string | number | undefined, fallback: string): string => {
   if (typeof value === 'string') {
     return value;
   }
@@ -72,10 +45,7 @@ const resolveColor = (
   return fallback;
 };
 
-const resolveNumber = (
-  value: string | number | undefined,
-  fallback: number
-): number => {
+const resolveNumber = (value: string | number | undefined, fallback: number): number => {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return value;
   }
@@ -102,10 +72,7 @@ export const TokenDemo: FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: resolveColor(
-                getToken('color.primary_500', '#3b82f6'),
-                '#3b82f6'
-              ),
+              backgroundColor: resolveColor(getToken('color.primary_500', '#3b82f6'), '#3b82f6'),
             },
           ]}
         />
@@ -117,10 +84,7 @@ export const TokenDemo: FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: resolveColor(
-                getToken('color.secondary_500', '#22c55e'),
-                '#22c55e'
-              ),
+              backgroundColor: resolveColor(getToken('color.secondary_500', '#22c55e'), '#22c55e'),
             },
           ]}
         />
@@ -139,15 +103,8 @@ export const TokenDemo: FC = () => {
           style={[
             styles.typographyText,
             {
-              fontSize:
-                resolveNumber(
-                  getToken('typography.fontSize_lg', 1.125),
-                  1.125
-                ) * 16,
-              fontWeight: normalizeFontWeight(
-                getToken('typography.fontWeight_medium', '500'),
-                '500'
-              ),
+              fontSize: resolveNumber(getToken('typography.fontSize_lg', 1.125), 1.125) * 16,
+              fontWeight: normalizeFontWeight(getToken('typography.fontWeight_medium', '500'), '500'),
             },
           ]}
         >

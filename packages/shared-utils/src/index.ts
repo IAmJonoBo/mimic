@@ -41,9 +41,7 @@ export type DeepPartial<T> = {
 
 export type TokenPath<T> = T extends object
   ? {
-      [K in keyof T]: T[K] extends object
-        ? `${string & K}.${TokenPath<T[K]>}`
-        : string & K;
+      [K in keyof T]: T[K] extends object ? `${string & K}.${TokenPath<T[K]>}` : string & K;
     }[keyof T]
   : never;
 
@@ -54,26 +52,14 @@ export const platformUtils = {
   isWeb: (): boolean => typeof window !== 'undefined',
   isNode: (): boolean => {
     try {
-      return (
-        typeof globalThis !== 'undefined' &&
-        'process' in globalThis &&
-        typeof (globalThis as { process?: { versions?: { node?: string } } })
-          .process?.versions?.node !== 'undefined'
-      );
+      return typeof globalThis !== 'undefined' && 'process' in globalThis && typeof (globalThis as { process?: { versions?: { node?: string } } }).process?.versions?.node !== 'undefined';
     } catch {
       return false;
     }
   },
   isMobile: (): boolean => {
     try {
-      return (
-        typeof globalThis !== 'undefined' &&
-        'navigator' in globalThis &&
-        /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          (globalThis as { navigator?: { userAgent?: string } }).navigator
-            ?.userAgent ?? ''
-        )
-      );
+      return typeof globalThis !== 'undefined' && 'navigator' in globalThis && /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test((globalThis as { navigator?: { userAgent?: string } }).navigator?.userAgent ?? '');
     } catch {
       return false;
     }

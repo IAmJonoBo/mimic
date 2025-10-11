@@ -132,13 +132,7 @@ export default [
         'warn',
         {
           alphabetize: { order: 'asc', caseInsensitive: true },
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'unknown',
-          ],
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'unknown'],
           pathGroupsExcludedImportTypes: ['builtin'],
           pathGroups: [
             {
