@@ -11,6 +11,8 @@ jobs:
   module-boundaries:
     name: Enforce Module Boundaries
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -24,15 +26,6 @@ jobs:
           key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml', 'nx.json') }}
           restore-keys: |
             ${{ runner.os }}-nx-
-
-      - name: Export Nx Cloud token
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          NX_TOKEN="$(gh variable get NX_CLOUD_ACCESS_TOKEN -R \"$GITHUB_REPOSITORY\" --json value --jq '.value' 2>/dev/null || true)"
-          if [ -n "$NX_TOKEN" ]; then
-            echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" >> "$GITHUB_ENV"
-          fi
 
       - name: Cleanup Apple metadata (pre-install)
         run: node tools/apple-cleaner.js --mode=full
@@ -54,7 +47,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Configure Nx Cloud environment
+        run: scripts/configure-nx-cloud.sh
+
       - name: Start Nx self-healing run
+        if: env.NX_CLOUD_ACCESS_TOKEN != ''
         run: |
           pnpm exec nx start-ci-run --no-distribution --fix-tasks="*lint*,*format*" \
             || echo "Nx self-healing bootstrap skipped (token missing or feature disabled)"
@@ -119,7 +116,7 @@ jobs:
           echo "✅ Token outputs are collision-safe"
 
       - name: Apply Nx self-healing fixes
-        if: always()
+        if: always() && env.NX_CLOUD_ACCESS_TOKEN != ''
         run: |
           pnpm exec nx fix-ci \
             || echo "Nx self-healing fixes not applied (token missing or no fixes available)"
