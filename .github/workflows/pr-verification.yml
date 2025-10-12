@@ -46,43 +46,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Detect documentation changes
-        id: docs_changes
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            docs:
-              - 'docs/**/*.{md,mdx}'
-              - '.github/**/*.md'
-              - '.github/**/*.mdx'
-              - '**/README.md'
-              - '**/README.mdx'
-              - 'apps/**/docs/**/*.{md,mdx}'
-              - 'packages/**/docs/**/*.{md,mdx}'
-              - 'tools/**/docs/**/*.{md,mdx}'
-              - 'infra/**/docs/**/*.{md,mdx}'
-              - '*.md'
-              - '*.mdx'
-              - 'README.md'
-              - 'README.mdx'
-              - 'CHANGELOG.md'
-              - 'CONTRIBUTING.md'
-              - 'CODE_OF_CONDUCT.md'
-              - 'DEVELOPMENT.md'
-              - 'Next_Steps.md'
-              - 'config.markdownlint-cli2.jsonc'
-              - 'example.markdownlint-cli2.jsonc'
-              - 'docs/**/*.md'
-              - 'docs/**/*.mdx'
-              - '*.md'
-              - 'packages/**/README.md'
       - name: Start Nx self-healing run
         run: |
-          if [ -n "$NX_CLOUD_ACCESS_TOKEN" ]; then
-            pnpm exec nx start-ci-run --no-distribution --fix-tasks="*lint*,*format*"
-          else
-            echo "Skipping Nx self-healing bootstrap (NX_CLOUD_ACCESS_TOKEN not set)"
-          fi
+          pnpm exec nx start-ci-run --no-distribution --fix-tasks="*lint*,*format*" \
+            || echo "Nx self-healing bootstrap skipped (token missing or feature disabled)"
 
       - name: Lint (affected)
         run: pnpm nx affected -t lint --parallel=4
@@ -102,16 +69,11 @@ jobs:
       - name: Build (affected)
         run: pnpm nx affected -t build --parallel=3
 
-      - name: Markdown lint (docs only)
-        if: ${{ steps.docs_changes.outputs.docs == 'true' }}
       - name: Markdown lint
         run: pnpm lint:md
 
       - name: Apply Nx self-healing fixes
         if: always()
         run: |
-          if [ -n "$NX_CLOUD_ACCESS_TOKEN" ]; then
-            pnpm exec nx fix-ci
-          else
-            echo "Skipping Nx self-healing fix (NX_CLOUD_ACCESS_TOKEN not set)"
-          fi
+          pnpm exec nx fix-ci \
+            || echo "Nx self-healing fixes not applied (token missing or no fixes available)"
