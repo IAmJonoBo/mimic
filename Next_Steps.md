@@ -134,6 +134,14 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   token via the `NX_CLOUD_ACCESS_TOKEN` repository secret instead of shelling out to `gh variable get`.
   Documented the new secret requirement in `docs/devops/nx-remote-cache.md`; coordinate with DevOps to
   store the secret in GitHub and validate Nx Cloud self-healing once populated.
+- 2025-10-30: Added `scripts/configure-nx-cloud.sh` so workflows disable Nx Cloud gracefully when the
+  secret is absent, vendored the `nx-cloud` package, and configured the `nx-cloud` tasks runner in
+  `nx.json`. Reran the baseline: `pnpm nx run-many -t test --parallel=1 --output-style=static`,
+  `pnpm lint:workspace`, `pnpm typecheck`, `pnpm nx run-many -t build --exclude=workspace-format
+  --output-style=static`, and `pnpm audit --prod` succeed with existing Node engine warnings;
+  `pnpm format:check` still reports legacy Biome drift and `npx gitleaks@latest detect` fails because
+  npm cannot determine the correct executable. Nx now logs "Nx Cloud Will Not Be Used" when
+  `NX_NO_CLOUD=true` is injected, suppressing repeated agent download attempts in forked PRs.
 
 ## Deliverables
 

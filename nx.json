@@ -19,6 +19,15 @@
     ],
     "sharedGlobals": ["{workspaceRoot}/.github/workflows/ci.yml", "{workspaceRoot}/tools/apple-cleaner.js"]
   },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx-cloud",
+      "options": {
+        "canTrackAnalytics": false,
+        "showUsageWarnings": false
+      }
+    }
+  },
   "targetDefaults": {
     "@nx/eslint:lint": {
       "cache": true,
