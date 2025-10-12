@@ -6,6 +6,9 @@ on:
       - packages/design-system/**
       - packages/design-tokens/**
       - .storybook/**
+  push:
+    branches: [main, develop]
+  workflow_dispatch:
 
 jobs:
   loki-visual-tests:
@@ -34,7 +37,6 @@ jobs:
           if [ -n "$NX_TOKEN" ]; then
             echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" >> "$GITHUB_ENV"
           fi
-
       - name: Setup Node.js
         uses: actions/setup-node@v5
         with:
