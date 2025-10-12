@@ -46,6 +46,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Detect documentation changes
+        id: docs_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docs:
+              - 'docs/**/*.md'
+              - 'docs/**/*.mdx'
+              - '*.md'
+              - 'packages/**/README.md'
       - name: Start Nx self-healing run
         run: |
           if [ -n "$NX_CLOUD_ACCESS_TOKEN" ]; then
@@ -72,6 +82,8 @@ jobs:
       - name: Build (affected)
         run: pnpm nx affected -t build --parallel=3
 
+      - name: Markdown lint (docs only)
+        if: ${{ steps.docs_changes.outputs.docs == 'true' }}
       - name: Markdown lint
         run: pnpm lint:md
 
