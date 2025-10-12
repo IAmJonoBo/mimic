@@ -83,6 +83,8 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   `contains(github.event.pull_request.changed_files, 'docs/')` check.
 - 2025-10-21: Tightened the Markdown lint gate to watch Markdown/MDX docs (including root handbooks and
   nested package READMEs) so CI only runs the fixer when relevant content files change.
+- 2025-10-22: Expanded the Markdown lint paths filter to include `.github` docs, infra/app/tool READMEs,
+  and markdownlint configuration files so documentation edits reliably trigger the CI lint job.
 - 2025-10-16: Removed workspace `ignoreDeprecations` overrides to restore compatibility with TypeScript 5.9;
   `pnpm typecheck` now completes successfully on Node 22.19.0 while we wait for the container image to
   upgrade to the required Node 22.20.0 baseline.
