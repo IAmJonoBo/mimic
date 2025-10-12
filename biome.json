@@ -3,7 +3,8 @@
   "vcs": {
     "enabled": true,
     "clientKind": "git",
-    "useIgnoreFile": true
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
   },
   "files": {
     "ignoreUnknown": false
@@ -14,7 +15,7 @@
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
-    "lineWidth": 320
+    "lineWidth": 120
   },
   "linter": {
     "enabled": true,
@@ -31,14 +32,24 @@
         "noInferrableTypes": "error",
         "noUselessElse": "error",
         "useImportType": "warn",
-        "noNonNullAssertion": "warn"
+        "noNonNullAssertion": "error"
       },
       "suspicious": {
-        "noExplicitAny": "warn",
+        "noExplicitAny": "error",
         "useIterableCallbackReturn": "warn"
       },
+      "complexity": {
+        "noExcessiveCognitiveComplexity": {
+          "level": "warn",
+          "options": {
+            "maxAllowedComplexity": 30
+          }
+        }
+      },
       "a11y": {
-        "useButtonType": "warn"
+        "useButtonType": "error",
+        "useValidAnchor": "warn",
+        "useAltText": "warn"
       }
     }
   },

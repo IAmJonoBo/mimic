@@ -1,0 +1,15 @@
+**/dist/**
+**/build/**
+**/lib/**
+**/.next/**
+**/.turbo/**
+**/.nx/**
+**/.nx-cache/**
+**/storybook-static/**
+**/coverage/**
+**/.trunk/out/**
+**/.trunk/actions/**
+**/.trunk/notifications/**
+**/.trunk/tools/**
+**/*.generated.*
+**/*.gen.*

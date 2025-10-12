@@ -53,7 +53,7 @@
     "precommit:clean": "pnpm run clean:apple:staged",
     "autofix": "./scripts/autofix.sh",
     "autofix:safe": "./scripts/autofix.sh",
-    "format": "pnpm exec biome format --write .",
+    "format": "pnpm exec biome check --write --linter-enabled=false .",
     "format:check": "pnpm exec biome check --formatter-enabled=true --linter-enabled=false --assist-enabled=false --error-on-warnings .",
     "typecheck": "pnpm run typecheck:workspace",
     "typecheck:workspace": "pnpm -r --workspace-root=false --workspace-concurrency=1 --if-present typecheck",
