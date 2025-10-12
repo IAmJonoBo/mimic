@@ -1,8 +1,4 @@
-import {
-  CommonTokens,
-  getToken,
-  getTokensByPattern,
-} from '@mimic/design-tokens/sdk';
+import { CommonTokens, getToken, getTokensByPattern } from '@mimic/design-tokens/sdk';
 import { tokenUtils, validationUtils } from '@mimic/shared-utils';
 
 export type TokenExpectation = 'color' | 'spacing' | 'string';
@@ -31,35 +27,19 @@ export type TokenBundle<TBlueprint extends Record<string, TokenRequest>> = {
  * runs the path through @mimic/design-tokens and validates the resulting value
  * using @mimic/shared-utils to ensure design-time regressions are caught in tests.
  */
-export const resolveToken = ({
-  path,
-  expectation,
-  fallback = '',
-}: TokenRequest): ResolvedToken => {
+export const resolveToken = ({ path, expectation, fallback = '' }: TokenRequest): ResolvedToken => {
   const rawValue = getToken(path, fallback);
   const isFallback = rawValue === fallback;
   const trimmedValue = rawValue.trim();
   const isAliasReference = /^\{.+\}$/.test(trimmedValue);
 
   if (!isFallback) {
-    if (
-      expectation === 'color' &&
-      !validationUtils.isValidColor(trimmedValue) &&
-      !isAliasReference
-    ) {
-      throw new Error(
-        `Token at path "${path}" is expected to be a color but resolved to "${rawValue}".`
-      );
+    if (expectation === 'color' && !validationUtils.isValidColor(trimmedValue) && !isAliasReference) {
+      throw new Error(`Token at path "${path}" is expected to be a color but resolved to "${rawValue}".`);
     }
 
-    if (
-      expectation === 'spacing' &&
-      !validationUtils.isValidSpacing(trimmedValue) &&
-      !isAliasReference
-    ) {
-      throw new Error(
-        `Token at path "${path}" is expected to be spacing but resolved to "${rawValue}".`
-      );
+    if (expectation === 'spacing' && !validationUtils.isValidSpacing(trimmedValue) && !isAliasReference) {
+      throw new Error(`Token at path "${path}" is expected to be spacing but resolved to "${rawValue}".`);
     }
   }
 
@@ -78,9 +58,7 @@ export const resolveToken = ({
 /**
  * Given a blueprint of token requests, resolve them to concrete values.
  */
-export const resolveTokenBundle = <
-  TBlueprint extends Record<string, TokenRequest>,
->(
+export const resolveTokenBundle = <TBlueprint extends Record<string, TokenRequest>>(
   blueprint: TBlueprint
 ): TokenBundle<TBlueprint> => {
   const entries = Object.entries(blueprint).map(([key, request]) => {
@@ -118,15 +96,11 @@ export const getButtonTokenBundle = (): ButtonTokenBundle => {
 /**
  * Resolve a named component blueprint.
  */
-export const getComponentTokenBundle = (
-  componentName: ComponentTokenName
-): TokenBundle<ComponentTokenBlueprint> => {
+export const getComponentTokenBundle = (componentName: ComponentTokenName): TokenBundle<ComponentTokenBlueprint> => {
   const blueprint = componentTokenBlueprints[componentName];
 
   if (!blueprint) {
-    throw new Error(
-      `Unknown component token blueprint: ${String(componentName)}`
-    );
+    throw new Error(`Unknown component token blueprint: ${String(componentName)}`);
   }
 
   return resolveTokenBundle(blueprint);
@@ -137,9 +111,7 @@ export const getComponentTokenBundle = (
  * Useful for integration tests that need to ensure cross-package availability
  * of design-token exports.
  */
-export const snapshotTokens = (
-  pattern: string
-): Array<{ path: string; value: string; type?: string }> => {
+export const snapshotTokens = (pattern: string): Array<{ path: string; value: string; type?: string }> => {
   return getTokensByPattern(pattern);
 };
 

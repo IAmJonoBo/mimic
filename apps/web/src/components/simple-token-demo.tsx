@@ -16,8 +16,7 @@ export const SimpleTokenDemo = component$(() => {
         border: '1px solid var(--ds-color-neutral-200, #e5e5e5)',
         borderRadius: 'var(--ds-border-radius-lg, 0.5rem)',
         boxShadow: 'var(--ds-shadow-md, 0px 4px 6px -1px rgba(0, 0, 0, 0.1))',
-        fontFamily:
-          "var(--ds-typography-font-family-primary, 'Inter', system-ui, sans-serif)",
+        fontFamily: "var(--ds-typography-font-family-primary, 'Inter', system-ui, sans-serif)",
         maxWidth: '600px',
         margin: '2rem auto',
       }}
@@ -41,9 +40,8 @@ export const SimpleTokenDemo = component$(() => {
           marginBottom: 'var(--ds-spacing-lg, 1.5rem)',
         }}
       >
-        This component demonstrates the Mimic design token pipeline working with
-        Qwik City. All colors, spacing, typography, and effects use CSS
-        variables generated from Penpot design tokens with the collision-safe{' '}
+        This component demonstrates the Mimic design token pipeline working with Qwik City. All colors, spacing,
+        typography, and effects use CSS variables generated from Penpot design tokens with the collision-safe{' '}
         <code>ds-</code> prefix.
       </p>
 

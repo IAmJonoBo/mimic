@@ -142,6 +142,11 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   `pnpm format:check` still reports legacy Biome drift and `npx gitleaks@latest detect` fails because
   npm cannot determine the correct executable. Nx now logs "Nx Cloud Will Not Be Used" when
   `NX_NO_CLOUD=true` is injected, suppressing repeated agent download attempts in forked PRs.
+- 2025-10-30: Removed stale `.trunk` symlinks, ignored the directory going forward, and ran Biome's
+  autofixer to clear the long-standing formatter drift so `pnpm format:check` exits cleanly.
+- 2025-10-30: Added `scripts/run-gitleaks.sh` and the `pnpm security:gitleaks` helper to download and
+  cache the upstream CLI, restoring the repository's secret scanning gate without relying on the
+  broken `npx gitleaks@latest` package entry point.
 
 ## Deliverables
 

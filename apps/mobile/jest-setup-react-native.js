@@ -15,6 +15,7 @@ jest.mock('react-native/Libraries/Utilities/Appearance', () => ({
 
 // Mock AsyncStorage
 import asyncStorageMock from '@react-native-async-storage/async-storage/jest/async-storage-mock';
+
 jest.mock('@react-native-async-storage/async-storage', () => asyncStorageMock);
 
 // Global setup

@@ -2,12 +2,7 @@
  * Integration coverage to ensure design-system bridges shared utilities
  * through tokens-core into design tokens.
  */
-import {
-  buttonTokenBlueprint,
-  CommonTokens,
-  snapshotTokens,
-  tokenUtils,
-} from '@mimic/tokens-core';
+import { buttonTokenBlueprint, CommonTokens, snapshotTokens, tokenUtils } from '@mimic/tokens-core';
 import { describe, expect, it } from 'vitest';
 
 import { getButtonStyles, getButtonTokenBundle } from '../index.js';
@@ -20,9 +15,7 @@ describe('design-system ↔︎ tokens-core integration', () => {
 
     const [primaryColor] = snapshotTokens(CommonTokens.PRIMARY_COLOR);
     expect(bundle.background.value).toBe(primaryColor?.value);
-    expect(bundle.background.cssVarReference).toBe(
-      `var(${tokenUtils.toCssVar(CommonTokens.PRIMARY_COLOR)})`
-    );
+    expect(bundle.background.cssVarReference).toBe(`var(${tokenUtils.toCssVar(CommonTokens.PRIMARY_COLOR)})`);
 
     const [spacingMedium] = snapshotTokens(CommonTokens.SPACING_MEDIUM);
     expect(bundle.paddingX.value).toBe(spacingMedium?.value);
@@ -40,9 +33,7 @@ describe('design-system ↔︎ tokens-core integration', () => {
 
     expect(styles.backgroundColor).toBe(bundle.background.cssVarReference);
     expect(styles.color).toBe(bundle.foreground.cssVarReference);
-    expect(styles.padding).toBe(
-      `${bundle.paddingY.value} ${bundle.paddingX.value}`
-    );
+    expect(styles.padding).toBe(`${bundle.paddingY.value} ${bundle.paddingX.value}`);
     expect(styles.borderRadius).toBe(bundle.borderRadius.value);
     expect(styles.borderWidth).toBe(bundle.borderWidth.value);
   });

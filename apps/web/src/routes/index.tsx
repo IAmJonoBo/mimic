@@ -23,8 +23,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content:
-        'Demo of Mimic design tokens integration with Qwik City and Vanilla Extract',
+      content: 'Demo of Mimic design tokens integration with Qwik City and Vanilla Extract',
     },
   ],
 };

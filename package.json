@@ -95,6 +95,7 @@
     "setup:complete": "pnpm install && pnpm clean:apple && pnpm build",
     "workspace:info": "nx report && nx graph --file=tmp/workspace-graph.json",
     "analyze": "pnpm build && pnpm workspace:info",
+    "security:gitleaks": "./scripts/run-gitleaks.sh detect --no-banner",
     "upgrade:plan": "nx migrate latest",
     "upgrade:latest": "pnpm up --latest --recursive --workspace-root",
     "upgrade:verify": "pnpm install && cross-env NX_NO_CLOUD=true pnpm nx run-many -t build,test,lint --exclude=workspace-format"
@@ -153,6 +154,7 @@
     "stylelint": "16.25.0",
     "stylelint-config-standard": "39.0.1",
     "stylelint-config-tailwindcss": "1.0.0",
+    "stylelint-order": "7.0.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.0",
     "vitest": "3.2.4",
@@ -170,7 +172,7 @@
       "prettier --write"
     ],
     "*.{css,scss,sass}": [
-      "stylelint --fix"
+      "biome format --write"
     ],
     "*.{md,mdx}": [
       "node scripts/fix-markdown-line-length.js",

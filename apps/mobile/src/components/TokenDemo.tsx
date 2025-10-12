@@ -61,10 +61,7 @@ const normalizeFontWeight = (
   return fallback;
 };
 
-const resolveColor = (
-  value: string | number | undefined,
-  fallback: string
-): string => {
+const resolveColor = (value: string | number | undefined, fallback: string): string => {
   if (typeof value === 'string') {
     return value;
   }
@@ -72,10 +69,7 @@ const resolveColor = (
   return fallback;
 };
 
-const resolveNumber = (
-  value: string | number | undefined,
-  fallback: number
-): number => {
+const resolveNumber = (value: string | number | undefined, fallback: number): number => {
   if (typeof value === 'number' && Number.isFinite(value)) {
     return value;
   }
@@ -102,10 +96,7 @@ export const TokenDemo: FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: resolveColor(
-                getToken('color.primary_500', '#3b82f6'),
-                '#3b82f6'
-              ),
+              backgroundColor: resolveColor(getToken('color.primary_500', '#3b82f6'), '#3b82f6'),
             },
           ]}
         />
@@ -117,10 +108,7 @@ export const TokenDemo: FC = () => {
           style={[
             styles.colorSwatch,
             {
-              backgroundColor: resolveColor(
-                getToken('color.secondary_500', '#22c55e'),
-                '#22c55e'
-              ),
+              backgroundColor: resolveColor(getToken('color.secondary_500', '#22c55e'), '#22c55e'),
             },
           ]}
         />
@@ -139,15 +127,8 @@ export const TokenDemo: FC = () => {
           style={[
             styles.typographyText,
             {
-              fontSize:
-                resolveNumber(
-                  getToken('typography.fontSize_lg', 1.125),
-                  1.125
-                ) * 16,
-              fontWeight: normalizeFontWeight(
-                getToken('typography.fontWeight_medium', '500'),
-                '500'
-              ),
+              fontSize: resolveNumber(getToken('typography.fontSize_lg', 1.125), 1.125) * 16,
+              fontWeight: normalizeFontWeight(getToken('typography.fontWeight_medium', '500'), '500'),
             },
           ]}
         >

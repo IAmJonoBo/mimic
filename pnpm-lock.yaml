@@ -183,6 +183,9 @@ importers:
       stylelint-config-tailwindcss:
         specifier: 1.0.0
         version: 1.0.0(stylelint@16.25.0(typescript@5.9.3))(tailwindcss@4.1.14)
+      stylelint-order:
+        specifier: 7.0.0
+        version: 7.0.0(stylelint@16.25.0(typescript@5.9.3))
       typescript:
         specifier: 5.9.3
         version: 5.9.3
@@ -9319,6 +9322,11 @@ packages:
     resolution: {integrity: sha512-8sLjZwK0R+JlxlYcTuVnyT2v+htpdrjDOKuMcOVdYjt52Lh8hWRYpxBPoKx/Zg+bcjc3wx6fmQevMmUztS/ccA==}
     engines: {node: '>=4'}
 
+  postcss-sorting@9.1.0:
+    resolution: {integrity: sha512-Mn8KJ45HNNG6JBpBizXcyf6LqY/qyqetGcou/nprDnFwBFBLGj0j/sNKV2lj2KMOVOwdXu14aEzqJv8CIV6e8g==}
+    peerDependencies:
+      postcss: ^8.4.20
+
   postcss-svgo@5.1.0:
     resolution: {integrity: sha512-D75KsH1zm5ZrHyxPakAxJWtkyXew5qwS70v56exwvw542d9CRtTo78K0WeFxZB4G7JXKKMbEZtZayTGdIky/eA==}
     engines: {node: ^10 || ^12 || >=14.0}
@@ -10441,6 +10449,12 @@ packages:
     peerDependencies:
       stylelint: '>=13.13.1'
       tailwindcss: '>=2.2.16'
+
+  stylelint-order@7.0.0:
+    resolution: {integrity: sha512-rSWxx0KscYfxU02wEskKXES9lkRzuuONMMNkZ7SUc6uiF3tDKm7e+sE0Ax/SBlG4TUf1sp1R6f3/SlsPGmzthg==}
+    engines: {node: '>=20.19.0'}
+    peerDependencies:
+      stylelint: ^16.18.0
 
   stylelint@16.25.0:
     resolution: {integrity: sha512-Li0avYWV4nfv1zPbdnxLYBGq4z8DVZxbRgx4Kn6V+Uftz1rMoF1qiEI3oL4kgWqyYgCgs7gT5maHNZ82Gk03vQ==}
@@ -22572,6 +22586,10 @@ snapshots:
       cssesc: 3.0.0
       util-deprecate: 1.0.2
 
+  postcss-sorting@9.1.0(postcss@8.5.6):
+    dependencies:
+      postcss: 8.5.6
+
   postcss-svgo@5.1.0(postcss@8.5.6):
     dependencies:
       postcss: 8.5.6
@@ -23875,6 +23893,12 @@ snapshots:
     dependencies:
       stylelint: 16.25.0(typescript@5.9.3)
       tailwindcss: 4.1.14
+
+  stylelint-order@7.0.0(stylelint@16.25.0(typescript@5.9.3)):
+    dependencies:
+      postcss: 8.5.6
+      postcss-sorting: 9.1.0(postcss@8.5.6)
+      stylelint: 16.25.0(typescript@5.9.3)
 
   stylelint@16.25.0(typescript@5.9.3):
     dependencies:

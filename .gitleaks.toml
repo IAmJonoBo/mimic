@@ -1,0 +1,4 @@
+title = "Mimic Gitleaks Configuration"
+
+[allowlist]
+  commits = ["57f33e14bc83774c13a84266d450051c4c866566"]

@@ -47,10 +47,7 @@
     },
     "build-android": {
       "executor": "@nx/react-native:build-android",
-      "outputs": [
-        "{projectRoot}/android/app/build/outputs/bundle",
-        "{projectRoot}/android/app/build/outputs/apk"
-      ]
+      "outputs": ["{projectRoot}/android/app/build/outputs/bundle", "{projectRoot}/android/app/build/outputs/apk"]
     },
     "sync-deps": {
       "executor": "@nx/react-native:sync-deps",

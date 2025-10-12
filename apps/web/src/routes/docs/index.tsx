@@ -7,8 +7,7 @@ export default component$(() => {
     <div
       style={{
         padding: 'var(--ds-spacing-lg, 1.5rem)',
-        fontFamily:
-          "var(--ds-typography-font-family-primary, 'Inter', system-ui, sans-serif)",
+        fontFamily: "var(--ds-typography-font-family-primary, 'Inter', system-ui, sans-serif)",
         maxWidth: '800px',
         margin: '0 auto',
       }}
@@ -32,8 +31,7 @@ export default component$(() => {
           marginBottom: 'var(--ds-spacing-xl, 2rem)',
         }}
       >
-        This page demonstrates the design token pipeline documentation and
-        implementation details.
+        This page demonstrates the design token pipeline documentation and implementation details.
       </p>
 
       <div
@@ -62,19 +60,16 @@ export default component$(() => {
           }}
         >
           <li style={{ marginBottom: 'var(--ds-spacing-sm, 0.5rem)' }}>
-            🎨 <strong>Colors:</strong> Primary, secondary, neutral scales with
-            semantic mappings
+            🎨 <strong>Colors:</strong> Primary, secondary, neutral scales with semantic mappings
           </li>
           <li style={{ marginBottom: 'var(--ds-spacing-sm, 0.5rem)' }}>
             📏 <strong>Spacing:</strong> Consistent spacing scale from xs to 3xl
           </li>
           <li style={{ marginBottom: 'var(--ds-spacing-sm, 0.5rem)' }}>
-            ✍️ <strong>Typography:</strong> Font families, sizes, weights, and
-            line heights
+            ✍️ <strong>Typography:</strong> Font families, sizes, weights, and line heights
           </li>
           <li style={{ marginBottom: 'var(--ds-spacing-sm, 0.5rem)' }}>
-            🔄 <strong>Border Radius:</strong> Consistent rounding from xs to
-            full
+            🔄 <strong>Border Radius:</strong> Consistent rounding from xs to full
           </li>
           <li style={{ marginBottom: 'var(--ds-spacing-sm, 0.5rem)' }}>
             🎭 <strong>Shadows:</strong> Elevation system from sm to lg
@@ -115,9 +110,8 @@ export default component$(() => {
         }}
       >
         <p>
-          This page demonstrates Qwik City's prefetching capabilities with{' '}
-          <code>prefetch={true}</code> on navigation links, ensuring instant
-          route transitions while maintaining design token consistency.
+          This page demonstrates Qwik City's prefetching capabilities with <code>prefetch={true}</code> on navigation
+          links, ensuring instant route transitions while maintaining design token consistency.
         </p>
       </div>
     </div>
@@ -129,8 +123,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: 'description',
-      content:
-        'Documentation for the Mimic design token pipeline implementation with Qwik City',
+      content: 'Documentation for the Mimic design token pipeline implementation with Qwik City',
     },
   ],
 };
