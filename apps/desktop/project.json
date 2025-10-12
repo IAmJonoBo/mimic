@@ -14,7 +14,7 @@
           "command": "cd apps/desktop && tauri dev"
         },
         "build": {
-          "command": "cd apps/desktop && if command -v tauri >/dev/null 2>&1; then tauri build; else echo '⚠️ Tauri CLI not found; skipping desktop build'; fi"
+          "command": "cd apps/desktop && if [ \"${TAURI_ENABLE_BUILD:-true}\" = \"true\" ]; then if command -v tauri >/dev/null 2>&1; then tauri build; else echo '❌ Tauri CLI not found; install it or set TAURI_ENABLE_BUILD=false to skip'; exit 1; fi; else echo 'ℹ️ TAURI_ENABLE_BUILD set to false; skipping desktop build'; fi"
         }
       }
     },
@@ -27,7 +27,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cd apps/desktop && if command -v tauri >/dev/null 2>&1; then tauri build; else echo '⚠️ Tauri CLI not found; skipping desktop build'; fi"
+        "command": "cd apps/desktop && if [ \"${TAURI_ENABLE_BUILD:-true}\" = \"true\" ]; then if command -v tauri >/dev/null 2>&1; then tauri build; else echo '❌ Tauri CLI not found; install it or set TAURI_ENABLE_BUILD=false to skip'; exit 1; fi; else echo 'ℹ️ TAURI_ENABLE_BUILD set to false; skipping desktop build'; fi"
       }
     },
     "serve": {

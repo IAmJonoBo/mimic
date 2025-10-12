@@ -25,6 +25,7 @@
     "build:affected": "cross-env NX_NO_CLOUD=true nx affected -t build --exclude=workspace-format && pnpm run postbuild:clean",
     "postbuild:clean": "pnpm run clean:apple",
     "test": "nx run-many -t test",
+    "test:shared-utils": "nx test shared-utils",
     "test:affected": "nx affected -t test",
     "lint:packages": "nx run-many -t lint -p design-tokens,design-system,shared-utils",
     "lint:base": "pnpm exec biome lint .",

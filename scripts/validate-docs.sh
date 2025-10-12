@@ -28,7 +28,7 @@ echo "📋 Checking advanced documentation files..."
 missing_files=()
 
 for doc in "${ADVANCED_DOCS[@]}"; do
-  if [[ -f "${doc}" ]]; then
+  if [[ -f ${doc} ]]; then
     echo "✅ ${doc}"
   else
     echo "❌ ${doc} (missing)"
@@ -76,7 +76,7 @@ PACKAGE_READMES=(
 )
 
 for readme in "${PACKAGE_READMES[@]}"; do
-  if [[ -f "${readme}" ]]; then
+  if [[ -f ${readme} ]]; then
     if grep -q "Advanced Documentation" "${readme}"; then
       echo "✅ ${readme} has advanced documentation section"
     else

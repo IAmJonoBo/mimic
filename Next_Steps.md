@@ -70,10 +70,10 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
     still sets `"ignoreDeprecations"`, which TypeScript 5.5 rejects. Investigate aligning the compiler version
     or flag usage so the sequential type gate returns to green.
 - 2025-10-16: Removed workspace `ignoreDeprecations` overrides to restore compatibility with TypeScript 5.9;
-    `pnpm typecheck` now completes successfully on Node 22.19.0 while we wait for the container image to
-    upgrade to the required Node 22.20.0 baseline.
+  `pnpm typecheck` now completes successfully on Node 22.19.0 while we wait for the container image to
+  upgrade to the required Node 22.20.0 baseline.
 - 2025-10-18: Raised the pnpm baseline to 10.18.2 across docs/scripts; refresh the `/opt/pnpm-store`
-    wheelhouse tarballs so offline installs keep matching the new version.
+  wheelhouse tarballs so offline installs keep matching the new version.
 - [ ] Coordinate PR template update broadcast with Docs & Release leads so contributor education stays consistent.
 - [ ] Review sprint entry/exit criteria with squad leads to confirm sequencing and readiness to begin each phase.
 - [ ] Map deliverables to repository issues and link back in this ledger.

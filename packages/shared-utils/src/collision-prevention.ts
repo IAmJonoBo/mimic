@@ -31,16 +31,15 @@ export function validateTokenNameClashes(cssFilePath: string): string[] {
     const lines = cssContent.split('\n');
 
     lines.forEach((line, index) => {
-      // Check for CSS custom properties that don't use --ds- prefix
-      const customPropertyMatch = line.match(/^\s*(--[^d][^s]-[^:]+):/);
-      if (customPropertyMatch) {
-        violations.push(
-          `Line ${index + 1}: "${customPropertyMatch[1]}" should use --ds- prefix (Specify warning prevention)`
-        );
-      }
+      const propertyMatches = line.match(/--[a-z0-9-]+/gi);
+      propertyMatches?.forEach((propertyName) => {
+        if (!propertyName.toLowerCase().startsWith('--ds-')) {
+          violations.push(`Line ${index + 1}: "${propertyName}" should use --ds- prefix (Specify warning prevention)`);
+        }
+      });
 
       // Check for class names that might conflict with Tailwind
-      const classMatch = line.match(/\.((?!ds-)[a-z-]+)\s*{/);
+      const classMatch = line.match(/(\.((?!ds-)[a-z-]+))\s*{/);
       if (classMatch) {
         violations.push(
           `Line ${index + 1}: Class "${classMatch[1]}" should use ds- prefix to prevent Tailwind conflicts`
@@ -58,9 +57,7 @@ export function validateTokenNameClashes(cssFilePath: string): string[] {
  * Validates Storybook port configurations to prevent conflicts
  * as documented in Supernova docs
  */
-export function validateStorybookPortConflicts(
-  storybookConfigPaths: string[]
-): string[] {
+export function validateStorybookPortConflicts(storybookConfigPaths: string[]): string[] {
   const violations: string[] = [];
   const usedPorts = new Set<number>();
   const requiredPorts = {
@@ -69,7 +66,7 @@ export function validateStorybookPortConflicts(
     'main.desktop.ts': 6008, // Desktop Storybook
   };
 
-  storybookConfigPaths.forEach(configPath => {
+  storybookConfigPaths.forEach((configPath) => {
     try {
       const configContent = readFileSync(configPath, 'utf-8');
       const configName = configPath.split('/').pop() || '';
@@ -94,19 +91,15 @@ export function validateStorybookPortConflicts(
         }
         usedPorts.add(port);
       } else {
-        violations.push(
-          `${configName}: No explicit port configuration found (Supernova docs require fixed ports)`
-        );
+        violations.push(`${configName}: No explicit port configuration found (Supernova docs require fixed ports)`);
       }
 
       // Validate composition references use correct ports
       const refsMatch = configContent.match(/refs:\s*{([^}]+)}/s);
       if (refsMatch) {
         const refsContent = refsMatch[1];
-        const urlMatches = refsContent.match(
-          /url:\s*['"]http:\/\/localhost:(\d+)['"]/g
-        );
-        urlMatches?.forEach(urlMatch => {
+        const urlMatches = refsContent.match(/url:\s*['"]http:\/\/localhost:(\d+)['"]/g);
+        urlMatches?.forEach((urlMatch) => {
           const portMatch = urlMatch.match(/localhost:(\d+)/);
           if (portMatch) {
             const refPort = Number.parseInt(portMatch[1], 10);
@@ -120,9 +113,7 @@ export function validateStorybookPortConflicts(
         });
       }
     } catch (error) {
-      violations.push(
-        `Failed to read Storybook config ${configPath}: ${error}`
-      );
+      violations.push(`Failed to read Storybook config ${configPath}: ${error}`);
     }
   });
 
@@ -133,31 +124,24 @@ export function validateStorybookPortConflicts(
  * Validates Metro configuration to prevent package duplication
  * as documented in Locofy FAQ
  */
-export function validateMetroDuplicationRisks(
-  metroConfigPath: string,
-  packageJsonPaths: string[]
-): string[] {
+export function validateMetroDuplicationRisks(metroConfigPath: string, packageJsonPaths: string[]): string[] {
   const violations: string[] = [];
 
   try {
     const metroContent = readFileSync(metroConfigPath, 'utf-8');
 
     // Check for deduplication configuration
-    if (!metroContent.includes('dedupe')) {
-      violations.push(
-        'Metro config missing dedupe configuration (Locofy FAQ requirement)'
-      );
+    if (!/\bdedupe\s*:/u.test(metroContent)) {
+      violations.push('Metro config missing dedupe configuration (Locofy FAQ requirement)');
     }
 
     // Check for alias configuration
-    if (!metroContent.includes('alias')) {
-      violations.push(
-        'Metro config missing alias configuration (Locofy FAQ requirement)'
-      );
+    if (!/\balias\s*:/u.test(metroContent)) {
+      violations.push('Metro config missing alias configuration (Locofy FAQ requirement)');
     }
 
     // Validate scoped package names in package.json files
-    packageJsonPaths.forEach(packagePath => {
+    packageJsonPaths.forEach((packagePath) => {
       try {
         const packageContent = readFileSync(packagePath, 'utf-8');
         const packageJson = JSON.parse(packageContent);
@@ -168,17 +152,13 @@ export function validateMetroDuplicationRisks(
           );
         }
       } catch (error) {
-        violations.push(
-          `Failed to parse package.json ${packagePath}: ${error}`
-        );
+        violations.push(`Failed to parse package.json ${packagePath}: ${error}`);
       }
     });
 
     // Check for enableGlobalPackages setting
-    if (!metroContent.includes('enableGlobalPackages')) {
-      violations.push(
-        'Metro config missing enableGlobalPackages setting (Locofy FAQ best practice)'
-      );
+    if (!/\benableGlobalPackages\s*:/u.test(metroContent)) {
+      violations.push('Metro config missing enableGlobalPackages setting (Locofy FAQ best practice)');
     }
   } catch (error) {
     violations.push(`Failed to read Metro config: ${error}`);
@@ -197,18 +177,11 @@ export function validateCollisionPrevention(options: {
   packageJsonPaths: string[];
 }): CollisionReport {
   const tokenNameClashes = validateTokenNameClashes(options.cssTokenPath);
-  const storybookPortConflicts = validateStorybookPortConflicts(
-    options.storybookConfigPaths
-  );
-  const metroDuplicationRisks = validateMetroDuplicationRisks(
-    options.metroConfigPath,
-    options.packageJsonPaths
-  );
+  const storybookPortConflicts = validateStorybookPortConflicts(options.storybookConfigPaths);
+  const metroDuplicationRisks = validateMetroDuplicationRisks(options.metroConfigPath, options.packageJsonPaths);
 
   const isValid =
-    tokenNameClashes.length === 0 &&
-    storybookPortConflicts.length === 0 &&
-    metroDuplicationRisks.length === 0;
+    tokenNameClashes.length === 0 && storybookPortConflicts.length === 0 && metroDuplicationRisks.length === 0;
 
   return {
     tokenNameClashes,
@@ -225,20 +198,11 @@ export function runCollisionCheck(): void {
   const workspaceRoot = process.cwd();
 
   const report = validateCollisionPrevention({
-    cssTokenPath: resolve(
-      workspaceRoot,
-      'packages/design-tokens/libs/tokens/css/tokens.css'
-    ),
+    cssTokenPath: resolve(workspaceRoot, 'packages/design-tokens/libs/tokens/css/tokens.css'),
     storybookConfigPaths: [
       resolve(workspaceRoot, 'packages/design-system/.storybook/main.ts'),
-      resolve(
-        workspaceRoot,
-        'packages/design-system/.storybook/main.mobile.ts'
-      ),
-      resolve(
-        workspaceRoot,
-        'packages/design-system/.storybook/main.desktop.ts'
-      ),
+      resolve(workspaceRoot, 'packages/design-system/.storybook/main.mobile.ts'),
+      resolve(workspaceRoot, 'packages/design-system/.storybook/main.desktop.ts'),
     ],
     metroConfigPath: resolve(workspaceRoot, 'metro.config.js'),
     packageJsonPaths: [
@@ -256,8 +220,8 @@ export function runCollisionCheck(): void {
     // eslint-disable-next-line no-console
     console.log('❌ Token Name Clashes (Specify Warning Prevention):');
 
-    report.tokenNameClashes.forEach(clash => {
-      console.log(`   • ${clash}`);
+    report.tokenNameClashes.forEach((clash) => {
+      console.warn(`   • ${clash}`);
     });
     // eslint-disable-next-line no-console
     console.log('');
@@ -271,16 +235,14 @@ export function runCollisionCheck(): void {
     // eslint-disable-next-line no-console
     console.log('❌ Storybook Port Conflicts (Supernova Docs Compliance):');
 
-    report.storybookPortConflicts.forEach(conflict => {
-      console.log(`   • ${conflict}`);
+    report.storybookPortConflicts.forEach((conflict) => {
+      console.warn(`   • ${conflict}`);
     });
     // eslint-disable-next-line no-console
     console.log('');
   } else {
     // eslint-disable-next-line no-console
-    console.log(
-      '✅ Storybook Port Conflicts (Supernova Docs Compliance): PASSED'
-    );
+    console.log('✅ Storybook Port Conflicts (Supernova Docs Compliance): PASSED');
   }
 
   // Report Metro duplication risks (Locofy FAQ)
@@ -288,8 +250,8 @@ export function runCollisionCheck(): void {
     // eslint-disable-next-line no-console
     console.log('❌ Metro Duplication Risks (Locofy FAQ Compliance):');
 
-    report.metroDuplicationRisks.forEach(risk => {
-      console.log(`   • ${risk}`);
+    report.metroDuplicationRisks.forEach((risk) => {
+      console.warn(`   • ${risk}`);
     });
     // eslint-disable-next-line no-console
     console.log('');
@@ -299,9 +261,7 @@ export function runCollisionCheck(): void {
   }
 
   // eslint-disable-next-line no-console
-  console.log(
-    `\n🎯 Overall Status: ${report.isValid ? '✅ PASSED' : '❌ FAILED'}\n`
-  );
+  console.log(`\n🎯 Overall Status: ${report.isValid ? '✅ PASSED' : '❌ FAILED'}\n`);
 
   if (!report.isValid) {
     process.exit(1);
