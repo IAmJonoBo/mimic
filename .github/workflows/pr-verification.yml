@@ -35,9 +35,10 @@ jobs:
       - name: Typecheck (affected)
         id: typecheck_affected
         run: pnpm nx affected -t typecheck --parallel=3
+        continue-on-error: true
 
       - name: Typecheck fallback (sequential)
-        if: ${{ failure() && steps.typecheck_affected.conclusion == 'failure' }}
+        if: steps.typecheck_affected.outcome == 'failure'
         run: pnpm typecheck
 
       - name: Unit tests (affected)
