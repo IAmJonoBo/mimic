@@ -16,3 +16,21 @@ available. Keep the following in mind when enabling remote caching:
    still succeed when the variable is omitted (for forks, etc.).
 5. **Monitoring** – Nx Cloud’s run dashboard will list remote executions triggered via CI. Periodically
    review stale cache entries and revoke the token if automation credentials change.
+
+## Nx Self-Healing CI
+
+Self-healing is now wired into the GitHub pipelines. Nx Cloud handles issue detection and proposes
+fixes when tasks fail.
+
+1. **Prerequisites** – Self-healing requires Nx Cloud with the GitHub VCS integration enabled. Ensure the
+   repository variable `NX_CLOUD_ACCESS_TOKEN` is populated (see steps above) and that the workspace has
+   Self-Healing CI toggled on in Nx Cloud settings.
+2. **Workflow hooks** – Each GitHub workflow calls `pnpm exec nx start-ci-run --no-distribution` after
+   installing dependencies. The command is skipped automatically if the Nx Cloud token is not available
+   (forked PRs continue to run normally).
+3. **Fix scope** – We scope automated fixes to lint and format style tasks via
+   `--fix-tasks="*lint*,*format*"`. Update the flag if you want Nx Cloud to tackle additional tasks or to
+   exclude certain ones.
+4. **Review loop** – When a failure occurs, Nx Cloud adds PR comments containing proposed patches. After
+   the workflow finishes, `pnpm exec nx fix-ci` runs and uploads the fixes for later review. Apply or
+   reject them via the Nx Cloud UI, PR comments, or locally using `pnpm exec nx fix-ci --apply`.
