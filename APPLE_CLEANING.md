@@ -36,6 +36,9 @@ pnpm run clean:apple:staged
 # Validate that no Apple metadata is tracked in git
 pnpm run check:apple
 
+# Watch for new Apple junk and delete it instantly
+pnpm run clean:apple:watch
+
 # Clean specific types of files
 pnpm run clean:ds-store     # Remove .DS_Store files only
 pnpm run clean:xcode        # Remove Xcode user data
@@ -94,11 +97,20 @@ Runs after rewrite/rebase operations (best effort, non-blocking):
 
 - Executes the full Apple cleaner via `pnpm run clean:apple`
 
+### Optional: Realtime Watcher
+
+- Run `pnpm run clean:apple:watch` to remove Apple metadata as soon as it appears
+- Automatically performs an initial deep clean before watching for changes (disable with
+  `pnpm run clean:apple:watch -- --no-initial`)
+- Scope the watcher to a specific path via `pnpm run clean:apple:watch -- packages/design-system`
+- Safe to leave running in a background terminal while developing
+
 ## 📁 Files and Structure
 
 ### Core Files
 
 - `tools/apple-cleaner.js` - Comprehensive Node.js cleaner script
+- `tools/apple-cleaner-watch.js` - Realtime watcher that removes metadata on creation
 - `.husky/` - Git hooks directory
 - `.gitignore` - Enhanced with comprehensive Apple/macOS patterns
 
