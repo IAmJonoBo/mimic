@@ -46,14 +46,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Detect documentation changes
-        id: docs_changes
-        uses: dorny/paths-filter@v3
-        with:
-          filters: |
-            docs:
-              - 'docs/**'
-              - 'packages/*/README.md'
+      - name: Start Nx self-healing run
+        run: |
+          if [ -n "$NX_CLOUD_ACCESS_TOKEN" ]; then
+            pnpm exec nx start-ci-run --no-distribution --fix-tasks="*lint*,*format*"
+          else
+            echo "Skipping Nx self-healing bootstrap (NX_CLOUD_ACCESS_TOKEN not set)"
+          fi
 
       - name: Lint (affected)
         run: pnpm nx affected -t lint --parallel=4
@@ -73,6 +72,14 @@ jobs:
       - name: Build (affected)
         run: pnpm nx affected -t build --parallel=3
 
-      - name: Markdown lint (docs only)
-        if: ${{ steps.docs_changes.outputs.docs == 'true' }}
+      - name: Markdown lint
         run: pnpm lint:md
+
+      - name: Apply Nx self-healing fixes
+        if: always()
+        run: |
+          if [ -n "$NX_CLOUD_ACCESS_TOKEN" ]; then
+            pnpm exec nx fix-ci
+          else
+            echo "Skipping Nx self-healing fix (NX_CLOUD_ACCESS_TOKEN not set)"
+          fi
