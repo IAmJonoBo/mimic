@@ -33,7 +33,13 @@ jobs:
         run: pnpm nx affected -t lint --parallel=4
 
       - name: Typecheck (affected)
-        run: pnpm nx affected -t typecheck --parallel=3 || true
+        id: typecheck_affected
+        run: pnpm nx affected -t typecheck --parallel=3
+        continue-on-error: true
+
+      - name: Typecheck fallback (sequential)
+        if: steps.typecheck_affected.outcome == 'failure'
+        run: pnpm typecheck
 
       - name: Unit tests (affected)
         run: pnpm nx affected -t test --parallel=3
