@@ -74,6 +74,17 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   design and keeping CI visibility during Nx instability.
 - 2025-10-19: Tightened the PR verification gate by removing the `continue-on-error` guard from the affected
   typecheck step, ensuring the Nx exit status fails the workflow even when the sequential fallback runs.
+- 2025-10-20: Baseline rerun in Node 22.19.0 container: `pnpm format:check` still reports existing formatting
+  drift (51 errors, 4 warnings) from prior work; `pnpm lint:workspace`, `pnpm typecheck`, and `pnpm audit`
+  succeed with engine warnings; `pnpm nx run-many -t test` and `pnpm build` crash the shell as Nx initialises
+  the project graph despite `NX_NATIVE_ENABLE=false` safeguards—captured fresh terminal crashes for DevOps.
+- 2025-10-20: Added a `dorny/paths-filter` gate to `pr-verification.yml` so Markdown lint only runs when
+  documentation paths (`docs/**`, package READMEs) change, replacing the previous incorrect
+  `contains(github.event.pull_request.changed_files, 'docs/')` check.
+- 2025-10-21: Tightened the Markdown lint gate to watch Markdown/MDX docs (including root handbooks and
+  nested package READMEs) so CI only runs the fixer when relevant content files change.
+- 2025-10-22: Expanded the Markdown lint paths filter to include `.github` docs, infra/app/tool READMEs,
+  and markdownlint configuration files so documentation edits reliably trigger the CI lint job.
 - 2025-10-16: Removed workspace `ignoreDeprecations` overrides to restore compatibility with TypeScript 5.9;
   `pnpm typecheck` now completes successfully on Node 22.19.0 while we wait for the container image to
   upgrade to the required Node 22.20.0 baseline.

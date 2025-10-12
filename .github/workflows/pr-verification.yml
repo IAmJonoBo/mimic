@@ -46,6 +46,33 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Detect documentation changes
+        id: docs_changes
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            docs:
+              - 'docs/**/*.{md,mdx}'
+              - '.github/**/*.md'
+              - '.github/**/*.mdx'
+              - '**/README.md'
+              - '**/README.mdx'
+              - 'apps/**/docs/**/*.{md,mdx}'
+              - 'packages/**/docs/**/*.{md,mdx}'
+              - 'tools/**/docs/**/*.{md,mdx}'
+              - 'infra/**/docs/**/*.{md,mdx}'
+              - '*.md'
+              - '*.mdx'
+              - 'README.md'
+              - 'README.mdx'
+              - 'CHANGELOG.md'
+              - 'CONTRIBUTING.md'
+              - 'CODE_OF_CONDUCT.md'
+              - 'DEVELOPMENT.md'
+              - 'Next_Steps.md'
+              - 'config.markdownlint-cli2.jsonc'
+              - 'example.markdownlint-cli2.jsonc'
+
       - name: Lint (affected)
         run: pnpm nx affected -t lint --parallel=4
 
@@ -65,5 +92,5 @@ jobs:
         run: pnpm nx affected -t build --parallel=3
 
       - name: Markdown lint (docs only)
-        if: ${{ contains(github.event.pull_request.changed_files, 'docs/') }}
+        if: ${{ steps.docs_changes.outputs.docs == 'true' }}
         run: pnpm lint:md
