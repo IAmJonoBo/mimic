@@ -4,12 +4,10 @@ import StyleDictionary from 'style-dictionary';
 StyleDictionary.registerTransform({
   name: 'size/pxToRem',
   type: 'value',
-  filter: token => {
-    return (
-      token.$type === 'dimension' && token.$value && token.$value.endsWith('px')
-    );
+  filter: (token) => {
+    return token.$type === 'dimension' && token.$value && token.$value.endsWith('px');
   },
-  transform: token => {
+  transform: (token) => {
     const pixelValue = Number.parseFloat(token.$value);
     return `${pixelValue / 16}rem`;
   },
@@ -18,12 +16,10 @@ StyleDictionary.registerTransform({
 StyleDictionary.registerTransform({
   name: 'color/hexToRgb',
   type: 'value',
-  filter: token => {
-    return (
-      token.$type === 'color' && token.$value && token.$value.startsWith('#')
-    );
+  filter: (token) => {
+    return token.$type === 'color' && token.$value && token.$value.startsWith('#');
   },
-  transform: token => {
+  transform: (token) => {
     const hex = token.$value.replace('#', '');
     const r = Number.parseInt(hex.substr(0, 2), 16);
     const g = Number.parseInt(hex.substr(2, 2), 16);
@@ -36,8 +32,8 @@ StyleDictionary.registerTransform({
 StyleDictionary.registerTransform({
   name: 'value/font-family-quote',
   type: 'value',
-  matcher: token => token.$type === 'fontFamily',
-  transform: token => {
+  matcher: (token) => token.$type === 'fontFamily',
+  transform: (token) => {
     if (Array.isArray(token.$value)) {
       return token.$value.join(', '); // Don't add extra quotes, the format will handle it
     }
@@ -52,7 +48,7 @@ StyleDictionary.registerTransform({
 StyleDictionary.registerTransform({
   name: 'name/js-numeric-safe',
   type: 'name',
-  transform: token => {
+  transform: (token) => {
     const name = token.path.slice(1).join('_');
     // If name starts with a number, prefix with underscore
     return /^\d/.test(name) ? `_${name}` : name;
@@ -62,13 +58,13 @@ StyleDictionary.registerTransform({
 // Register custom formats
 StyleDictionary.registerFormat({
   name: 'typescript/custom-declarations',
-  format: dictionary => {
+  format: (dictionary) => {
     const tokens = dictionary.allTokens;
 
     let output = '// Auto-generated design tokens\n\n';
     output += 'export interface DesignTokens {\n';
 
-    tokens.forEach(token => {
+    tokens.forEach((token) => {
       const path = token.path.join('.');
       let type = 'string';
       if (token.$type === 'fontWeight') {
@@ -106,7 +102,7 @@ StyleDictionary.registerFormat({
 
 StyleDictionary.registerFormat({
   name: 'json/flat',
-  format: dictionary => {
+  format: (dictionary) => {
     const tokens = dictionary.allTokens.reduce((acc, token) => {
       const path = token.path.join('.');
       acc[path] = token.$value;
@@ -120,14 +116,14 @@ StyleDictionary.registerFormat({
 // Dart/Flutter format with namespace
 StyleDictionary.registerFormat({
   name: 'dart/theme-dart',
-  format: dictionary => {
+  format: (dictionary) => {
     let output = '// Auto-generated Dart theme from design tokens\n';
     output += "import 'package:flutter/material.dart';\n\n";
     output += 'class DsTokens {\n'; // Prefixed class name
 
     // Group tokens by category
     const categories = {};
-    dictionary.allTokens.forEach(token => {
+    dictionary.allTokens.forEach((token) => {
       const category = token.path[0];
       if (!categories[category]) categories[category] = [];
       categories[category].push(token);
@@ -135,7 +131,7 @@ StyleDictionary.registerFormat({
 
     Object.entries(categories).forEach(([category, tokens]) => {
       output += `  // ${category.charAt(0).toUpperCase() + category.slice(1)} tokens\n`;
-      tokens.forEach(token => {
+      tokens.forEach((token) => {
         const name = token.path.slice(1).join('_');
         let value = token.$value;
 
@@ -145,9 +141,7 @@ StyleDictionary.registerFormat({
           value = `Color(0xFF${hex})`;
         } else if (token.$type === 'dimension') {
           // Convert to double for Flutter
-          const numValue = Number.parseFloat(
-            token.$value.replace(/[^\d.]/g, '')
-          );
+          const numValue = Number.parseFloat(token.$value.replace(/[^\d.]/g, ''));
           value = `${numValue}`;
         }
 
@@ -164,7 +158,7 @@ StyleDictionary.registerFormat({
 // Compose Multiplatform format with namespace
 StyleDictionary.registerFormat({
   name: 'compose/theme-kt',
-  format: dictionary => {
+  format: (dictionary) => {
     let output = '// Auto-generated Compose theme from design tokens\n';
     output += 'package ds.theme\n\n'; // Use ds.theme namespace per playbook
     output += 'import androidx.compose.ui.graphics.Color\n';
@@ -174,7 +168,7 @@ StyleDictionary.registerFormat({
 
     // Group tokens by category
     const categories = {};
-    dictionary.allTokens.forEach(token => {
+    dictionary.allTokens.forEach((token) => {
       const category = token.path[0];
       if (!categories[category]) categories[category] = [];
       categories[category].push(token);
@@ -182,16 +176,14 @@ StyleDictionary.registerFormat({
 
     Object.entries(categories).forEach(([category, tokens]) => {
       output += `  object ${category.charAt(0).toUpperCase() + category.slice(1)} {\n`;
-      tokens.forEach(token => {
+      tokens.forEach((token) => {
         const name = token.path.slice(1).join('_').toUpperCase();
         let value = token.$value;
 
         if (token.$type === 'color') {
           value = `Color(0xFF${token.$value.replace('#', '')})`;
         } else if (token.$type === 'dimension') {
-          const numericValue = Number.parseFloat(
-            token.$value.replace(/[^\d.]/g, '')
-          );
+          const numericValue = Number.parseFloat(token.$value.replace(/[^\d.]/g, ''));
           value = `${numericValue}.dp`;
         }
 
@@ -205,59 +197,161 @@ StyleDictionary.registerFormat({
   },
 });
 
-// React Native format with namespace
+const parseNumericDimension = (value) => {
+  if (typeof value === 'number') {
+    return value;
+  }
+
+  const numeric = Number.parseFloat(value);
+  return Number.isFinite(numeric) ? numeric : value;
+};
+
+const convertDimensionValue = (rawValue) => {
+  if (rawValue == null) {
+    return rawValue;
+  }
+
+  if (Array.isArray(rawValue)) {
+    return rawValue.map(convertDimensionValue);
+  }
+
+  if (typeof rawValue === 'object') {
+    return Object.fromEntries(Object.entries(rawValue).map(([key, value]) => [key, convertDimensionValue(value)]));
+  }
+
+  if (typeof rawValue !== 'string') {
+    return rawValue;
+  }
+
+  const parts = rawValue.trim().split(/\s+/).filter(Boolean);
+
+  if (parts.length <= 1) {
+    return parseNumericDimension(parts[0] ?? rawValue);
+  }
+
+  const numericParts = parts.map(parseNumericDimension);
+
+  if (parts.length === 2) {
+    return {
+      vertical: numericParts[0],
+      horizontal: numericParts[1],
+    };
+  }
+
+  if (parts.length === 3) {
+    return {
+      top: numericParts[0],
+      horizontal: numericParts[1],
+      bottom: numericParts[2],
+    };
+  }
+
+  if (parts.length === 4) {
+    return {
+      top: numericParts[0],
+      right: numericParts[1],
+      bottom: numericParts[2],
+      left: numericParts[3],
+    };
+  }
+
+  return numericParts;
+};
+
+const stringifyTokenValue = (value, indentLevel = 2) => {
+  const indent = ' '.repeat(indentLevel);
+  const childIndent = ' '.repeat(indentLevel + 2);
+
+  if (typeof value === 'number') {
+    return `${value}`;
+  }
+
+  if (typeof value === 'string') {
+    const escaped = value.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+    return `'${escaped}'`;
+  }
+
+  if (Array.isArray(value)) {
+    if (value.length === 0) {
+      return '[]';
+    }
+
+    const entries = value.map((item) => `${childIndent}${stringifyTokenValue(item, indentLevel + 2)}`).join(',\n');
+
+    return `[\n${entries}\n${indent}]`;
+  }
+
+  if (value && typeof value === 'object') {
+    const entries = Object.entries(value).map(([key, nestedValue]) => {
+      const safeKey = /^[A-Za-z_][A-Za-z0-9_]*$/.test(key) ? key : `'${key}'`;
+      const formattedValue = stringifyTokenValue(nestedValue, indentLevel + 2);
+      return `${childIndent}${safeKey}: ${formattedValue}`;
+    });
+
+    if (entries.length === 0) {
+      return '{}';
+    }
+
+    return `{\n${entries.join(',\n')}\n${indent}}`;
+  }
+
+  if (value === null) {
+    return 'null';
+  }
+
+  return `'${String(value)}'`;
+};
+
+export const reactNativeThemeTsFormatter = (dictionary) => {
+  let output = '// Auto-generated React Native theme from design tokens\n\n';
+
+  const categories = {};
+  dictionary.allTokens.forEach((token) => {
+    const category = token.path[0];
+    if (!categories[category]) categories[category] = [];
+    categories[category].push(token);
+  });
+
+  Object.entries(categories).forEach(([category, tokens]) => {
+    output += `export const ${category} = {\n`;
+    tokens.forEach((token) => {
+      let name = token.path.slice(1).join('_');
+      if (/^\d/.test(name)) {
+        name = `_${name}`;
+      }
+
+      let value = token.$value;
+
+      if (token.$type === 'dimension') {
+        value = convertDimensionValue(token.$value);
+      } else if (token.$type === 'fontFamily' && Array.isArray(token.$value)) {
+        value = token.$value.join(', ');
+      } else if (typeof value === 'object' && value !== null) {
+        value = JSON.stringify(value);
+      }
+
+      const formattedValue = stringifyTokenValue(value, 2);
+      output += `  ${name}: ${formattedValue},\n`;
+    });
+    output += '};\n\n';
+  });
+
+  return output;
+};
+
 StyleDictionary.registerFormat({
   name: 'react-native/theme-ts',
-  format: dictionary => {
-    let output = '// Auto-generated React Native theme from design tokens\n\n';
-
-    const categories = {};
-    dictionary.allTokens.forEach(token => {
-      const category = token.path[0];
-      if (!categories[category]) categories[category] = [];
-      categories[category].push(token);
-    });
-
-    Object.entries(categories).forEach(([category, tokens]) => {
-      output += `export const ${category} = {\n`;
-      tokens.forEach(token => {
-        let name = token.path.slice(1).join('_');
-        // Handle numeric property names
-        if (/^\d/.test(name)) {
-          name = `_${name}`;
-        }
-        let value = token.$value;
-
-        if (token.$type === 'dimension') {
-          value = Number.parseFloat(token.$value.replace(/[^\d.]/g, ''));
-        } else if (token.$type === 'fontFamily') {
-          // Handle font family arrays
-          if (Array.isArray(token.$value)) {
-            value = token.$value.join(', ');
-          }
-        } else if (typeof value === 'object' && value !== null) {
-          // Handle complex objects (like shadow tokens)
-          value = JSON.stringify(value);
-        }
-
-        const formattedValue = typeof value === 'string' ? `'${value}'` : value;
-        output += `  ${name}: ${formattedValue},\n`;
-      });
-      output += '};\n\n';
-    });
-
-    return output;
-  },
+  format: reactNativeThemeTsFormatter,
 });
 
 // Custom JavaScript ES6 format with namespace grouping
 StyleDictionary.registerFormat({
   name: 'javascript/es6-grouped',
-  format: dictionary => {
+  format: (dictionary) => {
     let output = '// Auto-generated JavaScript tokens from design tokens\n\n';
 
     const categories = {};
-    dictionary.allTokens.forEach(token => {
+    dictionary.allTokens.forEach((token) => {
       const category = token.path[0];
       if (!categories[category]) categories[category] = [];
       categories[category].push(token);
@@ -265,7 +359,7 @@ StyleDictionary.registerFormat({
 
     Object.entries(categories).forEach(([category, tokens]) => {
       output += `export const ${category} = {\n`;
-      tokens.forEach(token => {
+      tokens.forEach((token) => {
         let name = token.path.slice(1).join('_');
         // Handle numeric property names
         if (/^\d/.test(name)) {
@@ -283,10 +377,7 @@ StyleDictionary.registerFormat({
           value = JSON.stringify(value, null, 0);
         }
 
-        const formattedValue =
-          typeof value === 'string' && !value.startsWith('{')
-            ? `"${value}"`
-            : value;
+        const formattedValue = typeof value === 'string' && !value.startsWith('{') ? `"${value}"` : value;
         const comment = token.comment ? ` // ${token.comment}` : '';
         output += `  ${name}: ${formattedValue},${comment}\n`;
       });
@@ -299,23 +390,14 @@ StyleDictionary.registerFormat({
 
 export default {
   // Base configuration - will be merged with platform-specific sources
-  source: [
-    'tokens/base.json',
-    'tokens/semantic.json',
-    'tokens/components.json',
-  ],
+  source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json'],
   platforms: {
     css: {
       transformGroup: 'css',
       prefix: 'ds', // Add namespace prefix for collision prevention
       buildPath: 'libs/tokens/css/', // Platform-rooted build path
       // Include web platform overrides for CSS
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/web.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/web.json'],
       files: [
         {
           destination: 'tokens.css',
@@ -328,12 +410,7 @@ export default {
       prefix: 'ds', // Add namespace prefix for collision prevention
       buildPath: 'libs/tokens/scss/', // Platform-rooted build path
       // Include web platform overrides for SCSS
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/web.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/web.json'],
       files: [
         {
           destination: 'tokens.scss',
@@ -347,12 +424,7 @@ export default {
       prefix: 'ds', // Add namespace prefix for collision prevention
       buildPath: 'libs/tokens/js/', // Platform-rooted build path
       // Include web platform overrides for JS
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/web.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/web.json'],
       files: [
         {
           destination: 'tokens.js',
@@ -366,12 +438,7 @@ export default {
       prefix: 'ds', // Add namespace prefix for collision prevention
       buildPath: 'libs/tokens/ts/', // Platform-rooted build path
       // Include web platform overrides for TypeScript
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/web.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/web.json'],
       files: [
         {
           destination: 'tokens.ts',
@@ -384,11 +451,7 @@ export default {
       prefix: 'ds', // Add namespace prefix for collision prevention
       buildPath: 'libs/tokens/json/', // Platform-rooted build path
       // JSON output includes base tokens only (no platform overrides)
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json'],
       files: [
         {
           destination: 'tokens.json',
@@ -405,12 +468,7 @@ export default {
       prefix: 'Ds', // Add namespace prefix for collision prevention (PascalCase for Dart)
       buildPath: 'libs/tokens/dart/', // Platform-rooted build path
       // Include mobile platform overrides for Dart/Flutter
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/mobile.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/mobile.json'],
       files: [
         {
           destination: 'tokens.dart',
@@ -423,12 +481,7 @@ export default {
       prefix: 'Ds', // Add namespace prefix for collision prevention (PascalCase for Kotlin)
       buildPath: 'libs/tokens/compose/', // Platform-rooted build path
       // Include mobile platform overrides for Compose
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/mobile.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/mobile.json'],
       files: [
         {
           destination: 'Theme.kt',
@@ -441,12 +494,7 @@ export default {
       prefix: 'ds', // Add namespace prefix for collision prevention
       buildPath: 'libs/tokens/react-native/', // Platform-rooted build path
       // Include mobile platform overrides for React Native
-      source: [
-        'tokens/base.json',
-        'tokens/semantic.json',
-        'tokens/components.json',
-        'tokens/platforms/mobile.json',
-      ],
+      source: ['tokens/base.json', 'tokens/semantic.json', 'tokens/components.json', 'tokens/platforms/mobile.json'],
       files: [
         {
           destination: 'theme.ts',

@@ -105,9 +105,18 @@ export const shadow = {
 };
 
 export const button = {
-  padding_small: 0.25,
-  padding_medium: 0.51,
-  padding_large: 11.5,
+  padding_small: {
+    vertical: 0.25,
+    horizontal: 0.5
+  },
+  padding_medium: {
+    vertical: 0.5,
+    horizontal: 1
+  },
+  padding_large: {
+    vertical: 1,
+    horizontal: 1.5
+  },
   borderRadius: 0.375,
   fontSize_small: 0.875,
   fontSize_medium: 1,
@@ -123,7 +132,10 @@ export const card = {
 };
 
 export const input = {
-  padding: 0.51,
+  padding: {
+    vertical: 0.5,
+    horizontal: 1
+  },
   borderRadius: 0.375,
   fontSize: 1,
   border: '1px solid #e5e5e5',
