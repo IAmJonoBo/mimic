@@ -11,6 +11,8 @@ jobs:
   module-boundaries:
     name: Enforce Module Boundaries
     runs-on: ubuntu-latest
+    env:
+      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -24,15 +26,6 @@ jobs:
           key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml', 'nx.json') }}
           restore-keys: |
             ${{ runner.os }}-nx-
-
-      - name: Export Nx Cloud token
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          NX_TOKEN="$(gh variable get NX_CLOUD_ACCESS_TOKEN -R \"$GITHUB_REPOSITORY\" --json value --jq '.value' 2>/dev/null || true)"
-          if [ -n "$NX_TOKEN" ]; then
-            echo "NX_CLOUD_ACCESS_TOKEN=$NX_TOKEN" >> "$GITHUB_ENV"
-          fi
 
       - name: Cleanup Apple metadata (pre-install)
         run: node tools/apple-cleaner.js --mode=full

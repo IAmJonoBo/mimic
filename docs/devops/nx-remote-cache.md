@@ -3,14 +3,15 @@
 The workflows now hydrate the Nx cache directory and opt into Nx Cloud whenever an access token is
 available. Keep the following in mind when enabling remote caching:
 
-1. **Provision repository variable** – add a repository variable named `NX_CLOUD_ACCESS_TOKEN` under
-   *Settings → Actions → Variables*. The GitHub CLI step in each workflow copies the value into
-   `NX_CLOUD_ACCESS_TOKEN` for downstream Nx commands. (Tokens stored as variables are visible to
-   maintainers; rotate them periodically.)
+1. **Provision repository secret** – add a secret named `NX_CLOUD_ACCESS_TOKEN` under
+   *Settings → Secrets and variables → Actions → Secrets*. GitHub Actions now exposes the secret to
+   every workflow job, so Nx commands automatically discover the token. (Secrets remain encrypted and
+   masked in logs—rotate them periodically.)
 2. **Token scope** – generate a CI token from [Nx Cloud](https://cloud.nx.app/) with read/write cache
    permissions scoped to this workspace. No additional capabilities are required.
 3. **Local usage** – export the token locally before running Nx commands to take advantage of the same
-   cache: `export NX_CLOUD_ACCESS_TOKEN=<token>`.
+   cache: `export NX_CLOUD_ACCESS_TOKEN=<token>`. If you prefer, you can also store the token in a
+   local `.env` file—GitHub workflows will continue to read from the repository secret.
 4. **Cache behaviour** – the `actions/cache@v4` step restores `tmp/nx-cache` to stabilize results
    between reruns. Nx Cloud is only engaged once the environment variable is present, so the workflows
    still succeed when the variable is omitted (for forks, etc.).
@@ -23,7 +24,7 @@ Self-healing is now wired into the GitHub pipelines. Nx Cloud handles issue dete
 fixes when tasks fail.
 
 1. **Prerequisites** – Self-healing requires Nx Cloud with the GitHub VCS integration enabled. Ensure the
-   repository variable `NX_CLOUD_ACCESS_TOKEN` is populated (see steps above) and that the workspace has
+   repository secret `NX_CLOUD_ACCESS_TOKEN` is populated (see steps above) and that the workspace has
    Self-Healing CI toggled on in Nx Cloud settings.
 2. **Workflow hooks** – Each GitHub workflow calls `pnpm exec nx start-ci-run --no-distribution` after
    installing dependencies. The command is skipped automatically if the Nx Cloud token is not available
