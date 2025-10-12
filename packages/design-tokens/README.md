@@ -166,6 +166,25 @@ fun AppTheme(content: @Composable () -> Unit) {
 }
 ```
 
+### Token lookup order & platform overrides
+
+The runtime helpers (`getToken`, `getTokensByPattern`) resolve values using the following precedence so
+adapters can reason about overrides:
+
+1. **CSS Custom Properties** – When running in a browser, we read from `document.documentElement` to
+   respect runtime theming overrides first.
+2. **Base Tokens** – Canonical tokens exported from Penpot.
+3. **Semantic Tokens** – Contracted aliases that map to base tokens.
+4. **Component Tokens** – Component-specific shorthands.
+5. **Platform Tokens** – Web and mobile trees override everything else. By default the helper prefers
+   web values, but you can opt into the mobile precedence by either:
+   - Setting `process.env.MIMIC_PLATFORM=mobile` at build/runtime, or
+   - Running in an environment where `globalThis.navigator.product === 'ReactNative'` (React Native
+     sets this automatically).
+
+This guarantees that platform-specific overrides (for example, React Native touch targets) are returned
+even when the base token tree defines the same path.
+
 ### Desktop Applications (Tauri)
 
 ```typescript

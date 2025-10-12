@@ -106,6 +106,11 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   `pnpm test` and `pnpm build` crash the shell during Nx project graph creation; `pnpm audit` reports no
   known vulnerabilities. Scoped `pnpm exec vitest run --config vitest.config.ts` inside
   `packages/shared-utils` to execute the new token-utils coverage without triggering Nx.
+- 2025-10-12: Revalidated baseline ahead of platform token precedence update — `pnpm format:check`
+  still fails with 50 formatter errors and 4 warnings from existing drift; `pnpm lint:workspace` and
+  `pnpm typecheck` complete with engine mismatch warnings; `pnpm nx run-many -t test` and `pnpm build`
+  continue to crash the terminal while constructing the project graph; targeted `pnpm --filter
+  @mimic/design-tokens test -- --run` added to cover new platform lookup behaviour.
 
 ## Deliverables
 

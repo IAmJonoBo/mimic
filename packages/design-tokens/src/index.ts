@@ -51,13 +51,85 @@ export interface TokenValidationResult {
   warnings: string[];
 }
 
+type TokenSource = Record<string, unknown>;
+
+type PlatformTarget = 'mobile' | 'web';
+
+const baseTokenSources: TokenSource[] = [
+  baseTokens as TokenSource,
+  semanticTokens as TokenSource,
+  componentTokens as TokenSource,
+];
+
+const parsePlatformPreference = (value: unknown): PlatformTarget | undefined => {
+  if (typeof value !== 'string') {
+    return undefined;
+  }
+
+  const normalized = value.toLowerCase();
+
+  if (normalized === 'mobile') {
+    return 'mobile';
+  }
+
+  if (normalized === 'web') {
+    return 'web';
+  }
+
+  return undefined;
+};
+
+const detectPlatformTarget = (): PlatformTarget => {
+  if (typeof process !== 'undefined') {
+    const envPreference = parsePlatformPreference(process.env?.MIMIC_PLATFORM);
+    if (envPreference) {
+      return envPreference;
+    }
+  }
+
+  const globalPreference = parsePlatformPreference((globalThis as { MIMIC_PLATFORM?: unknown }).MIMIC_PLATFORM);
+  if (globalPreference) {
+    return globalPreference;
+  }
+
+  const runtimeNavigator = (
+    globalThis as {
+      navigator?: { product?: string; userAgent?: string };
+    }
+  ).navigator;
+
+  if (runtimeNavigator && typeof runtimeNavigator === 'object') {
+    if (runtimeNavigator.product === 'ReactNative') {
+      return 'mobile';
+    }
+
+    const userAgent = runtimeNavigator.userAgent?.toLowerCase();
+    if (userAgent?.includes('reactnative')) {
+      return 'mobile';
+    }
+  }
+
+  return 'web';
+};
+
+const getPlatformTokenSources = (): TokenSource[] => {
+  const platform = detectPlatformTarget();
+
+  if (platform === 'mobile') {
+    return [webTokens as TokenSource, mobileTokens as TokenSource];
+  }
+
+  return [mobileTokens as TokenSource, webTokens as TokenSource];
+};
+
+const getOrderedTokenSources = (): TokenSource[] => {
+  return [...baseTokenSources, ...getPlatformTokenSources()];
+};
+
 /**
  * Try to find a token value in a token object
  */
-const findTokenInSource = (
-  path: string,
-  tokens: Record<string, unknown>
-): string | null => {
+const findTokenInSource = (path: string, tokens: TokenSource): string | null => {
   const parts = path.split('.');
   let current: unknown = tokens;
 
@@ -93,11 +165,11 @@ export const getToken = (path: string, fallback = ''): string => {
       if (value) return value;
     }
 
-    // Try each token source in order: base tokens first, then semantic, then component
-    const tokenSources = [baseTokens, semanticTokens, componentTokens];
+    const tokenSources = getOrderedTokenSources();
 
-    for (const tokens of tokenSources) {
-      const result = findTokenInSource(path, tokens as Record<string, unknown>);
+    for (let index = tokenSources.length - 1; index >= 0; index -= 1) {
+      const tokens = tokenSources[index];
+      const result = findTokenInSource(path, tokens);
       if (result !== null) {
         return result;
       }
@@ -114,20 +186,14 @@ export const getToken = (path: string, fallback = ''): string => {
  * @param pattern - Glob-like pattern (e.g., 'color.primary.*')
  * @returns Array of matching tokens with their paths and values
  */
-export const getTokensByPattern = (
-  pattern: string
-): Array<{ path: string; value: string; type?: string }> => {
+export const getTokensByPattern = (pattern: string): Array<{ path: string; value: string; type?: string }> => {
   const results: Array<{ path: string; value: string; type?: string }> = [];
 
   // Collect tokens from each source
-  const tokenSources = [baseTokens, semanticTokens, componentTokens];
+  const tokenSources = getOrderedTokenSources();
 
   for (const tokens of tokenSources) {
-    collectTokensFromSource(
-      tokens as Record<string, unknown>,
-      pattern,
-      results
-    );
+    collectTokensFromSource(tokens, pattern, results);
   }
 
   return results;
@@ -137,7 +203,7 @@ export const getTokensByPattern = (
  * Collect tokens from a token source that match the pattern
  */
 const collectTokensFromSource = (
-  tokens: Record<string, unknown>,
+  tokens: TokenSource,
   pattern: string,
   results: Array<{ path: string; value: string; type?: string }>,
   currentPath = ''
@@ -151,12 +217,7 @@ const collectTokensFromSource = (
       addTokenIfMatches(newPath, value, pattern, results);
     } else if (value && typeof value === 'object') {
       // Continue traversing
-      collectTokensFromSource(
-        value as Record<string, unknown>,
-        pattern,
-        results,
-        newPath
-      );
+      collectTokensFromSource(value as Record<string, unknown>, pattern, results, newPath);
     }
   }
 };
@@ -164,9 +225,7 @@ const collectTokensFromSource = (
 /**
  * Check if a value is a token (has $value property)
  */
-const isTokenValue = (
-  value: unknown
-): value is { $value: unknown; $type?: unknown } => {
+const isTokenValue = (value: unknown): value is { $value: unknown; $type?: unknown } => {
   return value !== null && typeof value === 'object' && '$value' in value;
 };
 
@@ -180,13 +239,18 @@ const addTokenIfMatches = (
   results: Array<{ path: string; value: string; type?: string }>
 ): void => {
   if (matchesPattern(path, pattern)) {
-    // Avoid duplicates by checking if path already exists
-    if (!results.some(r => r.path === path)) {
-      results.push({
-        path,
-        value: String(tokenValue.$value),
-        type: tokenValue.$type as string | undefined,
-      });
+    const entry = {
+      path,
+      value: String(tokenValue.$value),
+      type: tokenValue.$type as string | undefined,
+    };
+
+    const existingIndex = results.findIndex((r) => r.path === path);
+
+    if (existingIndex >= 0) {
+      results[existingIndex] = entry;
+    } else {
+      results.push(entry);
     }
   }
 };
@@ -214,9 +278,7 @@ export const matchesPattern = (path: string, pattern: string): boolean => {
  * @param tokenObj - Token object to validate
  * @returns Validation result with errors and warnings
  */
-export const validateTokens = (
-  tokenObj?: Record<string, unknown>
-): TokenValidationResult => {
+export const validateTokens = (tokenObj?: Record<string, unknown>): TokenValidationResult => {
   const result: TokenValidationResult = {
     isValid: true,
     errors: [],
@@ -229,10 +291,7 @@ export const validateTokens = (
     return result;
   }
 
-  const validateSingleToken = (
-    tokenObject: Record<string, unknown>,
-    path: string
-  ): void => {
+  const validateSingleToken = (tokenObject: Record<string, unknown>, path: string): void => {
     if (!tokenObject.$value && tokenObject.$value !== 0) {
       result.errors.push(`Token at "${path}" is missing $value`);
       result.isValid = false;
@@ -247,50 +306,37 @@ export const validateTokens = (
     }
   };
 
-  const isTokenObject = (obj: Record<string, unknown>): boolean =>
-    '$value' in obj;
+  const isTokenObject = (obj: Record<string, unknown>): boolean => '$value' in obj;
 
   const isGroupObject = (obj: Record<string, unknown>): boolean => {
-    const dollarKeys = Object.keys(obj).filter(key => key.startsWith('$'));
+    const dollarKeys = Object.keys(obj).filter((key) => key.startsWith('$'));
     // Groups can have $description and $type properties (for inheritance)
     // BUT if they have other $ properties or appear to be intended as tokens, they're not groups
     const validGroupKeys = ['$description', '$type'];
-    const hasOnlyValidGroupKeys = dollarKeys.every(key =>
-      validGroupKeys.includes(key)
-    );
+    const hasOnlyValidGroupKeys = dollarKeys.every((key) => validGroupKeys.includes(key));
 
     // If object has non-group $ properties or seems like an incomplete token, it's not a group
     if (!hasOnlyValidGroupKeys) return false;
 
     // If it has $ properties and seems like it should be a token (no sub-objects), it's invalid
     const hasSubObjects = Object.values(obj).some(
-      value => value && typeof value === 'object' && !Array.isArray(value)
+      (value) => value && typeof value === 'object' && !Array.isArray(value)
     );
 
     // Groups should contain other objects, tokens should not
     return dollarKeys.length === 0 || hasSubObjects;
   };
 
-  const handleInvalidObject = (
-    tokenObject: Record<string, unknown>,
-    currentPath: string
-  ): void => {
-    const dollarKeys = Object.keys(tokenObject).filter(key =>
-      key.startsWith('$')
-    );
+  const handleInvalidObject = (tokenObject: Record<string, unknown>, currentPath: string): void => {
+    const dollarKeys = Object.keys(tokenObject).filter((key) => key.startsWith('$'));
     // If object has $ properties (indicating it's meant to be a token) but no $value, it's invalid
     if (dollarKeys.length > 0 && !isTokenObject(tokenObject)) {
-      result.errors.push(
-        `Object at "${currentPath}" has token properties but missing $value`
-      );
+      result.errors.push(`Object at "${currentPath}" has token properties but missing $value`);
       result.isValid = false;
     }
   };
 
-  const traverseGroupObject = (
-    tokenObject: Record<string, unknown>,
-    currentPath: string
-  ): void => {
+  const traverseGroupObject = (tokenObject: Record<string, unknown>, currentPath: string): void => {
     for (const [key, value] of Object.entries(tokenObject)) {
       if (!key.startsWith('$')) {
         const newPath = currentPath ? `${currentPath}.${key}` : key;
@@ -346,8 +392,7 @@ export const TokenCategories = {
   SHADOW: 'shadow',
 } as const;
 
-export type TokenCategory =
-  (typeof TokenCategories)[keyof typeof TokenCategories];
+export type TokenCategory = (typeof TokenCategories)[keyof typeof TokenCategories];
 
 /**
  * Common token paths for easy access
