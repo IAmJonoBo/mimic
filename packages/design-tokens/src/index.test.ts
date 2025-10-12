@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 
 import {
   baseTokens,
@@ -15,6 +15,37 @@ interface TokenWithValue {
   $type?: string;
   $description?: string;
 }
+
+const originalNavigatorDescriptor = Object.getOwnPropertyDescriptor(globalThis, 'navigator');
+
+const restoreEnvironment = () => {
+  if (originalNavigatorDescriptor) {
+    Object.defineProperty(globalThis, 'navigator', originalNavigatorDescriptor);
+  } else {
+    Reflect.deleteProperty(globalThis as { navigator?: unknown }, 'navigator');
+  }
+  if (typeof process !== 'undefined') {
+    delete process.env.MIMIC_PLATFORM;
+  }
+};
+
+const setMobileRuntime = () => {
+  Object.defineProperty(globalThis, 'navigator', {
+    configurable: true,
+    writable: true,
+    value: {
+      product: 'ReactNative',
+    },
+  });
+
+  if (typeof process !== 'undefined') {
+    process.env.MIMIC_PLATFORM = 'mobile';
+  }
+};
+
+afterEach(() => {
+  restoreEnvironment();
+});
 
 describe('Design Tokens', () => {
   describe('Token Validation', () => {
@@ -82,8 +113,7 @@ describe('Design Tokens', () => {
       expect(primaryTokens.length).toBeGreaterThan(0);
 
       const primaryToken = primaryTokens.find(
-        (t: { path: string; value: string; type?: string }) =>
-          t.path === 'color.primary.500'
+        (t: { path: string; value: string; type?: string }) => t.path === 'color.primary.500'
       );
       expect(primaryToken).toBeDefined();
       expect(primaryToken?.value).toBe('#3b82f6');
@@ -102,30 +132,42 @@ describe('Design Tokens', () => {
       const allTokens = getTokensByPattern('*');
       expect(allTokens.length).toBeGreaterThan(10);
     });
+
+    it('should surface mobile platform overrides when React Native runtime is detected', () => {
+      setMobileRuntime();
+
+      expect(getToken('spacing.md')).toBe('16dp');
+      expect(getToken('touch.minSize')).toBe('44dp');
+    });
+
+    it('should include platform tokens in pattern lookups for mobile runtime', () => {
+      setMobileRuntime();
+
+      const touchTokens = getTokensByPattern('touch.*');
+
+      expect(touchTokens).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ path: 'touch.minSize', value: '44dp' }),
+          expect.objectContaining({ path: 'touch.padding', value: '12dp' }),
+        ])
+      );
+    });
   });
 
   describe('Pattern Matching', () => {
     it('should match exact paths', () => {
-      expect(matchesPattern('color.primary.500', 'color.primary.500')).toBe(
-        true
-      );
-      expect(matchesPattern('color.primary.600', 'color.primary.500')).toBe(
-        false
-      );
+      expect(matchesPattern('color.primary.500', 'color.primary.500')).toBe(true);
+      expect(matchesPattern('color.primary.600', 'color.primary.500')).toBe(false);
     });
 
     it('should match wildcard patterns', () => {
       expect(matchesPattern('color.primary.500', 'color.primary.*')).toBe(true);
-      expect(matchesPattern('color.secondary.500', 'color.primary.*')).toBe(
-        false
-      );
+      expect(matchesPattern('color.secondary.500', 'color.primary.*')).toBe(false);
       expect(matchesPattern('color.primary.500', 'color.*.*')).toBe(true);
     });
 
     it('should match nested wildcard patterns', () => {
-      expect(matchesPattern('typography.fontSize.base', 'typography.*.*')).toBe(
-        true
-      );
+      expect(matchesPattern('typography.fontSize.base', 'typography.*.*')).toBe(true);
       expect(matchesPattern('spacing.md', 'spacing.*')).toBe(true);
     });
   });
