@@ -10,10 +10,10 @@ export const tokenUtils = {
   /**
    * Convert a token path to CSS custom property format
    * @param path - Token path like 'color.primary.500'
-   * @returns CSS custom property like '--color-primary-500'
+   * @returns CSS custom property like '--ds-color-primary-500'
    */
   toCssVar: (path: string): string => {
-    return `--${path.replace(/\./g, '-')}`;
+    return `--ds-${path.replace(/\./g, '-')}`;
   },
 
   /**
@@ -41,9 +41,7 @@ export type DeepPartial<T> = {
 
 export type TokenPath<T> = T extends object
   ? {
-      [K in keyof T]: T[K] extends object
-        ? `${string & K}.${TokenPath<T[K]>}`
-        : string & K;
+      [K in keyof T]: T[K] extends object ? `${string & K}.${TokenPath<T[K]>}` : string & K;
     }[keyof T]
   : never;
 
@@ -57,8 +55,7 @@ export const platformUtils = {
       return (
         typeof globalThis !== 'undefined' &&
         'process' in globalThis &&
-        typeof (globalThis as { process?: { versions?: { node?: string } } })
-          .process?.versions?.node !== 'undefined'
+        typeof (globalThis as { process?: { versions?: { node?: string } } }).process?.versions?.node !== 'undefined'
       );
     } catch {
       return false;
@@ -70,8 +67,7 @@ export const platformUtils = {
         typeof globalThis !== 'undefined' &&
         'navigator' in globalThis &&
         /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
-          (globalThis as { navigator?: { userAgent?: string } }).navigator
-            ?.userAgent ?? ''
+          (globalThis as { navigator?: { userAgent?: string } }).navigator?.userAgent ?? ''
         )
       );
     } catch {

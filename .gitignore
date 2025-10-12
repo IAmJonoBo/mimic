@@ -68,6 +68,7 @@ jest-coverage/
 junit.xml
 test-output/
 .vitest/
+packages/shared-utils/src/__tests__/__temp__/
 
 # IDE and editors
 .vscode/

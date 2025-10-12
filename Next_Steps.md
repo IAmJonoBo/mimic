@@ -101,6 +101,11 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
       repository engine requirement and unblock baseline automation verification.
 - [ ] Ensure Copilot workspace instructions stay in sync with toolchain changes (DevOps Guild — Ongoing)
       so AI agents continue to run installs from the shared wheelhouse before executing gates.
+- 2025-10-26: Confirmed baseline for token-utils change: `pnpm format:check` still reports 52 formatter
+  violations from legacy drift; `pnpm lint:workspace` and `pnpm typecheck` succeed under Node 22.19.0;
+  `pnpm test` and `pnpm build` crash the shell during Nx project graph creation; `pnpm audit` reports no
+  known vulnerabilities. Scoped `pnpm exec vitest run --config vitest.config.ts` inside
+  `packages/shared-utils` to execute the new token-utils coverage without triggering Nx.
 
 ## Deliverables
 
