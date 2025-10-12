@@ -12,7 +12,7 @@ Use this guide when working on Mimic 2.0. For big-picture context check
 code --folder-uri vscode-remote://dev-container+$(pwd)/infra/containers/devcontainer
 ```
 
-The container provisions Node 22.20, pnpm 10.17.1, Rust, Android/iOS toolchains, Playwright, and a local
+The container provisions Node 22.20, pnpm 10.18.2, Rust, Android/iOS toolchains, Playwright, and a local
 Penpot stack.
 
 ### Local environment

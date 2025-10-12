@@ -12,7 +12,7 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 
 **Prerequisites**
 
-- Baseline Node 22.20.0 + pnpm 10.17.1 toolchain ready per
+- Baseline Node 22.20.0 + pnpm 10.18.2 toolchain ready per
   [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies).
 - AI CLI approach (Ollama/OpenAI/Copilot) agreed so `mimic assist` planning aligns with licensing and
   offline expectations from the dependency matrix.
@@ -54,7 +54,7 @@ deliverables, and entry/exit criteria. Use this roadmap with the detailed
 
 - New directory layout (`apps/`, `packages/`, `infra/`, `toolchains/`) in place with CODEOWNERS + PR templates.
 - Shared toolchain presets (tsconfig, ESLint flat config, Biome, Stylelint, Vitest) published.
-- Devcontainer refreshed with Node 22.20, pnpm 10.17.1, Rust, Android/iOS SDKs, Playwright, Penpot
+- Devcontainer refreshed with Node 22.20, pnpm 10.18.2, Rust, Android/iOS SDKs, Playwright, Penpot
   stack, OpenAI & Copilot CLI tooling.
 - SLO dashboards (stub) and telemetry hooks scaffolded.
 - Contributor playbook (`CONTRIBUTING.md`, `DEVELOPMENT.md`) reflects new workflows and AI usage.
