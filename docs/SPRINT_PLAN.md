@@ -1,251 +1,364 @@
 # Mimic 2.0 Sprint Roadmap
 
-Two-week sprints tailored for the Mimic 2.0 rewrite. Each sprint lists the focus, key outcomes,
-deliverables, and entry/exit criteria. Use this roadmap with the detailed
-[`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md) to track execution.
+Two-week sprints tailored for the Mimic 2.0 rewrite. Each sprint now calls out mission, workstreams,
+architecture/tooling upgrades, quality gates, and exit checklists so squads can execute against
+consistent expectations. Partner this roadmap with
+[`docs/IMPLEMENTATION_PLAN_2.0.md`](./IMPLEMENTATION_PLAN_2.0.md) for deeper architectural context.
+
+## Baseline Quality Gates
+
+The following checks are mandatory for every sprint increment. Treat them as entry and exit criteria
+for stories as well as sprint reviews:
+
+- `pnpm format:check`, `pnpm lint:workspace`, and `pnpm typecheck` green with no warnings gated by
+  waivers.
+- Functional/contract suites (`pnpm nx run-many -t test`, Storybook interaction runner, Playwright
+  journeys) stable with flake budgets logged.
+- Visual regression baselines (Loki, Compose/SwiftUI snapshots) updated and reviewed.
+- `pnpm build` + package-specific builds successful in CI.
+- Security posture verified via `pnpm audit`, Scorecard, Trivy, Cargo Audit.
+- Telemetry dashboards and runbooks updated when new signals are added.
+
+Use Sprint 0 to unblock any failing gates so later sprints start from a trusted baseline.
+
+---
 
 ## Sprint 0 – Discovery & Alignment (Week 0)
 
-**Focus**
+### Mission
 
-- Finalise architecture decisions and prepare the workspace for execution.
+Finalize architecture decisions, quality guardrails, and the baseline toolchain so squads can deliver
+confidently from Sprint 1 onwards.
 
-**Prerequisites**
+### Workstreams
 
-- Baseline Node 22.20.0 + pnpm 10.18.2 toolchain ready per
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies).
-- AI CLI approach (Ollama/OpenAI/Copilot) agreed so `mimic assist` planning aligns with licensing and
-  offline expectations from the dependency matrix.
+- Run architecture workshops to confirm token orchestrator scope, UI kernel split, and automation
+  layers.
+- Map stakeholder goals and produce the Mimic 1.x migration impact assessment.
+- Draft the metrics charter (SLOs, SLIs, error budgets, telemetry owners).
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- Architecture blueprint endorsed (token orchestrator, UI kernel, repo layout).
-- ADRs drafted for Rust CLI, Lit kernel, repository structure, Storybook 10 track, AI accessibility
-  approach (Ollama/OpenAI/Copilot).
-- Migration impact of Mimic 1.x consumers documented.
-- Target SLOs and engineering metrics agreed (build time, drift MTTR, visual escape rate, documentation freshness).
+- Promote the Node 22.20.0 + pnpm 10.18.2 toolchain and document fallbacks (nvm, devcontainer,
+  wheelhouse sync).
+- Decide on AI platform mix (Ollama/OpenAI/Copilot) for `mimic assist` and Storybook guidance.
+- Capture ADRs for Rust CLI footprint, Lit kernel, repo layout, Storybook 10 track, and AI
+  accessibility workflow.
 
-**Entry Criteria**
+### Automation & Quality Gates
 
-- Vision statement approved.
+- Verify format/lint/type gates run without Nx native crashes; capture troubleshooting logs where
+  blockers remain.
+- Define acceptance criteria for telemetry dashboards and error-budget reviews.
+- Baseline accessibility policy (WCAG targets, testing cadence, AI remediation workflow).
 
-**Exit Criteria**
+### Deliverables
 
-- ADR PRs merged.
-- `docs/MIGRATION_SUMMARY.md` captures current adopters and risks.
-- Metrics charter published (SLO dashboard skeleton).
+- Architecture blueprint and dependency matrix updates.
+- Draft ADR set and migration summary stub (`docs/MIGRATION_SUMMARY.md`).
+- Metrics charter, quality gate documentation, and sprint operating agreement.
+
+### Exit Checklist
+
+- Vision statement approved and referenced in planning docs.
+- ADRs merged or in-review with owners assigned.
+- Toolchain upgrade plan accepted; devcontainer and CI images scheduled.
+- Metrics charter and migration summary published with owners.
 
 ---
 
 ## Sprint 1 – Repository Foundations (Weeks 1–2)
 
-**Focus**
+### Mission
 
-- Create the workspace scaffolding and shared tooling for 2.0 development.
+Stand up workspace scaffolding, shared tooling, and baseline telemetry so parallel squads can begin
+delivery.
 
-**Prerequisites**
+### Workstreams
 
-- Node/pnpm baseline validated in Sprint 0 and cached in CI runners (see
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
-- Nx plugin stack (`@nx/js`, `@nx/react`, `@nx/storybook`, `@nx/vite`) and `just` binary available for
-  scaffolding tasks called out in the matrix.
+- Finalize directory layout (`apps/`, `packages/`, `infra/`, `toolchains/`) and publish CODEOWNERS,
+  PR templates, and governance docs.
+- Ship toolchain presets (tsconfig, ESLint flat config, Biome, Stylelint, Vitest, Playwright).
+- Refresh devcontainer with Node 22.20, pnpm 10.18.2, Rust, mobile toolchains, Penpot stack, and AI
+  CLIs.
+- Seed SLO dashboards and telemetry hooks for orchestrator, kernel, and automation services.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- New directory layout (`apps/`, `packages/`, `infra/`, `toolchains/`) in place with CODEOWNERS + PR templates.
-- Shared toolchain presets (tsconfig, ESLint flat config, Biome, Stylelint, Vitest) published.
-- Devcontainer refreshed with Node 22.20, pnpm 10.18.2, Rust, Android/iOS SDKs, Playwright, Penpot
-  stack, OpenAI & Copilot CLI tooling.
-- SLO dashboards (stub) and telemetry hooks scaffolded.
-- Contributor playbook (`CONTRIBUTING.md`, `DEVELOPMENT.md`) reflects new workflows and AI usage.
+- Stabilize Nx plugin stack (`@nx/js`, `@nx/react`, `@nx/storybook`, `@nx/vite`) with
+  `NX_NATIVE_ENABLE=false` mitigation and document escalation paths.
+- Publish `justfile` catalogue with automation/AI helper aliases and ensure CI runners install it.
+- Align CONTRIBUTING/DEVELOPMENT guides with the new workflows and AI expectations.
 
-**Deliverables**
+### Automation & Quality Gates
 
-- `toolchains/` presets.
-- `.devcontainer` thin wrapper pointing to `infra/containers/devcontainer`.
-- `justfile` with core commands and AI helper aliases.
-- CODEOWNERS + SLO/metrics documentation.
+- Achieve clean `pnpm format:check`, `pnpm lint:workspace`, `pnpm typecheck`, and sequential
+  workspace tests for scaffolded projects.
+- Bootstrap Markdown lint, Stylelint, and Storybook smoke gates with path filters.
+- Ensure telemetry exporters send heartbeat metrics to the dashboards defined in Sprint 0.
 
-**Exit Criteria**
+### Deliverables
 
-- CI running on upgraded Node/pnpm versions with baseline telemetry flowing.
-- Covering documentation updated (setup, metrics, AI accessibility).
+- Updated repo structure, CODEOWNERS, PR template, and governance docs.
+- Toolchain presets and devcontainer updates merged.
+- `just` automation catalogue and CI bootstrap scripts.
+
+### Exit Checklist
+
+- CI running on upgraded Node/pnpm with telemetry streaming.
+- Setup docs refreshed and linked from onboarding communications.
+- Quality gates documented in `/Next_Steps.md` and CI workflows.
 
 ---
 
 ## Sprint 2 – Token Orchestrator Skeleton (Weeks 3–4)
 
-**Focus**
+### Mission
 
-- Build the first iteration of the Rust-based token orchestrator and schema contracts.
+Deliver the initial Rust/WASM token orchestrator capable of ingesting Penpot exports, validating
+schemas, and emitting telemetry.
 
-**Prerequisites**
+### Workstreams
 
-- Rust stable toolchain with `wasm32-unknown-unknown` target installed (see
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
-- Node/pnpm + Nx baseline from Sprint 1 remains green in CI for orchestrator bindings.
+- Scaffold `packages/token-orchestrator` CLI (Rust + wasm-bindgen bindings) with structured logging.
+- Implement Penpot DTCG ingest, schema validation, and history management in
+  `packages/tokens-core`.
+- Capture orchestration rules, schema evolution policy, and OpenTelemetry expectations in ADRs.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- `packages/token-orchestrator` CLI scaffolding (Rust + wasm bindings).
-- Penpot DTCG ingest + JSON schema validation pipeline with error envelopes.
-- `packages/tokens-core` canonical schema and history versioning structure.
-- Structured logging + OpenTelemetry traces emitted for orchestrator operations.
-- Initial ADR capturing orchestration rules and SLO impact.
+- Ensure Rust stable toolchain + `wasm32-unknown-unknown` target available in devcontainer and CI.
+- Add cargo fmt/clippy hooks and integrate with lint pipelines.
+- Extend metrics dashboards to surface orchestrator latency/error/throughput.
 
-**Exit Criteria**
+### Automation & Quality Gates
 
-- CLI can parse Penpot export and output normalised JSON to `packages/tokens-core/history`.
-- Unit tests cover schema validation and rule enforcement.
-- Observatory dashboard shows orchestrator latency/error metrics.
+- Unit coverage for schema/rule enforcement; CLI integration tests executed via Vitest/expect
+  harness.
+- Add `cargo test`, `cargo fmt --check`, `cargo clippy -- -D warnings` to CI.
+- Validate telemetry events flowing to Grafana/Tempo dashboards with runbooks.
+
+### Deliverables
+
+- CLI scaffolding with ingest + validation + history snapshotting.
+- Telemetry instrumentation and dashboards for orchestrator operations.
+- ADR capturing orchestration principles and change-management policy.
+
+### Exit Checklist
+
+- CLI exports normalized JSON to `packages/tokens-core/history` with golden snapshot tests.
+- Schema validation + rule enforcement tests passing.
+- Telemetry dashboards populated with orchestrator runs and alert thresholds set.
 
 ---
 
 ## Sprint 3 – Token Outputs & Automation (Weeks 5–6)
 
-**Focus**
+### Mission
 
-- Produce multi-platform token outputs and automate drift detection.
+Automate token output generation across platforms, detect drift, and operationalize the supporting
+CI workflows.
 
-**Prerequisites**
+### Workstreams
 
-- Storybook 9.1 + Loki runners provisioned as listed in the
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies).
-- Rust CLI toolchain from Sprint 2 available in CI to support orchestrator builds.
+- Generate outputs (CSS, TS, JSON Schema, Compose, Swift, Kotlin, Flutter) into
+  `packages/tokens-outputs`.
+- Build `apps/workflows/token-sync` automation to export from Penpot, diff, and raise PRs with
+  AI-generated annotations.
+- Integrate security scanning and telemetry into the automation pipeline.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- Generated outputs (CSS, TS, JSON Schema, Compose, Swift, Kotlin, Flutter) written to
-  `packages/tokens-outputs` (gitignored).
-- `apps/workflows/token-sync` job exporting from Penpot, diffing, and creating PRs with AI summaries.
-- GitHub Actions workflow for token validation + drift detection + security scanning.
-- Token pipeline telemetry feeding Grafana/Loki dashboards.
-- Documentation for consuming generated tokens and interpreting SLO dashboards.
+- Harden Storybook 9.1 + Loki runners; document upgrade path to Storybook 10.
+- Extend orchestrator CLI to publish provenance metadata and changelog entries.
+- Wire security tooling (Scorecard, Trivy, Cargo Audit) into scheduled workflows.
 
-**Exit Criteria**
+### Automation & Quality Gates
 
-- CI pipeline produces token outputs on demand.
-- Drift detection opens annotated PR when Penpot snapshot changes, including AI-generated change notes.
-- Security scans and telemetry reports are green.
+- Add drift detection workflow to CI with approval gates and auto-rollback strategy.
+- Ensure generated outputs have snapshot coverage and consumer contract tests.
+- Validate telemetry dashboards capture automation success/failure with alerting hooks.
+
+### Deliverables
+
+- Multi-platform token outputs committed (gitignored as appropriate) with consumption docs.
+- Token sync workflow with AI summaries, security scans, and dashboards.
+- Runbooks describing token refresh cadence and incident response.
+
+### Exit Checklist
+
+- CI pipeline produces token outputs on demand and blocks merges on drift regressions.
+- Drift PRs include AI-generated context and remediation suggestions.
+- Security scans green with remediation backlog filed for warnings.
 
 ---
 
 ## Sprint 4 – UI Kernel & Adapters MVP (Weeks 7–8)
 
-**Focus**
+### Mission
 
-- Establish the shared UI kernel and first wave of framework adapters.
+Implement the Lit-based UI kernel, first-party adapters, and Storybook-powered validation tooling.
 
-**Prerequisites**
+### Workstreams
 
-- Storybook + Nx plugin stack validated in Sprint 3 (see
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
-- AI CLI baseline (`mimic assist` + `just` automations) configured so accessibility prompts work
-  during Storybook reviews.
+- Build `packages/ui-kernel` with accessibility primitives, vanilla-extract theming, and telemetry
+  hooks.
+- Ship React adapter (`packages/ui-adapters/react`) and sample kernel consumers.
+- Integrate kernel + tokens into Storybook with token intelligence addon and AI accessibility
+  prompts.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- `packages/ui-kernel` implemented with Lit + vanilla-extract theming and accessibility primitives.
-- React adapter (`packages/ui-adapters/react`) wrapping kernel components.
-- Storybook integration consuming kernel + tokens with automated docs tables and token intelligence addon.
-- Contract tests (Storybook, Vitest DOM, Playwright) covering kernel behaviour, feeding flake analytics.
-- AI remediation prompts available inside Storybook for accessibility and design checklist results.
+- Stabilize Playwright, Storybook interaction runner, and Loki pipelines on Node 22.20.
+- Add contract testing harness (Vitest DOM, Storybook test runner, Playwright journeys).
+- Document adapter interface contracts and versioning policy.
 
-**Exit Criteria**
+### Automation & Quality Gates
 
-- Storybook stories demonstrate new kernel components using generated tokens with token inspector addon active.
-- Visual/a11y tests pass against the new kernel with results recorded in telemetry dashboards.
+- Enforce Storybook visual/a11y gates with thresholds and flake triage dashboards.
+- Add adapter contract tests to CI with coverage tracking.
+- Ensure telemetry captures component usage, performance, and accessibility guidance hits.
+
+### Deliverables
+
+- UI kernel + React adapter packages with docs and example implementations.
+- Storybook workspace demonstrating kernel components with token inspector addon.
+- Accessibility runbooks, AI remediation prompts, and contract test suites.
+
+### Exit Checklist
+
+- Storybook demos use generated tokens and pass visual/a11y gates.
+- Adapter contract tests green with coverage meeting thresholds.
+- Telemetry dashboards show kernel metrics and accessibility prompt usage.
 
 ---
 
 ## Sprint 5 – Platform Integrations (Weeks 9–10)
 
-**Focus**
+### Mission
 
-- Wire the kernel into the reference applications and supply example integrations.
+Wire the kernel and tokens into reference applications across web, native, and desktop platforms,
+complete with instrumentation and examples.
 
-**Prerequisites**
+### Workstreams
 
-- Node/pnpm and Nx plugin stack ready for multi-app builds (see
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
-- Rust toolchain accessible for Compose/Tauri bridges referenced in the dependency matrix.
+- Upgrade Qwik web app, Expo/React Native app, Compose Multiplatform shell, and Tauri desktop shell
+  to consume kernel + tokens.
+- Publish example integrations for Astro/Remix/Next with AI-assisted onboarding scripts.
+- Instrument apps with OpenTelemetry and feed dashboards.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- Web app upgraded to Qwik City 2 using kernel + tokens with instrumentation hooks.
-- React Native app using Expo Router + new tokens; Compose Multiplatform/Tauri shells bound to
-  generated outputs and emitting OpenTelemetry data.
-- Example integrations for Astro/Remix/Next in `examples/` with AI-assisted setup scripts.
-- Compose/SwiftUI snapshot tests running in CI.
+- Ensure multi-platform build toolchains (Android/iOS SDKs, Rust, Tauri, Expo) are cached in CI.
+- Add shared navigation/state patterns for adapters to reuse.
+- Expand telemetry schema to capture platform-specific performance and UX data.
 
-**Exit Criteria**
+### Automation & Quality Gates
 
-- All reference apps compile with the new kernel and tokens, with telemetry dashboards showing baseline UX metrics.
-- Example projects documented, buildable, and include AI-assisted onboarding scripts.
+- Compose/SwiftUI snapshot suites, React Native Jest, and Playwright mobile web journeys running in
+  CI with flake monitoring.
+- Performance budgets enforced (initial load, bundle size) with alerts in dashboards.
+- Example apps validated by `just`/AI scripts end-to-end.
+
+### Deliverables
+
+- Reference apps compiling with instrumentation and documented integration steps.
+- Example repo automation scripts and AI onboarding flows.
+- Dashboard updates summarizing platform health metrics.
+
+### Exit Checklist
+
+- All reference apps build and pass platform-specific test suites in CI.
+- Example projects documented with quickstart scripts verified by QA.
+- Telemetry dashboards show baseline platform metrics with owners assigned.
 
 ---
 
 ## Sprint 6 – Docs, DX & AI Assistance (Weeks 11–12)
 
-**Focus**
+### Mission
 
-- Launch the new documentation experience and polish developer tooling.
+Launch the new documentation experience, refine developer tooling, and expand AI-powered workflows.
 
-**Prerequisites**
+### Workstreams
 
-- Storybook + AI CLI stack healthy to power embedded docs previews and `mimic assist` flows (see
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
-- `just` catalogue and Nx generators from earlier sprints stable for CLI doc captures.
+- Build Starlight-based docs app with MDX, Storybook embeds, and API tables.
+- Document token governance, release process, migration guides, and AI tooling playbooks.
+- Enhance `mimic assist` CLI with guided flows, offline hints, and telemetry.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- Starlight-based docs app with MDX, Storybook embeds, interactive API tables, and telemetry dashboards.
-- Token governance, release process, migration guides authored with SLO references.
-- `mimic assist` CLI documented with Ollama + OpenAI + Copilot flows and AI-powered command wrappers.
-- CODEOWNERS, automation, and `just` task UX refined with AI hints.
+- Integrate docs site with Storybook, telemetry dashboards, and search indexing (Algolia/elastic).
+- Automate doc linting, link checking, and preview deployments.
+- Expand `just` catalogue with doc/DX focused commands.
 
-**Exit Criteria**
+### Automation & Quality Gates
 
-- Docs site deployed (preview and local instructions) with AI-enhanced search and live Storybook embeds.
-- CLI helper usable for scaffolding, Q&A, and AI-orchestrated workflows.
+- Docs lint (markdownlint, Vale if available) and link check enforced in CI with diff-based filters.
+- Coverage tracking for CLI commands via automated smoke tests.
+- DX telemetry capturing CLI usage, docs search metrics, and onboarding funnel.
+
+### Deliverables
+
+- Docs site preview with Storybook embeds, AI search, and governance content.
+- Updated CONTRIBUTING/DEVELOPMENT guides and release playbooks.
+- `mimic assist` CLI enhancements and documentation.
+
+### Exit Checklist
+
+- Docs preview deployed; content reviewed by Docs/DX leads.
+- AI tooling instructions validated across Ollama/OpenAI/Copilot flows.
+- Telemetry dashboards updated with DX metrics and alert thresholds.
 
 ---
 
 ## Sprint 7 – Quality Gates & GA Readiness (Weeks 13–14)
 
-**Focus**
+### Mission
 
-- Harden CI/CD, run beta testing, and prepare GA release assets.
+Harden CI/CD, complete beta programme follow-ups, and prepare the GA release package.
 
-**Prerequisites**
+### Workstreams
 
-- Full dependency matrix validated: Node/pnpm, Rust toolchain, Storybook runners, AI CLIs (see
-  [Foundational Dependencies](./IMPLEMENTATION_PLAN_2.0.md#foundational-dependencies)).
-- Follow-ups from the matrix (Rust in GitHub Actions, AI optionality on runners) tracked and nearing
-  closure to unblock GA criteria.
+- Expand CI matrix with accessibility, Playwright, Loki, Compose/SwiftUI, and security suites with
+  flake analytics.
+- Run beta programme, capture feedback, and close critical bugs.
+- Compile release notes, migration toolkit, communications plan, and QA bot integrations.
 
-**Key Outcomes**
+### Architecture & Tooling Upgrades
 
-- Enhanced CI matrix (a11y, Playwright journeys, Loki diffs, Compose/SwiftUI snapshots) with flake tracking and alerting.
-- Beta programme feedback incorporated and success metrics reviewed against SLOs.
-- Changesets-based release notes, migration toolkit, and communication plan ready (AI-generated summaries).
-- Token analytics dashboard prototype and QA bot hooks (Slack/Matrix) operating on telemetry
-  streams.
+- Finalize runtime parity across local, CI, and production automation (Node/pnpm, Rust, Storybook
+  runners, AI CLIs).
+- Harden observability pipelines (Grafana/Tempo/Loki dashboards, alert routing to Slack/Matrix).
+- Automate release packaging with Changesets, provenance metadata, and signing.
 
-**Exit Criteria**
+### Automation & Quality Gates
 
-- CI green across the matrix for multiple consecutive runs within agreed SLO budget.
-- GA announcement copy, migration guides, release artefacts staged, and analytics dashboard live.
+- Require consecutive green runs across full CI matrix within agreed SLO budgets.
+- Security scans (Scorecard, Trivy, Cargo Audit) must be zero critical/high issues.
+- QA bot + analytics dashboards validated with simulated incidents.
+
+### Deliverables
+
+- GA release assets (Changesets notes, migration toolkit, announcement copy).
+- Beta programme report with resolved actions.
+- QA bot prototype and analytics dashboards wired to alerting channels.
+
+### Exit Checklist
+
+- CI matrix green with retries within SLO; release go/no-go checklist signed off.
+- Release communications staged and approved by stakeholders.
+- QA bot notifying on telemetry anomalies and runbooks finalised.
 
 ---
 
 ## Cross-Sprint Backlog
 
 - Storybook 10 addon parity tracking.
-- Token analytics dashboard + QA notification bot.
+- Token analytics dashboard + QA notification bot enhancements.
 - Penpot plugin enhancements (semantic naming, validation hints).
 - CLI advanced commands (`design diff`, `story publish`, `repo doctor`) and AI assistant extensions.
 - Security hardening backlog (Scorecard, Trivy, Cargo Audit follow-ups).
-- 1.x migration codemods and API rename mapping.
+- Mimic 1.x migration codemods and API rename mapping.
 
 Review and reprioritise these items at the end of each sprint.
