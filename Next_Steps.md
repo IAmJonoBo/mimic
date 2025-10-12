@@ -116,6 +116,14 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
   `pnpm typecheck` complete with engine mismatch warnings; `pnpm nx run-many -t test` and `pnpm build`
   continue to crash the terminal while constructing the project graph; targeted `pnpm --filter
   @mimic/design-tokens test -- --run` added to cover new platform lookup behaviour.
+- 2025-10-28: Re-ran baseline commands before sprint planning refresh — `pnpm format:check` fails with
+  47 errors/4 warnings (Biome broken symlink notices persist); `pnpm lint:workspace` and
+  `pnpm typecheck` pass despite Node engine warnings; `pnpm nx run-many -t test` and `pnpm build`
+  still crash the shell while Nx constructs the project graph; `pnpm audit` reports no known
+  vulnerabilities. Captured new terminal crashes for DevOps to correlate with ongoing Nx runtime issue.
+- 2025-10-28: Expanded `docs/SPRINT_PLAN.md` with mission/workstream/quality-gate sections for each
+  sprint plus baseline gate summary so squads can operationalise the roadmap; ensure squads cross-link
+  the new structure from sprint kickoff notes.
 
 ## Deliverables
 
