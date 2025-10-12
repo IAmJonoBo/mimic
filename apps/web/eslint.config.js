@@ -1,8 +1,8 @@
 import js from '@eslint/js';
-import globals from 'globals';
-import tseslint from 'typescript-eslint';
 import { globalIgnores } from 'eslint/config';
 import { qwikEslint9Plugin } from 'eslint-plugin-qwik';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 const ignores = [
   '**/*.log',
@@ -44,6 +44,7 @@ const ignores = [
   '**/yarn.lock',
   '**/server',
   'eslint.config.js',
+  '**/eslint.config.js',
 ];
 
 export default tseslint.config(

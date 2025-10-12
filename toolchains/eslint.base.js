@@ -2,6 +2,7 @@ import js from '@eslint/js';
 import nxEslintPlugin from '@nx/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default [
@@ -110,9 +111,9 @@ export default [
       ecmaVersion: 2024,
       sourceType: 'module',
       globals: {
-        browser: true,
-        node: true,
-        es2024: true,
+        ...globals.browser,
+        ...globals.node,
+        ...globals.es2024,
       },
     },
   },
@@ -122,6 +123,7 @@ export default [
       import: importPlugin,
       'simple-import-sort': simpleImportSort,
       '@nx': nxEslintPlugin,
+      '@typescript-eslint': tseslint.plugin,
     },
     rules: {
       'simple-import-sort/imports': 'warn',
@@ -132,13 +134,7 @@ export default [
         'warn',
         {
           alphabetize: { order: 'asc', caseInsensitive: true },
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            ['parent', 'sibling', 'index'],
-            'unknown',
-          ],
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index'], 'unknown'],
           pathGroupsExcludedImportTypes: ['builtin'],
           pathGroups: [
             {
