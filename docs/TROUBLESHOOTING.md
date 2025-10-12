@@ -2,7 +2,7 @@
 
 Common issues and solutions for the Mimic design system monorepo.
 
-> Applies to the Mimic 2.0 toolchain (Node 22.20 / pnpm 10.17.1). If you are working from older
+> Applies to the Mimic 2.0 toolchain (Node 22.20 / pnpm 10.18.2). If you are working from older
 > instructions, cross-check the latest references in [`docs/README.md`](./README.md).
 
 ## 📋 Table of Contents
@@ -41,7 +41,7 @@ Common issues and solutions for the Mimic design system monorepo.
 
    ```bash
    node --version  # Should be 18.0.0 or later
-   pnpm --version  # Should be 10.17.1 or later
+   pnpm --version  # Should be 10.18.2 or later
    ```
 
 3. **Reset workspace:**

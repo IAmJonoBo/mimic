@@ -2,7 +2,9 @@
 
 ## Overview
 
-This document summarizes the comprehensive codebase upgrade performed following the TOOLCHAIN_UPGRADE_PLAYBOOK to improve Developer Experience (DX), User Experience (UX), and Quality Control (QC).
+This document summarizes the comprehensive codebase upgrade performed following the
+TOOLCHAIN_UPGRADE_PLAYBOOK to improve Developer Experience (DX), User Experience (UX), and Quality
+Control (QC).
 
 ## Upgrade Date
 
@@ -15,7 +17,7 @@ September 30, 2025
 | Package         | Before  | After   | Notes             |
 | --------------- | ------- | ------- | ----------------- |
 | Node.js         | 22.19.0 | 22.20.0 | Latest LTS        |
-| pnpm            | 10.17.0 | 10.17.1 | Package manager   |
+| pnpm            | 10.17.0 | 10.18.2 | Package manager   |
 | TypeScript      | 5.9.2   | 5.9.3   | Latest stable     |
 | Nx              | 21.6.2  | 21.6.2  | Already at latest |
 | Storybook       | 9.1.9   | 9.1.9   | Already at latest |
@@ -57,7 +59,7 @@ September 30, 2025
 - `/package.json` - Root package with all new dependencies
 - `/pnpm-lock.yaml` - Updated lockfile with new dependency tree
 - `/.nvmrc` - Already at 22.20.0
-- `/setup.sh` - Updated pnpm version to 10.17.1
+- `/setup.sh` - Updated pnpm version to 10.18.2
 
 ### Application Packages
 
@@ -135,7 +137,8 @@ All validation steps completed successfully:
 
 ### Peer Dependency Warnings
 
-Some Storybook v8 addons show peer dependency warnings with Storybook v9. This is expected and doesn't affect functionality. The warnings are:
+Some Storybook v8 addons show peer dependency warnings with Storybook v9. This is expected and
+doesn't affect functionality. The warnings are:
 
 - `@storybook/addon-essentials@8.6.14` expects `storybook@^8.6.14` but found `9.1.9`
 - Other v8 addons show similar warnings
@@ -144,7 +147,9 @@ These can be safely ignored as Storybook v9 maintains backward compatibility wit
 
 ### Node Version Warning
 
-The project requires Node.js 22.20.0, but the current environment has 20.19.5. This is expected in CI environments without Node version management. Developers should use nvm or similar tools to install the correct version locally.
+The project requires Node.js 22.20.0, but the current environment has 20.19.5. This is expected in CI
+environments without Node version management. Developers should use nvm or similar tools to install
+the correct version locally.
 
 ## Next Steps
 
@@ -179,7 +184,7 @@ nvm use 22.20.0
 
 # Enable pnpm
 corepack enable
-corepack prepare pnpm@10.17.1 --activate
+corepack prepare pnpm@10.18.2 --activate
 
 # Install dependencies
 pnpm install

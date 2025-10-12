@@ -28,8 +28,8 @@ phase-by-phase delivery status.
 
 | Tool        | Version                        | Installation Notes                                            |
 | ----------- | ------------------------------ | ------------------------------------------------------------- |
-| Node.js     | ≥ 22 LTS (22.20.0 recommended) | `corepack enable && corepack prepare pnpm@10.17.1 --activate` |
-| pnpm        | ≥ 10.17.1                      | Included with Node corepack                                   |
+| Node.js     | ≥ 22 LTS (22.20.0 recommended) | `corepack enable && corepack prepare pnpm@10.18.2 --activate` |
+| pnpm        | ≥ 10.18.2                      | Included with Node corepack                                   |
 | Rust        | Latest stable                  | Required for Tauri desktop apps                               |
 | Java        | 17+                            | For Compose Multiplatform development                         |
 | Xcode       | Latest                         | iOS React Native development (macOS only)                     |

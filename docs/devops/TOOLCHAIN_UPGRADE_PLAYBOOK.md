@@ -19,7 +19,7 @@ Dictionary, and Penpot automation on their latest supported versions.
 
    ```bash
    corepack enable
-   corepack prepare pnpm@10.17.1 --activate
+   corepack prepare pnpm@10.18.2 --activate
    ```
 
 ## 2. Plan the Upgrade

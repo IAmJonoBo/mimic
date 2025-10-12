@@ -23,7 +23,7 @@ fi
 if command -v corepack >/dev/null 2>&1; then
   echo "⚙️ Enabling corepack and preparing pnpm..."
   corepack enable
-  corepack prepare pnpm@10.17.1 --activate
+  corepack prepare pnpm@10.18.2 --activate
 else
   echo "⚠️ corepack not found; install pnpm manually if needed"
 fi

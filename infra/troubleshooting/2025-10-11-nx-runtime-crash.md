@@ -3,14 +3,14 @@
 ## Summary
 
 - `pnpm format:check` and `pnpm lint:workspace` crash with exit code 134 when Nx initialises the workspace graph.
-- Failure reproduces after aligning to Node.js 22.20.0 and pnpm 10.17.1 using `nvm` within the current devcontainer.
+- Failure reproduces after aligning to Node.js 22.20.0 and pnpm 10.18.2 using `nvm` within the current devcontainer.
 - Captured terminal transcripts show `fatal runtime error: failed to initiate panic, error 5`
   emitted by the Nx native binary before aborting.
 
 ## Environment
 
 - Node.js: 22.20.0 (via `nvm install 22.20.0`)
-- pnpm: 10.17.1 (`corepack prepare pnpm@10.17.1 --activate`)
+- pnpm: 10.18.2 (`corepack prepare pnpm@10.18.2 --activate`)
 - OS image: `mcr.microsoft.com/devcontainers/base:bookworm`
 - Nx CLI: workspace pinned version (see `package.json`)
 - Cache: shared pnpm wheelhouse at `/opt/pnpm-store` hydrated via `pnpm fetch`
@@ -22,7 +22,7 @@
 nvm install 22.20.0
 nvm use 22.20.0
 corepack enable
-corepack prepare pnpm@10.17.1 --activate
+corepack prepare pnpm@10.18.2 --activate
 pnpm install --frozen-lockfile
 NX_DAEMON=false pnpm format:check
 ```
