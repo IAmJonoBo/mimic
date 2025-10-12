@@ -1,14 +1,9 @@
 /* Import design tokens - Mimic collision-prevention architecture with ds- prefix */
-@import './styles/tokens.css';
+@import "./styles/tokens.css";
 
 /* Global styles for the Mimic design token demo */
 body {
-  font-family: var(
-    --ds-typography-font-family-primary,
-    'Inter',
-    system-ui,
-    sans-serif
-  );
+  font-family: var(--ds-typography-font-family-primary, "Inter", system-ui, sans-serif);
   color: var(--ds-color-neutral-900, #171717);
   background-color: var(--ds-color-background-primary, #fafafa);
   margin: 0;

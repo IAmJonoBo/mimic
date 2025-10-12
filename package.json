@@ -95,6 +95,7 @@
     "setup:complete": "pnpm install && pnpm clean:apple && pnpm build",
     "workspace:info": "nx report && nx graph --file=tmp/workspace-graph.json",
     "analyze": "pnpm build && pnpm workspace:info",
+    "security:gitleaks": "./scripts/run-gitleaks.sh detect --no-banner",
     "upgrade:plan": "nx migrate latest",
     "upgrade:latest": "pnpm up --latest --recursive --workspace-root",
     "upgrade:verify": "pnpm install && cross-env NX_NO_CLOUD=true pnpm nx run-many -t build,test,lint --exclude=workspace-format"
@@ -137,8 +138,8 @@
     "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-simple-import-sort": "12.1.1",
-    "globals": "16.4.0",
     "glob": "11.0.3",
+    "globals": "16.4.0",
     "husky": "9.1.7",
     "jiti": "2.6.1",
     "jsdom": "27.0.0",
@@ -146,12 +147,14 @@
     "markdownlint-cli2": "0.18.1",
     "npm-run-all2": "8.0.4",
     "nx": "21.6.4",
+    "nx-cloud": "^19.1.0",
     "prettier": "3.6.2",
     "prettier-plugin-tailwindcss": "0.6.14",
     "rimraf": "6.0.1",
     "stylelint": "16.25.0",
     "stylelint-config-standard": "39.0.1",
     "stylelint-config-tailwindcss": "1.0.0",
+    "stylelint-order": "7.0.0",
     "typescript": "5.9.3",
     "typescript-eslint": "8.46.0",
     "vitest": "3.2.4",
@@ -169,7 +172,7 @@
       "prettier --write"
     ],
     "*.{css,scss,sass}": [
-      "stylelint --fix"
+      "biome format --write"
     ],
     "*.{md,mdx}": [
       "node scripts/fix-markdown-line-length.js",

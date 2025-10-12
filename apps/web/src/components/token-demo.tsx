@@ -1,13 +1,7 @@
 import { component$ } from '@builder.io/qwik';
 import { Link } from '@builder.io/qwik-city';
 
-import {
-  buttonPrimary,
-  buttonSecondary,
-  card,
-  heading,
-  text,
-} from '../styles/theme.css';
+import { buttonPrimary, buttonSecondary, card, heading, text } from '../styles/theme.css';
 
 // Demo component showcasing design token integration as documented in USER_GUIDE.md
 // This demonstrates the collision-safe ds- prefixed tokens with Vanilla Extract + Qwik
@@ -16,9 +10,8 @@ export const TokenDemo = component$(() => {
     <div class={card}>
       <h1 class={heading}>Design Token Integration Demo</h1>
       <p class={text}>
-        This component demonstrates the design token pipeline integration with
-        Qwik City and Vanilla Extract, following the architecture documented in
-        the USER_GUIDE.md.
+        This component demonstrates the design token pipeline integration with Qwik City and Vanilla Extract, following
+        the architecture documented in the USER_GUIDE.md.
       </p>
 
       <div
@@ -28,18 +21,10 @@ export const TokenDemo = component$(() => {
           marginTop: 'var(--ds-spacing-lg)',
         }}
       >
-        <button
-          type="button"
-          class={buttonPrimary}
-          onClick$={() => alert('Primary action triggered!')}
-        >
+        <button type="button" class={buttonPrimary} onClick$={() => alert('Primary action triggered!')}>
           Primary Button
         </button>
-        <button
-          type="button"
-          class={buttonSecondary}
-          onClick$={() => alert('Secondary action triggered!')}
-        >
+        <button type="button" class={buttonSecondary} onClick$={() => alert('Secondary action triggered!')}>
           Secondary Button
         </button>
       </div>

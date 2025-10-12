@@ -34,10 +34,7 @@
     "tokens:sync": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": [
-          "nx run design-tokens:tokens:export",
-          "nx run design-tokens:tokens:build"
-        ],
+        "commands": ["nx run design-tokens:tokens:export", "nx run design-tokens:tokens:build"],
         "cwd": "packages/design-tokens",
         "parallel": false
       }

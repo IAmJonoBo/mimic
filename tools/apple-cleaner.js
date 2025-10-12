@@ -27,61 +27,55 @@ const APPLE_METADATA_PATTERNS = [
 const CLEANING_COMMANDS = [
   {
     desc: 'Removing .DS_Store files',
-    build: root => `find ${quotePath(root)} -name '.DS_Store' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name '.DS_Store' -type f -delete`,
   },
   {
     desc: 'Removing AppleDouble files',
-    build: root => `find ${quotePath(root)} -name '._*' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name '._*' -type f -delete`,
   },
   {
     desc: 'Removing Spotlight metadata',
-    build: root =>
-      `find ${quotePath(root)} -name '.Spotlight-V100' -type d -exec rm -rf {} +`,
+    build: (root) => `find ${quotePath(root)} -name '.Spotlight-V100' -type d -exec rm -rf {} +`,
   },
   {
     desc: 'Removing FSEvents metadata',
-    build: root =>
-      `find ${quotePath(root)} -name '.fseventsd' -type d -exec rm -rf {} +`,
+    build: (root) => `find ${quotePath(root)} -name '.fseventsd' -type d -exec rm -rf {} +`,
   },
   {
     desc: 'Removing Trash folders',
-    build: root =>
-      `find ${quotePath(root)} -name '.Trashes' -type d -exec rm -rf {} +`,
+    build: (root) => `find ${quotePath(root)} -name '.Trashes' -type d -exec rm -rf {} +`,
   },
   {
     desc: 'Removing temporary items',
-    build: root =>
-      `find ${quotePath(root)} -name '.TemporaryItems' -type d -exec rm -rf {} +`,
+    build: (root) => `find ${quotePath(root)} -name '.TemporaryItems' -type d -exec rm -rf {} +`,
   },
   {
     desc: 'Removing Windows thumbnails',
-    build: root => `find ${quotePath(root)} -name 'Thumbs.db' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name 'Thumbs.db' -type f -delete`,
   },
   {
     desc: 'Removing Xcode user data',
-    build: root =>
-      `find ${quotePath(root)} -name '*.xcuserdata*' -type d -exec rm -rf {} +`,
+    build: (root) => `find ${quotePath(root)} -name '*.xcuserdata*' -type d -exec rm -rf {} +`,
   },
   {
     desc: 'Removing Xcode user data directories',
-    build: root =>
-      `find ${quotePath(root)} -name 'xcuserdata' -type d -exec rm -rf {} +`,
+    build: (root) => `find ${quotePath(root)} -name 'xcuserdata' -type d -exec rm -rf {} +`,
   },
   {
     desc: 'Removing crash logs',
-    build: root => `find ${quotePath(root)} -name '*.crash' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name '*.crash' -type f -delete`,
   },
   {
     desc: 'Removing crash log files',
-    build: root => `find ${quotePath(root)} -name '*.crashlog' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name '*.crashlog' -type f -delete`,
   },
   {
     desc: 'Removing temporary files',
-    build: root => `find ${quotePath(root)} -name '*.tmp' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name '*.tmp' -type f -delete`,
   },
   {
     desc: 'Removing backup files',
-    build: root => `find ${quotePath(root)} -name '~*' -type f -delete`,
+    build: (root) => `find ${quotePath(root)} -name '~*' -type f -delete`,
   },
 ];
 
@@ -107,20 +101,18 @@ function quotePath(value) {
 }
 
 function normalizeRoots(projectRoots) {
-  const candidates = Array.isArray(projectRoots)
-    ? projectRoots
-    : [projectRoots];
+  const candidates = Array.isArray(projectRoots) ? projectRoots : [projectRoots];
   const normalized = new Set();
 
   candidates
-    .map(candidate => {
+    .map((candidate) => {
       const trimmed = candidate?.trim();
       if (trimmed) {
         return trimmed;
       }
       return '.';
     })
-    .forEach(candidate => {
+    .forEach((candidate) => {
       const sanitized = candidate === '.' ? '.' : candidate.replace(/\/$/, '');
       if (!sanitized) {
         return;
@@ -150,7 +142,7 @@ function cleanAppleJunk(projectRoots = ['.']) {
       : `Starting Apple junk cleanup for ${roots.length} paths...`
   );
 
-  roots.forEach(root => {
+  roots.forEach((root) => {
     const label = root === '.' ? 'workspace root' : root;
     CLEANING_COMMANDS.forEach(({ desc, build }) => {
       safeExec(build(root), `${desc} in ${label}`);
@@ -161,7 +153,7 @@ function cleanAppleJunk(projectRoots = ['.']) {
 }
 
 function fileMatchesApplePattern(filePath) {
-  return APPLE_METADATA_PATTERNS.some(pattern => pattern.test(filePath));
+  return APPLE_METADATA_PATTERNS.some((pattern) => pattern.test(filePath));
 }
 
 function checkTrackedAppleMetadata(projectRoots = ['.']) {
@@ -176,24 +168,18 @@ function checkTrackedAppleMetadata(projectRoots = ['.']) {
   const files = output.split('\0').filter(Boolean);
   const roots = normalizeRoots(projectRoots);
   const offenders = files
-    .filter(file =>
-      roots.includes('.')
-        ? true
-        : roots.some(root => file.startsWith(`${root}/`) || file === root)
-    )
+    .filter((file) => (roots.includes('.') ? true : roots.some((root) => file.startsWith(`${root}/`) || file === root)))
     .filter(fileMatchesApplePattern);
 
   if (offenders.length > 0) {
     log('❌ Tracked Apple metadata files detected:');
-    offenders.slice(0, 20).forEach(file => {
+    offenders.slice(0, 20).forEach((file) => {
       log(`   • ${file}`);
     });
     if (offenders.length > 20) {
       log(`   • ...and ${offenders.length - 20} more`);
     }
-    log(
-      'Please remove these files from version control (git rm --cached <path>) and re-run the cleaner.'
-    );
+    log('Please remove these files from version control (git rm --cached <path>) and re-run the cleaner.');
     process.exitCode = 1;
   } else {
     log('✅ No tracked Apple metadata files found');
@@ -211,23 +197,19 @@ function stagedRootsWithin(explicitRoots) {
     }
 
     const directories = new Set();
-    stagedFiles.forEach(file => {
+    stagedFiles.forEach((file) => {
       const dir = path.dirname(file);
       const normalizedDir = dir === '.' ? '.' : dir;
       if (
         !explicitRoots.length ||
         explicitRoots.includes('.') ||
-        explicitRoots.some(
-          root => normalizedDir === root || normalizedDir.startsWith(`${root}/`)
-        )
+        explicitRoots.some((root) => normalizedDir === root || normalizedDir.startsWith(`${root}/`))
       ) {
         directories.add(normalizedDir);
       }
     });
 
-    const roots = Array.from(directories).filter(
-      dir => dir === '.' || fs.existsSync(dir)
-    );
+    const roots = Array.from(directories).filter((dir) => dir === '.' || fs.existsSync(dir));
     if (roots.includes('.')) {
       return ['.'];
     }

@@ -115,14 +115,7 @@ async function main() {
 
   // Get all markdown files (excluding node_modules, etc.)
   const files = await glob(
-    [
-      'README.md',
-      'CONTRIBUTING.md',
-      'DEVELOPMENT.md',
-      'docs/**/*.md',
-      'packages/**/*.md',
-      '.github/**/*.md',
-    ],
+    ['README.md', 'CONTRIBUTING.md', 'DEVELOPMENT.md', 'docs/**/*.md', 'packages/**/*.md', '.github/**/*.md'],
     {
       ignore: [
         '**/node_modules/**',

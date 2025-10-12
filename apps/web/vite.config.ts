@@ -2,13 +2,14 @@
  * This is the base config for vite.
  * When building, the adapter config is used which loads this file and extends it.
  */
-import { defineConfig, type UserConfig } from 'vite';
-import { qwikVite } from '@builder.io/qwik/optimizer';
-import { qwikCity } from '@builder.io/qwik-city/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
-import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { qwikVite } from '@builder.io/qwik/optimizer';
+import { qwikCity } from '@builder.io/qwik-city/vite';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
+import { defineConfig, type UserConfig } from 'vite';
+import tsconfigPaths from 'vite-tsconfig-paths';
 import pkg from './package.json';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -89,21 +90,14 @@ export default defineConfig((): UserConfig => {
  * @param {Object} devDependencies - List of development dependencies
  * @param {Object} dependencies - List of production dependencies
  */
-function errorOnDuplicatesPkgDeps(
-  devDependencies: PkgDep,
-  dependencies: PkgDep
-) {
+function errorOnDuplicatesPkgDeps(devDependencies: PkgDep, dependencies: PkgDep) {
   let msg = '';
   // Create an array 'duplicateDeps' by filtering devDependencies.
   // If a dependency also exists in dependencies, it is considered a duplicate.
-  const duplicateDeps = Object.keys(devDependencies).filter(
-    dep => dependencies[dep]
-  );
+  const duplicateDeps = Object.keys(devDependencies).filter((dep) => dependencies[dep]);
 
   // include any known qwik packages
-  const qwikPkg = Object.keys(dependencies).filter(value =>
-    /qwik/i.test(value)
-  );
+  const qwikPkg = Object.keys(dependencies).filter((value) => /qwik/i.test(value));
 
   // any errors for missing "qwik-city-plan"
   // [PLUGIN_ERROR]: Invalid module "@qwik-city-plan" is not a valid package

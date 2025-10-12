@@ -124,6 +124,29 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
 - 2025-10-28: Expanded `docs/SPRINT_PLAN.md` with mission/workstream/quality-gate sections for each
   sprint plus baseline gate summary so squads can operationalise the roadmap; ensure squads cross-link
   the new structure from sprint kickoff notes.
+- 2025-10-29: Baseline rerun (Node 22.19.0) – `pnpm nx run-many -t test --output-style=static`,
+  `pnpm lint:workspace`, `pnpm typecheck`, `pnpm audit --prod`, and `pnpm nx run-many -t build
+  --exclude=workspace-format --output-style=static` complete with existing Node engine warnings and
+  Nx Cloud client download notices. `pnpm format:check` still reports pre-existing Biome formatting
+  drift (45 errors, 4 warnings). `npx gitleaks@latest detect` failed because npm could not determine a
+  runnable binary inside the package; capture the log for security tooling follow-up.
+- 2025-10-29: Updated CI (`ci.yml`, `pr-verification.yml`, `visual-tests.yml`) to inject the Nx Cloud
+  token via the `NX_CLOUD_ACCESS_TOKEN` repository secret instead of shelling out to `gh variable get`.
+  Documented the new secret requirement in `docs/devops/nx-remote-cache.md`; coordinate with DevOps to
+  store the secret in GitHub and validate Nx Cloud self-healing once populated.
+- 2025-10-30: Added `scripts/configure-nx-cloud.sh` so workflows disable Nx Cloud gracefully when the
+  secret is absent, vendored the `nx-cloud` package, and configured the `nx-cloud` tasks runner in
+  `nx.json`. Reran the baseline: `pnpm nx run-many -t test --parallel=1 --output-style=static`,
+  `pnpm lint:workspace`, `pnpm typecheck`, `pnpm nx run-many -t build --exclude=workspace-format
+  --output-style=static`, and `pnpm audit --prod` succeed with existing Node engine warnings;
+  `pnpm format:check` still reports legacy Biome drift and `npx gitleaks@latest detect` fails because
+  npm cannot determine the correct executable. Nx now logs "Nx Cloud Will Not Be Used" when
+  `NX_NO_CLOUD=true` is injected, suppressing repeated agent download attempts in forked PRs.
+- 2025-10-30: Removed stale `.trunk` symlinks, ignored the directory going forward, and ran Biome's
+  autofixer to clear the long-standing formatter drift so `pnpm format:check` exits cleanly.
+- 2025-10-30: Added `scripts/run-gitleaks.sh` and the `pnpm security:gitleaks` helper to download and
+  cache the upstream CLI, restoring the repository's secret scanning gate without relying on the
+  broken `npx gitleaks@latest` package entry point.
 
 ## Deliverables
 

@@ -237,3 +237,6 @@ metro.config.*.js
 
 # Flipper
 flipper-rn-addons.json
+
+# Trunk CLI cache
+.trunk/

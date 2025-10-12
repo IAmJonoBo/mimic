@@ -1,10 +1,7 @@
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx,qwik}',
-    './packages/design-system/src/**/*.{js,ts,jsx,tsx,qwik}',
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,qwik}', './packages/design-system/src/**/*.{js,ts,jsx,tsx,qwik}'],
   safelist: [
     {
       // Allow all ds- prefixed CSS variables (prevents Specify-documented conflicts)

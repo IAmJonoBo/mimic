@@ -57,12 +57,10 @@
   --ds-spacing-xl: 2rem; /** Extra large spacing */
   --ds-spacing-2xl: 3rem; /** 2x extra large spacing */
   --ds-spacing-3xl: 4rem; /** 3x extra large spacing */
-  --ds-typography-font-family-primary:
-    Inter, system-ui, sans-serif; /** Primary font family for body text */
-  --ds-typography-font-family-heading:
-    Inter, system-ui, sans-serif; /** Font family for headings */
+  --ds-typography-font-family-primary: Inter, system-ui, sans-serif; /** Primary font family for body text */
+  --ds-typography-font-family-heading: Inter, system-ui, sans-serif; /** Font family for headings */
   --ds-typography-font-family-monospace:
-    'JetBrains Mono', Consolas, Monaco, monospace; /** Monospace font family for code */
+    "JetBrains Mono", Consolas, Monaco, monospace; /** Monospace font family for code */
   --ds-typography-font-size-xs: 0.75rem; /** Extra small font size */
   --ds-typography-font-size-sm: 0.875rem; /** Small font size */
   --ds-typography-font-size-base: 1rem; /** Base font size */
@@ -112,8 +110,7 @@
   --ds-input-font-size: 1rem; /** Input font size */
   --ds-input-border: 1px solid #e5e5e5; /** Input border */
   --ds-input-border-focus: 2px solid #3b82f6; /** Input focus border */
-  --ds-heading-font-family:
-    Inter, system-ui, sans-serif; /** Heading font family */
+  --ds-heading-font-family: Inter, system-ui, sans-serif; /** Heading font family */
   --ds-heading-font-weight: 700; /** Heading font weight */
   --ds-heading-line-height: 1.25; /** Heading line height */
   --ds-heading-h1-font-size: 2.25rem; /** H1 font size */
