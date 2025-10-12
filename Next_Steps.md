@@ -72,6 +72,8 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
 - 2025-10-18: Updated `.github/workflows/pr-verification.yml` so the Nx typecheck exit code is surfaced while
   providing a sequential `pnpm typecheck` fallback when the affected run fails, matching the workspace script
   design and keeping CI visibility during Nx instability.
+- 2025-10-19: Tightened the PR verification gate by removing the `continue-on-error` guard from the affected
+  typecheck step, ensuring the Nx exit status fails the workflow even when the sequential fallback runs.
 - 2025-10-16: Removed workspace `ignoreDeprecations` overrides to restore compatibility with TypeScript 5.9;
   `pnpm typecheck` now completes successfully on Node 22.19.0 while we wait for the container image to
   upgrade to the required Node 22.20.0 baseline.
