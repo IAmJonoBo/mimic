@@ -147,6 +147,9 @@ typecheck --nx-bail` stalled after kicking off five projects (manual SIGTERM at 
 - 2025-10-30: Added `scripts/run-gitleaks.sh` and the `pnpm security:gitleaks` helper to download and
   cache the upstream CLI, restoring the repository's secret scanning gate without relying on the
   broken `npx gitleaks@latest` package entry point.
+- 2025-10-13: Scaffolded the Rust token orchestrator pipeline (Penpot ingest, governance checks,
+  multi-platform emitters, OpenTelemetry spans) with integration tests and wired pnpm scripts to
+  run the new CLI before legacy Style Dictionary tasks.
 
 ## Deliverables
 

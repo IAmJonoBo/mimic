@@ -238,6 +238,9 @@ mimic/
 
 **Deliverables**: Deterministic token pipeline, drift detection workflow, CLI usage docs.
 
+➡️ Reference [`packages/token-orchestrator/README.md`](../packages/token-orchestrator/README.md) for the
+Rust orchestrator usage guide, feature flags, and build targets.
+
 ### Phase 3 – UI Kernel & Adapters (Weeks 4–6)
 
 | Status | Task                                                                                                           | Owner            | Dependencies |

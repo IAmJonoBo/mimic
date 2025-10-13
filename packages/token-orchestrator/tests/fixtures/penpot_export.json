@@ -1,0 +1,33 @@
+{
+  "$schema": "https://design-tokens.org/dtcg.schema.json",
+  "collections": {
+    "core": {
+      "color": {
+        "brand": {
+          "$type": "color",
+          "$value": "#3366FF",
+          "$description": "Primary brand blue"
+        },
+        "accent": {
+          "$type": "color",
+          "$value": "#FF6F61",
+          "$description": "Accent coral"
+        }
+      },
+      "size": {
+        "spacing": {
+          "md": {
+            "$type": "dimension",
+            "$value": "16",
+            "$description": "Medium spacing"
+          },
+          "lg": {
+            "$type": "dimension",
+            "$value": "24",
+            "$description": "Large spacing"
+          }
+        }
+      }
+    }
+  }
+}
