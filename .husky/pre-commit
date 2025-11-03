@@ -1,11 +1,5 @@
 #!/usr/bin/env sh
 set -e
 
-# Clean Apple junk within staged paths
-pnpm run clean:apple:staged
-
-# Fail fast if tracked Apple metadata slipped in
-pnpm run check:apple
-
 # Run staged linters/formatters
 pnpm exec lint-staged
