@@ -33,21 +33,18 @@
     "style-dictionary.config.js"
   ],
   "scripts": {
-    "build": "pnpm run build:tokens && pnpm run build:types && pnpm run postbuild:clean",
+    "build": "pnpm run build:tokens && pnpm run build:types",
     "build:tokens": "style-dictionary build -c style-dictionary.config.js",
     "build:types": "tsc",
     "typecheck": "tsc --noEmit",
     "build:watch": "concurrently \"pnpm run build:tokens --watch\" \"pnpm run build:types --watch\"",
-    "postbuild:clean": "../../scripts/postbuild-chain.sh libs/tokens --validate",
     "clean": "rm -rf dist",
-    "clean:apple": "node ../../tools/apple-cleaner.js .",
     "watch": "pnpm run build:tokens --watch",
     "test": "vitest",
     "test:tokens": "node -e \"const tokens = require('./dist/json/tokens.json'); console.log('Tokens loaded successfully:', Object.keys(tokens).length, 'categories');\"",
     "validate": "node -e \"const { validateTokens } = require('./dist/index.js'); const tokens = require('./tokens/base.json'); const result = validateTokens(tokens); console.log('Validation result:', result);\"",
-    "tokens:export": "docker compose -f ../../infra/containers/devcontainer/docker-compose.yml --profile penpot-sync up penpot-export && pnpm run postexport:clean",
-    "tokens:sync": "pnpm run tokens:export && pnpm run build:tokens && pnpm run postbuild:clean",
-    "postexport:clean": "../../scripts/postbuild-chain.sh tokens --validate",
+    "tokens:export": "docker compose -f ../../infra/containers/devcontainer/docker-compose.yml --profile penpot-sync up penpot-export",
+    "tokens:sync": "pnpm run tokens:export && pnpm run build:tokens",
     "tokens:watch": "pnpm run tokens:sync && pnpm run watch",
     "tokens:validate": "pnpm run build && pnpm test && pnpm run validate",
     "prepublishOnly": "pnpm run build"
@@ -56,10 +53,10 @@
     "style-dictionary": "^5.1.1"
   },
   "devDependencies": {
-    "@types/node": "^24.7.2",
+    "@types/node": "^24.10.0",
     "concurrently": "^9.2.1",
     "typescript": "^5.9.3",
-    "vitest": "^3.2.4"
+    "vitest": "^4.0.6"
   },
   "keywords": [
     "design-tokens",

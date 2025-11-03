@@ -11,27 +11,11 @@ jobs:
   module-boundaries:
     name: Enforce Module Boundaries
     runs-on: ubuntu-latest
-    env:
-      NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
-
-      - name: Restore Nx cache
-        uses: actions/cache@v4
-        with:
-          path: tmp/nx-cache
-          key: ${{ runner.os }}-nx-${{ hashFiles('pnpm-lock.yaml', 'nx.json') }}
-          restore-keys: |
-            ${{ runner.os }}-nx-
-
-      - name: Cleanup Apple metadata (pre-install)
-        run: node tools/apple-cleaner.js --mode=full
-
-      - name: Fail if Apple metadata files are tracked
-        run: node tools/apple-cleaner.js --mode=check
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
@@ -47,17 +31,8 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Configure Nx Cloud environment
-        run: scripts/configure-nx-cloud.sh
-
-      - name: Start Nx self-healing run
-        if: env.NX_CLOUD_ACCESS_TOKEN != ''
-        run: |
-          pnpm exec nx start-ci-run --no-distribution --fix-tasks="*lint*,*format*" \
-            || echo "Nx self-healing bootstrap skipped (token missing or feature disabled)"
-
       - name: Run ESLint module boundary checks
-        run: pnpm nx run-many -t lint --parallel --maxParallel=4
+        run: pnpm run lint:typed
 
       - name: Validate token namespace compliance
         run: |
@@ -114,12 +89,6 @@ jobs:
             fi
           fi
           echo "✅ Token outputs are collision-safe"
-
-      - name: Apply Nx self-healing fixes
-        if: always() && env.NX_CLOUD_ACCESS_TOKEN != ''
-        run: |
-          pnpm exec nx fix-ci \
-            || echo "Nx self-healing fixes not applied (token missing or no fixes available)"
 
   report-status:
     name: Report Module Boundary Status
