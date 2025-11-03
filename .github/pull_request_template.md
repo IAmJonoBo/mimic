@@ -38,9 +38,8 @@ assignees: ''
 
 - [ ] All tests pass locally (`pnpm nx run-many -t test`)
 - [ ] Linting passes (`pnpm lint:workspace`)
-- [ ] TypeScript checks pass (`pnpm typecheck`; `pnpm typecheck:nx` remains available for diagnostics)
-- [ ] Visual tests pass (`pnpm nx run design-system:visual-test`)
-- [ ] No new Apple metadata files introduced
+- [ ] TypeScript checks pass (`pnpm typecheck`)
+- [ ] Visual tests pass (`pnpm --filter design-system visual-test`)
 - [ ] Module boundaries respected (no cross-module imports)
 
 ### Token System Compliance (if applicable)

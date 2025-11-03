@@ -1,5 +1,4 @@
 import js from '@eslint/js';
-import nxEslintPlugin from '@nx/eslint-plugin';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import globals from 'globals';
@@ -122,7 +121,6 @@ export default [
     plugins: {
       import: importPlugin,
       'simple-import-sort': simpleImportSort,
-      '@nx': nxEslintPlugin,
       '@typescript-eslint': tseslint.plugin,
     },
     rules: {
@@ -145,7 +143,6 @@ export default [
           ],
         },
       ],
-      '@nx/workspace-dependency-rules': 'off',
       '@typescript-eslint/no-explicit-any': 'warn',
       '@typescript-eslint/explicit-module-boundary-types': 'warn',
       '@typescript-eslint/no-unused-vars': [
